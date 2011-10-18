@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Documentation for COEUS | Enabling Knowledge</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le styles -->
+        <link href="../assets/css/bootstrap.css" rel="stylesheet">
+        <link href="../assets/css/docs.css" rel="stylesheet">
+        <!-- Le fav and touch icons -->
+        <link rel="shortcut icon" href="../assets/img/favicon.ico">
+        <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="../assets/img/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="../assets/img/apple-touch-icon-114x114.png">
+    </head>
+
+    <body>
+
+        <!-- Topbar
+        ================================================== -->
+        <div class="topbar">
+            <div class="fill">
+                <div class="container">
+                    <h3><a href="/coeus/"><img src="/coeus/assets/img/coeus_bw.png" /></a></h3>
+                    <ul class="nav secondary-nav">
+                        <li class="menu">
+                            <a href="#" class="menu">Explore</a>
+                            <ul class="menu-dropdown">
+                                <li><a href="#about">About</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#basics">The Basics</a></li>
+                                <li><a href="#ontology">Ontology</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#api">API</a></li>
+                                <li><a href="#web">Web Apps</a></li>
+                                <li><a href="#download">Download</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#license">License</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="active"><a href="#">Documentation</a></li>
+                        <li><a href="/coeus/science/">Science</a></li>
+                        <li><a href="/coeus/sparqler/">SPARQL</a></li>
+                        <li><a id="contact" href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="modal" class="well modal-backdrop" style="border: none; padding: 40px;display: none; width: 100%; height: 100%;">
+            <div class="modal" style="position: relative; top: auto; left: auto; margin: 0 auto; z-index: 1000; margin-top: 64px;">
+                <div class="modal-header">
+                    <h3>Contact Information</h3>
+                    <a href="#" class="close closer">&times;</a>
+                </div>
+                <div class="modal-body">
+                    <address>
+                        <strong>Pedro Lopes</strong><br/>
+                        <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a><br/>
+                        DETI/IEETA, University of Aveiro<br />
+                        Campus Universitário de Santiago<br />
+                        3810 - 193 Aveiro<br/>
+                        Portugal
+                    </address>
+                </div>
+                <div class="modal-footer">
+                    <a href="mailto:pedrolopes@ua.pt" class="btn primary">Send Mail</a>
+                    <a href="#" class="btn secondary closer">Close</a>
+                </div>
+            </div>
+        </div>
+        <!-- Quickstart options
+        ================================================== -->
+        <div class="quickstart">
+            <div class="container">
+                <div class="row">
+                    <div class="span5 columns">
+                        <h6>About</h6>
+                        <p>A <strong>Semantic Web Application Framework</strong> promoting <em>integration</em> & <em>interoperability</em>.</p>
+                        <p>
+                            Perfect for bioinformatics information systems developers. Useful for everybody else.
+                        </p>
+
+                    </div>
+                    <div class="span5 columns">
+                        <h6>Test Drive</h6>
+                        <p>It's "Semantic Web-in-a-box", with steroids and quick web data browser.</p>
+                        <p><a class="btn primary" href="/coeus/api/omim:104300" target="_blank">Give it a try &raquo;</a></p>
+                    </div>
+                    <div class="span5 columns">
+                        <h6>Download</h6>
+                        <p>If you're brave enough, love the code and can't live without Semantic Web. This is for you!<br />
+                            If not... remember, it's 1.0b, there's more to come!</p>
+                        <p><a class="btn primary" href="#download">Download 1.0b &raquo;</a></p>
+                    </div>
+                </div><!-- /row -->
+            </div>
+        </div>
+
+        <div class="container">
+
+            <!-- About COEUS
+            ================================================== -->
+            <section id="about">
+                <div class="page-header">
+                    <h1>About COEUS <small>Brief history, support, and more</small></h1>
+                </div>
+                <div class="row">
+                    <div class="span6 columns">
+                        <h3>History</h3>
+                        <p>
+                            Despite its promise, we can argue that the Semantic Web has underdelivered. A decade later, its usage is still reduced. The lack
+                            of <em>killer apps</em> and streamlined frameworks makes developers life very difficult, having to start every new information
+                            system from scratch and digg in piles of code and documentation...
+                        </p>
+                        <p>
+                            Therefore, we started developing a Semantic Web Application Framework, geared towards researchers/developers working on integrating
+                            heterogeneous data or interoperable software. COEUS includes an ontology, APIs and a web app skeleton by default to speed up the
+                            creation of new Semantic Web applications.
+                        </p>
+                    </div>
+                    <div class="span5 columns">
+                        <h3>Support</h3>
+                        <p>This is the first alpha release for COEUS. Hence, support is very limited.</p>
+                        <p>Software is provided as is, so feel fry to modify anything!</p>
+                        <p>If you can't wait for a final version, you can <a href="mailto:pedrolopes@ua.pt">contact me</a> and I'll try and answer your requests (no promises though, PhD thesis to write...)</p>
+
+                    </div>
+                    <div class="span5 columns">
+                        <h3>What's included</h3>
+                        <p>Current COEUS version includes a working sample:</p>
+                        <ul>
+                            <li>All Java code.</li>
+                            <li>Sample configuration files (for a disease-related instance)</li>
+                            <li>Web API and default web app (this!).</li>
+                        </ul>
+                        <p><a class="btn primary large" href="#download">Download &raquo;</a></p>
+                    </div>
+                </div><!-- /row -->
+            </section>
+
+            <div class="alert-message block-message error">
+                <p>
+                    COEUS is a Semantic Web Application Progress and is, therefore, targeted at Semantic Web application developers. Since this is still a <strong>work in progress</strong>, some expertise regarding
+                    Semantic Web technologies, standards and usage is required for a better understanding of this software stack.
+                </p>
+                <p>
+                    <strong><em>Use at your own risk!</em></strong>
+                </p>
+            </div>
+
+
+            <!-- Basics
+            ================================================== -->
+            <section id="basics">
+                <div class="page-header">
+                    <h1>The Basics <small>Do you fancy gardening?</small></h1>
+                </div>
+                <!-- Table structure -->
+                <div class="row">
+                    <div class="span4 columns">
+                        <h2>Organizing Knowledge</h2>
+                        <p>
+                            COEUS is focused on <strong>integration</strong> and <strong>interoperability</strong>. These are the key goals that
+                            defined COEUS development and its internal organization. <br />
+                            For a simpler interpretation of COEUS internal structure, we thought about organizing it according to a gardening metaphor.
+                        </p>
+                        <p>
+                            The first thing to consider are single COEUS instances. These standalone applications are built according to a configuration file, in Javascript, and
+                            a setup file, in RDF, adopting COEUS Ontology.
+                        </p>
+                        <p>
+                            Each COEUS instance integrates data in a mini-warehouse (or a large warehouse, depending on the number of resources you are collecting!) and is called a <em>Knowledge Seed</em>.
+                        </p>
+                        <p>
+                            Once a <em>Seed</em> is built, integrated data is made available through an API (internal Java methods + external REST services). Remember <strong>interoperability</strong>?<br />
+                            Since all seeds publish acquired data by default, we can deploy multiple seeds and connect them easily, creating a knowledge federation layer: the <em>Knowledge Garden</em>.
+                        </p>
+                    </div>
+                    <div class="span12 columns">
+                        <h3>Building</h3>
+                        <p>COEUS includes data connectors to CSV, XML, SQL and SPARQL resources. With them, you can triplify (almost) any external data into COEUS
+                            semantic data storage and use it in new applications.
+                        </p>
+                        <a href="../assets/img/build.png" target="_blank"><img src="../assets/img/build_small.png" width="360" alt="Building COEUS" /></a>
+                        <h3>Knowledge Seeds</h3>
+                        <p>
+                            A simgle COEUS instance is a seed. This basically represents a standalone application with a public API.
+                        </p>
+                        <a href="../assets/img/seed.png" target="_blank"><img src="../assets/img/seed_small.png" width="360" alt="COEUS Seed" /></a>
+                        <h3>Knowledge Garden</h3>
+                        <p>
+                            And you get multiple seeds working together... they bloom, creating a garden: a truly federated semantic knowledge network.
+                        </p>
+                        <a href="../assets/img/build.png" target="_blank"><img src="../assets/img/build_small.png" width="360" alt="Building COEUS" /></a>
+
+                    </div>
+                </div><!-- /row -->
+            </section>
+
+            <!-- Ontology
+            ================================================== -->
+            <section id="ontology">
+                <div class="page-header">
+                    <h1>Ontology</h1>
+                </div>
+                <div class="row">
+                    <div class="span4 columns">
+                        <h2>COEUS Ontology</h2>
+                        <p>For organizing all resources and setting up a new seed, COEUS ontology comes to play.</p>
+                        <p><a href="../ontology/" target="_blank" class="btn primary">Check it out &raquo; </a></p>
+                        <h4>Documentation</h4>
+                        <p>
+                            <a href="../ontology/doc" target="_blank" class="btn secondary small">Documentation is also available!</a>
+                        </p>
+                    </div>
+                    <div class="span12 columns">
+                        <h3>Entity Concept Item</h3>
+                        <p>
+                            To manage as various data organizations as possible, COEUS data structure is organized in a tree: Entity &gt; Concept &gt; Item. <br />
+                            Entities are classes for the upper data types, Concepts for a middle division and Items for individual level.
+                        </p>
+                        <p>
+                            For example, to create a seed with transportation information we might have the following structure:
+                        </p>
+                        <ul>
+                            <li>Entity: Vehicle
+                                <ul>
+                                    <li>Concept: Land
+                                        <ul>
+                                            <li>Item: Car</li>
+                                            <li>Item: Motorbike</li>
+                                        </ul>
+                                    </li>
+                                    <li>Concept: Air</li>
+                                    <li>Concept: Water</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <a href="../assets/img/COEUS_Ontology_entity_concept_item.png" target="_blank"><img src="../assets/img/COEUS_Ontology_entity_concept_item.png" width="400" alt="Entity Concept Item" /></a>
+                        <a href="../assets/img/COEUS_Ontology_concept_item.png" target="_blank"><img src="../assets/img/COEUS_Ontology_concept_item.png" width="400" alt="Concept Item" /></a>
+
+                        <h3>Resources</h3>
+                        <p>
+                            The Resource class handles setup information for external resources. Basically, resources are apps, services or databases where integrated comes from. <br />
+                            In this version, COEUS enables data loading from CSV, SQL, XML and SPARQL resources through generic connectors. In the future, plugins will be supported for custom data loads, covering
+                            even more resource types.
+                        </p>
+                        <p>
+                            Resources are tied to Concept objects. That is, when we load data from a Resource, we will be creating new Item objects
+                            for the related Concept. Easy, right?
+                        </p>
+                        <p>
+                            Resources can be loaded directly or extending existing Concept data. For instance, if you have a list of IDs and want to load data from a remote
+                            web service based on those IDs, you just need to setup the Resource Concept extension properties accordingly.
+                        </p>
+                        <a href="../assets/img/COEUS_Ontology_concept_resource.png" target="_blank"><img src="../assets/img/COEUS_Ontology_concept_resource.png" width="400" alt="Entity Concept Item" /></a>
+                        <a href="../assets/img/COEUS_Ontology_resource_csv_sparql.png" target="_blank"><img src="../assets/img/COEUS_Ontology_resource_csv_sparql.png" width="400" alt="Entity Concept Item" /></a>
+                        <a href="../assets/img/COEUS_Ontology_resource_xml_sparql.png" target="_blank"><img src="../assets/img/COEUS_Ontology_resource_xml_sparql.png" width="400" alt="Entity Concept Item" /></a>
+
+                        <h3>Seeds</h3>
+                        <p>
+                            At last, there's the Seed information. Connecting seed Entities to a main Seed object enables a quicker registry access. Hence, knowing what
+                            entities, concepts or items are available at a given seed requires a single SPARQL query.
+                        </p>
+                        <a href="../assets/img/COEUS_Ontology_seed.png" target="_blank"><img src="../assets/img/COEUS_Ontology_seed.png" width="400" alt="Entity Concept Item" /></a>
+                    </div>
+                </div><!-- /row -->
+            </section>
+
+            <!-- STREAM
+================================================== -->
+            <section id="api">
+                <div class="page-header">
+                    <h1>COEUS API <small>is called STREAM</small></h1>
+                </div>
+                <!-- Table structure -->
+                <div class="row">
+                    <div class="span4 columns">
+                        <h2>APIs</h2>
+                        <p>
+                            Since COEUS is focused on interoperability, there's more than one way of getting your data. If you are also developing your applications
+                            in Java, you can use the internal API. If you're using something else, just use the REST API!
+                        </p>
+                        <p>
+                            To (visually) check your COEUS dataset, there's a simple web application that will list all relationships to a given item, you can test it
+                            <a href="/coeus/api/omim:104300">here</a> with a OMIM Disease Item.
+                        </p>
+                    </div>
+                    <div class="span12 columns">
+                        <h3>Internal</h3>
+                        <p>
+                            How are your Javadoc reading skills? <br />
+                            There will be better docs for the internal methods in the future, but in the meanwhile this will have to do...
+                        </p>
+                        <p><a class="btn right info" href="../javadoc/">View Java Documentation &raquo;</a></p>
+                        <h3>External</h3>
+                        <p>
+                            There's no rest with REST. STREAM web app can give you a quick glance over existing data while new methods are being added...
+                        </p>
+                        <p>
+                            Simple data access is done using key:value pairs where keys are Concept <em>rdfs:label</em>s and value are the respective Item IDs. Data can be browsed in the UI or in through direct GETs.
+                        </p>
+                        <ul>
+                            <li><a href="../api/omim:104300" target="_blank">../api/omim:104300</a> goes directly to the UI</li>                            
+                            <li><a href="../api/omim:104300.xml" target="_blank">../api/omim:104300.xml</a> retrieves data in the select format (json, csv, xml...)</li>
+                        </ul>
+                        <p>
+                            For triple access, you can combine subjects, objects and predicates to get almost all data (even if iteratively!).
+                        </p>
+                        <ul>
+                            <li><a href="../api/triple/coeus:omim_114480/p/o" target="_blank">../api/triple/coeus:omim_114480/p/o</a> gets all predicates (p) and objects (o) related to <strong>omim:114480</strong></li>
+                            <li><a href="../api/triple/coeus:omim_114480/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:omim_114480/coeus:isAssociatedTo/obj/csv</a> gets all objects (obj) with a <em>coeus:isAssociatedTo</em> relationship to <strong>omim:114480</strong> (in CSV format)</li>
+                            <li><a href="../api/triple/s/diseasecard:hasGenotype/o/xml" target="_blank">../api/triple/s/diseasecard:hasGenotype/o/xml</a> gets all subjects (s) and objects (obj) connected with a <em>diseasecard:hasGenotype</em> relationship (in XML format)</li>
+                        </ul>
+                        <h3>SPARQL Endpoint</h3>
+                        <p>
+                            All data collected in a COEUS instance can be accessed through a SPARQL endpoint and taking advantage of SPARQL's advanced querying features.
+                        </p>
+                        <p>
+                            The endpoint default location is at <em><strong>&lt;app&gt;/sparql</strong></em>. <a class="btn right info" href="../sparqler/">Test it here &raquo;</a>
+                        </p>
+                        <h3>STREAM UI</h3>
+                        <p>
+                            With STREAM you can browse all exising data and relationships in your COEUS SDB. This API simply lists all properties associated with the given element. The UI (described below) lists
+                            associated items (<em>coeus:isAssociatedTo</em>) along with all other Item properties.
+                        </p>
+                        <a href="../assets/img/stream_ui.png" target="_blank"><img src="../assets/img/stream_ui_small.png" /></a>
+                        <ol>
+                            <li>Associated Item title (<em>dc:title</em>)</li>
+                            <li>Associated Item STREAM link</li>
+                            <li>Associated Item concept label (<em>rdfs:label</em> for <em>coeus:hasConcept</em>)</li>
+                            <li>Item title (<em>dc:title</em>)</li>
+                            <li>Item triple relationship object title (<em>dc:title</em>)</li>
+                            <li>Item triple relationship predicate</li>
+                        </ol>                        
+                    </div>
+                </div><!-- /row -->
+            </section>
+            
+                        <!-- Web
+================================================== -->
+            <section id="web">
+                <div class="page-header">
+                    <h1>Web Apps</h1>
+                </div>
+                <!-- Table structure -->
+                <div class="row">
+                    <div class="span4 columns">
+                        <h2>Stripes</h2>
+                        <p>
+                            COEUS includes the Java Stripes framework for streamlined Web Application development on top of existing Java APIs.
+                        </p>
+                    </div>
+                    <div class="span12 columns">
+                        <h3>More on Stripes</h3>
+                        <p>
+                           Stripes is a presentation framework for building web applications using the latest Java technologies. The main driver behind Stripes is that web application development in Java is just too much work! It seems like every existing framework requires gobs of configuration. Struts is pretty feature-light and has some serious architectural issues. Others, like WebWork 2 and Spring-MVC are much better, but still require a lot of configuration, and seem to require you to learn a whole new language just to get started.
+                        </p>
+                        <p><a class="btn right info" target="_blank" href="http://www.stripesframework.org/">Go to Stripes &raquo;</a></p>
+                                             
+                    </div>
+                </div><!-- /row -->
+            </section>
+
+            <!-- Download
+================================================== -->
+            <section id="download">
+                <div class="page-header">
+                    <h1>Download <small>and installation instructions</small></h1>
+                </div>
+                <!-- Table structure -->
+                <div class="row">
+                    <div class="span4 columns">
+                        <h2>1.0b</h2>
+                        <h5>Get it while it's hot!</h5>
+                        <p>You can checkout the latest stable version (1.0a) from Google Code...<br /><a class="btn success large" href="https://coeus-swaf.googlecode.com/svn/trunk/COEUS1.0a/">Checkout 1.0b &raquo;</a><br /><a class="btn success large" href="https://coeus-swaf.googlecode.com/svn/trunk/COEUS1.0a/">Checkout 1.0b &raquo;</a><br />... <a href="http://coeus-swaf.googlecode.com/files/coeus_streamdb.zip" targeT="_blank">and the sample database is here!</a></p>
+                    </div>
+                    <div class="span12 columns">
+                        <h3>Requirements</h3>
+                        <ul>
+                            <li><a href="http://www.java.com/en/download/" target="_blank">Latest Java Version</a></li> 
+                            <li><a href="http://netbeans.org/downloads/" target="_blank">NetBeans IDE 7.0+</a></li>
+                            <li><a href="http://tomcat.apache.org/download-70.cgi" target="_blank">Apache Tomcat 7.0+</a></li>
+                            <li><a href="http://dev.mysql.com/downloads/" target="_blank">MySQL 5+</a></li>
+                        </ul>
+                        <h3>Package Contents</h3>
+                        <ul>
+                            <li><strong>COEUS 1.0a source</strong> Java source code: NetBeans Web Project + required libraries</li>
+                            <li><strong>coeus_streamdb.zip</strong> MySQL database ready for database import (destination DB: coeus)</li>
+                        </ul>
+                        <p>
+                            All included libraries are use according to their respective licenses. No commercial software is used.
+                        </p>
+                        <h3>Installation</h3>
+                        <ol>
+                            <li>Create a new database/user in MySQL for COEUS</li>
+                            <li>Extract <strong>coeus_streamdb.zip</strong> and restore it to your COEUS database</li>
+                            <li>Checkout <strong>COEUS 1.0a source</strong> to your workspace.</li>
+                            <li>Open COEUS Project in NetBeans and correct server/classpath issues</li>
+                            <li>Update the <em>src/java/coeus_sdb_&lt;environment&gt;.ttl</em> file with your MySQL access credentials for the COEUS storage (file content is self-explanatory)</li>
+                            <li>Update the <em>src/java/coeus_joseki_sdb.ttl</em> file with your MySQL access credentials for the SPARQL server(file content is self-explanatory)(same as above)</li>
+                            <li>Your COEUS install is ready to use!</li>
+                        </ol>
+                        <h3>Running</h3>
+                        <p>
+                            I recommend that you start by running the existing application setup and read the documentation before building a new seed.
+                        </p>
+                        <ul>
+                            <li>Before running, make sure the <em>src/java/config.js</em> file points to the correct files and environment definitions</li>
+                            <li>To run, simply <em>build</em> the project and press <em>run</em> on NetBeans</li>
+                        </ul>
+                        <h3>Building</h3>
+                        <p>
+                            The default seed included in COEUS contains the setup for a disease-based information system. You can use <a href="http://protege.stanford.edu/" target="_blank">Protege</a> and open up the 
+                            <em>src/java/coeus_setup.rdf</em> file to analyze the configuration. Using Protege is advisable for a clearer understanding of the setup structure.                        
+                        </p>
+                        <p>
+                            Since the default seed setup is very complex (and with plenty dependencies), the data import process is divided in various levels. You can use this strategy in your own system or rely on the <em>coeus:order</em>
+                            property for each Resource.
+                        </p>
+                        <ul>
+                            <li>To build a new instance, start by setting up the seed ontology (if you need a new one), and the data organization in the setup file (coeus_setup.rdf)</li> 
+                            <li>With the RDF setup file comple, update the <em>pt.ua.bioinformatics.coeus.common.Run</em> Java file with the level configuration or with the full thing</li>
+                            <li>Execute the Run class file.</li>
+                        </ul>
+                    </div>
+                </div><!-- /row -->
+            </section>
+
+
+            <!-- License
+================================================== -->
+            <section id="license">
+                <div class="page-header">
+                    <h1>License</h1>
+                </div>
+                <!-- Table structure -->
+                <div class="row">
+                    <div class="span4 columns">
+                        <h2>Free</h2>
+
+                    </div>
+                    <div class="span12 columns">
+                        <h3>Creative Commons</h3>
+                        <p>
+                            COEUS and COEUS Ontology are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. To view a copy of this license, visit <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">http://creativecommons.org/licenses/by-nc-sa/3.0/</a> or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
+                        </p>
+                        <h3>DETI/IEETA, University of Aveiro</h3>
+                        <p>
+                            Use, modify, change, update as you need!
+                        </p>
+                    </div>
+                </div><!-- /row -->
+            </section>
+
+        </div><!-- /container -->
+
+        <div id="footer">
+            <div class="inner">
+                <div class="container">
+                    <p class="right"><a href="#">Back to top</a></p>
+
+                    <p>&copy; University of Aveiro 2011</p>
+                    <p><small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a></small></p>
+
+                    <p> <a href="http://twitter.github.com/bootstrap/" target="_blank"><small>Layout with Twitter Bootstrap</small></a></p>
+                </div>
+            </div>
+        </div>
+        <!-- JavaScript at the bottom for fast page loading -->
+
+        <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="assets/js/jquery-1.6.2.min.js"><\/script>')</script>
+
+
+        <!-- scripts concatenated and minified via ant build script-->
+        <script defer src="assets/js/plugins.js"></script>
+        <!-- end scripts-->
+
+
+        <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12230872-7']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+        <script>
+            $(document).ready(function(){
+                $('#contact').click(function(){
+                    $('#modal').fadeIn('slow');
+                });
+
+                $('.closer').click(function(){
+                    $('#modal').fadeOut('slow');
+                });
+
+                $("body").bind("click", function (e) {
+                    $('a.menu').parent("li").removeClass("open");
+                });
+
+                $("a.menu").click(function (e) {
+                    var $li = $(this).parent("li").toggleClass('open');
+                    return false;
+                });
+            });
+        </script>
+
+
+        <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+             chromium.org/developers/how-tos/chrome-frame-getting-started -->
+        <!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

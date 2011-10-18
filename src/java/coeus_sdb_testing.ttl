@@ -1,0 +1,21 @@
+@prefix sdb:     <http://jena.hpl.hp.com/2007/sdb#> .
+@prefix rdfs:	 <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix coeus:	 <http://bioinformatics.ua.pt/coeus/> .
+@prefix diseasecard:    <http://bioinformatics.ua.pt/diseasecard/> .
+
+<#store> rdf:type sdb:Store ;
+    sdb:layout     "layout2" ;
+    sdb:connection <#conn> ;
+    sdb:engine     "InnoDB" ;
+.
+
+<#conn> rdf:type sdb:SDBConnection ;
+    sdb:sdbType       "MySQL" ;
+    sdb:sdbHost       "localhost:3306" ;
+    sdb:sdbName       "coeus" ;
+    sdb:sdbUser       "root" ;
+    sdb:sdbPassword   "telematica" ;
+    sdb:driver        "com.mysql.jdbc.Driver" ;
+    .

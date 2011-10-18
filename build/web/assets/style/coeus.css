@@ -1,0 +1,113 @@
+body {
+	margin: 0px;
+	color: #424242;
+	text-transform: none;
+	text-decoration: none;
+	font-size: 9pt;
+	font-family: sans-serif;
+	background: transparent url(../image/bck.jpg) repeat;
+	width: 100%;
+}
+
+h1 {
+	text-transform: uppercase;
+	color: #656565;
+	border-bottom: solid 1px #466086;
+}
+h2 {
+	border-bottom: solid 1px #CCC;
+}
+
+#top{
+	background: transparent url(../image/head.jpg) repeat-x;
+	height: 25px;
+	display: block;
+	top:0;
+	margin: 0;
+	width: 100%;		
+}
+
+#head {
+	padding: 4px;
+	padding-right: 50px;
+	color: #FFFFFF;
+	text-align: right;
+}
+
+
+#container {
+	top: 26px;
+	border-top: solid 1px #FFFFFF;
+	width: 100%;
+	height: 100%;
+}
+
+#content {
+	width: 65%;
+	padding: 10px;
+	float: left;
+	position: inherit;
+        margin: auto;
+}
+#sidebar {
+	width: 30%;
+	float: right;
+	padding: 10px;
+	text-align: left;
+	margin-top: 40px;
+	position: inherit;
+	margin-right: 4px;
+}
+#footer {
+	bottom: 0px;
+	width: 40%;
+	margin: auto;
+	padding: 10px;
+}
+
+#head a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+#head a:hover {
+	color: #DDDDDD;
+	text-decoration: underline;
+}
+
+.white {
+	background-color: #FFFFFF;
+}
+
+#about {
+	width: 100%;
+	height: 100%;
+	background-color: #FFFFFF;
+}
+#testdrive{
+	width: 100%;
+	height: 100%;
+	background-color: #FFFFFF;
+}
+#download {
+	width: 100%;
+	height: 100%;
+	background-color: #FFFFFF;
+}
+#help {
+	width: 100%;
+	height: 100%;
+	background-color: #FFFFFF;
+}
+#sidebar {
+    float: left;
+    width: 20%;
+    vertical-align: middle;
+    margin-left: 20px;
+}
+.question {
+    padding: 5px;
+}
+.question .ask {
+    font-weight: bold;
+}

@@ -1,0 +1,294 @@
+package pt.ua.bioinformatics.coeus.common;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.simple.parser.ParseException;
+import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import pt.ua.bioinformatics.coeus.data.connect.CSVFactory;
+import pt.ua.bioinformatics.coeus.data.connect.PluginFactory;
+import pt.ua.bioinformatics.coeus.data.connect.SPARQLFactory;
+import pt.ua.bioinformatics.coeus.data.connect.SQLFactory;
+import pt.ua.bioinformatics.coeus.data.connect.XMLFactory;
+import pt.ua.bioinformatics.coeus.domain.Resource;
+
+/**
+ * Seed builder class. 
+ * <p>
+ * General class handler for loading new data into COEUS SDB.
+ * </p>
+ * 
+ * @author pedrolopes
+ */
+public class Builder {
+
+    private static ArrayList<Resource> resources = new ArrayList<Resource>();
+
+    public static ArrayList<Resource> getResources() {
+        return resources;
+    }
+
+    public static void setResources(ArrayList<Resource> resources) {
+        Builder.resources = resources;
+    }
+
+    /**
+     * Reads resources from COEUS SDB and populates Resource object list for further building.
+     * 
+     */
+    public static void readResources() {
+        try {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Reading resources for " + Config.getName());
+            }
+            JSONParser parser = new JSONParser();
+            JSONObject response = (JSONObject) parser.parse(Boot.getAPI().select("SELECT ?s ?method ?comment ?label ?title ?built ?publisher ?extends ?extension ?order ?endpoint ?built ?query WHERE { ?s rdf:type coeus:Resource ."
+                    + " ?s rdfs:comment ?comment ."
+                    + " ?s rdfs:label ?label ."
+                    + " ?s dc:title ?title ."
+                    + " ?s dc:publisher ?publisher ."
+                    + " ?s coeus:extends ?extends ."
+                    + " ?s coeus:method ?method ."
+                    + " ?s coeus:endpoint ?endpoint ."
+                    + " ?s coeus:order ?order . "
+                    + "OPTIONAL { ?s coeus:built ?buil} . OPTIONAL { ?s coeus:extension ?extension} . OPTIONAL {?s coeus:query ?query}} ORDER BY ?order", "js", false));
+            JSONObject results = (JSONObject) response.get("results");
+            JSONArray bindings = (JSONArray) results.get("bindings");
+
+            for (Object o : bindings) {
+                JSONObject binding = (JSONObject) o;
+                JSONObject s = (JSONObject) binding.get("s");
+                JSONObject d = (JSONObject) binding.get("comment");
+                JSONObject l = (JSONObject) binding.get("label");
+                JSONObject t = (JSONObject) binding.get("title");
+                JSONObject publisher = (JSONObject) binding.get("publisher");
+                JSONObject ext = (JSONObject) binding.get("extends");
+                JSONObject endpoint = (JSONObject) binding.get("endpoint");
+                JSONObject method = (JSONObject) binding.get("method");
+                JSONObject extension = (JSONObject) binding.get("extension");
+                JSONObject built = (JSONObject) binding.get("built");
+                JSONObject query = (JSONObject) binding.get("query");
+                Resource r = new Resource(s.get("value").toString(), t.get("value").toString(), l.get("value").toString(), d.get("value").toString(), publisher.get("value").toString(), endpoint.get("value").toString(), method.get("value").toString());
+                r.setExtendsConcept(ext.get("value").toString());
+                r.setExtension(!(extension == null) ? extension.get("value").toString() : "");
+                r.setQuery(!(query == null) ? query.get("value").toString() : "");
+                r.setBuilt(!(built == null) ? Boolean.parseBoolean(built.get("value").toString()) : false);
+                resources.add(r);
+            }
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Resource information read");
+            }
+        } catch (ParseException ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Unable to read resource information");
+                Logger.getLogger(Builder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    /**
+     * Reads Resource object information from COEUS SDB for further building.
+     * <p>Method used for single resource imports.
+     * </p>
+     * 
+     * @param whatResource the resource label that will be read.
+     * @return  a new Resource object.
+     */
+    public static Resource readResource(String whatResource) {
+        Resource r = null;
+        try {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Reading resource for " + Config.getName());
+            }
+            System.out.println(whatResource);
+            JSONParser parser = new JSONParser();
+            JSONObject response = (JSONObject) parser.parse(Boot.getAPI().select("SELECT ?res ?method ?comment ?label ?title ?built ?publisher ?extends ?extension ?order ?endpoint ?built ?query WHERE { ?res a coeus:Resource . ?res rdfs:comment ?comment . ?res rdfs:label ?label . ?res dc:title ?title . ?res dc:publisher ?publisher . ?res coeus:extends ?extends . ?res coeus:method ?method . ?res coeus:endpoint ?endpoint . ?res coeus:order ?order . OPTIONAL { ?res coeus:built ?buil} . OPTIONAL {?res coeus:extension ?extension} . OPTIONAL {?res coeus:query ?query} . FILTER regex(str(?label), '" + whatResource + "')} ORDER BY ?order LIMIT 1", "js", false));
+            JSONObject results = (JSONObject) response.get("results");
+            JSONArray bindings = (JSONArray) results.get("bindings");
+            for (Object o : bindings) {
+                JSONObject binding = (JSONObject) o;
+                JSONObject s = (JSONObject) binding.get("res");
+                JSONObject d = (JSONObject) binding.get("comment");
+                JSONObject l = (JSONObject) binding.get("label");
+                JSONObject t = (JSONObject) binding.get("title");
+                JSONObject publisher = (JSONObject) binding.get("publisher");
+                JSONObject ext = (JSONObject) binding.get("extends");
+                JSONObject endpoint = (JSONObject) binding.get("endpoint");
+                JSONObject method = (JSONObject) binding.get("method");
+                JSONObject extension = (JSONObject) binding.get("extension");
+                JSONObject built = (JSONObject) binding.get("built");
+                JSONObject query = (JSONObject) binding.get("query");
+                r = new Resource(s.get("value").toString(), t.get("value").toString(), l.get("value").toString(), d.get("value").toString(), publisher.get("value").toString(), endpoint.get("value").toString(), method.get("value").toString());
+                r.setExtendsConcept(ext.get("value").toString());
+                r.setExtension(!(extension == null) ? extension.get("value").toString() : "");
+                r.setQuery(!(query == null) ? query.get("value").toString() : "");
+                r.setBuilt(!(built == null) ? Boolean.parseBoolean(built.get("value").toString()) : false);
+            }
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Resource information read");
+            }
+        } catch (ParseException ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Unable to read resource information");
+                Logger.getLogger(Builder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return r;
+    }
+
+    /**
+     * Initiates data conversion process from Resource to RDF in COEUS Data SDB.
+     * 
+     * @param r resource whose data will be read.
+     * @return success of the operation.
+     */
+    public static boolean readData(Resource r) {
+        boolean success = false;
+        CSVFactory csv = null;
+        XMLFactory xml = null;
+        SQLFactory sql = null;
+        SPARQLFactory sparql = null;
+        PluginFactory plugin = null;
+        try {
+            if (r.getPublisher().equals("plugin")) {
+                plugin = new PluginFactory(r);
+                plugin.read();
+                plugin.save();
+
+            }
+            if (!r.isBuilt()) {
+                if (r.getPublisher().equals("csv")) {
+                    csv = new CSVFactory(r);
+                    csv.read();
+                    csv.save();
+                } else if (r.getPublisher().equals("xml")) {
+                    xml = new XMLFactory(r);
+                    xml.read();
+                    xml.save();
+                } else if (r.getPublisher().equals("sql")) {
+                    sql = new SQLFactory(r);
+                    sql.read();
+                    sql.save();
+                } else if (r.getPublisher().equals("sparql")) {
+                    sparql = new SPARQLFactory(r);
+                    sparql.read();
+                    sparql.save();
+                }
+            }
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Data for " + r.getTitle() + " read");
+            }
+            success = true;
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Unable to read data for " + r.getTitle());
+                Logger.getLogger(Builder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return success;
+    }
+
+    /**
+     * Instance builder.
+     * <p><b>Workflow</b><ol>
+     *  <li>Reads resource information from COEUS Data SDB</li>
+     *  <li>Reads information for each resource (Key, Concept and LoadsFrom)</li>
+     *  <li>Reads data for each resource</li>
+     * </ol></p>
+     * @return
+     */
+    public static boolean build() {
+        boolean success = false;
+        try {
+            readResources();
+            for (Resource r : resources) {
+                r.loadInfo();
+                try {
+
+                    if (r.isBuilt()) {
+                        if (Config.isDebug()) {
+                            System.out.println("[COEUS][Builder] Already built resource " + r.getTitle());
+                        }
+                    } else {
+                        if (Config.isDebug()) {
+                            System.out.println("[COEUS][Builder] Reading data for resource " + r.getTitle());
+                        }
+                        readData(r);
+                    }
+                } catch (Exception ex) {
+                    if (Config.isDebug()) {
+                        System.out.println("[COEUS][Builder] Unable to read data for " + Config.getName() + " in resource " + r.getTitle());
+                    }
+                    Logger.getLogger(Builder.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Finished building " + Config.getName());
+            }
+            success = true;
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Unable to build " + Config.getName());
+                Logger.getLogger(Builder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return success;
+    }
+
+    /**
+     * Instance builder for a single Resource.
+     * <p><b>Workflow</b><ol>
+     *  <li>Reads resource information from COEUS Data SDB</li>
+     *  <li>Reads data for  resource</li>
+     * </ol></p>
+     * @param resource
+     * @return 
+     */
+    public static boolean build(String resource) {
+        boolean success = false;
+        try {
+            Resource r = readResource(resource);
+            r.loadInfo();
+            try {
+                readData(r);
+            } catch (Exception ex) {
+                if (Config.isDebug()) {
+                    System.out.println("[COEUS][Builder] Unable to read data for " + Config.getName() + " in resource " + r.getTitle());
+                    Logger.getLogger(Builder.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Finished building " + Config.getName());
+            }
+            success = true;
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Unable to build " + Config.getName());
+                Logger.getLogger(Builder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return success;
+    }
+
+    /**
+     * Saves new JS configuration file with updated information.
+     *
+     * @return success of the operation.
+     */
+    public static boolean save() {
+        boolean success = false;
+        try {
+            // TO DO
+            success = true;
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Builder] Unable to save build configuration");
+                Logger.getLogger(Builder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return success;
+    }
+}
