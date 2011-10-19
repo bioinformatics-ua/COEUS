@@ -66,7 +66,7 @@
                 <img src="assets/img/coeus_left.png" class="logo_right" />
                 <h1>Hello, Semantic Web!</h1>
                 <p><em>Ipsa scientia potestas est.</em> Knowledge itself is power.<br />Next-generation Semantic Web Application Framework.</p>
-                <p><a class="btn primary large" target="_blank" href="/coeus/api/omim:104300">Take the TestDrive &raquo;</a></p>
+                <p><a class="btn primary large" href="/coeus/sparqler/">Take the TestDrive &raquo;</a></p>
             </div>
 
             <!-- Example row of columns -->
