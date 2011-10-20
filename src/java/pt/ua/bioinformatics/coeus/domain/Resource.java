@@ -248,11 +248,12 @@ public class Resource {
         boolean success = true;
         try {
             loadKey();
-            System.out.println("loaded key");
             loadConcept();
-            System.out.println("loaded concepts");
             loadInherited();
             success = true;
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Resource][" + this.title + "] information read");                
+            }
         } catch (Exception ex) {
             if (Config.isDebug()) {
                 System.out.println("[COEUS][Resource] Unable to load resource information");

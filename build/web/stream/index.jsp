@@ -3,10 +3,21 @@
 <!doctype html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>STREAM - COEUS Data Browser</title>
+        <title>STREM data browser for COEUS | Enabling Knowledge</title>
         <link type="text/css" rel="stylesheet" href="<c:url value="/stream/assets/style/reset.css" />" />
         <link type="text/css" rel="stylesheet" href="<c:url value="/stream/assets/style/base.css" />" />
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le styles -->
+        <link href="../assets/css/bootstrap.css" rel="stylesheet">
+        <link href="../assets/css/docs.css" rel="stylesheet">
+        <!-- Le fav and touch icons -->
+        <link rel="shortcut icon" href="../assets/img/favicon.ico">
         <script src="<c:url value="/stream/assets/script/jquery.min.js" />" type="text/javascript"></script>
         <script src="<c:url value="/stream/assets/script/jquery.tmpl.min.js" />" type="text/javascript"></script>
         <script type="text/javascript">
@@ -49,16 +60,12 @@
                                 }
                             });
                             table += '</ul>';
-                            
+                            panel.fadeIn();
                             $('#panel_table').html(table);
                             if(data_id==id) {
-                                panel.animate({left: parseInt(panel.css('left'),0) == 0 ? +panel.outerWidth() : 0});
+                                panel.animate({left: parseInt(panel.css('left'),0) == 0 ? +panel.outerWidth() + 32 : 0});
                             } else {
-                                if(panel_width=='441px') {
-
-                                } else {
-                                    panel.animate({left: parseInt(panel.css('left'),0) == 0 ? +panel.outerWidth() : 0});
-                                }
+                                panel.animate({left: parseInt(panel.css('left'),0) == 0 ? +panel.outerWidth() + 32 : 0});
                             }
                             $('.right').fadeOut();
                         });
@@ -68,7 +75,8 @@
 
                 $('.close').click(function(){
                     var panel= $('.panel');
-                    panel.animate({left: parseInt(panel.css('left'),0) == 0 ? +panel.outerWidth() : 0});
+                    panel.fadeOut().animate({left: parseInt(panel.css('left'),0) == 0 ? + panel.outerWidth() + 32: 0});
+                    //panel.;
                     $('.right').fadeIn();
                     return false;
                 });
@@ -99,22 +107,60 @@
                     table += '</ul>';
                     $('.start_table').html(table);
                 });
-
-                $('.search_button').click(function() {
-                    var v = $('#search_text').attr('value');
-                    window.location = "http://bioinformatics.ua.pt/coeus/api/" + v;
+                
+                $('#search').keypress(function(e){
+                    if ( e.which == 13 ) {
+                        e.preventDefault();
+                        var urls = window.location.toString().split('/');
+                        var uri = "";
+                        for (i = 0; i < urls.length - 1; i++) {
+                            uri += urls[i] + "/";
+                        }window.location = uri + $('#search').attr('value');
+                    } 
                 });
             });
-
         </script>
     </head>
     <body>
-        <!-- header -->
-        <div id="top">
-            <div id="logo">
-                <a href="/coeus/api/omim:104300" target="_top"><img src="<c:url value="/stream/assets/image/stream_logo.png" />" alt="stream_logo" width="157" height="30" /></a>
+        <!-- Topbar
+        ================================================== -->
+        <div class="topbar">
+            <div class="fill">
+                <div class="container">
+                    <h3><a href="../"><img src="../assets/img/coeus_bw.png" /></a></h3>
+                    <ul>
+                        <li><a href="../documentation/">Documentation</a></li>
+                        <li class="active"><a href="#">Science</a></li>
+                        <li><a href="../sparqler/">SPARQL</a></li>
+                        <li><a id="contact" href="#">Contact</a></li>
+                    </ul>
+                    <form class="pull-right" action="">
+                        <input type="text" id="search" placeholder="Search" />
+                    </form>
+                </div>
             </div>
-            <div id="header"><input type="text" id="search_text" /><a class="search_button" href="#">Search &raquo;</a></div>
+        </div>
+        <div id="modal" class="well modal-backdrop" style="border: none; padding: 40px;display: none; width: 100%; height: 100%;">
+            <div class="modal" style="position: relative; top: auto; left: auto; margin: 0 auto; z-index: 1000; margin-top: 64px;">
+                <div class="modal-header">
+                    <h3>Contact Information</h3>
+                    <a href="#" class="close closer">&times;</a>
+                </div>
+                <div class="modal-body">
+                    <address>
+                        <strong>Pedro Lopes</strong><br/>
+                        <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a><br/>
+                        DETI/IEETA, University of Aveiro<br />
+                        Campus Universitário de Santiago<br />
+                        3810 - 193 Aveiro<br/>
+                        Portugal
+                    </address>
+                </div>
+                <div class="modal-footer">
+                    <a href="mailto:pedrolopes@ua.pt" class="btn primary">Send Mail</a>
+                    <a href="#" class="btn secondary closer">Close</a>
+                </div>
+            </div>
         </div>
         <!-- main container -->
         <div id='container'>
@@ -143,10 +189,10 @@
                     </div>
                     <div class="data">
                         <div id="panel_comment">
-                            
+
                         </div>
                         <div id="panel_table">
-                            
+
                         </div>
                     </div>
                 </div>

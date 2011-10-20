@@ -122,6 +122,7 @@ public class SQLFactory {
         } else if (res.getMethod().equals("cache")) {
             try {
                 if (res.getExtendsConcept().equals(res.getIsResourceOf().getUri())) {
+
                     db.connect(res.getEndpoint());
                     query = res.getQuery();
                     rs = db.getData(query);
@@ -168,7 +169,6 @@ public class SQLFactory {
                             while (rs.next()) {
                                 InheritedResource key = (InheritedResource) res.getHasKey();
                                 rdfizer = new Triplify(res, item);
-                                System.out.println("\t\t" + item);
                                 for (Object o : res.getLoadsFrom()) {
                                     InheritedResource r = (InheritedResource) o;
                                     String[] tmp = r.getProperty().split("\\|");

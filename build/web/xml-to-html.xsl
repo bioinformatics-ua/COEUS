@@ -118,16 +118,16 @@
                 <div class="topbar">
                     <div class="fill">
                         <div class="container">
-                    <h3><a href="/coeus/"><img src="/coeus/assets/img/coeus_bw.png" /></a></h3>
+                    <h3><a href="../"><img src="../assets/img/coeus_bw.png" /></a></h3>
                             <ul>
                                 <li>
-                                    <a href="/coeus/documentation/">Documentation</a>
+                                    <a href="../documentation/">Documentation</a>
                                 </li>
                                 <li>
-                                    <a href="/coeus/science/">Science</a>
+                                    <a href="../science/">Science</a>
                                 </li>
                                 <li class="active">
-                                    <a href="/coeus/sparqler/">SPARQL</a>
+                                    <a href="../sparqler/">SPARQL</a>
                                 </li>
                             </ul>
                         </div>

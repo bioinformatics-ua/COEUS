@@ -9,8 +9,8 @@
         "sdb":"coeus_sdb.ttl",
         "predicates":"coeus_predicates.csv",
         "built": true,
-        "debug": true,
-        "environment": "development"
+        "debug": false,
+        "environment": "testing"
     },
     "prefixes" : {
         "coeus": "http://bioinformatics.ua.pt/coeus/",

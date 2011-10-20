@@ -180,8 +180,9 @@ public class Triplify {
             com.hp.hpl.jena.rdf.model.Resource item = api.getResource(extension);
             for (String s : map) {
                 try {
-                    com.hp.hpl.jena.rdf.model.Resource to = api.getResource(s);
+                    com.hp.hpl.jena.rdf.model.Resource to = api.getResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(this.resource.getIsResourceOf().getLabel()) + s);
                     api.addStatement(item, Predicate.get("coeus:isAssociatedTo"), to);
+                    api.addStatement(to, Predicate.get("coeus:isAssociatedTo"), item);
                 } catch (Exception ex) {
                     if (Config.isDebug()) {
                         System.out.println("[COEUS][API] Unable to map " + extension.toString() + " for " + s);
