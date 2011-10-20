@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.ua.bioinformatics.coeus.api.API;
+import pt.ua.bioinformatics.coeus.api.ConceptFactory;
 import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
@@ -106,8 +107,8 @@ public class Triplify {
             api.addStatement(item, Predicate.get("rdf:type"), obj);
 
             // set Item label and creator
-            api.addStatement(item, Predicate.get("rdfs:label"), "item_" + i);
-            api.addStatement(item, Predicate.get("dc:creator"), "COEUS");
+            api.addStatement(item, Predicate.get("rdfs:label"), ConceptFactory.getTokenFromConcept(this.resource.getIsResourceOf().getLabel()) + i);
+            api.addStatement(item, Predicate.get("dc:creator"), Config.getName());
 
             // associate Item with Concept
             com.hp.hpl.jena.rdf.model.Resource con = api.getResource(resource.getIsResourceOf().getUri());

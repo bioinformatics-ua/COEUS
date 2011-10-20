@@ -7,8 +7,10 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import pt.ua.bioinformatics.coeus.api.API;
+import pt.ua.bioinformatics.coeus.api.ConceptFactory;
 import pt.ua.bioinformatics.coeus.api.DB;
 import pt.ua.bioinformatics.coeus.api.ItemFactory;
+import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
 import pt.ua.bioinformatics.coeus.data.Predicate;
@@ -54,7 +56,42 @@ public class SQLFactory {
      */
     public void read() {
         if (res.getMethod().equals("complete")) {
-            // TODO
+            try {
+                ArrayList<String> extensions;
+                if (res.getExtension().equals("")) {
+                    extensions = res.getExtended();
+                } else {
+                    extensions = res.getExtended(res.getExtension());
+                }
+                for (String item : extensions) {
+                    db.connect(res.getEndpoint());
+                    query = res.getQuery().replace("#replace#", ItemFactory.getTokenFromItem(item));
+                    rs = db.getData(query);
+                    try {
+                        while (rs.next()) {
+                            rdfizer = new Triplify(res, PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(res.getExtendsConcept()) + ItemFactory.getTokenFromItem(item));
+
+                            for (Object o : res.getLoadsFrom()) {
+                                InheritedResource c = (InheritedResource) o;
+                                String[] tmp = c.getProperty().split("\\|");
+                                for (String inside : tmp) {
+                                    rdfizer.add(inside, rs.getString(c.getQuery()));
+                                }
+                            }
+                            rdfizer.complete();
+                        }
+                    } catch (Exception ex) {
+                        if (Config.isDebug()) {
+                            Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                if (Config.isDebug()) {
+                    System.out.println("[COEUS][SQLFactory] unable to " + res.getMethod() + " data for " + res.getUri());
+                    Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         } else if (res.getMethod().equals("map")) {
             try {
                 // load extension data
@@ -131,6 +168,7 @@ public class SQLFactory {
                             while (rs.next()) {
                                 InheritedResource key = (InheritedResource) res.getHasKey();
                                 rdfizer = new Triplify(res, item);
+                                System.out.println("\t\t" + item);
                                 for (Object o : res.getLoadsFrom()) {
                                     InheritedResource r = (InheritedResource) o;
                                     String[] tmp = r.getProperty().split("\\|");

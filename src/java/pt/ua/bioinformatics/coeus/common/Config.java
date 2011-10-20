@@ -178,7 +178,6 @@ public class Config {
                 predicates = (String) config.get("predicates");                                 
                 environment = (String) config.get("environment");                               
                 sdb = ((String) config.get("sdb")).replace(".ttl", "_" + environment + ".ttl");
-                System.out.println("\t" + sdb);
                 keyPrefix = (String) config.get("keyprefix");
                 JSONObject prefixes = (JSONObject) file.get("prefixes");
                 for (Object o : prefixes.keySet()) {

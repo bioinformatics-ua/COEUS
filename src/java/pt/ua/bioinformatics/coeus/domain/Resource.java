@@ -201,6 +201,9 @@ public class Resource {
                 Logger.getLogger(Resource.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        if (Config.isDebug()) {
+            System.out.println("\tExtension data loaded");
+        }
         return extensions;
     }
 
@@ -229,6 +232,9 @@ public class Resource {
                 System.out.println("[COEUS][Resource] Unable to load extension concept information");
                 Logger.getLogger(Resource.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        if (Config.isDebug()) {
+            System.out.println("\tExtension data loaded");
         }
         return extensions;
     }
