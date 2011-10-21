@@ -26,7 +26,7 @@ import pt.ua.bioinformatics.coeus.domain.Resource;
  *
  * @author pedrolopes
  */
-public class CSVFactory {
+public class CSVFactory implements ResourceFactory {
 
     private Resource res;
     private static CSVReader reader;

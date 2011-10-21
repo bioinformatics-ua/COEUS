@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import pt.ua.bioinformatics.coeus.data.connect.CSVFactory;
 import pt.ua.bioinformatics.coeus.data.connect.PluginFactory;
+import pt.ua.bioinformatics.coeus.data.connect.ResourceFactory;
 import pt.ua.bioinformatics.coeus.data.connect.SPARQLFactory;
 import pt.ua.bioinformatics.coeus.data.connect.SQLFactory;
 import pt.ua.bioinformatics.coeus.data.connect.XMLFactory;
@@ -146,36 +147,24 @@ public class Builder {
      */
     public static boolean readData(Resource r) {
         boolean success = false;
-        CSVFactory csv = null;
-        XMLFactory xml = null;
-        SQLFactory sql = null;
-        SPARQLFactory sparql = null;
-        PluginFactory plugin = null;
+        ResourceFactory factory;
         try {
-            if (r.getPublisher().equals("plugin")) {
-                plugin = new PluginFactory(r);
-                plugin.read();
-                plugin.save();
-
-            }
             if (!r.isBuilt()) {
-                if (r.getPublisher().equals("csv")) {
-                    csv = new CSVFactory(r);
-                    csv.read();
-                    csv.save();
+                if (r.getPublisher().equals("plugin")) {
+                    factory = new PluginFactory(r);
+                } else if (r.getPublisher().equals("csv")) {
+                    factory = new CSVFactory(r);
                 } else if (r.getPublisher().equals("xml")) {
-                    xml = new XMLFactory(r);
-                    xml.read();
-                    xml.save();
+                    factory = new XMLFactory(r);
                 } else if (r.getPublisher().equals("sql")) {
-                    sql = new SQLFactory(r);
-                    sql.read();
-                    sql.save();
+                    factory = new SQLFactory(r);
                 } else if (r.getPublisher().equals("sparql")) {
-                    sparql = new SPARQLFactory(r);
-                    sparql.read();
-                    sparql.save();
+                    factory = new SPARQLFactory(r);
+                } else {
+                    factory = null;
                 }
+                factory.read();
+                factory.save();
             }
             if (Config.isDebug()) {
                 System.out.println("[COEUS][Builder] Data for " + r.getTitle() + " read");

@@ -14,7 +14,7 @@ import pt.ua.bioinformatics.coeus.domain.Resource;
  *
  * @author pedrolopes
  */
-public class PluginFactory {
+public class PluginFactory implements ResourceFactory{
 
     private Resource res;
 

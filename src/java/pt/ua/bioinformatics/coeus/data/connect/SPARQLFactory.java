@@ -26,7 +26,7 @@ import pt.ua.bioinformatics.coeus.domain.Resource;
  *
  * @author pedrolopes
  */
-public class SPARQLFactory {
+public class SPARQLFactory implements ResourceFactory {
 
     private Resource res;
     private Triplify rdfizer;

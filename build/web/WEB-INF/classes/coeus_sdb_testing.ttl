@@ -14,7 +14,7 @@
 <#conn> rdf:type sdb:SDBConnection ;
     sdb:sdbType       "MySQL" ;
     sdb:sdbHost       "localhost:3306" ;
-    sdb:sdbName       "coeus" ;
+    sdb:sdbName       "DC4" ;
     sdb:sdbUser       "root" ;
     sdb:sdbPassword   "telematica" ;
     sdb:driver        "com.mysql.jdbc.Driver" ;

@@ -28,7 +28,7 @@ import pt.ua.bioinformatics.coeus.domain.Resource;
  *
  * @author pedrolopes
  */
-public class XMLFactory {
+public class XMLFactory implements ResourceFactory {
 
     private Resource res;
     private DocumentBuilderFactory domFactory;

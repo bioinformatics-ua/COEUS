@@ -23,7 +23,7 @@ import pt.ua.bioinformatics.coeus.domain.Resource;
  *
  * @author pedrolopes
  */
-public class SQLFactory {
+public class SQLFactory implements ResourceFactory {
 
     private Resource res;
     private DB db = new DB();
