@@ -74,7 +74,7 @@ public class GetActionBean implements ActionBean {
     @DefaultHandler
     public Resolution doView() {
         Boot.start();
-        return new ForwardResolution("/stream/index.jsp");
+        return new ForwardResolution("/stream.jsp");
     }
 
     public Resolution json() {

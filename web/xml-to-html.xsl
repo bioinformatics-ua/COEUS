@@ -110,7 +110,7 @@
         <html lang="en">
             <head>
                 <title>SPARQL results for COEUS | Enabling Knowledge</title>     
-                <link rel="shortcut icon" href="../assets/img/favicon.ico" />           
+                <link rel="shortcut icon" href="assets/img/favicon.ico" />           
                 <link href="assets/css/bootstrap.css" rel="stylesheet" />        
                 <link href="assets/css/docs.css" rel="stylesheet" />
             </head>
@@ -118,16 +118,16 @@
                 <div class="topbar">
                     <div class="fill">
                         <div class="container">
-                    <h3><a href="../"><img src="../assets/img/coeus_bw.png" /></a></h3>
+                    <h3><a href="./">COEUS</a></h3>
                             <ul>
                                 <li>
-                                    <a href="../documentation/">Documentation</a>
+                                    <a href="documentation/">Documentation</a>
                                 </li>
                                 <li>
-                                    <a href="../science/">Science</a>
+                                    <a href="science/">Science</a>
                                 </li>
                                 <li class="active">
-                                    <a href="../sparqler/">SPARQL</a>
+                                    <a href="sparqler/">SPARQL</a>
                                 </li>
                             </ul>
                         </div>

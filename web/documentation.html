@@ -9,17 +9,13 @@
         <!--[if lt IE 9]>
           <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-
         <!-- Le styles -->
         <link href="../assets/css/bootstrap.css" rel="stylesheet">
         <link href="../assets/css/docs.css" rel="stylesheet">
+        <link href="../assets/css/coeus.css" rel="stylesheet">
         <!-- Le fav and touch icons -->
         <link rel="shortcut icon" href="../assets/img/favicon.ico">
-        <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="../assets/img/apple-touch-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="../assets/img/apple-touch-icon-114x114.png">
     </head>
-
     <body>
 
         <!-- Topbar
@@ -27,8 +23,8 @@
         <div class="topbar">
             <div class="fill">
                 <div class="container">
-                    <h3><a href="../"><img src="../assets/img/coeus_bw.png" /></a></h3>
-                    <ul class="nav secondary-nav">
+                    <h3><a href="../">COEUS</a></h3>
+                    <ul id="topbar" class="nav secondary-nav">
                         <li class="menu">
                             <a href="#" class="menu">Explore</a>
                             <ul class="menu-dropdown">
@@ -49,31 +45,28 @@
                         <li class="active"><a href="#">Documentation</a></li>
                         <li><a href="../science/">Science</a></li>
                         <li><a href="../sparqler/">SPARQL</a></li>
-                        <li><a id="contact" href="#">Contact</a></li>
+                        <li><a id="contact" data-controls-modal="modal" data-backdrop="true" href="#">Contact</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div id="modal" class="well modal-backdrop" style="border: none; padding: 40px;display: none; width: 100%; height: 100%;">
-            <div class="modal" style="position: relative; top: auto; left: auto; margin: 0 auto; z-index: 1000; margin-top: 64px;">
-                <div class="modal-header">
-                    <h3>Contact Information</h3>
-                    <a href="#" class="close closer">&times;</a>
-                </div>
-                <div class="modal-body">
-                    <address>
-                        <strong>Pedro Lopes</strong><br/>
-                        <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a><br/>
-                        DETI/IEETA, University of Aveiro<br />
-                        Campus Universitário de Santiago<br />
-                        3810 - 193 Aveiro<br/>
-                        Portugal
-                    </address>
-                </div>
-                <div class="modal-footer">
-                    <a href="mailto:pedrolopes@ua.pt" class="btn primary">Send Mail</a>
-                    <a href="#" class="btn secondary closer">Close</a>
-                </div>
+        <div id="modal" class="modal hide fade">
+            <div class="modal-header">
+                <a href="#" class="close">&times;</a>
+                <h3>Contact Information</h3>
+            </div>
+            <div class="modal-body">
+                <address>
+                    <strong>Pedro Lopes</strong><br/>
+                    <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a><br/>
+                    DETI/IEETA, University of Aveiro<br />
+                    Campus Universitário de Santiago<br />
+                    3810 - 193 Aveiro<br/>
+                    Portugal
+                </address>
+            </div>
+            <div class="modal-footer">
+                <a href="mailto:pedrolopes@ua.pt" class="btn primary">Send Mail</a>
             </div>
         </div>
         <!-- Quickstart options
@@ -91,7 +84,7 @@
                     </div>
                     <div class="span5 columns">
                         <h6>Test Drive</h6>
-                        <p>It's "Semantic Web-in-a-box", with steroids and quick web data browser.</p>
+                        <p>It's "Semantic Web in a box", with steroids and interactive data APIs.</p>
                         <p><a class="btn primary" href="/coeus/api/omim:104300" target="_blank">Give it a try &raquo;</a></p>
                     </div>
                     <div class="span5 columns">
@@ -325,7 +318,10 @@
                             All data collected in a COEUS instance can be accessed through a SPARQL endpoint and taking advantage of SPARQL's advanced querying features.
                         </p>
                         <p>
-                            The endpoint default location is at <em><strong>&lt;app&gt;/sparql</strong></em>. <a class="btn right info" href="../sparqler/">Test it here &raquo;</a>
+                            The endpoint default location is at <em><strong>&lt;app&gt;/sparql</strong></em>.
+                        </p>
+                        <p>
+                            <a class="btn right info" href="../sparqler/">Test it here &raquo;</a>
                         </p>
                         <h3>STREAM UI</h3>
                         <p>
@@ -344,8 +340,8 @@
                     </div>
                 </div><!-- /row -->
             </section>
-            
-                        <!-- Web
+
+            <!-- Web
 ================================================== -->
             <section id="web">
                 <div class="page-header">
@@ -354,18 +350,24 @@
                 <!-- Table structure -->
                 <div class="row">
                     <div class="span4 columns">
-                        <h2>Stripes</h2>
+                        <h3>Stripes and Twitter</h3>
                         <p>
-                            COEUS includes the Java Stripes framework for streamlined Web Application development on top of existing Java APIs.
+                            COEUS includes the Java Stripes framework for streamlined Web Application development on top of existing Java APIs and Twitter Bootstrap CSS/JS framework for the web apps presentation layer.
                         </p>
                     </div>
                     <div class="span12 columns">
-                        <h3>More on Stripes</h3>
+                        <h2>Stripes</h2>
                         <p>
-                           Stripes is a presentation framework for building web applications using the latest Java technologies. The main driver behind Stripes is that web application development in Java is just too much work! It seems like every existing framework requires gobs of configuration. Struts is pretty feature-light and has some serious architectural issues. Others, like WebWork 2 and Spring-MVC are much better, but still require a lot of configuration, and seem to require you to learn a whole new language just to get started.
+                            Stripes is a presentation framework for building web applications using the latest Java technologies. The main driver behind Stripes is that web application development in Java is just too much work! It seems like every existing framework requires gobs of configuration. Struts is pretty feature-light and has some serious architectural issues. Others, like WebWork 2 and Spring-MVC are much better, but still require a lot of configuration, and seem to require you to learn a whole new language just to get started.
                         </p>
                         <p><a class="btn right info" target="_blank" href="http://www.stripesframework.org/">Go to Stripes &raquo;</a></p>
-                                             
+                        <h2>Twitter Bootstrap</h2>
+                        <p>
+                            Bootstrap is a toolkit from Twitter designed to kickstart development of webapps and sites.
+                            It includes base CSS and HTML for typography, forms, buttons, tables, grids, navigation, and more.
+                        </p>
+                        <p><a class="btn right info" target="_blank" href="http://twitter.github.com/bootstrap/">Go to Bootstrap &raquo;</a> <span class="label success">New</span>
+                        </p>
                     </div>
                 </div><!-- /row -->
             </section>
@@ -409,6 +411,22 @@
                             <li>Update the <em>src/java/coeus_joseki_sdb.ttl</em> file with your MySQL access credentials for the SPARQL server(file content is self-explanatory)(same as above)</li>
                             <li>Your COEUS install is ready to use!</li>
                         </ol>
+                        <p><span class="label warning">Warning</span><br />There are three working environments in COEUS: <em>testing</em>, <em>development</em> and <em>production</em>. Each of these environments
+                            will read a distinct <strong>.ttl</strong> setup file for the working environment defined in the <em>src/java/config.js</em> <strong>environment</strong> property.
+                        <h3>Configuration</h3>
+                        <p>
+                            COEUS seeds’ configuration defines the entire instance structure. Three files have control over the application properties, model and, above all, integrated data.
+                            Application properties such as naming, version or deployment environment are stored in a local JavaScript file (<em>src/java/config.js</em>). Using a JSON object for the configuration permits faster reads, in comparison to XML, while maintaining a good object-oriented structure, in comparison to simple properties files.
+                        </p>
+                        <p>
+                            In some scenarios, the “reuse instead of rewrite” principle may not suffice for the entire application model. As such, COEUS allows the creation of custom ontologies to use in one or various seeds. Starting with the basic <a href="#ontology">COEUS ontology</a>, developers can setup their own applications models, taking full advantage of RDF/OWL’s modeling flexibility.<br />
+                            This ontology is defined in the <strong>ontology</strong> property of COEUS JavaScript configuration file.
+                        </p>
+                        <p>
+                            The third required configuration file includes the data integration and exploration setup (<em>src/java/coeus_setup.rdf</em>). In this file we define the application individuals for each class, configuring entities, concepts, bridges and resources. Summarily, content in this file is used to guide the entire framework instance setup, from the handling of external resources in the connectors to the labeling rules for each Item individual.
+                            Considering the setup files OWL/RDF nature, relying on Protégé is advisable to ease the configuration process. In this widely used ontology modeling tool, the configuration can be visually organized. 
+
+                        </p>
                         <h3>Running</h3>
                         <p>
                             I recommend that you start by running the existing application setup and read the documentation before building a new seed.
@@ -475,53 +493,25 @@
                 </div>
             </div>
         </div>
-        <!-- JavaScript at the bottom for fast page loading -->
-
-        <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="assets/js/jquery-1.6.2.min.js"><\/script>')</script>
-
-
-        <!-- scripts concatenated and minified via ant build script-->
-        <script defer src="assets/js/plugins.js"></script>
-        <!-- end scripts-->
-
-
+        <script defer src="../assets/js/bootstrap-modal.js"></script>        
+        <script defer src="../assets/js/bootstrap-dropdown.js"></script>
         <script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-12230872-7']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-12230872-7']);
+            _gaq.push(['_trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
         <script>
             $(document).ready(function(){
-                $('#contact').click(function(){
-                    $('#modal').fadeIn('slow');
-                });
-
-                $('.closer').click(function(){
-                    $('#modal').fadeOut('slow');
-                });
-
-                $("body").bind("click", function (e) {
-                    $('a.menu').parent("li").removeClass("open");
-                });
-
-                $("a.menu").click(function (e) {
-                    var $li = $(this).parent("li").toggleClass('open');
-                    return false;
-                });
+                $('#topbar').dropdown();
             });
         </script>
-
-
         <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
              chromium.org/developers/how-tos/chrome-frame-getting-started -->
         <!--[if lt IE 7 ]>
