@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>SPARQL endpoint for COEUS | Enabling Knowledge</title>
+        <meta name="description" content="">
+        <meta name="author" content="Pedro Lopes pedrolopes@ua.pt">
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le styles -->
+        <link rel="shortcut icon" href="../assets/img/favicon.ico">
+        <link href="../assets/css/bootstrap.css" rel="stylesheet">
+        <link href="../assets/css/docs.css" rel="stylesheet">
+        <link href="../assets/css/coeus.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- Topbar
+          ================================================== -->
+        <div class="topbar">
+            <div class="fill">
+                <div class="container">
+                    <h3><a href="../">COEUS</a></h3>
+                    <ul>
+                        <li><a href="../documentation/">Documentation</a></li>
+                        <li><a href="../science/">Science</a></li>
+                        <li class="active"><a href="#">SPARQL</a></li>
+                        <li><a id="contact" data-controls-modal="modal" data-backdrop="true" href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="modal" class="modal hide fade">
+                <div class="modal-header">
+                     <a href="#" class="close">&times;</a>
+                    <h3>Contact Information</h3>
+                </div>
+                <div class="modal-body">
+                    <address>
+                        <strong>Pedro Lopes</strong><br/>
+                        <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a><br/>
+                        DETI/IEETA, University of Aveiro<br />
+                        Campus Universitário de Santiago<br />
+                        3810 - 193 Aveiro<br/>
+                        Portugal
+                    </address>
+                </div>
+                <div class="modal-footer">
+                    <a href="mailto:pedrolopes@ua.pt" class="btn primary">Send Mail</a>
+                </div>
+            </div>
+        <div class="container">
+            <section id="basics">
+                <div class="page-header">
+                    <h1>SPARQL</h1>
+                </div>
+                <!-- Table structure -->
+                <div class="row">
+                    <div class="span4 columns">
+                        <h2>Test your query</h2>
+                        <p>
+                            You can test (or write) your SPARQL queries in the <em>query</em> box or use one of the samples below.
+                        </p>
+                        <ul>
+                            <li><a id="item_info">Get individual Item info</a></li>
+                            <li><a id="all_concept">Get all Concept individuals</a></li>
+                            <li><a id="count_items">Get Item count for Concept</a></li>
+                        </ul>
+                        <h2>Endpoint</h2>
+                        <p>
+                            You can integrate COEUS data directly by using the SPARQL endpoint.<br />This endpoint replies to any SPARQL queries, including output format specifications and distributed service connections.
+                        </p>
+                        <p><a class="btn right disabled" target="_top" href="#">Endpoint at <em>/sparql</em></a></p>
+                    </div>
+                    <div class="span12 columns">
+                        <form action="../sparql" method="get">
+                            <div class="clearfix">
+                                <label for="query">Query</label>
+                                <div class="input">
+                                    <textarea class="xxlarge" id="query" name="query"  rows="16"></textarea>
+                                    <span class="help-block">
+                                        Please write your SPARQL query and select the output data format.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <label>Data format:</label>
+                                <div class="input">
+                                    <ul class="inputs-list">
+                                        <li>
+                                            <label>
+                                                <input type="radio" name="output" value="xml" checked/>
+                                                <span>XML</span>                                                 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="radio" name="output" value="json"/>
+                                                <span>JSON</span>                                                 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="radio" name="output" value="tsv"/>
+                                                <span>TSV</span>                                                 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="radio" name="output" value="csv"/>
+                                                <span>CSV</span>                                                 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="radio" name="output" value="text"/>
+                                                <span>Text</span>                                                 
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="force-accept" value="text/plain"/>
+                                                <span>Force the accept header to <tt>text/plain</tt> regardless</span>                                                 
+                                            </label>
+                                        </li>                                         
+                                    </ul>
+
+                                </div>
+                            </div>
+                            <input hidden name="stylesheet" size="25" value="/coeus/translate" />
+                            <input type="submit" class="btn primary" value="Get Data" />
+                        </form>
+                    </div>
+                </div><!-- /row -->
+            </section>
+        </div>
+        <div id="footer">
+            <div class="inner">
+                <div class="container">
+                    <p class="right"><a href="#">Back to top</a></p>
+
+                    <p>&copy; University of Aveiro 2011</p>
+                    <p><small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a></small></p>
+
+                    <p> <a href="http://twitter.github.com/bootstrap/" target="_blank"><small>Layout with Twitter Bootstrap</small></a></p>
+                </div>
+            </div>
+        </div>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="assets/js/jquery-1.6.2.min.js"><\/script>')</script>
+        <script defer src="../assets/js/bootstrap-modal.js"></script>        
+        <script defer src="../assets/js/bootstrap-dropdown.js"></script>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-12230872-7']);
+            _gaq.push(['_trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+        <script>
+            $(document).ready(function(){
+                $('#topbar').dropdown();
+                 $('#item_info').click(function () {
+                    $('#query').attr('value','PREFIX coeus: <http://bioinformatics.ua.pt/coeus/>\nPREFIX owl2xml: <http://www.w3.org/2006/12/owl2-xml#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\n\nSELECT ?predicate ?object {<http://bioinformatics.ua.pt/coeus/omim_114480> ?predicate ?object}');
+                });
+                
+                $('#all_concept').click(function () {
+                    $('#query').attr('value','PREFIX coeus: <http://bioinformatics.ua.pt/coeus/>\nPREFIX owl2xml: <http://www.w3.org/2006/12/owl2-xml#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\n\nSELECT ?item {?item coeus:hasConcept coeus:concept_PharmGKB }');
+                });
+                
+                $('#count_items').click(function () {
+                    $('#query').attr('value','PREFIX coeus: <http://bioinformatics.ua.pt/coeus/>\nPREFIX owl2xml: <http://www.w3.org/2006/12/owl2-xml#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\n\nSELECT COUNT(DISTINCT ?tag) {?tag coeus:hasConcept coeus:concept_PDB}');
+                });
+            });
+        </script>
+        <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+             chromium.org/developers/how-tos/chrome-frame-getting-started -->
+        <!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+       
+    </body>
+</html>
