@@ -280,21 +280,46 @@
                         <h2>APIs</h2>
                         <p>
                             Since COEUS is focused on interoperability, there's more than one way of getting your data. If you are also developing your applications
-                            in Java, you can use the internal API. If you're using something else, just use the REST API!
+                            in Java, you can use the internal API. If you're using something else, just use the REST API! or LinkedData! or SPARQL!
                         </p>
                         <p>
                             To (visually) check your COEUS dataset, there's a simple web application that will list all relationships to a given item, you can test it
-                            <a href="/coeus/api/omim:104300">here</a> with a OMIM Disease Item.
+                            <a href="../resource/uniprot_P51587">here</a> with a UniProt Protein item.
                         </p>
                     </div>
                     <div class="span12 columns">
-                        <h3>Internal</h3>
+                        <h3>Java</h3>
                         <p>
                             How are your Javadoc reading skills? <br />
                             There will be better docs for the internal methods in the future, but in the meanwhile this will have to do...
                         </p>
                         <p><a class="btn right info" href="../javadoc/">View Java Documentation &raquo;</a></p>
-                        <h3>External</h3>
+                        
+                        <h3>SPARQL Endpoint</h3>
+                        <p>
+                            All data collected in a COEUS instance can be accessed through a SPARQL endpoint and taking advantage of SPARQL's advanced querying features.
+                        </p>
+                        <p>
+                            The endpoint default location is at <em><strong>&lt;app&gt;/sparql</strong></em>.
+                        </p>
+                        <p>
+                            <a class="btn right info" href="../sparqler/">Test it here &raquo;</a>
+                        </p>
+                        <h3>LinkedData</h3>
+                        <p>
+                            COEUS publishes all data through LinkedData patterns & guidelines by default. With <a href="http://www4.wiwiss.fu-berlin.de/pubby/" target="_blank">pubby</a> included in all COEUS seeds, data is easily available to external
+                            appications. <br />Using the <em>../resource/*</em> pattern, you can access object data in the web or RDF browsers.
+                        </p>
+                        <ul>
+                            <li>HTML page for UniProt P51587: <a href="../resource/uniprot_P51687">../resource/uniprot_P51687</a></li>
+                            <li>RDF content for EntrezGene 5002 <a href="../resource/entrezgene_5002?output=xml">../resource/entrezgene_5002?output=xml</a></li>
+                        </ul>
+                        <p>
+                            <span class="label warning">Warning</span><br />
+                            Please remember to configure the <em>../src/java/coeus_pubby.ttl</em> file with your custom ontology and application settings in order to get COEUS LinkedData
+                            working properly.
+                        </p>
+                        <h3>REST</h3>
                         <p>
                             There's no rest with REST. STREAM web app can give you a quick glance over existing data while new methods are being added...
                         </p>
@@ -313,16 +338,6 @@
                             <li><a href="../api/triple/coeus:omim_114480/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:omim_114480/coeus:isAssociatedTo/obj/csv</a> gets all objects (obj) with a <em>coeus:isAssociatedTo</em> relationship to <strong>omim:114480</strong> (in CSV format)</li>
                             <li><a href="../api/triple/s/diseasecard:hasGenotype/o/xml" target="_blank">../api/triple/s/diseasecard:hasGenotype/o/xml</a> gets all subjects (s) and objects (obj) connected with a <em>diseasecard:hasGenotype</em> relationship (in XML format)</li>
                         </ul>
-                        <h3>SPARQL Endpoint</h3>
-                        <p>
-                            All data collected in a COEUS instance can be accessed through a SPARQL endpoint and taking advantage of SPARQL's advanced querying features.
-                        </p>
-                        <p>
-                            The endpoint default location is at <em><strong>&lt;app&gt;/sparql</strong></em>.
-                        </p>
-                        <p>
-                            <a class="btn right info" href="../sparqler/">Test it here &raquo;</a>
-                        </p>
                         <h3>STREAM UI</h3>
                         <p>
                             With STREAM you can browse all exising data and relationships in your COEUS SDB. This API simply lists all properties associated with the given element. The UI (described below) lists
@@ -409,9 +424,12 @@
                             <li>Open COEUS Project in NetBeans and correct server/classpath issues</li>
                             <li>Update the <em>src/java/coeus_sdb_&lt;environment&gt;.ttl</em> file with your MySQL access credentials for the COEUS storage (file content is self-explanatory)</li>
                             <li>Update the <em>src/java/coeus_joseki_sdb.ttl</em> file with your MySQL access credentials for the SPARQL server(file content is self-explanatory)(same as above)</li>
+                            <li>Update the <em>src/java/coeus_pubby.ttl</em> file with your custom ontology settings.</li>
                             <li>Your COEUS install is ready to use!</li>
                         </ol>
-                        <p><span class="label warning">Warning</span><br />There are three working environments in COEUS: <em>testing</em>, <em>development</em> and <em>production</em>. Each of these environments
+                        <p>
+                            <span class="label warning">Warning</span><br />
+                            There are three working environments in COEUS: <em>testing</em>, <em>development</em> and <em>production</em>. Each of these environments
                             will read a distinct <strong>.ttl</strong> setup file for the working environment defined in the <em>src/java/config.js</em> <strong>environment</strong> property.
                         <h3>Configuration</h3>
                         <p>

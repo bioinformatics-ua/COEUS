@@ -216,7 +216,7 @@ public class OMIMPlugin {
                     api.addStatement(geno_item, Predicate.get("rdf:type"), geno_obj);
 
                     // set Item label
-                    api.addStatement(geno_item, Predicate.get("rdfs:label"), api.createResource("item_" + genotype.getOmimId()));
+                    api.addStatement(geno_item, Predicate.get("rdfs:label"), "omim_" + genotype.getOmimId());
 
                     // associate Item with Concept
                     com.hp.hpl.jena.rdf.model.Resource con = api.getResource(res.getIsResourceOf().getUri());
@@ -241,7 +241,7 @@ public class OMIMPlugin {
                         api.addStatement(pheno_item, Predicate.get("rdf:type"), pheno_obj);
 
                         // set Item label
-                        api.addStatement(pheno_item, Predicate.get("rdfs:label"), api.createResource("item_" + phenotype.getOmimId()));
+                        api.addStatement(pheno_item, Predicate.get("rdfs:label"), "hgnc_" + phenotype.getOmimId());
 
                         // associate Item with Concept
                         com.hp.hpl.jena.rdf.model.Resource pheno_concept = api.getResource(res.getIsResourceOf().getUri());
