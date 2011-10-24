@@ -36,9 +36,8 @@
 
     <xsl:template name="vb-result">
         <div>
-            <table cellspacing="10" cellpadding="5" border="0">
-                <xsl:text>
-                </xsl:text>
+            <table class="zebra-striped">
+                <thead>
                 <tr>
                     <xsl:for-each select="res:head/res:variable">
                         <th>
@@ -46,6 +45,8 @@
                         </th>
                     </xsl:for-each>
                 </tr>
+                </thead>
+                <tbody>
                 <xsl:text>
                 </xsl:text>
                 <xsl:for-each select="res:results/res:result">
@@ -53,6 +54,7 @@
                         <xsl:apply-templates select="."/>
                     </tr>
                 </xsl:for-each>
+                </tbody>
             </table>
         </div>
     </xsl:template>
@@ -133,6 +135,7 @@
                         </div>
                     </div>
                 </div>
+                <br /><br/><br/>
                 <div class="container">
                     <xsl:if test="res:head/res:link">
                         <xsl:call-template name="header"/>
