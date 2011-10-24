@@ -1,43 +1,17 @@
-/* the humans responsible & colophon */
-/* humanstxt.org */
+/* COEUS | Enabling Knowledge */
 
 
 /* TEAM */
-  <your title>: <your name>
-  Site: 
-  Twitter: 
-  Location: 
+  Pedro Lopes: pedrolopes@ua.pt
+  Site:  http://pedrolopes.net  
+  Twitter: @pedrolopes
+  Location: Aveiro, Portugal
 
 /* THANKS */
-  Names (& URL): 
+  UA.PT Bioinformatics (http://bioinformatics.ua.pt/)
+  José Luís Oliveira (jlo@ua.pt)
 
 /* SITE */
-  Standards: HTML5, CSS3
-  Components: Modernizr, jQuery
-  Software:
+  Standards: HTML5, CSS3, RDF, OWL, SPARQL, LinkedData
+  Components: jQuery, Java, Jena, Joseki, pubby, Stripes...
   
-
-                                    
-                               -o/-                       
-                               +oo//-                     
-                              :ooo+//:                    
-                             -ooooo///-                   
-                             /oooooo//:                   
-                            :ooooooo+//-                  
-                           -+oooooooo///-                 
-           -://////////////+oooooooooo++////////////::    
-            :+ooooooooooooooooooooooooooooooooooooo+:::-  
-              -/+ooooooooooooooooooooooooooooooo+/::////:-
-                -:+oooooooooooooooooooooooooooo/::///////:-
-                  --/+ooooooooooooooooooooo+::://////:-   
-                     -:+ooooooooooooooooo+:://////:--     
-                       /ooooooooooooooooo+//////:-        
-                      -ooooooooooooooooooo////-           
-                      /ooooooooo+oooooooooo//:            
-                     :ooooooo+/::/+oooooooo+//-           
-                    -oooooo/::///////+oooooo///-          
-                    /ooo+::://////:---:/+oooo//:          
-                   -o+/::///////:-      -:/+o+//-         
-                   :-:///////:-            -:/://         
-                     -////:-                 --//:        
-                       --                       -:        

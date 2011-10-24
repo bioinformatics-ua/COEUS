@@ -38,22 +38,22 @@
         <div>
             <table class="zebra-striped">
                 <thead>
-                <tr>
-                    <xsl:for-each select="res:head/res:variable">
-                        <th>
-                            <xsl:value-of select="@name"/>
-                        </th>
-                    </xsl:for-each>
-                </tr>
+                    <tr>
+                        <xsl:for-each select="res:head/res:variable">
+                            <th>
+                                <xsl:value-of select="@name"/>
+                            </th>
+                        </xsl:for-each>
+                    </tr>
                 </thead>
                 <tbody>
-                <xsl:text>
-                </xsl:text>
-                <xsl:for-each select="res:results/res:result">
-                    <tr>
-                        <xsl:apply-templates select="."/>
-                    </tr>
-                </xsl:for-each>
+                    <xsl:text>
+                    </xsl:text>
+                    <xsl:for-each select="res:results/res:result">
+                        <tr>
+                            <xsl:apply-templates select="."/>
+                        </tr>
+                    </xsl:for-each>
                 </tbody>
             </table>
         </div>
@@ -120,7 +120,9 @@
                 <div class="topbar">
                     <div class="fill">
                         <div class="container">
-                    <h3><a href="./">COEUS</a></h3>
+                            <h3>
+                                <a href="./">COEUS</a>
+                            </h3>
                             <ul>
                                 <li>
                                     <a href="documentation/">Documentation</a>
@@ -135,7 +137,9 @@
                         </div>
                     </div>
                 </div>
-                <br /><br/><br/>
+                <br />
+                <br/>
+                <br/>
                 <div class="container">
                     <xsl:if test="res:head/res:link">
                         <xsl:call-template name="header"/>
@@ -152,28 +156,25 @@
 
                     </xsl:choose>
                 </div>
-                <div id="footer">
-                    <div class="inner">
-                        <div class="container">
-                            <p class="right">
-                                <a href="#">Back to top</a>
-                            </p>
+                <footer>
+                    <div class="container">
+                        <p class="right">
+                            <a href="#">Back to top</a>
+                        </p>
 
-                            <p>University of Aveiro 2011</p>
-                            <p>
-                                <small>Under Development by 
-                                    <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a>
-                                </small>
-                            </p>
-
-                            <p> 
-                                <a href="http://twitter.github.com/bootstrap/" target="_blank">
-                                    <small>Layout with Twitter Bootstrap</small>
-                                </a>
-                            </p>
-                        </div>
+                        <p>University of Aveiro 2011</p>
+                        <p>
+                            <small>Under Development by 
+                                <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a>
+                            </small>
+                        </p>
+                        <p> 
+                            <a href="http://twitter.github.com/bootstrap/" target="_blank">
+                                <small>Layout with Twitter Bootstrap</small>
+                            </a>
+                        </p>
                     </div>
-                </div>
+                </footer>
             </body>
         </html>
     </xsl:template>
