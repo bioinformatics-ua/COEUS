@@ -85,7 +85,7 @@
                     <div class="span5 columns">
                         <h6>Test Drive</h6>
                         <p>It's "Semantic Web in a box", with steroids and interactive data APIs.</p>
-                        <p><a class="btn primary" href="/coeus/api/omim:104300" target="_blank">Give it a try &raquo;</a></p>
+                        <p><a class="btn primary" href="/coeus/resource/uniprot_P51587" target="_blank">Give it a try &raquo;</a></p>
                     </div>
                     <div class="span5 columns">
                         <h6>Download</h6>
@@ -272,7 +272,7 @@
 ================================================== -->
             <section id="api">
                 <div class="page-header">
-                    <h1>COEUS API <small>is called STREAM</small></h1>
+                    <h1>API</h1>
                 </div>
                 <!-- Table structure -->
                 <div class="row">
@@ -294,7 +294,7 @@
                             There will be better docs for the internal methods in the future, but in the meanwhile this will have to do...
                         </p>
                         <p><a class="btn right info" href="../javadoc/">View Java Documentation &raquo;</a></p>
-                        
+
                         <h3>SPARQL Endpoint</h3>
                         <p>
                             All data collected in a COEUS instance can be accessed through a SPARQL endpoint and taking advantage of SPARQL's advanced querying features.
@@ -325,37 +325,13 @@
                         </p>
                         <h3>REST</h3>
                         <p>
-                            There's no rest with REST. STREAM web app can give you a quick glance over existing data while new methods are being added...
-                        </p>
-                        <p>
-                            Simple data access is done using key:value pairs where keys are Concept <em>rdfs:label</em>s and value are the respective Item IDs. Data can be browsed in the UI or in through direct GETs.
+                            To access all triples in COEUS Semantic Storage, you can combine subjects, objects and predicates to iteratively get data!
                         </p>
                         <ul>
-                            <li><a href="../api/omim:104300" target="_blank">../api/omim:104300</a> goes directly to the UI</li>                            
-                            <li><a href="../api/omim:104300.xml" target="_blank">../api/omim:104300.xml</a> retrieves data in the select format (json, csv, xml...)</li>
-                        </ul>
-                        <p>
-                            For triple access, you can combine subjects, objects and predicates to get almost all data (even if iteratively!).
-                        </p>
-                        <ul>
-                            <li><a href="../api/triple/coeus:omim_114480/p/o" target="_blank">../api/triple/coeus:omim_114480/p/o</a> gets all predicates (p) and objects (o) related to <strong>omim:114480</strong></li>
-                            <li><a href="../api/triple/coeus:omim_114480/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:omim_114480/coeus:isAssociatedTo/obj/csv</a> gets all objects (obj) with a <em>coeus:isAssociatedTo</em> relationship to <strong>omim:114480</strong> (in CSV format)</li>
+                            <li><a href="../api/triple/coeus:omim_114480/p/o" target="_blank">../api/triple/coeus:omim_114480/p/o</a> gets all predicates (p) and objects (o) related to <strong>omim_114480</strong></li>
+                            <li><a href="../api/triple/coeus:omim_114480/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:omim_114480/coeus:isAssociatedTo/obj/csv</a> gets all objects (obj) with a <em>coeus:isAssociatedTo</em> relationship to <strong>omim_114480</strong> (in CSV format)</li>
                             <li><a href="../api/triple/s/diseasecard:hasGenotype/o/xml" target="_blank">../api/triple/s/diseasecard:hasGenotype/o/xml</a> gets all subjects (s) and objects (obj) connected with a <em>diseasecard:hasGenotype</em> relationship (in XML format)</li>
                         </ul>
-                        <h3>STREAM UI</h3>
-                        <p>
-                            With STREAM you can browse all exising data and relationships in your COEUS SDB. This API simply lists all properties associated with the given element. The UI (described below) lists
-                            associated items (<em>coeus:isAssociatedTo</em>) along with all other Item properties.
-                        </p>
-                        <a href="../assets/img/stream_ui.png" target="_blank"><img src="../assets/img/stream_ui_small.png" /></a>
-                        <ol>
-                            <li>Associated Item title (<em>dc:title</em>)</li>
-                            <li>Associated Item STREAM link</li>
-                            <li>Associated Item concept label (<em>rdfs:label</em> for <em>coeus:hasConcept</em>)</li>
-                            <li>Item title (<em>dc:title</em>)</li>
-                            <li>Item triple relationship object title (<em>dc:title</em>)</li>
-                            <li>Item triple relationship predicate</li>
-                        </ol>                        
                     </div>
                 </div><!-- /row -->
             </section>
