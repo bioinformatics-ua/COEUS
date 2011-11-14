@@ -60,6 +60,7 @@
                 <img src="assets/img/coeus_left.png" class="logo_right" />
                 <h1>Hello, Semantic Web!</h1>
                 <p><em>Ipsa scientia potestas est.</em> Knowledge itself is power.<br />Next-generation Semantic Web Application Framework.</p>
+                <p>"Semantic Web in a box"</p>
                 <p><a class="btn primary large" href="sparqler/">Take the TestDrive &raquo;</a></p>
             </div>
 
@@ -88,7 +89,7 @@
 
             <footer>
                 <blockquote>
-                    <p>&copy; University of Aveiro 2011</p>
+                    <p>&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2011</p>
                     <small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a></small>
                 </blockquote>
             </footer>
