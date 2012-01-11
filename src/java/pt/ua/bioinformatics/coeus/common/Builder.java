@@ -54,7 +54,7 @@ public class Builder {
                     + " ?s coeus:method ?method ."
                     + " ?s coeus:endpoint ?endpoint ."
                     + " ?s coeus:order ?order . "
-                    + "OPTIONAL { ?s coeus:built ?buil} . OPTIONAL { ?s coeus:extension ?extension} . OPTIONAL {?s coeus:query ?query}} ORDER BY ?order", "js", false));
+                    + "OPTIONAL { ?s coeus:built ?built} . OPTIONAL { ?s coeus:extension ?extension} . OPTIONAL {?s coeus:query ?query}} ORDER BY ?order", "js", false));
             JSONObject results = (JSONObject) response.get("results");
             JSONArray bindings = (JSONArray) results.get("bindings");
 

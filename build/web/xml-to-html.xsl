@@ -137,6 +137,8 @@
                         </div>
                     </div>
                 </div>
+                  <!-- forker -->
+                 <a href="https://github.com/pdrlps/COEUS/tree/coeus1.0b" target="_blank" id="forkme">Fork COEUS on GitHub</a>
                 <br />
                 <br/>
                 <br/>
@@ -162,7 +164,7 @@
                             <a href="#">Back to top</a>
                         </p>
 
-                        <p>University of Aveiro 2011</p>
+                        <p>University of Aveiro 2012</p>
                         <p>
                             <small>Under Development by 
                                 <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a>

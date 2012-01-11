@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>SPARQL endpoint for COEUS | Enabling Knowledge</title>
-        <meta name="description" content="">
+        <meta name="description" content="COEUS semantic web linkeddata linked data services rest integration heterogeneous distributed knowledge federation">
         <meta name="author" content="Pedro Lopes pedrolopes@ua.pt">
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
@@ -33,6 +33,9 @@
                 </div>
             </div>
         </div>
+        
+          <!-- forker -->
+        <a href="https://github.com/pdrlps/COEUS/tree/coeus1.0b" target="_blank" id="forkme">Fork COEUS on GitHub</a>
         <div id="modal" class="modal hide fade">
                 <div class="modal-header">
                      <a href="#" class="close">&times;</a>
@@ -68,6 +71,15 @@
                             <li><a id="item_info">Get individual Item info</a></li>
                             <li><a id="all_concept">Get all Concept individuals</a></li>
                             <li><a id="count_items">Get Item count for Concept</a></li>
+                        </ul>
+                        <h2>LinkedData</h2>
+                        <p>
+                            You can also browse COEUS content through LinkedData methods.
+                        </p>
+                        <ul>
+                            <li><a href="../resource/uniprot_P51587" target="_top">Browse <em>UniProt P51587</em> data</a></li>
+                            <li><a href="../resource/pdb_1N0W" target="_top">Browse <em>PDB 1N0W</em> data</a></li>
+                            <li><a href="../resource/mesh_D000742" target="_top">Browse <em>MeSH term D000742</em> data</a></li>
                         </ul>
                         <h2>Endpoint</h2>
                         <p>
@@ -122,7 +134,7 @@
                                         </li>
                                         <li>
                                             <label>
-                                                <input type="checkbox" name="force-accept" value="text/plain"/>
+                                                <input style="visibility: none;" type="checkbox" name="force-accept" value="text/plain"/>
                                                 <span>Force the accept header to <tt>text/plain</tt> regardless</span>                                                 
                                             </label>
                                         </li>                                         
@@ -144,7 +156,7 @@
             <div class="container">
                 <p class="right"><a href="#">Back to top</a></p>
 
-                 <p>&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2011</p>
+                 <p>&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2012</p>
                 <p><small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a></small></p>
 
                 <p> <a href="http://twitter.github.com/bootstrap/" target="_blank"><small>Layout with Twitter Bootstrap</small></a></p>

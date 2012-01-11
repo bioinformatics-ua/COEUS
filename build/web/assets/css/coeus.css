@@ -13,3 +13,16 @@
     margin-top: 28px;
     bottom: 0px;
 }
+
+#forkme {
+    display: block;
+    background: url(../img/forkme.png) no-repeat 0 0;
+    width: 149px;
+    height: 149px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    cursor:pointer;
+    text-indent: -9000px;
+    z-index: 1000000;
+}
