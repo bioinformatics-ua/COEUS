@@ -198,4 +198,58 @@ public class Triplify {
         }
         return success;
     }
+
+    /**
+     * Maps two Item individual lists in SDB with respective statements
+     * according to setup file. <p><b>Workflow</b><ol> <li>Get Item from
+     * <concept>_<key> structure</li> <li>Map new Item</li> </ol></p>
+     * 
+     * @param property the property set field (using | and &amp; nomenclature) 
+     * @return 
+     */
+    public boolean map(String property) {
+        boolean success = false;
+        try {
+            com.hp.hpl.jena.rdf.model.Resource item = api.getResource(extension);
+            for (String s : map) {
+                try {
+                    com.hp.hpl.jena.rdf.model.Resource to = api.getResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(this.resource.getIsResourceOf().getLabel()) + s);
+                    api.addStatement(item, Predicate.get("coeus:isAssociatedWith"), to);
+                    api.addStatement(to, Predicate.get("coeus:isAssociatedWith"), item);
+
+                    if (property.indexOf("|") >= 4) {
+                        String[] ps = property.split("\\|");
+                        for (String prop : ps) {
+                            if (prop.indexOf("&") >= 4) {
+                                String[] inv = prop.split("\\&");
+                                api.addStatement(item, Predicate.get(inv[0]), to);
+                                api.addStatement(to, Predicate.get(inv[1]), item);
+                            } else {
+                                api.addStatement(item, Predicate.get(prop), to);
+                            }
+                        }
+                    } else {
+                        if (property.indexOf("&") >= 4) {
+                            String[] inv = property.split("\\&");
+                            api.addStatement(item, Predicate.get(inv[0]), to);
+                            api.addStatement(to, Predicate.get(inv[1]), item);
+                        } else {
+                            api.addStatement(item, Predicate.get(property), to);
+                        }
+                    }
+                } catch (Exception ex) {
+                    if (Config.isDebug()) {
+                        System.out.println("[COEUS][API] Unable to map " + extension.toString() + " for " + s);
+                    }
+                }
+            }
+            success = true;
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][API] Unable to map " + extension.toString());
+                Logger.getLogger(Triplify.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return success;
+    }
 }

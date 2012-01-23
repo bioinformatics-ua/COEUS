@@ -316,7 +316,9 @@ public class Storage {
             CSVReader predicates = new CSVReader(new FileReader(Config.getPath() + Config.getPredicates()));
             String[] nextLine;
             while ((nextLine = predicates.readNext()) != null) {
-                Predicate.add(PrefixFactory.encode(nextLine[0]), Storage.getModel().getProperty(nextLine[0]));
+                if(!(nextLine[0].indexOf("#") == 0)) {
+                    Predicate.add(PrefixFactory.encode(nextLine[0]), Storage.getModel().getProperty(nextLine[0]));
+                }
             }
             success = true;
         } catch (Exception ex) {
