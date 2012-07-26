@@ -12,7 +12,7 @@ import pt.ua.bioinformatics.coeus.common.Boot;
  *
  * @author pedrolopes
  */
-@UrlBinding("/api/triple/{sub=s}/{pred=p}/{obj=oj}/{format=json}")
+@UrlBinding("/api/triple/{sub=s}/{pred=p}/{obj=o}/{format=json}")
 public class TripleActionBean implements ActionBean {
 
     private ActionBeanContext context;
