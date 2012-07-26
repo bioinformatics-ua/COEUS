@@ -163,21 +163,36 @@ public class API {
     public String getTriple(String sub, String pred, String obj, String format) {
         String response = "";
         String select = "SELECT ?s_sub ?s_pred ?s_obj WHERE {?w_sub ?w_pred ?w_obj}";
-        if (sub.equals("s") || sub.equals("sub") || sub.equals("subject")) {
-            select = select.replace("?s_sub", "?" + sub).replace("?w_sub", "?" + sub);
-        } else {
+        
+        // process subject
+        if(sub.contains("?")) {
+             select = select.replace("?s_sub", sub).replace("?w_sub",sub);
+        } else if (sub.contains(":")) {
             select = select.replace("?s_sub", "").replace("?w_sub", sub);
-        }
-        if (pred.equals("p") || pred.equals("pred") || pred.equals("predicate")) {
-            select = select.replace("?s_pred", "?" + pred).replace("?w_pred", "?" + pred);
         } else {
+            select = select.replace("?s_sub", "?" + sub).replace("?w_sub", "?" + sub);
+        }
+        
+        // process predicate
+        if (pred.contains("?")) {
+            select = select.replace("?s_pred",pred).replace("?w_pred", pred);
+        } else if (pred.contains(":")) {
             select = select.replace("?s_pred", "").replace("?w_pred", pred);
-        }
-        if (obj.equals("o") || obj.equals("obj") || obj.equals("object")) {
-            select = select.replace("?s_obj", "?" + obj).replace("?w_obj", "?" + obj);
         } else {
-            select = select.replace("?s_obj", "").replace("?w_obj", obj);
+            select = select.replace("?s_pred", "?" + pred).replace("?w_pred", "?" + pred);
         }
+        
+        // process object
+        if (obj.contains("?")) {
+             select = select.replace("?s_obj", obj).replace("?w_obj", obj);
+        } else if (obj.contains(":")) {
+            select = select.replace("?s_obj", "").replace("?w_obj", obj); 
+        } else if (obj.contains("\"")) {
+            select = select.replace("?s_obj", "").replace("?w_obj", obj);
+        } else {
+            select = select.replace("?s_obj", "?" + obj).replace("?w_obj", "?" + obj);
+        }
+            
         try {
             String sparqlQuery = PrefixFactory.allToString() + select;
             QueryExecution qe = QueryExecutionFactory.create(sparqlQuery, model);

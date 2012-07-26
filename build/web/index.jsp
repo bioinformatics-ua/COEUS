@@ -134,12 +134,12 @@
                         <p>With COEUS anyone can deploy customized mini-warehouses - Knwoledge Seeds. Each seed provides an API for internal and external usage, enabling the connection of multiple seeds. With multiple seeds connected, their content can be federated, resulting in a truly semantic knowledge federation network - the Knowledge Garden. </p>
                     </div>
                     <div class="span-one-third">
-                        <h6>Case Study</h6>
+                        <h6>Featured</h6>
                         <a href="http://bioinformatics.ua.pt/dc4/"><img src="assets/img/dc4.png" width="200" height="29" alt="Diseasecard" /></a>
                         <ul>
-                            <li>First COEUS seed</li>
                             <li>Rare disease information integration and enrichment</li>
                             <li>Disease-centric and contextual data exploration</li>
+                            <li>Browse external content within Diseasecard</li>
                         </ul>
                         <p><a class="btn primary" href="http://bioinformatics.ua.pt/dc4/">Go to Diseasecard &raquo;</a></p>
                     </div>
