@@ -11,11 +11,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pt.ua.bioinformatics.coeus.api.API;
+import pt.ua.bioinformatics.coeus.api.ConceptFactory;
 import pt.ua.bioinformatics.coeus.api.ItemFactory;
+import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
 import pt.ua.bioinformatics.coeus.data.Predicate;
@@ -53,15 +56,12 @@ public class XMLFactory implements ResourceFactory {
     }
 
     /**
-     * Reads XML data according to Resource information.
-     * <p>Workflow</b><ol>
-     *  <li>Check if resource is starter/extends</li>
-     *  <li>Load XML resource into URL and Document</li>
-     *  <li>Start Triplify with factory Resource</li>
-     *  <li>Get data for Item key into Triplify</li>
-     *  <li>Load data for each InheritedResource property into Triplify hashmap based on XPath queries</li>
-     *  <li>Itemize single item</li>
-     * </ol></p>
+     * Reads XML data according to Resource information. <p>Workflow</b><ol>
+     * <li>Check if resource is starter/extends</li> <li>Load XML resource into
+     * URL and Document</li> <li>Start Triplify with factory Resource</li>
+     * <li>Get data for Item key into Triplify</li> <li>Load data for each
+     * InheritedResource property into Triplify hashmap based on XPath
+     * queries</li> <li>Itemize single item</li> </ol></p>
      */
     public void read() {
         if (res.getMethod().equals("map")) {
@@ -137,12 +137,22 @@ public class XMLFactory implements ResourceFactory {
                                         XPath x_element = factory.newXPath();
                                         NodeList element = (NodeList) x_element.evaluate(c.getQuery(), n, XPathConstants.NODE);
                                         if (element != null) {
-                                            for (int k = 0; k < element.getLength(); k++) {
-                                                try {
-                                                    rdfizer.add(inside, element.item(k).getTextContent());
-                                                } catch (Exception ex) {
+                                            if (element.getLength() > 1) {
+                                                for (int k = 0; k < element.getLength(); k++) {
+                                                    try {
+                                                        rdfizer.add(inside, element.item(k).getTextContent());
+                                                    } catch (Exception ex) {
+                                                        if (Config.isDebug()) {
+                                                            Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, ex);
+                                                        }
+                                                    }
                                                 }
+                                            } else {
+                                                Node e = (Node) element;
+                                                rdfizer.add(inside, e.getTextContent());
                                             }
+
+
                                         }
                                     }
                                 }
@@ -172,12 +182,66 @@ public class XMLFactory implements ResourceFactory {
                 }
             }
         } else if (res.getMethod().equals("complete")) {
-            // TODO
+            try {
+                ArrayList<String> extensions;
+                if (res.getExtension().equals("")) {
+                    extensions = res.getExtended();
+                } else {
+                    extensions = res.getExtended(res.getExtension());
+                }
+                for (String l : extensions) {
+                    domFactory = DocumentBuilderFactory.newInstance();
+                    u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(l)));
+                    domFactory.setNamespaceAware(false);
+                    builder = domFactory.newDocumentBuilder();
+                    try {
+                        doc = builder.parse(u.openStream());
+                        factory = XPathFactory.newInstance();
+                        xpath = factory.newXPath();
+                        entries = (NodeList) xpath.evaluate(res.getQuery(), doc, XPathConstants.NODESET);
+                        for (int i = 0; i < entries.getLength(); i++) {
+                            Node n = entries.item(i);
+                            InheritedResource key = (InheritedResource) res.getHasKey();
+                            rdfizer = new Triplify(res, PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(res.getExtendsConcept()) + ItemFactory.getTokenFromItem(l));
+                            for (Object o : res.getLoadsFrom()) {
+                                InheritedResource c = (InheritedResource) o;
+                                String[] tmp = c.getProperty().split("\\|");
+                                for (String inside : tmp) {
+                                    XPath x_element = factory.newXPath();
+                                    NodeList element = (NodeList) x_element.evaluate(c.getQuery(), n, XPathConstants.NODE);
+                                    if (element != null) {
+                                        for (int k = 0; k < element.getLength(); k++) {
+                                            try {
+                                                rdfizer.add(inside, element.item(k).getTextContent());
+                                            } catch (Exception ex) {
+                                                if (Config.isDebug()) {
+                                                    Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, ex);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            rdfizer.complete();
+                        }
+                    } catch (Exception ex) {
+                        if (Config.isDebug()) {
+                            Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                if (Config.isDebug()) {
+                    System.out.println("[COEUS][XMLFactory] unable to complete data for " + res.getUri());
+                    Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     }
 
     /**
-     * Updates the resource coeus:built property once the resource finished building.
+     * Updates the resource coeus:built property once the resource finished
+     * building.
      *
      * @return success of the operation
      */
