@@ -10,7 +10,7 @@
         "predicates":"coeus_predicates.csv",
         "built": true,
         "debug": false,
-        "environment": "testing"
+        "environment": "production"
     },
     "prefixes" : {
         "coeus": "http://bioinformatics.ua.pt/coeus/",

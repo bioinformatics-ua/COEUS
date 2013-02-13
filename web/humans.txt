@@ -1,4 +1,4 @@
-/* COEUS | Enabling Knowledge */
+/* COEUS */
 
 
 /* TEAM */

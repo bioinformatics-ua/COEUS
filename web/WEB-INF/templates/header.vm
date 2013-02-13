@@ -9,9 +9,9 @@
           <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
         <!-- Le styles -->
-        <link href="${server_base}assets/css/bootstrap.css" rel="stylesheet">
+        <link href="${server_base}assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="${server_base}assets/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link href="${server_base}assets/css/docs.css" rel="stylesheet">
-        <link href="${server_base}assets/css/coeus.css" rel="stylesheet">
         <!-- Le fav and touch icons -->
         <link rel="shortcut icon" href="${server_base}assets/img/favicon.ico">
     
@@ -20,11 +20,13 @@
   <body onLoad="init();">
  <!-- Topbar
         ================================================== -->
-        <div class="topbar">
-            <div class="fill">
-                <div class="container">
-                    <h3><a href="${server_base}">COEUS</a></h3>
-                    <ul>
+       <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+            <div class="container">
+                    <a class="brand" href="#">COEUS</a>
+                    <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="${server_base}/">Home</a></li>
                         <li><a href="${server_base}documentation/">Documentation</a></li>
                         <li><a href="${server_base}science/">Science</a></li>
                         <li><a href="${server_base}sparqler/">SPARQL</a></li>
@@ -32,9 +34,8 @@
                     </ul>
                 </div>
             </div>
+            </div>
         </div>
-  <!-- forker -->
-        <a href="https://github.com/pdrlps/COEUS/tree/coeus1.0b" target="_blank" id="forkme">Fork COEUS on GitHub</a>
         <div id="modal" class="modal hide fade">
             <div class="modal-header">
                 <a href="#" class="close">&times;</a>

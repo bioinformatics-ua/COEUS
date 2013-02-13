@@ -15,8 +15,8 @@
     sdb:sdbType       "MySQL" ;
     #sdb:sdbHost       "localhost:3306" ;
     #sdb:sdbName       "DC4" ;
-    sdb:jdbcURL        "jdbc:mysql://localhost:3306/DC4?autoReconnect=true" ;
-    sdb:sdbUser       "root" ;
-    sdb:sdbPassword   "telematica" ;
+    sdb:jdbcURL        "jdbc:mysql://localhost:3306/diseasecard?autoReconnect=true" ;
+    sdb:sdbUser       "diseasecard" ;
+    sdb:sdbPassword   "diseasecard" ;
     sdb:driver        "com.mysql.jdbc.Driver" ;
     .

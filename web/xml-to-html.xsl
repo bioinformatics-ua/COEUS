@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
-		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:res="http://www.w3.org/2005/sparql-results#"
-		exclude-result-prefixes="res xsl">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:res="http://www.w3.org/2005/sparql-results#"
+                exclude-result-prefixes="res xsl">
     <xsl:output
-   method="xml" 
-   indent="yes"
-   encoding="UTF-8" 
-   doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
-   doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-   omit-xml-declaration="no" />
+        method="xml" 
+        indent="yes"
+        encoding="UTF-8" 
+        doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
+        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+        omit-xml-declaration="no" />
 
     <xsl:template name="header">
         <div>
@@ -25,9 +25,9 @@
 
     <xsl:template name="boolean-result">
         <div>
-      <!--      
-	<h2>Boolean Result</h2>
-      -->      
+            <!--      
+             	<h2>Boolean Result</h2>
+            -->      
             <p>ASK => 
                 <xsl:value-of select="res:boolean"/>
             </p>
@@ -36,7 +36,7 @@
 
     <xsl:template name="vb-result">
         <div>
-            <table class="zebra-striped">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <xsl:for-each select="res:head/res:variable">
@@ -66,11 +66,11 @@
             <td>
                 <xsl:choose>
                     <xsl:when test="$current/res:binding[@name=$name]">
-	    <!-- apply template for the correct value type (bnode, uri, literal) -->
+                        <!-- apply template for the correct value type (bnode, uri, literal) -->
                         <xsl:apply-templates select="$current/res:binding[@name=$name]"/>
                     </xsl:when>
                     <xsl:otherwise>
-	    <!-- no binding available for this variable in this solution -->
+                        <!-- no binding available for this variable in this solution -->
                     </xsl:otherwise>
                 </xsl:choose>
             </td>
@@ -96,13 +96,13 @@
 
         <xsl:choose>
             <xsl:when test="@datatype">
-	<!-- datatyped literal value -->
-	^^&lt;
+                <!-- datatyped literal value -->
+                ^^&lt;
                 <xsl:value-of select="@datatype"/>&gt;
             </xsl:when>
             <xsl:when test="@xml:lang">
-	<!-- lang-string -->
-	@
+                <!-- lang-string -->
+                @
                 <xsl:value-of select="@xml:lang"/>
             </xsl:when>
         </xsl:choose>
@@ -113,33 +113,35 @@
             <head>
                 <title>SPARQL results for COEUS | Enabling Knowledge</title>     
                 <link rel="shortcut icon" href="assets/img/favicon.ico" />           
-                <link href="assets/css/bootstrap.css" rel="stylesheet" />        
+                <link href="assets/css/bootstrap.min.css" rel="stylesheet" />       
+                <link href="assets/css/bootstrap-responsive.min.css" rel="stylesheet" />            
                 <link href="assets/css/docs.css" rel="stylesheet" />
             </head>
             <body>
-                <div class="topbar">
-                    <div class="fill">
+                <div class="navbar navbar-inverse navbar-fixed-top">
+                    <div class="navbar-inner">
                         <div class="container">
-                            <h3>
-                                <a href="./">COEUS</a>
-                            </h3>
-                            <ul>
-                                <li>
-                                    <a href="documentation/">Documentation</a>
-                                </li>
-                                <li>
-                                    <a href="science/">Science</a>
-                                </li>
-                                <li class="active">
-                                    <a href="sparqler/">SPARQL</a>
-                                </li>
-                            </ul>
+                            <a class="brand" href="./">COEUS</a> 
+                            <div class="nav-collapse collapse">
+                                <ul class="nav">
+                                    <li>
+                                        <a href="./">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="documentation/">Documentation</a>
+                                    </li>
+                                    <li>
+                                        <a href="science/">Science</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="sparqler/">SPARQL</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-                  <!-- forker -->
-                 <a href="https://github.com/pdrlps/COEUS/tree/coeus1.0b" target="_blank" id="forkme">Fork COEUS on GitHub</a>
-                <br />
+                
                 <br/>
                 <br/>
                 <div class="container">

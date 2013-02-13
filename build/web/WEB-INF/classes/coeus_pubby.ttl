@@ -62,12 +62,12 @@
 # URIs on the Web:             http://localhost:8080/resource/*
     conf:dataset [
         # SPARQL endpoint URL of the dataset
-        #conf:sparqlEndpoint <http://localhost:8080/coeus/sparql>;
-        conf:sparqlEndpoint <http://bioinformatics.ua.pt/coeus/sparql>;
+        conf:sparqlEndpoint <http://localhost:8084/coeus/sparql>;
+        #conf:sparqlEndpoint <http://bioinformatics.ua.pt/coeus/sparql>;
         # Default graph name to query (not necessary for most endpoints)
         # conf:sparqlDefaultGraph <>;
         # Common URI prefix of all resource URIs in the SPARQL dataset
-        conf:datasetBase <http://bioinformatics.ua.pt/coeus/>;
+        conf:datasetBase <http://bioinformatics.ua.pt/diseasecard/>;
         # Will be appended to the conf:webBase to form the public
         # resource URIs; if not present, defaults to ""
         conf:webResourcePrefix "resource/";

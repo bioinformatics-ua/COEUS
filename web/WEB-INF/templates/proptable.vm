@@ -1,7 +1,7 @@
 <br />
 <br /> 
-<div class="container zebra-striped">    
-<table class="description">
+<div class="container">    
+<table class="description table table-striped">
 <thead>
       <tr><th width="25%">Property</th><th>Value</th></tr>
 </thead>
@@ -27,7 +27,7 @@
 #end
         </td>
         <td>
-          <ul>
+          <ul class="unstyled">
 #foreach ($value in $property.Values)
             <li>
 #if ($value.Node.isURI())

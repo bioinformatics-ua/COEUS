@@ -25,6 +25,6 @@ public class RedirectJavadocActionBean implements ActionBean {
 
     @DefaultHandler
     public Resolution handle() {
-        return new ForwardResolution("/javadoc.jsp");
+        return new ForwardResolution("/javadoc/index.html");
     }
 }

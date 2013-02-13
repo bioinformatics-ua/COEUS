@@ -53,9 +53,9 @@ sdb:Model rdfs:subClassOf  ja:Model .
     [ rdf:type sdb:SDBConnection ;
        sdb:sdbType        "mysql" ;
        sdb:sdbHost        "localhost:3306" ;
-       sdb:sdbName        "DC4" ;
-     sdb:sdbUser       "root" ;
-    sdb:sdbPassword   "telematica" ;
+       sdb:sdbName        "diseasecard" ;
+     sdb:sdbUser       "diseasecard" ;
+    sdb:sdbPassword   "diseasecard" ;
     ]
     .
 
