@@ -7,8 +7,7 @@
     <title>Documentation for COEUS</title>
     <meta name="description" content="COEUS semantic web linkeddata linked data services rest integration heterogeneous distributed knowledge federation">
     <meta name="author" content="Pedro Lopes pedrolopes@ua.pt">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
           <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -96,7 +95,7 @@
 
                 <section id="basics">
                     <div class="page-header">
-                        <h1>The Basics <small> Start here</small></h1>
+                        <h1>The Basics <small>Start here</small></h1>
                     </div>
 
                     <p>COEUS is focused on <strong>integration</strong> and <strong>interoperability</strong>. These are the key goals that defined COEUS development and its internal organization.<br>
@@ -123,7 +122,7 @@
 
                 <section id="ontology">
                     <div class="page-header">
-                        <h1>Ontology <small> Managing knowledge</small></h1>
+                        <h1>Ontology <small>Managing knowledge</small></h1>
                     </div>
 
                     <p>For organizing all resources and setting up a new seed, COEUS ontology comes to play.</p>
@@ -178,7 +177,7 @@
 
                 <section id="translation">
                     <div class="page-header">
-                        <h1>Translation <small> From SQL data to a semantic graph</small></h1>
+                        <h1>Translation <small>From SQL data to a semantic graph</small></h1>
                     </div>
 
                     <p>COEUS' advanced integration engine executes a Extract-Transform-Load process to abstract data in legacy formats - CSV, XML, SQL - into a semantic graph, stored in the seed triplestore.</p>
@@ -195,7 +194,7 @@
 
                 <section id="components">
                     <div class="page-header">
-                        <h1>Components <small> All the pieces in the puzzle</small></h1>
+                        <h1>Components <small>All the pieces in the puzzle</small></h1>
                     </div>
 
                     <p>COEUS follows a "Semantic Web in a box" approach. This means that all the required components to kickstart a new application are available by default in the COEUS package.</p>
@@ -222,7 +221,7 @@
 
                 <section id="api">
                     <div class="page-header">
-                        <h1>API <small> Delivering interoperability</small></h1>
+                        <h1>API <small>Delivering interoperability</small></h1>
                     </div>
 
                     <p>Since COEUS is focused on interoperability, there's more than one way of getting your data. If you are also developing your applications in Java, you can use the internal API. If you're using something else, just use the REST API! or LinkedData! or SPARQL!</p>
@@ -234,30 +233,33 @@
                     <p>How are your Javadoc reading skills?<br>
                     There will be better docs for the internal methods in the future, but in the meanwhile this will have to do...</p>
 
-
                     <p><a class="btn right btn-info" href="../javadoc/">View Java Documentation &raquo;</a></p>
+
                     <div class="bs-docs-example">
-   API call to retrieve data.
-</div>
-<pre class="prettyprint linenums">
+                        API call to retrieve data.
+                    </div>
+                    <pre class="prettyprint linenums">
 /* Invoke getTriple(“coeus:uniprot_P51587”, ”p”, ”o”, “xml”); */
 pt.ua.bioinformatics.API.getTriple(…);
 </pre>
+
                     <h2>SPARQL Endpoint</h2>
 
                     <p>All data collected in a COEUS instance can be accessed through a SPARQL endpoint and taking advantage of SPARQL's advanced querying features.</p>
 
                     <p>The endpoint default location is at <em><strong>&lt;app&gt;/sparql</strong></em>.</p>
-                                        <div class="bs-docs-example">
-Query to get specific object data.
-</div>
-<pre class="prettyprint linenums">
+
+                    <div class="bs-docs-example">
+                        Query to get specific object data.
+                    </div>
+                    <pre class="prettyprint linenums">
 PREFIX coeus: &lt;http://bioinformatics.ua.pt/coeus/&gt;
 SELECT ?p ?o {coeus:uniprot_P51587 ?p ?o}
 </pre>
 
-                    
-                                      <div class="alert"><strong>Warning!</strong> Please remember to configure the <em>../src/java/coeus_joseki_sdb.ttl</em> file with your custom triplestore connection settings to get COEUS SPARQL endpoint working properly.</div>
+                    <div class="alert">
+                        <strong>Warning!</strong> Please remember to configure the <em>../src/java/coeus_joseki_sdb.ttl</em> file with your custom triplestore connection settings to get COEUS SPARQL endpoint working properly.
+                    </div>
 
                     <p><a class="btn right btn-info" href="../sparqler/">Test it here &raquo;</a></p>
 
@@ -272,18 +274,17 @@ SELECT ?p ?o {coeus:uniprot_P51587 ?p ?o}
                         <li>RDF content for EntrezGene 5002 <a href="../data/entrezgene_5002?output=xml">../data/entrezgene_5002?output=xml</a></li>
                     </ul>
 
-
                     <p><span class="label warning">Warning</span><br>
                     Please remember to configure the <em>../src/java/coeus_pubby.ttl</em> file with your custom ontology and application settings in order to get COEUS LinkedData working properly.</p>
-                    
+
                     <h2>Federation</h2>
-                    <p>
-                    With the SPARQL endpoint online, querying multiple distributed COEUS instances is a straightforward process. Moreover, additional knowledge bases with public SPARQL endpoints can also be put into the mix, providing an holistic perspective over a distributed knowledge network.
-                    </p>
-<div class="bs-docs-example">
-Query to retrieve data from multiple COEUS seeds and external knowledge bases.
-</div>
-<pre class="prettyprint linenums">
+
+                    <p>With the SPARQL endpoint online, querying multiple distributed COEUS instances is a straightforward process. Moreover, additional knowledge bases with public SPARQL endpoints can also be put into the mix, providing an holistic perspective over a distributed knowledge network.</p>
+
+                    <div class="bs-docs-example">
+                        Query to retrieve data from multiple COEUS seeds and external knowledge bases.
+                    </div>
+                    <pre class="prettyprint linenums">
 PREFIX coeus: &lt;http://bioinformatics.ua.pt/coeus/&gt;
 PREFIX dc: &lt;http://purl.org/dc/elements/1.1/&gt;
 PREFIX diseasome: &lt;http://www4.wiwiss.fu-berlin.de/diseasome/resource/diseasome/&gt;
@@ -344,7 +345,7 @@ WHERE{
 
                 <section id="web">
                     <div class="page-header">
-                        <h1>Web Apps <small> The Internet is the platform</small></h1>
+                        <h1>Web Apps <small>The Internet is the platform</small></h1>
                     </div>
 
                     <p>COEUS includes the Java Stripes framework for streamlined Web Application development on top of existing Java APIs and Twitter Bootstrap CSS/JS framework for the web apps presentation layer.</p>
@@ -365,10 +366,8 @@ WHERE{
 
                 <section id="download">
                     <div class="page-header">
-                        <h1>Download <small> and installation instructions</small></h1>
-                    </div>
-
-                    You can fork the latest stable version (1.0b) from <a href="https://github.com/pdrlps/COEUS/tree/coeus1.0b" target="_blank">GitHub</a>...<br>
+                        <h1>Download <small>and installation instructions</small></h1>
+                    </div>You can fork the latest stable version (1.0b) from <a href="https://github.com/pdrlps/COEUS/tree/coeus1.0b" target="_blank">GitHub</a>...<br>
                     <a class="btn btn-success large" href="https://github.com/pdrlps/COEUS/zipball/coeus1.0b">Get 1.0b &raquo;</a><br>
                     ... <a href="http://bioinformatics.ua.pt/coeus/coeus_streamdb.zip" target="_blank">and get the sample database here!</a>
 
@@ -416,28 +415,23 @@ WHERE{
 
                     <div class="alert alert-info">
                         <strong>Warning!</strong> There are three working environments in COEUS: <em>testing</em>, <em>development</em> and <em>production</em>. Each of these environments will read a distinct <strong>.ttl</strong> setup file for the working environment defined in the <em>src/java/config.js</em> <strong>environment</strong> property.
-                    </div>
-
-                    COEUS seeds’ configuration defines the entire instance structure. Three files have control over the application properties, model and, above all, integrated data. Application properties such as naming, version or deployment environment are stored in a local JavaScript file (<em>src/java/config.js</em>). Using a JSON object for the configuration permits faster reads, in comparison to XML, while maintaining a good object-oriented structure, in comparison to simple properties files.
-<br /><br/>
+                    </div>COEUS seeds’ configuration defines the entire instance structure. Three files have control over the application properties, model and, above all, integrated data. Application properties such as naming, version or deployment environment are stored in a local JavaScript file (<em>src/java/config.js</em>). Using a JSON object for the configuration permits faster reads, in comparison to XML, while maintaining a good object-oriented structure, in comparison to simple properties files.<br>
+                    <br>
                     In some scenarios, the “reuse instead of rewrite” principle may not suffice for the entire application model. As such, COEUS allows the creation of custom ontologies to use in one or various seeds. Starting with the basic <a href="#ontology">COEUS ontology</a>, developers can setup their own applications models, taking full advantage of RDF/OWL’s modeling flexibility.<br>
-                    This ontology is defined in the <strong>ontology</strong> property of COEUS JavaScript configuration file.
-<br /><br/>
+                    This ontology is defined in the <strong>ontology</strong> property of COEUS JavaScript configuration file.<br>
+                    <br>
                     The third required configuration file includes the data integration and exploration setup (<em>src/java/coeus_setup.rdf</em>). In this file we define the application individuals for each class, configuring entities, concepts, bridges and resources. Summarily, content in this file is used to guide the entire framework instance setup, from the handling of external resources in the connectors to the labeling rules for each Item individual. Considering the setup files OWL/RDF nature, relying on Protégé is advisable to ease the configuration process. In this widely used ontology modeling tool, the configuration can be visually organized.
 
-                    <h2>Running</h2>
-
-                    We recommend that you start by running the existing application setup and read the documentation before building a new seed.
+                    <h2>Running</h2>We recommend that you start by running the existing application setup and read the documentation before building a new seed.
 
                     <ul>
                         <li>Before running, make sure the <em>src/java/config.js</em> file points to the correct files and environment definitions</li>
+
                         <li>To run, simply <em>build</em> the project and press <em>run</em> on NetBeans</li>
                     </ul>
 
-                    <h2>Building</h2>
-
-                   The default seed included in COEUS contains the setup for a disease-based information system. You can use <a href="http://protege.stanford.edu/" target="_blank">Protege</a> and open up the <em>src/java/coeus_setup.rdf</em> file to analyze the configuration. Using Protege is advisable for a clearer understanding of the setup structure.
-<br /><br/>
+                    <h2>Building</h2>The default seed included in COEUS contains the setup for a disease-based information system. You can use <a href="http://protege.stanford.edu/" target="_blank">Protege</a> and open up the <em>src/java/coeus_setup.rdf</em> file to analyze the configuration. Using Protege is advisable for a clearer understanding of the setup structure.<br>
+                    <br>
                     Since the default seed setup is very complex (and with plenty dependencies), the data import process is divided in various levels. You can use this strategy in your own system or rely on the <em>coeus:order</em> property for each Resource.
 
                     <ul>
@@ -454,8 +448,6 @@ WHERE{
                     <div class="page-header">
                         <h1>License</h1>
                     </div>
-
-                    <h2>Free</h2>
 
                     <h3>Creative Commons</h3>
 
@@ -475,7 +467,7 @@ WHERE{
 
             <p>&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2012</p>
 
-            <p><small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a></small></p>
+            <p><small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a>, supported by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a></small></p>
 
             <p><a href="http://twitter.github.com/bootstrap/" target="_blank"><small>Layout with Twitter Bootstrap</small></a></p>
         </div>
@@ -484,7 +476,7 @@ WHERE{
 window.jQuery || document.write('<script src="assets/js/jquery/jquery.min.js"><\/script>')
     </script><script defer src="../assets/js/bootstrap.min.js" type="text/javascript">
 </script><script type="text/javascript">
-        var _gaq = _gaq || [];
+var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-12230872-7']);
             _gaq.push(['_trackPageview']);
             (function() {
@@ -493,7 +485,7 @@ window.jQuery || document.write('<script src="assets/js/jquery/jquery.min.js"><\
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
     </script><script type="text/javascript">
-        $(document).ready(function(){
+$(document).ready(function(){
         window.prettyPrint && prettyPrint()
             });
     </script><!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.

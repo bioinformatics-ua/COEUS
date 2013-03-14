@@ -131,12 +131,22 @@
                 <p class="marketing-byline">Semantic Web + Rapid Application Development = Next-Generation Applications.</p>
                 <div class="row-fluid">
                     <div class="span4">
-                        <h2>What?</h2>
-                        <p>COEUS is a next-generation semantic web-powered knowledge management framework. It is targeted at rapid application deployment of new applications in any research field, supported by a comprehensive integration engine and an advanced data distribution API.</p>
+                        <h2>Support</h2>
+                        <p>COEUS is an ongoing open-source project at the <a href="http://www.ua.pt" target="_blank">University of Aveiro</a>'s <a href="http://bioinformatics.ua.pt" target="_blank">bioinformatics group</a>.
+                            <br />If you are looking for support to launch your own system, please <a href="mailto:pedrolopes@ua.pt">contact us</a>. Private/commercial collaborations are also possible through <a href="http://bmd-software.com" target="_blank" title="View BMD Software">BMD Software</a>.
+                        </p>
                     </div>
                     <div class="span4">
-                        <h2>How?</h2>
-                        <p>With COEUS you can deploy new semantic warehouses with custom applications - seeds. Each seed provides an API for internal and external usage, enabling the connection of multiple seeds. With multiple seeds connected, their content can be distributed, resulting in a truly semantic knowledge federation network.</p>
+                        <h2>Cite</h2>
+                        <p>
+                            Multiple <a href="science" title="View COEUS publications">scientific publications</a> support COEUS architecture and development strategies. However, if you wish to cite COEUS in your work please use the following citation.
+                        </p>
+                        <dl>
+                            <dt>COEUS: "Semantic Web in a box" for biomedical applications</dt>
+                            <dd>Pedro Lopes and Jose Luis Oliveira</dd>
+                            <dd><em>Journal of Biomedical Semantics</em> 2012, 3:11</dd>
+                            <dd>doi:<a href="http://dx.doi.org/10.1186/2041-1480-3-11" target="_blank" title="View COEUS publication">10.1186/2041-1480-3-11</a></dd>
+                        </dl>
                     </div>
                     <div class="span4">
                         <h2>Featured</h2>

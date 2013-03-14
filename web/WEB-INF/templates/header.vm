@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>$title at COEUS | Enabling Knwoledge</title>
+    <title>$title at COEUS | Enabling Knowledge</title>
 #if ($rdf_link)
     <link rel="alternate" type="application/rdf+xml" href="$rdf_link" title="RDF" />
 #end

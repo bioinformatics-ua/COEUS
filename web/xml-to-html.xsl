@@ -167,11 +167,7 @@
                         </p>
 
                         <p>University of Aveiro 2012</p>
-                        <p>
-                            <small>Under Development by 
-                                <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a>
-                            </small>
-                        </p>
+                        <p><small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a>, supported by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a></small></p>
                         <p> 
                             <a href="http://twitter.github.com/bootstrap/" target="_blank">
                                 <small>Layout with Twitter Bootstrap</small>
