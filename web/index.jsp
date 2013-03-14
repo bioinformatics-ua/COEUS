@@ -70,12 +70,12 @@
 
             <p>Streamlined back-end framework for rapid semantic web application development.</p>
 
-            <p><a href="https://github.com/pdrlps/COEUS/zipball/coeus1.0b" class="btn btn-inverse btn-primary btn-large">Get COEUS</a></p>
+            <p><a href="https://github.com/pdrlps/COEUS/archive/master.zip" class="btn btn-inverse btn-primary btn-large">Get COEUS</a></p>
 
             <ul class="masthead-links">
-                <li><a href="https://github.com/pdrlps/COEUS/tree/coeus1.0b" target="_blank">GitHub project</a></li>
+                <li><a href="https://github.com/pdrlps/COEUS/tree/master" target="_blank">GitHub project</a></li>
 
-                <li>Version 1.0b</li>
+                <li>Version 1.1</li>
             </ul>
         </div>
     </div>
