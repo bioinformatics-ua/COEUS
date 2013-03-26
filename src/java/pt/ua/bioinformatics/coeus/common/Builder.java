@@ -13,6 +13,7 @@ import pt.ua.bioinformatics.coeus.data.connect.ResourceFactory;
 import pt.ua.bioinformatics.coeus.data.connect.SPARQLFactory;
 import pt.ua.bioinformatics.coeus.data.connect.SQLFactory;
 import pt.ua.bioinformatics.coeus.data.connect.XMLFactory;
+import pt.ua.bioinformatics.coeus.domain.Concept;
 import pt.ua.bioinformatics.coeus.domain.Resource;
 
 /**
@@ -45,11 +46,12 @@ public class Builder {
                 System.out.println("[COEUS][Builder] Reading resources for " + Config.getName());
             }
             JSONParser parser = new JSONParser();
-            JSONObject response = (JSONObject) parser.parse(Boot.getAPI().select("SELECT ?s ?method ?comment ?label ?title ?built ?publisher ?extends ?extension ?order ?endpoint ?built ?query WHERE { ?s rdf:type coeus:Resource ."
+            JSONObject response = (JSONObject) parser.parse(Boot.getAPI().select("SELECT ?s ?resof ?method ?comment ?label ?title ?built ?publisher ?extends ?extension ?order ?endpoint ?built ?query WHERE { ?s rdf:type coeus:Resource ."
                     + " ?s rdfs:comment ?comment ."
                     + " ?s rdfs:label ?label ."
                     + " ?s dc:title ?title ."
                     + " ?s dc:publisher ?publisher ."
+                    + " ?s coeus:isResourceOf ?resof ."
                     + " ?s coeus:extends ?extends ."
                     + " ?s coeus:method ?method ."
                     + " ?s coeus:endpoint ?endpoint ."
@@ -64,6 +66,7 @@ public class Builder {
                 JSONObject d = (JSONObject) binding.get("comment");
                 JSONObject l = (JSONObject) binding.get("label");
                 JSONObject t = (JSONObject) binding.get("title");
+                JSONObject resof = (JSONObject) binding.get("resof");
                 JSONObject publisher = (JSONObject) binding.get("publisher");
                 JSONObject ext = (JSONObject) binding.get("extends");
                 JSONObject endpoint = (JSONObject) binding.get("endpoint");
@@ -73,6 +76,7 @@ public class Builder {
                 JSONObject query = (JSONObject) binding.get("query");
                 Resource r = new Resource(s.get("value").toString(), t.get("value").toString(), l.get("value").toString(), d.get("value").toString(), publisher.get("value").toString(), endpoint.get("value").toString(), method.get("value").toString());
                 r.setExtendsConcept(ext.get("value").toString());
+                r.setIsResourceOf(new Concept((resof.get("value").toString())));
                 r.setExtension(!(extension == null) ? extension.get("value").toString() : "");
                 r.setQuery(!(query == null) ? query.get("value").toString() : "");
                 r.setBuilt(!(built == null) ? Boolean.parseBoolean(built.get("value").toString()) : false);
@@ -105,7 +109,7 @@ public class Builder {
             }
             System.out.println(whatResource);
             JSONParser parser = new JSONParser();
-            JSONObject response = (JSONObject) parser.parse(Boot.getAPI().select("SELECT ?res ?method ?comment ?label ?title ?built ?publisher ?extends ?extension ?order ?endpoint ?built ?query WHERE { ?res a coeus:Resource . ?res rdfs:comment ?comment . ?res rdfs:label ?label . ?res dc:title ?title . ?res dc:publisher ?publisher . ?res coeus:extends ?extends . ?res coeus:method ?method . ?res coeus:endpoint ?endpoint . ?res coeus:order ?order . OPTIONAL { ?res coeus:built ?buil} . OPTIONAL {?res coeus:extension ?extension} . OPTIONAL {?res coeus:query ?query} . FILTER regex(str(?label), '" + whatResource + "')} ORDER BY ?order LIMIT 1", "js", false));
+            JSONObject response = (JSONObject) parser.parse(Boot.getAPI().select("SELECT ?res ?method ?comment ?label ?title ?built ?publisher ?extends ?extension ?order ?endpoint ?query WHERE { ?res a coeus:Resource . ?res rdfs:comment ?comment . ?res rdfs:label ?label . ?res dc:title ?title . ?res dc:publisher ?publisher . ?res coeus:extends ?extends . ?res coeus:method ?method . ?res coeus:endpoint ?endpoint . ?res coeus:order ?order . OPTIONAL { ?res coeus:built ?built} . OPTIONAL {?res coeus:extension ?extension} . OPTIONAL {?res coeus:query ?query} . FILTER regex(str(?label), '" + whatResource + "')} ORDER BY ?order LIMIT 1", "js", false));
             JSONObject results = (JSONObject) response.get("results");
             JSONArray bindings = (JSONArray) results.get("bindings");
             for (Object o : bindings) {

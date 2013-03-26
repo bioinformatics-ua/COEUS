@@ -92,6 +92,7 @@ public class XMLFactory implements ResourceFactory {
                                 }
                             }
                             XPath x_key = factory.newXPath();
+                            
                             Node xmlkey = (Node) x_key.evaluate(key.getQuery(), n, XPathConstants.NODE);
                             if (key.getRegex() == null) {
                                 rdfizer.itemize(xmlkey.getTextContent());

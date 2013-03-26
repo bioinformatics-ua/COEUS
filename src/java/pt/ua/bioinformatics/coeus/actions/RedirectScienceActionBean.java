@@ -25,6 +25,6 @@ public class RedirectScienceActionBean implements ActionBean {
 
     @DefaultHandler
     public Resolution handle() {
-        return new ForwardResolution("/science.html");
+        return new ForwardResolution("/science.jsp");
     }
 }

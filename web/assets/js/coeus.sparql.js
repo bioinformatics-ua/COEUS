@@ -1,50 +1,26 @@
 /**********************************************************
-  Copyright (c) 2006, 2007
-    Lee Feigenbaum ( lee AT thefigtrees DOT net )
-	Elias Torres   ( elias AT torrez DOT us )
-    Wing Yung      ( wingerz AT gmail DOT com )
-  All rights reserved.
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy of
-	this software and associated documentation files (the "Software"), to deal in
-	the Software without restriction, including without limitation the rights to
-	use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-	of the Software, and to permit persons to whom the Software is furnished to do
-	so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in all
-	copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.
-**********************************************************/
-
-/**
- * Example client interactions
- *
+ * 
+ * COEUS
+ *  Semantic Web Application Framework
+ *  
+ *  Javascript API
+ *  
+ *  
+ * Example interactions
  
- 	var sparqler = new SPARQL.Service("http://sparql.org/sparql");
-	sparqler.addDefaultGraph("http://thefigtrees.net/lee/ldf-card"); // inherited by all (future) queries
-	sparqler.addNamedGraph("http://torrez.us/elias/foaf.rdf");
-	sparqler.setPrefix("foaf", "http://xmlns.com/foaf/0.1/"); // inherited by all (future) queries
-	sparqler.setPrefix("rdf", "http://xmlns.com/foaf/0.1/");
+ 
+ 	var sparqler = new SPARQL.Service("http://bioinformatics.ua.pt/coeus/sparql");
+	sparqler.setPrefix("dc", "http://purl.org/dc/elements/1.1/");
+	sparqler.setPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+	sparqler.setPrefix("coeus", "http://bioinformatics.ua.pt/coeus/resource/");
 	
 	sparqler.setRequestHeader("Authentication", "Basic: " + basicAuthString);
 	
 	//sparqler.wantOutputAs("application/json"); // for now we only do JSON
 
-	var query = sparqler.createQuery();
-	query.addDefualtGraph(...) query.addNamedGraph(...) query.setPrefix(...) query.setRequestHeader(...) // this query only
-
-	// query forms:
+	var query = sparqler.createQuery();:
 
 	// passes standard JSON results object to success callback
-	query.setPrefix("ldf", "http://thefigtrees.net/lee/ldf-card#");
 	query.query("SELECT ?who ?mbox WHERE { ldf:LDF foaf:knows ?who . ?who foaf:mbox ?mbox }",
 		{failure: onFailure, success: function(json) { for (var x in json.head.vars) { ... } ...}}
 	);
@@ -55,13 +31,11 @@
 	); 
 
 	// passes a single vector (array) of values representing a single column of results to success callback
-	query.setPrefix("ldf", "http://thefigtrees.net/lee/ldf-card#");
 	var addresses = query.selectValues("SELECT ?mbox WHERE { _:someone foaf:mbox ?mbox }",
 		{failure: onFailure, success: function(values) { for (var i = 0; i < values.length; i++) { ... values[i] ...} } }
 	); 
 
 	// passes a single value representing a single row of a single column (variable) to success callback
-	query.setPrefix("ldf", "http://thefigtrees.net/lee/ldf-card#");
 	var myAddress = query.selectSingleValue("SELECT ?mbox WHERE {ldf:LDF foaf:mbox ?mbox }",
 		{failure: onFailure, success: function(value) { alert("value is: " + value); } }
 	); 
@@ -549,3 +523,31 @@ SPARQL.Query = function(service, priority) {
 	
     return this;
 };
+
+
+
+/**********************************************************
+  Original Copyright (c) 2006, 2007
+    Lee Feigenbaum ( lee AT thefigtrees DOT net )
+	Elias Torres   ( elias AT torrez DOT us )
+    Wing Yung      ( wingerz AT gmail DOT com )
+  All rights reserved.
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy of
+	this software and associated documentation files (the "Software"), to deal in
+	the Software without restriction, including without limitation the rights to
+	use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+	of the Software, and to permit persons to whom the Software is furnished to do
+	so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+**********************************************************/

@@ -111,10 +111,10 @@
     <xsl:template match="res:sparql">
         <html lang="en">
             <head>
-                <title>SPARQL results for COEUS | Enabling Knowledge</title>     
-                <link rel="shortcut icon" href="assets/img/favicon.ico" />           
-                <link href="assets/css/bootstrap.min.css" rel="stylesheet" />       
-                <link href="assets/css/bootstrap-responsive.min.css" rel="stylesheet" />            
+                <title>SPARQL results - COEUS</title>     
+                <link rel="shortcut icon" href="favicon.ico" />           
+                <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,700italic,300,700' rel='stylesheet' type='text/css' />
+                <link href="assets/css/bootstrap.min.css" rel="stylesheet" />               
                 <link href="assets/css/docs.css" rel="stylesheet" />
             </head>
             <body>
@@ -141,10 +141,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <br/>
-                <br/>
-                <div class="container">
+                <div class="container space">
                     <xsl:if test="res:head/res:link">
                         <xsl:call-template name="header"/>
                     </xsl:if>
@@ -160,21 +157,20 @@
 
                     </xsl:choose>
                 </div>
-                <footer>
-                    <div class="container">
-                        <p class="right">
-                            <a href="#">Back to top</a>
-                        </p>
-
-                        <p>University of Aveiro 2012</p>
-                        <p><small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a>, supported by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a></small></p>
-                        <p> 
-                            <a href="http://twitter.github.com/bootstrap/" target="_blank">
-                                <small>Layout with Twitter Bootstrap</small>
-                            </a>
-                        </p>
-                    </div>
-                </footer>
+                 <footer class="footer">
+                <div class="container">
+                    <span class="span2 pull-right"><a href="#">Back to top</a></span>
+                    <p><br /></p>
+                    <p> <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2013
+                        <br />
+                        Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a>
+                        <br />
+                        <small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a> <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback"><i class="icon-envelope"></i></a></small>
+                        <br />
+                        <a href="http://twitter.github.com/bootstrap/" target="_blank"><small>Layout with Twitter Bootstrap</small></a>
+                    </p>
+                </div>
+            </footer>
             </body>
         </html>
     </xsl:template>

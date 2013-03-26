@@ -28,14 +28,13 @@ public class PrefixFactory {
      * @param what the encoded string.
      * @return
      */
-    public static String encode(String uri) {
+    public static String encode(String uri) {        
         String prefix = getPrefixForURI(uri);
-        //System.out.println("\t" + prefix);
-        return uri.replace(prefixes.get(prefix), prefix + ":");// + ":" + value;
+        return uri.replace(prefixes.get(prefix), prefix + ":");
     }
 
     /**
-     * Decodes a shortned RDF String to a full URI.
+     * Decodes a shortneed RDF String to a full URI.
      * <p>
      *  <b>Sample</b><br />
      *  coeus:Resource decodes to http://bioinformatics.ua.pt/coeus/Resource.

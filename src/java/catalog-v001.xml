@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <group id="Folder Repository, directory=file:/Users/pedrolopes/Development/Software/COEUS/COEUS/src/java/, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
-        <uri id="Automatically generated entry, Timestamp=1332256375086" name="http://bioinformatics.ua.pt/coeus/" uri="coeus_setup.rdf"/>
-    </group>
-</catalog>
