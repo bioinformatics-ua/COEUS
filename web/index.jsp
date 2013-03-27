@@ -113,16 +113,16 @@
 
                             <dd><em>Journal of Biomedical Semantics</em> 2012, 3:11</dd>
 
-                            <dd>doi:<a href="http://dx.doi.org/10.1186/2041-1480-3-11" target="_blank" title="View COEUS publication">10.1186/2041-1480-3-11</a></dd>
+                            <dd>DOI:<a href="http://dx.doi.org/10.1186/2041-1480-3-11" target="_blank" title="View COEUS publication">10.1186/2041-1480-3-11</a></dd>
                         </dl>
                     </div>
 
                     <div class="span4">
-                        <h2>Featured</h2><a href="http://bioinformatics.ua.pt/diseasecard/"><img src="<c:url value="/assets/img/dc4.png" />" width="200" height="29" alt="Diseasecard"></a>
+                        <h2>Featured</h2><a title="Go to Diseasecard" target="_blank" href="http://bioinformatics.ua.pt/diseasecard/"><img src="<c:url value="/assets/img/dc4.png" />" width="200" height="29" alt="Diseasecard"></a>
                         <br/><br />
                         A new semantic rare diseases research portal. COEUS is the foundation of the internal application engine, enabling the delivery of advanced UI features and the exploration of collected knowledge programmatically.<br>
                         <br />
-                        <p><a class="btn btn-primary btn-info" href="http://bioinformatics.ua.pt/diseasecard/">Go to Diseasecard</a></p>
+                        <p><a title="Go to Diseasecard" target="_blank"  class="btn btn-primary btn-info" href="http://bioinformatics.ua.pt/diseasecard/">Go to Diseasecard</a></p>
                     </div>
                 </div>
             </div>

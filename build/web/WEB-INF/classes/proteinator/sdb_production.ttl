@@ -13,7 +13,7 @@
 <#conn> rdf:type sdb:SDBConnection ;
     sdb:sdbType       "MySQL" ;
     sdb:jdbcURL        "jdbc:mysql://localhost:3306/coeus?autoReconnect=true" ;
-    sdb:sdbUser       "demo" ;
-    sdb:sdbPassword   "demo" ;
+    sdb:sdbUser       "root" ;
+    sdb:sdbPassword   "telematica" ;
     sdb:driver        "com.mysql.jdbc.Driver" ;
     .

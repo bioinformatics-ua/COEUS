@@ -75,7 +75,7 @@
                         <br />
                         <small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a> <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback"><i class="icon-envelope"></i></a></small>
                         <br />
-                        <a href="http://twitter.github.com/bootstrap/" target="_blank"><small>Layout with Twitter Bootstrap</small></a>
+                        <a href="http://getbootstrap.com/" title="Go to Bootstrap" target="_blank"><small>Layout with Bootstrap</small></a>
                     </p>
                 </div>
             </footer>

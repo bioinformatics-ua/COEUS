@@ -8,7 +8,7 @@
 
             <li><a href="#code">Code</a></li>
 
-            <li><a href="#libaries">Libraries</a></li>
+            <li><a href="#libraries">Libraries</a></li>
 
             <li><a href="#samples">Samples</a></li>
         </ul>

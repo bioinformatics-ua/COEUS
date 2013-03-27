@@ -25,9 +25,9 @@
             <h2>API</h2>
 
             <p>How are your Javadoc reading skills?<br>
-                The Java documentation is pretty self-explanatory. For interacting with the knowledge base, use the <a href="http://bioinformatics.ua.pt/coeus/javadoc/pt/ua/bioinformatics/coeus/api/API.html" target="_blank">API</a> class to add new triples and perform SPARQL queries directly.</p>
+                The Java documentation is pretty self-explanatory. For interacting with the knowledge base, use the <a title="Go to COEUS' API Javadoc" href="http://bioinformatics.ua.pt/coeus/javadoc/pt/ua/bioinformatics/coeus/api/API.html" target="_blank">API</a> class to add new triples and perform SPARQL queries directly.</p>
 
-            <p><a class="btn right btn-info" href="../javadoc/">View Java Documentation</a></p>
+            <p><a class="btn right btn-info" href="../javadoc/" target="_blank" title="Go to COEUS' Javadoc">View Java Documentation</a></p>
 
             <div class="bs-docs-example">
                 API call to retrieve data matching the given triple wildcards.

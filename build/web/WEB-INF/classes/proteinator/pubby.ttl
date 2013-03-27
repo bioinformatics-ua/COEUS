@@ -44,7 +44,7 @@
     # Homepage with description of the project for the link in the page header
     conf:projectHomepage <http://bioinformatics.ua.pt/coeus/>;
     # The Pubby root, where the webapp is running inside the servlet container.
-    conf:webBase <http://localhost:8084/coeus/>;
+    conf:webBase <http://bioinformatics.ua.pt/coeus/>;
     # URL of an RDF file whose prefix mapping is to be used by the
     # server; defaults to <>, which is *this* file.
     conf:usePrefixesFrom <>;
@@ -61,8 +61,8 @@
 # URIs on the Web:             http://localhost:8080/resource/*
     conf:dataset [
         # SPARQL endpoint URL of the dataset
-        conf:sparqlEndpoint <http://localhost:8084/coeus/sparql>;
-        #conf:sparqlEndpoint <http://bioinformatics.ua.pt/coeus/sparql>;
+        #conf:sparqlEndpoint <http://localhost:8084/coeus/sparql>;
+        conf:sparqlEndpoint <http://bioinformatics.ua.pt/coeus/sparql>;
         # Default graph name to query (not necessary for most endpoints)
         # conf:sparqlDefaultGraph <>;
         # Common URI prefix of all resource URIs in the SPARQL dataset

@@ -1310,7 +1310,7 @@ Example:
         <rdfs:comment rdf:datatype="&xsd;string">UniProt data loader.</rdfs:comment>
         <method rdf:datatype="&xsd;string">cache</method>
         <dc:publisher rdf:datatype="&xsd;string">csv</dc:publisher>
-        <endpoint rdf:datatype="&xsd;string">http://www.uniprot.org/uniprot/?query=huntington+AND+taxonomy%3a%22Homo+sapiens+%5b9606%5d%22+AND+reviewed%3ayes+AND+active%3ayes&amp;format=tab&amp;columns=id,entry%20name,reviewed,protein%20names,genes,organism,length</endpoint>
+        <endpoint rdf:datatype="&xsd;string">http://www.uniprot.org/uniprot/?query=breast+cancer+AND+taxonomy%3a%22Homo+sapiens+%5b9606%5d%22&amp;force=yes&amp;format=tab&amp;columns=id,entry%20name,reviewed,protein%20names,genes,organism,length</endpoint>
         <extends rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_UniProt"/>
         <isResourceOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_UniProt"/>
         <hasKey rdf:resource="http://bioinformatics.ua.pt/coeus/resource/csv_UniProt_entry"/>

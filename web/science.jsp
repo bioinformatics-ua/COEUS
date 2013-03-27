@@ -33,7 +33,7 @@
                             <em>Pedro Lopes &amp; José Luís Oliveira</em><br>
                             DOI: <a href="http://dx.doi.org/10.1186/2041-1480-3-11" target="_blank">10.1186/2041-1480-3-11</a>
                             <br />
-                            <small><span class="label label-warning">Notice: </span>Please use this reference when citing COEUS in your work.</small>
+                            <small><span class="label label-info">Notice:</span> Please use this reference when citing COEUS in your work.</small>
                         </p>
                     </section>
 

@@ -8,8 +8,8 @@
         "setup": "proteinator/setup.rdf",
         "sdb":"proteinator/sdb.ttl",
         "predicates":"proteinator/predicates.csv",
-        "built": false,
-        "debug": true,
+        "built": true,
+        "debug": false,
         "environment": "production"
     },
     "prefixes" : {
