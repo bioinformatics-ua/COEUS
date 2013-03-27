@@ -74,8 +74,7 @@ public class InheritedResource {
         this.uri = uri;
     }
 
-    public InheritedResource(String description, String label, String title, String uri, String property, String query) {
-        this.description = description;
+    public InheritedResource(String label, String title, String uri, String property, String query) {
         this.label = label;
         this.title = title;
         this.uri = uri;

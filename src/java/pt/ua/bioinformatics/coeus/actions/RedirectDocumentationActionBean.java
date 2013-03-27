@@ -25,6 +25,6 @@ public class RedirectDocumentationActionBean implements ActionBean {
 
     @DefaultHandler
     public Resolution handle() {
-        return new ForwardResolution("/documentation.html");
+        return new ForwardResolution("/documentation.jsp");
     }
 }

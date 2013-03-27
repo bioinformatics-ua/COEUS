@@ -25,6 +25,6 @@ public class RedirectSPARQLerActionBean implements ActionBean {
 
     @DefaultHandler
     public Resolution handle() {
-        return new ForwardResolution("/sparql.html");
+        return new ForwardResolution("/sparql.jsp");
     }
 }

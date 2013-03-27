@@ -205,12 +205,10 @@ public class Config {
      */
     private static String readFile() {
         byte[] buffer = new byte[(int) new File(path + "config.js").length()];
-
         try {
             BufferedInputStream f = null;
             try {
                 f = new BufferedInputStream(new FileInputStream(path + "config.js"));
-
                 f.read(buffer);
             } finally {
                 if (f != null) {
