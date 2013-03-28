@@ -45,7 +45,7 @@
 
             <p>If you wish to spread the word about COEUS, feel free to add the following code snippet to your website. Place it at the end of your <em>body</em> tag, along with all the other scripts. It will create an almost invisible link to COEUS' web page.</p>
             <pre class="prettyprint linenums lang-js">
-&lt;script src="http://bioinformatics.ua.pt/coeus/coeus.powered.js" type="text/javascript"&gt;&lt;/script&gt;</pre>
+&lt;script src="http://bioinformatics.ua.pt/coeus/assets/js/coeus.powered.js" type="text/javascript"&gt;&lt;/script&gt;</pre>
         </section>
     </div>
 </div>
