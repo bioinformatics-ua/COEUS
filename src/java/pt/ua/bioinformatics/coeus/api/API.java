@@ -17,12 +17,14 @@ import pt.ua.bioinformatics.coeus.data.Storage;
 
 /**
  * COEUS API handler class.
- * <p>Main API class for internal Java usage, use this or internal when building new data access methods!</p>
+ * <p>Main API class for internal Java usage, use this or internal when building
+ * new data access methods!</p>
  * <p>
- *  <ul>
- *      <li>select*|get* are data extraction methods for SPARQL queries and direct triplets.</li>
- *      <li>add*|create* are data input methods for data creating.</li>
- *  </ul>
+ * <ul>
+ * <li>select*|get* are data extraction methods for SPARQL queries and direct
+ * triplets.</li>
+ * <li>add*|create* are data input methods for data creating.</li>
+ * </ul>
  * </p>
  *
  * @author pedrolopes
@@ -74,7 +76,8 @@ public class API {
      *
      * @param query the SPARQL query (no prefixes).
      * @param format the response format (csv, xml, json/js, rdf)
-     * @param inferred true to query on inferred model, false to query on simple model.
+     * @param inferred true to query on inferred model, false to query on simple
+     * model.
      * @return
      */
     public ResultSet selectRS(String query, boolean inferred) {
@@ -100,11 +103,13 @@ public class API {
     }
 
     /**
-     * Perform a SPARQL SELECT query to COEUS SDB with multiple output formats support.
+     * Perform a SPARQL SELECT query to COEUS SDB with multiple output formats
+     * support.
      *
      * @param query the SPARQL query (no prefixes).
      * @param format the response format (csv, xml, json/js, rdf)
-     * @param inferred true to query on inferred model, false to query on simple model.
+     * @param inferred true to query on inferred model, false to query on simple
+     * model.
      * @return
      */
     public String select(String query, String format, boolean inferred) {
@@ -163,36 +168,36 @@ public class API {
     public String getTriple(String sub, String pred, String obj, String format) {
         String response = "";
         String select = "SELECT ?s_sub ?s_pred ?s_obj WHERE {?w_sub ?w_pred ?w_obj}";
-        
+
         // process subject
-        if(sub.contains("?")) {
-             select = select.replace("?s_sub", sub).replace("?w_sub",sub);
+        if (sub.contains("?")) {
+            select = select.replace("?s_sub", sub).replace("?w_sub", sub);
         } else if (sub.contains(":")) {
             select = select.replace("?s_sub", "").replace("?w_sub", sub);
         } else {
             select = select.replace("?s_sub", "?" + sub).replace("?w_sub", "?" + sub);
         }
-        
+
         // process predicate
         if (pred.contains("?")) {
-            select = select.replace("?s_pred",pred).replace("?w_pred", pred);
+            select = select.replace("?s_pred", pred).replace("?w_pred", pred);
         } else if (pred.contains(":")) {
             select = select.replace("?s_pred", "").replace("?w_pred", pred);
         } else {
             select = select.replace("?s_pred", "?" + pred).replace("?w_pred", "?" + pred);
         }
-        
+
         // process object
         if (obj.contains("?")) {
-             select = select.replace("?s_obj", obj).replace("?w_obj", obj);
+            select = select.replace("?s_obj", obj).replace("?w_obj", obj);
         } else if (obj.contains(":")) {
-            select = select.replace("?s_obj", "").replace("?w_obj", obj); 
+            select = select.replace("?s_obj", "").replace("?w_obj", obj);
         } else if (obj.contains("\"")) {
             select = select.replace("?s_obj", "").replace("?w_obj", obj);
         } else {
             select = select.replace("?s_obj", "?" + obj).replace("?w_obj", "?" + obj);
         }
-            
+
         try {
             String sparqlQuery = PrefixFactory.allToString() + select;
             QueryExecution qe = QueryExecutionFactory.create(sparqlQuery, model);
@@ -313,7 +318,7 @@ public class API {
      * Gets information for a given Resource in COEUS SDB.
      *
      * TODO: shouldn't this be in Internal?
-     * 
+     *
      * @param uri the desired Resource URI.
      * @return the loaded Resource.
      */
@@ -324,7 +329,7 @@ public class API {
         } catch (Exception ex) {
             if (Config.isDebug()) {
                 System.out.println("[COEUS][API] Unable to obtain new Resource from Model");
-            Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return resource;
@@ -351,9 +356,9 @@ public class API {
 
     /**
      * Extracts an item identifier from a full URI.
-     * 
+     *
      * @param uri
-     * @return 
+     * @return
      */
     public String uriToItem(String uri) {
         String[] full = uri.split("/");
@@ -362,9 +367,9 @@ public class API {
 
     /**
      * Extracts an item identifier from an Item label.
-     * 
+     *
      * @param uri
-     * @return 
+     * @return
      */
     public String labelToItem(String label) {
         if (!label.contains("_")) {
@@ -373,5 +378,15 @@ public class API {
             String[] full = label.split("_");
             return full[1];
         }
+    }
+
+    /**
+     * Validates a given key in COEUS internal configuration.
+     *
+     * @param key
+     * @return
+     */
+    public boolean validateKey(String key) {
+        return (Config.getApikeys().contains(key) || Config.getApikeys().contains("*"));
     }
 }

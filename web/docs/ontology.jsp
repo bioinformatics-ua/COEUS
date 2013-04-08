@@ -62,8 +62,8 @@
                 </li>
             </ul>
         </section>
+           <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <!-- Ontology/ABSTRACTION -->
-
         <section id="abstraction">
             <div class="page-header">
                 <h1>Abstraction</h1>
@@ -75,8 +75,9 @@
                     <a href="#" class="thumbnail"><img src="<c:url value="/assets/img/coeus_abstraction.png" />" alt="COEUS abstraction"></a>
                 </li>
             </ul>
-        </section><!-- Ontology/TRIPIFLICATION -->
-
+        </section>
+           <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        <!-- Ontology/TRIPIFLICATION -->
         <section id="triplification">
             <div class="page-header">
                 <h1>Triplification</h1>
@@ -89,7 +90,7 @@
                 </li>
             </ul>
         </section>
-
+   <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <!-- Ontology/CLASSES -->
         <section id="classes">
             <div class="page-header">
@@ -142,8 +143,10 @@
 
                 <dd>External SPARQL selector.<br />Defines individual configuration properties to perform custom data abstractions from SPARQL query results into COEUS' knowledge base.</dd>
             </dl>
-        </section><!-- Ontology/PROPERTIES -->
-
+        </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+           
+                   <!-- Ontology/PROPERTIES -->
         <section id="properties">
             <div class="page-header">
                 <h1>Properties</h1>

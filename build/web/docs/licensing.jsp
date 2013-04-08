@@ -38,7 +38,7 @@
             </ul>
             <p>
         </section>
-
+   <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <section id="powered">
             <div class="page-header">
                 <h1>Powered by COEUS</h1>

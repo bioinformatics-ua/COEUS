@@ -9,7 +9,8 @@
         "sdb":"newsaggregator/sdb.ttl",
         "predicates":"newsaggregator/predicates.csv",
         "built": false,
-        "debug": true,
+        "debug": true,        
+        "apikey":"coeus|uavr",
         "environment": "production"
     },
     "prefixes" : {

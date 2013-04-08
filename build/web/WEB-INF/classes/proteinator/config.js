@@ -9,7 +9,8 @@
         "sdb":"proteinator/sdb.ttl",
         "predicates":"proteinator/predicates.csv",
         "built": false,
-        "debug": true,
+        "debug": true,        
+        "apikey":"coeus|uavr",
         "environment": "production"
     },
     "prefixes" : {

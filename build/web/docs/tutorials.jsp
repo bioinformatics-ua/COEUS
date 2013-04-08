@@ -41,6 +41,7 @@
 
             </p>
         </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <section id="setup">
             <div class="page-header">
                 <h1>Setup</h1>
@@ -60,6 +61,7 @@
                 <strong>Note</strong>: <a href="<c:url value="/assets/files/coeus.sql" />" title="Get COEUS database creation SQL">You can download the SQL code to create your database here <i class="icon-download-alt"></i></a>.
             </div>
         </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
 
         <section id="seed">
             <div class="page-header">
@@ -196,6 +198,7 @@
                 With similar models defined for all the resources that will be integrated, we are now ready to configure our seed and get it ready for deployment.
             </p>
         </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
 
         <section id="configuration">
             <div class="page-header">
@@ -330,7 +333,12 @@
                         <td><code>config.predicates</code></td>
                         <td>Predicates file location (relative to project base). The predicates file is a unique text-file including the list of all the predicates to use in the COEUS seed (one per line).</td>
                         <td>proteinator/predicates.csv</td>
-                    </tr>   
+                    </tr>        
+                    <tr>
+                        <td><code>config.apikey</code></td>
+                        <td>String set for defining the valid API keys for client applications. API keys are basic strings, delimited by <strong>|</strong>. API keys are used in services with <strong>write</strong> access to the knowledge base to prevent abuse. <br/>Using <strong>*</strong> in this property will validate all values.</td>
+                        <td>coeus|sdjkfhs8374</td>
+                    </tr> 
                     <tr>
                         <td><code>config.built</code></td>
                         <td>Defines if the seed has been built or not (must be set to built once the knowledge base has been populated).</td>
@@ -474,6 +482,7 @@ SingleImport single = new SingleImport("resource_go");
 Thread t = new Thread(single);
 t.start();</pre>
         </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <section id="publish">
             <div class="page-header">
                 <h1>Publish</h1>
@@ -493,6 +502,7 @@ t.start();</pre>
             </p>
             <div class="alert alert-warning"><strong>Warning</strong>: Beware that you need to update your Jena, Joseki and Pubby connection settings if you are changing the working environment to a distinct production server.</div>
         </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <section id="access">
             <div class="page-header">
                 <h1>Access</h1>

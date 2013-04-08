@@ -23,7 +23,10 @@
             <p><a href="https://github.com/pdrlps/COEUS/archive/master.zip" target="_blank" class="btn btn-large btn-info">Download COEUS</a></p>
 
             <p>Or you can fork the latest stable version from <a href="https://github.com/pdrlps/COEUS/tree/master" target="_blank">GitHub</a>.</p>
-        </section><!-- Downloads/REQUIREMENTS -->
+        </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        
+        <!-- Downloads/REQUIREMENTS -->
 
         <section id="requirements">
             <div class="page-header">
@@ -46,6 +49,7 @@
 
             <p></p>
         </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <!-- Downloads/CODE -->
         <section id="code">
             <div class="page-header">
@@ -97,7 +101,9 @@
             </ul>
 
             <p></p>
-        </section><!-- Downloads/LIBRARIES -->
+        </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        <!-- Downloads/LIBRARIES -->
 
         <section id="libraries">
             <div class="page-header">
@@ -135,7 +141,9 @@
             </dl>
 
             <p></p>
-        </section><!-- Downloads/SAMPLES -->
+        </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        <!-- Downloads/SAMPLES -->
 
         <section id="samples">
             <div class="page-header">

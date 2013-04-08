@@ -4,6 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
@@ -32,6 +34,15 @@ public class Config {
     private static boolean built = false;
     private static String path = "";
     private static String environment = "development";
+    private static ArrayList<String> apikeys = new ArrayList<String>();
+
+    public static ArrayList<String> getApikeys() {
+        return apikeys;
+    }
+
+    public static void setApikeys(ArrayList<String> apikeys) {
+        Config.apikeys = apikeys;
+    }
 
     public static String getEnvironment() {
         return environment;
@@ -176,7 +187,8 @@ public class Config {
                 debug = (Boolean) config.get("debug");                                          
                 built = (Boolean) config.get("built");                                          
                 predicates = (String) config.get("predicates");                                 
-                environment = (String) config.get("environment");                               
+                environment = (String) config.get("environment");
+                apikeys.addAll(Arrays.asList( ((String) config.get("apikey")).split("\\|")));
                 sdb = ((String) config.get("sdb")).replace(".ttl", "_" + environment + ".ttl");
                 keyPrefix = (String) config.get("keyprefix");
                 JSONObject prefixes = (JSONObject) file.get("prefixes");

@@ -75,7 +75,10 @@ pt.ua.bioinformatics.api.PrefixFactory.encode("http://bioinformatics.ua.pt/coeus
             <pre class="prettyprint lang-java linenums">
 /* Invoke getTokenFromItem...); */
 pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.pt/coeus/resource/omim_143100");                                </pre>
-        </section><!-- API/REST -->
+        </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        
+        <!-- API/REST -->
 
         <section id="rest">
             <div class="page-header">
@@ -99,7 +102,10 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
             </ul>
 
             <p></p>
-        </section><!-- API/SPARQL -->
+        </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        
+        <!-- API/SPARQL -->
 
         <section id="sparql">
             <div class="page-header">
@@ -158,7 +164,10 @@ WHERE{
 }                                </pre>
 
             <p><a class="btn right btn-info" href="../sparqler/">Test it here</a></p>
-        </section><!-- API/LINKEDDATA -->
+        </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        
+        <!-- API/LINKEDDATA -->
 
         <section id="linkeddata">
             <div class="page-header">
@@ -173,7 +182,10 @@ WHERE{
 
                 <li><a href="../data/entrezgene_5002?output=xml">../data/entrezgene_5002?output=xml</a> RDF content for EntrezGene 5002</li>
             </ul>
-        </section><!-- API/JAVASCRIPT -->
+        </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        
+        <!-- API/JAVASCRIPT -->
 
         <section id="javascript">
             <div class="page-header">

@@ -39,6 +39,7 @@
             <p>
                 Since all seeds publish acquired data by default, we can deploy multiple seeds and connect them easily, creating a knowledge federation layer: the <em><strong>Garden</strong></em>.</p>
         </section>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
 
         <!-- Basics/ARCHITECTURE -->
         <section id="architecture">
