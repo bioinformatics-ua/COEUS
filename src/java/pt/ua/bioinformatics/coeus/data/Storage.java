@@ -164,7 +164,7 @@ public class Storage {
     }
 
     /**
-     * Loads \Seed setup for COEUS instance.
+     * Loads Seed setup for COEUS instance.
      * <p>
      *  Setup information must be available in JS configuration file, <strong>setup</strong> property.
      * </p>

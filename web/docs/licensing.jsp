@@ -1,4 +1,5 @@
-<%@include file="/layout/taglib.jsp" %>                    <div class="row">
+<%@include file="/layout/taglib.jsp" %>                    
+<div class="row">
     <div class="span2 bs-docs-sidebar pull-left">
         <ul class="nav nav-list bs-docs-sidenav affix">
             <li><a href="#cc">Creative Commons</a></li>

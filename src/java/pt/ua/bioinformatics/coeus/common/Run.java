@@ -22,7 +22,7 @@ public class Run {
     public static void main(String[] args) {
         try {
             // Start build process            
-            //Boot.start();
+            Boot.start();
             
             // Import single resource (threaded) example
            SingleImport single = new SingleImport("resource_go");
