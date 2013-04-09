@@ -34,7 +34,8 @@
             </div>
             <pre class="prettyprint lang-java linenums">
 /* Invoke getTriple(...); */
-pt.ua.bioinformatics.api.API.getTriple(?coeus:uniprot_P51587?, ?p?, ?o?, ?xml?);                                </pre>
+pt.ua.bioinformatics.api.API.getTriple(?coeus:uniprot_P51587?, ?p?, ?o?, ?xml?);                                </pre> 
+
 
             <div class="bs-docs-example">
                 API call to perform given SPARQL query, with results in desired format (encapsulated in String).
@@ -42,7 +43,12 @@ pt.ua.bioinformatics.api.API.getTriple(?coeus:uniprot_P51587?, ?p?, ?o?, ?xml?);
             <pre class="prettyprint lang-java linenums">
 /* Invoke select(...); */
 pt.ua.bioinformatics.api.API.select("SELECT ...", "js", false);                                </pre>
-
+<div class="bs-docs-example">
+                API call to add new triples to the knowledge base.
+            </div>
+            <pre class="prettyprint lang-java linenums">
+/* Invoke addStatement(...); */
+pt.ua.bioinformatics.api.API.addStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), Boot.getAPI().createResource(PrefixFactory.decode(obj)));                                </pre>
             <h2>Factories</h2>
 
             <p>COEUS includes multiple factories to perform quick transformation between URIs, concepts, strings, prefixes, etc. We use these static methods throughout the entire framework, thus facilitating string-based data conversions.</p>
@@ -84,7 +90,7 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
             <div class="page-header">
                 <h1>REST</h1>
             </div>
-
+            <h2>Read access</h2>
             <p>To access all triples in COEUS Semantic Storage, you can combine subjects, objects or predicates wildcards to iteratively get data. The wildcards' usage is highlighted in the following diagram.</p>
 
             <ul class="thumbnails">
@@ -101,7 +107,48 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
                 <li><a href="../api/triple/coeus:hgnc_brca2/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:hgnc_brca2/coeus:isAssociatedTo/obj/csv</a> gets all objects (obj) with a <em>coeus:isAssociatedTo</em> relationship to <strong>omim_114480</strong> (in CSV format)</li>
             </ul>
 
-            <p></p>
+            <h2>Write Access</h2>
+            <p>
+            	COEUS write API provides a straightforward (and customisable) URL to add new triples to a seed's knowledge base. This enables writing sets of triples for a given subject from any client application.<br/>COEUS write API URLs are:
+            </p>
+            <ul>
+            	<li>../api/&lt;<em>API key</em>&gT;/write/&lt;<em>subject</em>&gt;/<em>&lt;predicate&gt;</em>,&lt;object&gt;</li>
+            </ul>
+            <table class="table table-condensed table-striped table-hover table-bordered">
+            	<thead>
+            		<tr>
+            			<th>Element</th><th>Description</th><th>Sample</th>
+            		</tr>
+            	</thead>
+            	<tbody>
+            		<tr>
+            			<td><code>API key</code></td><td>Value for the seed access API key (defined in <strong>config.js</strong>).</td><td>coeus</td>
+            		</tr>
+            		<tr>
+            			<td><code>subject</code></td><td>The (new or existing) subject to where new triples will be built.</td><td>coeus:uniprot_P51582</td>
+            		</tr>
+            		<tr>
+            			<td><code>predicate,object</code></td><td>Predicate and object list to add to the knowledge base. Multiple predicate-object combinations can be added, delimited by <strong>|</strong>.</td><td>dc:description,a description|dc:title,new title</td>
+            		</tr>
+            	</tbody>
+            </table>
+            <p>
+            	The write REST API returns a JSON object with the server response. The <strong>status</strong> field of that object contains a numeric value with the write operation output.
+            </p>
+            <dl>
+            	<dt>100</dt>
+            	<dd>All OK, triples written to knowledge base.</dd>
+            	<dt>200</dt>
+            	<dd>Error adding triples to knowledge base (check exception output).</dd>
+            	<dt>201</dt>
+            	<dd>Invalid subject.</dd>
+            	<dt>202</dt>
+            	<dd>Invalid predicate.</dd>
+            	<dt>203</dt>
+            	<dd>Invalid object.</dd>
+            	<dt>403</dt>
+            	<dd>Forbidden access, invalid API key.</dd>
+            </dl>
         </section>
         <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         
@@ -191,9 +238,13 @@ WHERE{
             <div class="page-header">
                 <h1>Javascript</h1>
             </div>
-
+            <h2>Data Access</h2>
             <p>Easily perform SPARQL queries to your COEUS-generated endpoint with this new library.<br>
-                Check the documentation and the library at <span class="label label-info">../assets/js/coeus.sparql.js</span></p>
+                Check the documentation and the library at <a class="btn" href="<c:url value="/assets/js/coeus.sparql.js" />" target="_blank" title="Open COEUS Javascript SPARQL library">../assets/js/coeus.sparql.js</a>.</p>
+                <h2>Write</h2>
+                <p>
+                	COEUS Write API can be easily accessed in Javascript. <br />Check the documentation and sample at <a class="btn" href="<c:url value="/assets/js/coeus.sparql.js" />" target="_blank" title="Open COEUS Javascript SPARQL library">../assets/js/coeus.write.js</a>.</p>
+                </p>
         </section>
     </div>
 </div>

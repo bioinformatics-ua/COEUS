@@ -203,6 +203,7 @@
 
                                 <li>For <strong>SPARQL</strong> resources, endpoint is the SPARQL endpoint URI.</li>
                             </ul>
+                            When the resource <strong>extends</strong> another concept, use the <strong>#replace#</strong> keyword to compose the URL with the values from the extended Concept items.
                         </td>
 
                         <td><span class="label label-success">YES</span></td>

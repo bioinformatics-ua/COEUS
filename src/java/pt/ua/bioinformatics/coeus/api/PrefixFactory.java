@@ -34,7 +34,7 @@ public class PrefixFactory {
     }
 
     /**
-     * Decodes a shortneed RDF String to a full URI.
+     * Decodes a shortened RDF String to a full URI.
      * <p>
      *  <b>Sample</b><br />
      *  coeus:Resource decodes to http://bioinformatics.ua.pt/coeus/Resource.

@@ -87,7 +87,7 @@ public class CSVFactory implements ResourceFactory {
                                 InheritedResource c = (InheritedResource) o;
                                 String[] tmp = c.getProperty().split("\\|");
                                 for (String inside : tmp) {
-                                    int col = Integer.parseInt(Character.toString(c.getQuery().charAt(0)));
+                                    int col = Integer.parseInt(c.getQuery());
                                     rdfizer.add(inside, s[col]);
                                 }
                             }
@@ -119,7 +119,7 @@ public class CSVFactory implements ResourceFactory {
                         rdfizer = new Triplify(res, item);
                         InheritedResource key = (InheritedResource) res.getHasKey();
                         for (String[] entry : list) {
-                            int column = Integer.parseInt(Character.toString(key.getQuery().charAt(0)));
+                            int column = Integer.parseInt(key.getQuery());
                             rdfizer.getMap().add(entry[column]);
                         }
                         rdfizer.map();
@@ -150,11 +150,11 @@ public class CSVFactory implements ResourceFactory {
                                 InheritedResource c = (InheritedResource) o;
                                 String[] tmp = c.getProperty().split("\\|");
                                 for (String inside : tmp) {
-                                    int col = Integer.parseInt(Character.toString(c.getQuery().charAt(0)));
+                                    int col = Integer.parseInt(c.getQuery());
                                     rdfizer.add(inside, s[col]);
                                 }
                             }
-                            int column = Integer.parseInt(Character.toString(key.getQuery().charAt(0)));
+                            int column = Integer.parseInt(key.getQuery());
                             if (key.getRegex() == null) {
                                 rdfizer.itemize(s[column]);
                             } else {
@@ -191,11 +191,11 @@ public class CSVFactory implements ResourceFactory {
                                     InheritedResource c = (InheritedResource) o;
                                     String[] tmp = c.getProperty().split("\\|");
                                     for (String inside : tmp) {
-                                        int col = Integer.parseInt(Character.toString(c.getQuery().charAt(0)));
+                                        int col = Integer.parseInt(c.getQuery());
                                         rdfizer.add(inside, s[col]);
                                     }
                                 }
-                                int column = Integer.parseInt(Character.toString(key.getQuery().charAt(0)));
+                                int column = Integer.parseInt(key.getQuery());
                                 if (key.getRegex() == null) {
                                     rdfizer.itemize(s[column]);
                                 } else {

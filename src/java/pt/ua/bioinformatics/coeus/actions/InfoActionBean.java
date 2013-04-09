@@ -13,7 +13,7 @@ import pt.ua.bioinformatics.coeus.common.Boot;
  *
  * @author pedrolopes
  */
-@UrlBinding("/api/{apikey}/info/{id}/{$event}")
+@UrlBinding("/api/{apikey}/info/{id}.{$event}")
 public class InfoActionBean implements ActionBean {
 
     private ActionBeanContext context;
@@ -45,15 +45,18 @@ public class InfoActionBean implements ActionBean {
     }
 
     @DefaultHandler
-    public Resolution json() {
+    public Resolution js() {
         Boot.start();
-
         if (Boot.getAPI().validateKey(apikey)) {
             id = id.replace(":", "_");
             String query = "SELECT ?p ?o WHERE { coeus:" + id + " ?p ?o }";
             return new StreamingResolution("application/json", (String) Boot.getAPI().select(query, "json", false));
         } else {
-           // StreamingResolution sr = new StreamingResolution("application/json", "{'status': 403}");
+            // Default StreamingResolution to output JSON object with 403 Forbidden status
+           // StreamingResolution sr = new StreamingResolution("application/json", "{'status': '403 Forbidden'}");
+            /**
+             * Sample StreamingResolution to generate HTTP 403 Forbidden
+             */
             return new StreamingResolution("text/xml") {
                 public void stream(HttpServletResponse response) throws Exception {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);

@@ -117,7 +117,6 @@ public class API {
         try {
             String sparqlQuery = PrefixFactory.allToString() + query;
             QueryExecution qe = null;
-
             if (inferred) {
                 qe = QueryExecutionFactory.create(sparqlQuery, inferredModel);
                 //qe = QueryExecutionFactory.create(sparqlQuery, model);
@@ -256,7 +255,7 @@ public class API {
      * @param object a Resource for the statement object.
      * @return success of the operation.
      */
-    public boolean addStatement(Resource subject, Property predicate, Resource object) {
+    public boolean addStatement(Resource subject, Property predicate, Resource object) throws Exception {
         boolean success = false;
         try {
             this.model.add(subject, predicate, object);
@@ -266,6 +265,7 @@ public class API {
                 System.out.println("[COEUS][API] Unable to add triple to database");
                 Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
             }
+            throw ex;
         }
         return success;
     }
@@ -278,7 +278,7 @@ public class API {
      * @param object a String for the statement object.
      * @return success of the operation.
      */
-    public boolean addStatement(Resource subject, Property predicate, String object) {
+    public boolean addStatement(Resource subject, Property predicate, String object) throws Exception {
         boolean success = false;
         try {
             this.model.add(subject, predicate, object);
@@ -288,6 +288,7 @@ public class API {
                 System.out.println("[COEUS][API] Unable to add triple to database");
                 Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
             }
+            throw ex;
         }
         return success;
     }
@@ -300,7 +301,7 @@ public class API {
      * @param object a boolean value for the statement object.
      * @return success of the operation.
      */
-    public boolean addStatement(Resource subject, Property predicate, boolean object) {
+    public boolean addStatement(Resource subject, Property predicate, boolean object) throws Exception {
         boolean success = false;
         try {
             this.model.addLiteral(subject, predicate, object);
@@ -310,6 +311,7 @@ public class API {
                 System.out.println("[COEUS][API] Unable to add triple to database");
                 Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
             }
+            throw ex;
         }
         return success;
     }
