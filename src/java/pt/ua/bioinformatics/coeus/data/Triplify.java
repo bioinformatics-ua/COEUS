@@ -18,7 +18,7 @@ import pt.ua.bioinformatics.coeus.domain.Resource;
  */
 public class Triplify {
 
-    private HashMap<String, String> properties = new HashMap<String, String>();
+    private HashMap<String, ArrayList<String>> properties = new HashMap<String, ArrayList<String>>();
     private Resource resource;
     private String extension = "";
     private API api = Boot.getAPI();
@@ -61,20 +61,25 @@ public class Triplify {
         this.resource = r;
     }
 
-    public HashMap<String, String> getProperties() {
+    public HashMap<String, ArrayList<String>> getProperties() {
         return properties;
     }
 
-    public void setProperties(HashMap<String, String> properties) {
+    public void setProperties(HashMap<String, ArrayList<String>> properties) {
         this.properties = properties;
     }
 
-    public String get(String what) {
+    public ArrayList<String> get(String what) {
         return properties.get(what);
     }
 
     public void add(String pred, String obj) {
-        properties.put(pred, obj);
+        if (properties.containsKey(pred)) {
+            properties.get(pred).add(obj);
+        } else {
+            properties.put(pred, new ArrayList<String>());
+            properties.get(pred).add(obj);
+        }
     }
 
     public void clear() {
@@ -86,12 +91,13 @@ public class Triplify {
     }
 
     /**
-     * Creates new Item individual in SDB and respective statements according to setup file.
+     * Creates new Item individual in SDB and respective statements according to
+     * setup file.
      * <p><b>Workflow</b><ol>
-     *  <li>Add Item with <concept>_<key> structure and default properties</li>
-     *  <li>Connect Item with respective Concept</li>
-     *  <li>Associate with Item from extension</li>
-     *  <li>Add Resource-specific properties</li>
+     * <li>Add Item with <concept>_<key> structure and default properties</li>
+     * <li>Connect Item with respective Concept</li>
+     * <li>Associate with Item from extension</li>
+     * <li>Add Resource-specific properties</li>
      * </ol></p>
      *
      * @param i
@@ -124,7 +130,9 @@ public class Triplify {
 
             // set Resource-specific properties (from HashMap)
             for (String key : properties.keySet()) {
-                api.addStatement(item, Predicate.get(key), properties.get(key));
+                for (String object : properties.get(key)) {
+                    api.addStatement(item, Predicate.get(key), object);
+                }
             }
             success = true;
         } catch (Exception ex) {
@@ -137,12 +145,13 @@ public class Triplify {
     }
 
     /**
-     * Completes an Item individual in SDB with respective statements according to setup file.
+     * Completes an Item individual in SDB with respective statements according
+     * to setup file.
      * <p><b>Workflow</b><ol>
-     *  <li>Get Item from <concept>_<key> structure</li>
-     *  <li>Add Resource-specific properties</li>
+     * <li>Get Item from <concept>_<key> structure</li>
+     * <li>Add Resource-specific properties</li>
      * </ol></p>
-     * 
+     *
      * @param uri
      * @return
      */
@@ -154,7 +163,9 @@ public class Triplify {
 
             // set Resource-specific properties (from HashMap)
             for (String key : properties.keySet()) {
-                api.addStatement(item, Predicate.get(key), properties.get(key));
+                for (String object : properties.get(key)) {
+                    api.addStatement(item, Predicate.get(key), object);
+                }
             }
             success = true;
         } catch (Exception ex) {
@@ -167,12 +178,14 @@ public class Triplify {
     }
 
     /**
-     * Maps two Item individual lists in SDB with respective statements according to setup file.
+     * Maps two Item individual lists in SDB with respective statements
+     * according to setup file.
      * <p><b>Workflow</b><ol>
-     *  <li>Get Item from <concept>_<key> structure</li>
-     *  <li>Map new Item</li>
+     * <li>Get Item from <concept>_<key> structure</li>
+     * <li>Map new Item</li>
      * </ol></p>
-     * @return 
+     *
+     * @return
      */
     public boolean map() {
         boolean success = false;
@@ -203,9 +216,9 @@ public class Triplify {
      * Maps two Item individual lists in SDB with respective statements
      * according to setup file. <p><b>Workflow</b><ol> <li>Get Item from
      * <concept>_<key> structure</li> <li>Map new Item</li> </ol></p>
-     * 
-     * @param property the property set field (using | and &amp; nomenclature) 
-     * @return 
+     *
+     * @param property the property set field (using | and &amp; nomenclature)
+     * @return
      */
     public boolean map(String property) {
         boolean success = false;
@@ -214,8 +227,8 @@ public class Triplify {
             for (String s : map) {
                 try {
                     com.hp.hpl.jena.rdf.model.Resource to = api.getResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(this.resource.getIsResourceOf().getLabel()) + s);
-                    api.addStatement(item, Predicate.get("coeus:isAssociatedWith"), to);
-                    api.addStatement(to, Predicate.get("coeus:isAssociatedWith"), item);
+                    api.addStatement(item, Predicate.get("coeus:isAssociatedTo"), to);
+                    api.addStatement(to, Predicate.get("coeus:isAssociatedTo"), item);
 
                     if (property.indexOf("|") >= 4) {
                         String[] ps = property.split("\\|");

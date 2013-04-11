@@ -25,9 +25,9 @@ public class Run {
             Boot.start();
             
             // Import single resource (threaded) example
-           SingleImport single = new SingleImport("resource_go");
+           /*SingleImport single = new SingleImport("resource_go");
             Thread t = new Thread(single);
-            t.start();
+            t.start();*/
         } catch (Exception ex) {
             Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
         }

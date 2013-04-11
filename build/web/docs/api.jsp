@@ -102,9 +102,9 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
             <p>Some data output examples are:</p>
 
             <ul>
-                <li><a href="../api/triple/coeus:hgnc_brca2/p/o" target="_blank">../api/triple/coeus:hgnc_brca2/p/o</a> gets all predicates (p) and objects (o) related to <strong>omim_114480</strong></li>
+                <li><a href="../api/triple/coeus:uniprot_Q13428/p/o" target="_blank">../api/triple/coeus:uniprot_Q13428/p/o</a> gets all predicates (<strong>p</strong>) and objects (<strong>o</strong>) related to <strong>uniprot_Q13428</strong></li>
 
-                <li><a href="../api/triple/coeus:hgnc_brca2/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:hgnc_brca2/coeus:isAssociatedTo/obj/csv</a> gets all objects (obj) with a <em>coeus:isAssociatedTo</em> relationship to <strong>omim_114480</strong> (in CSV format)</li>
+                <li><a href="../api/triple/coeus:uniprot_Q13428/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:uniprot_Q13428/coeus:isAssociatedTo/obj/csv</a> gets all objects (<strong>obj</strong>) with a <em>coeus:isAssociatedTo</em> relationship to <strong>uniprot_Q13428</strong> (in CSV format)</li>
             </ul>
 
             <h2>Write Access</h2>

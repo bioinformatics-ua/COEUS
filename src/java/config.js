@@ -8,9 +8,9 @@
         "setup": "proteinator/setup.rdf",
         "sdb":"proteinator/sdb.ttl",
         "predicates":"proteinator/predicates.csv",
-        "apikey":"uavr|coeus",
-        "built": true,
-        "debug": false,
+        "built": false,
+        "debug": true,        
+        "apikey":"coeus|uavr",
         "environment": "production"
     },
     "prefixes" : {

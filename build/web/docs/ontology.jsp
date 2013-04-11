@@ -286,7 +286,7 @@
 
                         <td>Defines the Resource integration order (ASC).</td>
 
-                        <td><span class="label label-success">NO</span></td>
+                        <td><span class="label label-warning">NO</span></td>
 
                         <td>Resource</td>
 
