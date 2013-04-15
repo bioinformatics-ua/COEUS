@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,20 +70,20 @@ public class CSVFactory implements ResourceFactory {
     public void read() {
         if (res.getMethod().equals("complete")) {
             try {
-                ArrayList<String> extensions;
+                HashMap<String, String> extensions;
                 if (res.getExtension().equals("")) {
                     extensions = res.getExtended();
                 } else {
                     extensions = res.getExtended(res.getExtension());
                 }
-                for (String l : extensions) {
+                for (String l : extensions.keySet()) {
                     u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(l)));
                     in = new BufferedReader(new InputStreamReader(u.openStream()));
                     reader = new CSVReader(in, '\t', '"', 1);
                     list = reader.readAll();
                     try {
                         for (String[] s : list) {
-                            rdfizer = new Triplify(res, PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(res.getExtendsConcept()) + ItemFactory.getTokenFromItem(l));
+                            rdfizer = new Triplify(res, PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(res.getExtendsConcept()) + ItemFactory.getTokenFromItem(extensions.get(l)));
                             for (Object o : res.getLoadsFrom()) {
                                 InheritedResource c = (InheritedResource) o;
                                 String[] tmp = c.getProperty().split("\\|");
@@ -108,15 +109,15 @@ public class CSVFactory implements ResourceFactory {
         } else if (res.getMethod().equals("map")) {
             try {
                 // load extension data
-                ArrayList<String> extensions = res.getExtended();
+                HashMap<String, String> extensions = res.getExtended();
 
-                for (String item : extensions) {
+                for (String item : extensions.keySet()) {
                     u = new URL(res.getEndpoint());
                     in = new BufferedReader(new InputStreamReader(u.openStream()));
                     reader = new CSVReader(in, '\t', '"', 1);
                     list = reader.readAll();
                     try {
-                        rdfizer = new Triplify(res, item);
+                        rdfizer = new Triplify(res, extensions.get(item));
                         InheritedResource key = (InheritedResource) res.getHasKey();
                         for (String[] entry : list) {
                             int column = Integer.parseInt(key.getQuery());
@@ -172,21 +173,21 @@ public class CSVFactory implements ResourceFactory {
                     }
                 } else {
                     // load extension data from resource Extension
-                    ArrayList<String> extensions;
+                    HashMap<String, String> extensions;
                     if (res.getExtension().equals("")) {
                         extensions = res.getExtended();
                     } else {
                         extensions = res.getExtended(res.getExtension());
                     }
-                    for (String l : extensions) {
-                        u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(l)));
+                    for (String item : extensions.keySet()) {
+                        u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(item)));
                         in = new BufferedReader(new InputStreamReader(u.openStream()));
                         reader = new CSVReader(in, '\t', '"', 1);
                         list = reader.readAll();
                         try {
                             for (String[] s : list) {
                                 InheritedResource key = (InheritedResource) res.getHasKey();
-                                rdfizer = new Triplify(res, l);
+                                rdfizer = new Triplify(res, extensions.get(item));
                                 for (Object o : res.getLoadsFrom()) {
                                     InheritedResource c = (InheritedResource) o;
                                     String[] tmp = c.getProperty().split("\\|");

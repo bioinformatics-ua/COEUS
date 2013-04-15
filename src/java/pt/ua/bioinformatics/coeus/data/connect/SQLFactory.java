@@ -2,6 +2,7 @@ package pt.ua.bioinformatics.coeus.data.connect;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -57,19 +58,19 @@ public class SQLFactory implements ResourceFactory {
     public void read() {
         if (res.getMethod().equals("complete")) {
             try {
-                ArrayList<String> extensions;
+                HashMap<String, String> extensions;
                 if (res.getExtension().equals("")) {
                     extensions = res.getExtended();
                 } else {
                     extensions = res.getExtended(res.getExtension());
                 }
-                for (String item : extensions) {
+                for (String item : extensions.keySet()) {
                     db.connect(res.getEndpoint());
                     query = res.getQuery().replace("#replace#", ItemFactory.getTokenFromItem(item));
                     rs = db.getData(query);
                     try {
                         while (rs.next()) {
-                            rdfizer = new Triplify(res, PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(res.getExtendsConcept()) + ItemFactory.getTokenFromItem(item));
+                            rdfizer = new Triplify(res, PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(res.getExtendsConcept()) + ItemFactory.getTokenFromItem(extensions.get(item)));
 
                             for (Object o : res.getLoadsFrom()) {
                                 InheritedResource c = (InheritedResource) o;
@@ -95,7 +96,8 @@ public class SQLFactory implements ResourceFactory {
         } else if (res.getMethod().equals("map")) {
             try {
                 // load extension data
-                for (String item : res.getExtended()) {
+                
+                for (String item : res.getExtended().keySet()) {
                     db.connect(res.getEndpoint());
                     query = res.getQuery().replace("#replace#", ItemFactory.getTokenFromItem(item));
                     rs = db.getData(query);
@@ -155,20 +157,20 @@ public class SQLFactory implements ResourceFactory {
                     db.close();
                 } else {
                     // load extension data
-                    ArrayList<String> extensions;
+                    HashMap<String, String> extensions;
                     if (res.getExtension().equals("")) {
                         extensions = res.getExtended();
                     } else {
                         extensions = res.getExtended(res.getExtension());
                     }
-                    for (String item : extensions) {
+                    for (String item : extensions.keySet()) {
                         db.connect(res.getEndpoint());
                         query = res.getQuery().replace("#replace#", ItemFactory.getTokenFromItem(item));
                         rs = db.getData(query);
                         try {
                             while (rs.next()) {
                                 InheritedResource key = (InheritedResource) res.getHasKey();
-                                rdfizer = new Triplify(res, item);
+                                rdfizer = new Triplify(res, extensions.get(item));
                                 for (Object o : res.getLoadsFrom()) {
                                     InheritedResource r = (InheritedResource) o;
                                     String[] tmp = r.getProperty().split("\\|");

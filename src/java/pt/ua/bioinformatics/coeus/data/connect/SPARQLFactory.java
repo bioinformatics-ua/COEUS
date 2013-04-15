@@ -7,6 +7,7 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.Syntax;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -95,13 +96,13 @@ public class SPARQLFactory implements ResourceFactory {
                     }
                 } else {
                     // load extension data
-                    ArrayList<String> extensions;
+                   HashMap<String, String> extensions;
                     if (res.getExtension().equals("")) {
                         extensions = res.getExtended();
                     } else {
                         extensions = res.getExtended(res.getExtension());
                     }
-                    for (String item : extensions) {
+                    for (String item : extensions.keySet()) {
                         query = PrefixFactory.allToString() + res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(item));
                         e = QueryExecutionFactory.create(query, Syntax.syntaxARQ, DatasetFactory.create());
                         rs = e.execSelect();
@@ -109,7 +110,7 @@ public class SPARQLFactory implements ResourceFactory {
                             while (rs.hasNext()) {
                                 QuerySolution row = rs.nextSolution();
                                 InheritedResource key = (InheritedResource) res.getHasKey();
-                                rdfizer = new Triplify(res, item);
+                                rdfizer = new Triplify(res, extensions.get(item));
                                 for (Object o : res.getLoadsFrom()) {
                                     InheritedResource r = (InheritedResource) o;
                                     String[] tmp = r.getProperty().split("\\|");

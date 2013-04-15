@@ -1,6 +1,7 @@
 package pt.ua.bioinformatics.coeus.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
@@ -179,8 +180,8 @@ public class Resource {
      *
      * @return an ArrayList<String> containing Concept individual URIs.
      */
-    public ArrayList<String> getExtended() {
-        ArrayList<String> extensions = new ArrayList<String>();
+    public HashMap<String, String> getExtended() {
+        HashMap<String, String> extensions = new HashMap<String, String>();
         try {
             if (Config.isDebug()) {
                 System.out.println("[COEUS][Resource] " + title + " loading extension data");
@@ -192,7 +193,7 @@ public class Resource {
             for (Object obj : bindings) {
                 JSONObject binding = (JSONObject) obj;
                 JSONObject tit = (JSONObject) binding.get("title");
-                extensions.add(tit.get("value").toString());
+                extensions.put(tit.get("value").toString(), tit.get("value").toString());
             }
 
         } catch (Exception ex) {
@@ -212,20 +213,22 @@ public class Resource {
      *
      * @return an ArrayList<String> containing Concept individual URIs.
      */
-    public ArrayList<String> getExtended(String uri) {
-        ArrayList<String> extensions = new ArrayList<String>();
+    public HashMap<String, String> getExtended(String uri) {
+        HashMap<String, String> extensions = new HashMap<String, String>();
+       
         try {
             if (Config.isDebug()) {
                 System.out.println("[COEUS][Resource] " + title + " loading extension data");
             }
             JSONParser parser = new JSONParser();
-            JSONObject response = (JSONObject) parser.parse(Boot.getAPI().select("SELECT ?title WHERE { ?t coeus:hasConcept " + PrefixFactory.encode(extendsConcept) + " . ?t " + uri + " ?title} ORDER BY ?title", "json", false));
+            JSONObject response = (JSONObject) parser.parse(Boot.getAPI().select("SELECT ?t ?title WHERE { ?t coeus:hasConcept " + PrefixFactory.encode(extendsConcept) + " . ?t " + uri + " ?title} ORDER BY ?title", "json", false));
             JSONObject results = (JSONObject) response.get("results");
             JSONArray bindings = (JSONArray) results.get("bindings");
             for (Object obj : bindings) {
                 JSONObject binding = (JSONObject) obj;
                 JSONObject tit = (JSONObject) binding.get("title");
-                extensions.add(tit.get("value").toString());
+                JSONObject element = (JSONObject) binding.get("t");
+                extensions.put(tit.get("value").toString(), element.get("value").toString());
             }
         } catch (Exception ex) {
             if (Config.isDebug()) {

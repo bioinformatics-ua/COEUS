@@ -62,7 +62,7 @@
     conf:dataset [
         # SPARQL endpoint URL of the dataset
         #conf:sparqlEndpoint <http://localhost:8084/coeus/sparql>;
-        conf:sparqlEndpoint <http://bioinformatics.ua.pt/coeus/sparql>;
+        conf:sparqlEndpoint <http://bioinformatics.ua.pt/bibliodem/sparql>;
         # Default graph name to query (not necessary for most endpoints)
         # conf:sparqlDefaultGraph <>;
         # Common URI prefix of all resource URIs in the SPARQL dataset

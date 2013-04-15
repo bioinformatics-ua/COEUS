@@ -2,6 +2,7 @@ package pt.ua.bioinformatics.coeus.data.connect;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -111,13 +112,13 @@ public class XMLFactory implements ResourceFactory {
                     }
                 } else {
                     // load extension data
-                    ArrayList<String> extensions;
+                    HashMap<String, String> extensions;
                     if (res.getExtension().equals("")) {
                         extensions = res.getExtended();
                     } else {
                         extensions = res.getExtended(res.getExtension());
                     }
-                    for (String item : extensions) {
+                    for (String item : extensions.keySet()) {
                         domFactory = DocumentBuilderFactory.newInstance();
                         u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(item)));
                         domFactory.setNamespaceAware(false);
@@ -130,7 +131,7 @@ public class XMLFactory implements ResourceFactory {
                             for (int i = 0; i < entries.getLength(); i++) {
                                 Node n = entries.item(i);
                                 InheritedResource key = (InheritedResource) res.getHasKey();
-                                rdfizer = new Triplify(res, item);
+                                rdfizer = new Triplify(res, extensions.get(item));
                                 for (Object o : res.getLoadsFrom()) {
                                     InheritedResource c = (InheritedResource) o;
                                     String[] tmp = c.getProperty().split("\\|");
@@ -184,15 +185,15 @@ public class XMLFactory implements ResourceFactory {
             }
         } else if (res.getMethod().equals("complete")) {
             try {
-                ArrayList<String> extensions;
+                HashMap<String, String> extensions;
                 if (res.getExtension().equals("")) {
                     extensions = res.getExtended();
                 } else {
                     extensions = res.getExtended(res.getExtension());
                 }
-                for (String l : extensions) {
+                for (String item : extensions.keySet()) {
                     domFactory = DocumentBuilderFactory.newInstance();
-                    u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(l)));
+                    u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(item)));
                     domFactory.setNamespaceAware(false);
                     builder = domFactory.newDocumentBuilder();
                     try {
@@ -202,8 +203,7 @@ public class XMLFactory implements ResourceFactory {
                         entries = (NodeList) xpath.evaluate(res.getQuery(), doc, XPathConstants.NODESET);
                         for (int i = 0; i < entries.getLength(); i++) {
                             Node n = entries.item(i);
-                            InheritedResource key = (InheritedResource) res.getHasKey();
-                            rdfizer = new Triplify(res, PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(res.getExtendsConcept()) + ItemFactory.getTokenFromItem(l));
+                            rdfizer = new Triplify(res, PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(res.getExtendsConcept()) + ItemFactory.getTokenFromItem(extensions.get(item)));
                             for (Object o : res.getLoadsFrom()) {
                                 InheritedResource c = (InheritedResource) o;
                                 String[] tmp = c.getProperty().split("\\|");

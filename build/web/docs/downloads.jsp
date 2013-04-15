@@ -159,7 +159,7 @@
 
             <p>Sample setup from multiple proteomics sources. Starting with a list of protein entries (in CSV), loads data for genes from HGNC and protein mappings to Gene Ontology, InterPro, PROSITE and PDB from UniProt's database.<br>
                 This example highlights how we can combine data from multiple heterogeneous resource using a single <strong>COEUS</strong> seed configuration.<br>
-                Configuration files available on <code>source/java/newsaggregator</code>.</p>
+                Configuration files available on <code>source/java/proteinator</code>.</p>
         </section>
     </div>
 </div>
