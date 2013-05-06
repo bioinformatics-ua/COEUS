@@ -1,5 +1,6 @@
 package pt.ua.bioinformatics.coeus.common;
 
+import pt.ua.bioinformatics.coeus.data.connect.JSONFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
@@ -164,6 +165,8 @@ public class Builder {
                     factory = new SQLFactory(r);
                 } else if (r.getPublisher().equals("sparql")) {
                     factory = new SPARQLFactory(r);
+                } else if (r.getPublisher().equals("json")) {
+                    factory = new JSONFactory(r);
                 } else {
                     factory = null;
                 }
