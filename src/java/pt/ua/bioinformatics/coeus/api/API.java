@@ -391,4 +391,38 @@ public class API {
     public boolean validateKey(String key) {
         return (Config.getApikeys().contains(key) || Config.getApikeys().contains("*"));
     }
+    
+    /**
+     * Read into the model any rdf data (given the url location).
+     * 
+     * @param location 
+     */
+    public void readModel(String location){
+        try {
+            this.model.read(location);
+        }catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][API] Unable to read into the model");
+            }
+            Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+     /**
+     * Read into the model any rdf data in the given format.
+     * 
+     * @param location 
+     * @param format 
+     */
+    public void readModel(String location,String format){
+        try {
+            this.model.read(location,format);
+        }catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][API] Unable to read into the model");
+            }
+            Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
 }
