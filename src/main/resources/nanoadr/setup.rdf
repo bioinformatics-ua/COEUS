@@ -1,0 +1,950 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY np "http://www.nanopub.org/nschema#" >
+    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY coeus "http://bioinformatics.ua.pt/coeus/" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY nanoadr "http://bioinformatics.ua.pt/nanoadr/resource/" >
+]>
+
+
+<rdf:RDF xmlns="http://bioinformatics.ua.pt/nanoadr/resource/"
+     xml:base="http://bioinformatics.ua.pt/nanoadr/resource/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:nanoadr="http://bioinformatics.ua.pt/nanoadr/resource/"
+     xmlns:np="http://www.nanopub.org/nschema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:coeus="http://bioinformatics.ua.pt/coeus/">
+    <owl:Ontology rdf:about="http://bioinformatics.ua.pt/nanoadr/resource/">
+        <rdfs:label rdf:datatype="&xsd;string">nanoadrontology</rdfs:label>
+        <owl:versionInfo rdf:datatype="&xsd;string">1.0</owl:versionInfo>
+        <dc:date rdf:datatype="&xsd;date">2013-04-09</dc:date>
+        <dc:subject rdf:datatype="&xsd;string">ADR Nanopublications.</dc:subject>
+        <dc:rights rdf:datatype="&xsd;string">CC</dc:rights>
+        <dc:title rdf:datatype="&xsd;string">NanoADR Ontology</dc:title>
+        <dc:description rdf:datatype="&xsd;string">NanoADR setup 1.0</dc:description>
+        <dc:language rdf:datatype="&xsd;string">en</dc:language>
+        <dc:publisher rdf:datatype="&xsd;string">http://bioinformatics.ua.pt</dc:publisher>
+        <dc:creator rdf:datatype="&xsd;string">sernadela@ua.pt</dc:creator>
+        <owl:imports rdf:resource="&coeus;ontology/"/>
+        <owl:imports rdf:resource="http://www.nanopub.org/nschema"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/concept_assertion -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;concept_assertion">
+        <rdf:type rdf:resource="&coeus;Concept"/>
+        <rdfs:label rdf:datatype="&xsd;string">concept_assertion</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Concept Assertion</dc:title>
+        <coeus:hasEntity rdf:resource="&nanoadr;entity_nanopub"/>
+        <coeus:hasResource rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/concept_atc -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;concept_atc">
+        <rdf:type rdf:resource="&coeus;Concept"/>
+        <rdfs:label rdf:datatype="&xsd;string">concept_atc</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">ConceptATC</dc:title>
+        <coeus:hasEntity rdf:resource="&nanoadr;entity_nanopub"/>
+        <coeus:hasResource rdf:resource="&nanoadr;resource_atc"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/concept_event -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;concept_event">
+        <rdf:type rdf:resource="&coeus;Concept"/>
+        <rdfs:label rdf:datatype="&xsd;string">concept_event</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Concept Event</dc:title>
+        <coeus:hasEntity rdf:resource="&nanoadr;entity_nanopub"/>
+        <coeus:hasResource rdf:resource="&nanoadr;resource_event"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/concept_nanopub -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;concept_nanopub">
+        <rdf:type rdf:resource="&coeus;Concept"/>
+        <rdfs:label rdf:datatype="&xsd;string">concept_nanopub</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">ConceptNanoPub</dc:title>
+        <coeus:hasEntity rdf:resource="&nanoadr;entity_nanopub"/>
+        <coeus:hasResource rdf:resource="&nanoadr;resource_nanopub"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/concept_provenance -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;concept_provenance">
+        <rdf:type rdf:resource="&coeus;Concept"/>
+        <rdfs:label rdf:datatype="&xsd;string">concept_provenance</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Concept Provenance</dc:title>
+        <coeus:hasEntity rdf:resource="&nanoadr;entity_nanopub"/>
+        <coeus:hasResource rdf:resource="&nanoadr;resource_provenance"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/concept_pubinfo -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;concept_pubinfo">
+        <rdf:type rdf:resource="&coeus;Concept"/>
+        <rdfs:label rdf:datatype="&xsd;string">concept_pubinfo</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Concept PublicationInfo</dc:title>
+        <coeus:hasEntity rdf:resource="&nanoadr;entity_nanopub"/>
+        <coeus:hasResource rdf:resource="&nanoadr;resource_pubinfo"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/entity_nanopub -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;entity_nanopub">
+        <rdf:type rdf:resource="&coeus;Entity"/>
+        <rdfs:label rdf:datatype="&xsd;string">entity_nanopub</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">NanoPub</dc:title>
+        <rdfs:comment rdf:datatype="&xsd;string">NanoPub entity for NanoADR</rdfs:comment>
+        <coeus:isEntityOf rdf:resource="&nanoadr;concept_nanopub"/>
+        <coeus:isIncludedIn rdf:resource="&nanoadr;seed_nanoadr"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_assertion -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_assertion">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_assertion</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">0</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for nanopub SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">ResourceAssertion</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT * FROM adr;</coeus:query>
+        <coeus:method rdf:datatype="&xsd;string">cache</coeus:method>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_assertion"/>
+        <coeus:extends rdf:resource="&nanoadr;concept_assertion"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_ci95down_bcpnn"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_ci95down_gps"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_ci95down_lgps"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_ci95down_mh"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_ci95down_sccs"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_ci95up_bcpnn"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_ci95up_gps"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_ci95up_lgps"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_ci95up_mh"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_ci95up_sccs"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_events"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_exposure"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_leopard4or7"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_name"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_p_bcpnn"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_p_exact"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_p_gps"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_p_leopard"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_p_leopard4"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_p_lgps"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_p_mh"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_p_sccs"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_req_days_rr1.5"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_req_days_rr2.0"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_req_days_rr4.0"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_rr_bcpnn"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_rr_gps"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_rr_lgps"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_rr_mh"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_rr_sccs"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion_wp2_validation_set"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_nanopub_id"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_nanopub_id"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_assertion2atc -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_assertion2atc">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_assertion2atc</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">3</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for assertion2atc SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">ResourceAssertion2atc</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT ATC FROM adr WHERE ID LIKE &apos;#replace#&apos;;</coeus:query>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <coeus:method rdf:datatype="&xsd;string">map</coeus:method>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:extends rdf:resource="&nanoadr;concept_assertion"/>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_atc"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion2atc_map"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_assertion2atc_map"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_assertion2event -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_assertion2event">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_assertion2event</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">5</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for assertion2event SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">ResourceAssertion2event</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT EVENTTYPE FROM adr WHERE ID LIKE &apos;#replace#&apos;;</coeus:query>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <coeus:method rdf:datatype="&xsd;string">map</coeus:method>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:extends rdf:resource="&nanoadr;concept_assertion"/>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_event"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_assertion2event_map"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_assertion2event_map"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_atc -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_atc">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_atc</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">2</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for atc SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">ResourceATC</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT * FROM adr;</coeus:query>
+        <coeus:method rdf:datatype="&xsd;string">cache</coeus:method>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_atc"/>
+        <coeus:extends rdf:resource="&nanoadr;concept_atc"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_atc"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_atc"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_event -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_event">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_event</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">4</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for event SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">ResourceEvent</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT * FROM adr;</coeus:query>
+        <coeus:method rdf:datatype="&xsd;string">cache</coeus:method>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_event"/>
+        <coeus:extends rdf:resource="&nanoadr;concept_event"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_event"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_event"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_nanopub -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_nanopub">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_nanopub</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">0</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for nanopub SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">ResourceNanopub</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT * FROM adr;</coeus:query>
+        <coeus:method rdf:datatype="&xsd;string">cache</coeus:method>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_nanopub"/>
+        <coeus:extends rdf:resource="&nanoadr;concept_nanopub"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_nanopub_id"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_nanopub_id"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_nanopub2assertion -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_nanopub2assertion">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_nanopub2assertion</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">1</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for nanopub2assertion SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">Resourcenanopub2assertion</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT ID FROM adr WHERE ID LIKE &apos;#replace#&apos;;</coeus:query>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <coeus:method rdf:datatype="&xsd;string">map</coeus:method>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_assertion"/>
+        <coeus:extends rdf:resource="&nanoadr;concept_nanopub"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_nanopub2assertion_map"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_nanopub2assertion_map"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_nanopub2provenance -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_nanopub2provenance">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_nanopub2provenance</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">7</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for nanopub2provenance SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">Resourcenanopub2provenance</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT ID FROM adr WHERE ID LIKE &apos;#replace#&apos;;</coeus:query>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <coeus:method rdf:datatype="&xsd;string">map</coeus:method>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:extends rdf:resource="&nanoadr;concept_nanopub"/>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_provenance"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_nanopub2provenance_map"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_nanopub2provenance_map"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_nanopub2pubinfo -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_nanopub2pubinfo">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_nanopub2pubinfo</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">7</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for nanopub2pubinfo SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">Resource nanopub2pubinfo</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT ID FROM adr WHERE ID LIKE &apos;#replace#&apos;;</coeus:query>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <coeus:method rdf:datatype="&xsd;string">map</coeus:method>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:extends rdf:resource="&nanoadr;concept_nanopub"/>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_pubinfo"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_nanopub2pubinfo_map"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_nanopub2pubinfo_map"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_provenance -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_provenance">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_provenance</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">6</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for nanopub provenance SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">ResourceProvenance</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT * FROM adr;</coeus:query>
+        <coeus:method rdf:datatype="&xsd;string">cache</coeus:method>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:extends rdf:resource="&nanoadr;concept_provenance"/>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_provenance"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_nanopub_id"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_nanopub_id"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_provenance_author"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/resource_pubinfo -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;resource_pubinfo">
+        <rdf:type rdf:resource="&coeus;Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_pubinfo</rdfs:label>
+        <coeus:order rdf:datatype="&xsd;int">8</coeus:order>
+        <rdfs:comment rdf:datatype="&xsd;string">Resource loader for nanopub publicationInfo SQL.</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">ResourcePublicationInfo</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">SELECT * FROM adr;</coeus:query>
+        <coeus:method rdf:datatype="&xsd;string">cache</coeus:method>
+        <coeus:endpoint rdf:datatype="&xsd;string">jdbc:mysql://localhost:3306/nanoadr?user=demo&amp;password=demo</coeus:endpoint>
+        <dc:publisher rdf:datatype="&xsd;string">sql</dc:publisher>
+        <coeus:extends rdf:resource="&nanoadr;concept_pubinfo"/>
+        <coeus:isResourceOf rdf:resource="&nanoadr;concept_pubinfo"/>
+        <coeus:hasKey rdf:resource="&nanoadr;sql_nanopub_id"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_nanopub_id"/>
+        <coeus:loadsFrom rdf:resource="&nanoadr;sql_pubinfo_rights"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/seed_nanoadr -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;seed_nanoadr">
+        <rdf:type rdf:resource="&coeus;Seed"/>
+        <rdfs:label rdf:datatype="&xsd;string">seed_nanoadr</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">NanoADR</dc:title>
+        <coeus:includes rdf:resource="&nanoadr;entity_nanopub"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion2atc_map -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion2atc_map">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion2atc_map</rdfs:label>
+        <coeus:query rdf:datatype="&xsd;string">ATC</coeus:query>
+        <dc:title rdf:datatype="&xsd;string">SQL assertion to atc maping</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:hasATC</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion2atc"/>
+        <coeus:isKeyOf rdf:resource="&nanoadr;resource_assertion2atc"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion2event_map -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion2event_map">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion2event_map</rdfs:label>
+        <coeus:query rdf:datatype="&xsd;string">EventType</coeus:query>
+        <dc:title rdf:datatype="&xsd;string">SQL assertion to event maping</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:hasEvent</coeus:property>
+        <coeus:isKeyOf rdf:resource="&nanoadr;resource_assertion2event"/>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion2event"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_ci95down_bcpnn -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_ci95down_bcpnn">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_ci95down_bcpnn</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion CI95down(BCPNN) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">CI95down(BCPNN)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:ci95down_bcpnn</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_ci95down_gps -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_ci95down_gps">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_ci95down_gps</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion CI95down(GPS) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">CI95down(GPS)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:ci95down_gps</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_ci95down_lgps -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_ci95down_lgps">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_ci95down_lgps</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion CI95down(LGPS) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">CI95down(LGPS)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:ci95down_lgps</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_ci95down_mh -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_ci95down_mh">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_ci95down_mh</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion CI95down(MH) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">CI95down(MH)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:ci95down_mh</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_ci95down_sccs -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_ci95down_sccs">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_ci95down_sccs</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion CI95down(SCCS) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">CI95down(SCCS)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:ci95down_sccs</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_ci95up_bcpnn -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_ci95up_bcpnn">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_ci95up_bcpnn</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion CI95up(BCPNN) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">CI95up(BCPNN)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:ci95up_bcpnn</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_ci95up_gps -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_ci95up_gps">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_ci95up_gps</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion CI95up(GPS) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">CI95up(GPS)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:ci95up_gps</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_ci95up_lgps -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_ci95up_lgps">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_ci95up_lgps</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion CI95up(LGPS) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">CI95up(LGPS)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:ci95up_lgps</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_ci95up_mh -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_ci95up_mh">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_ci95up_mh</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion CI95up(MH) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">CI95UP(MH)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:ci95up_mh</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_ci95up_sccs -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_ci95up_sccs">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_ci95up_sccs</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion CI95up(SCCS) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">CI95up(SCCS)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:ci95up_sccs</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_events -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_events">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_events</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion events sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">Events</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:events</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_exposure -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_exposure">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_exposure</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion Exposure sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">EXPOSURE</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:exposure</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_leopard4or7 -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_leopard4or7">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_leopard4or7</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion LEOPARD4Or7 sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">LEOPARD4Or7</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:leopard4or7</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_name -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_name">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_name</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion name sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">NAME</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">dc:title</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_p_bcpnn -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_p_bcpnn">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_p_bcpnn</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion p(BCPNN) sql</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:p_bcpnn</coeus:property>
+        <coeus:query rdf:datatype="&xsd;string">p(BCPNN)</coeus:query>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_p_exact -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_p_exact">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_p_exact</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion p(Exact) sql</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:p_exact</coeus:property>
+        <coeus:query rdf:datatype="&xsd;string">p(Exact)</coeus:query>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_p_gps -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_p_gps">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_p_gps</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion p(GPS) sql</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:p_gps</coeus:property>
+        <coeus:query rdf:datatype="&xsd;string">p(GPS)</coeus:query>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_p_leopard -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_p_leopard">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_p_leopard</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion p(LEOPARD) sql</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:p_leopard</coeus:property>
+        <coeus:query rdf:datatype="&xsd;string">p(LEOPARD)</coeus:query>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_p_leopard4 -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_p_leopard4">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_p_leopard4</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion p(LEOPARD4) sql</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:p_leopard4</coeus:property>
+        <coeus:query rdf:datatype="&xsd;string">p(LEOPARD4)</coeus:query>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_p_lgps -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_p_lgps">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_p_lgps</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion p(LGPS) sql</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:p_lgps</coeus:property>
+        <coeus:query rdf:datatype="&xsd;string">p(LGPS)</coeus:query>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_p_mh -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_p_mh">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_p_mh</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion p(MH) sql</dc:title>
+        <coeus:property rdf:datatype="&xsd;double">nanoadr:p_mh</coeus:property>
+        <coeus:query rdf:datatype="&xsd;double">p(MH)</coeus:query>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_p_sccs -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_p_sccs">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_p_sccs</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion p(SCCS) sql</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:p_sccs</coeus:property>
+        <coeus:query rdf:datatype="&xsd;string">p(SCCS)</coeus:query>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_req_days_rr1.5 -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_req_days_rr1.5">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_req_days_rr1.5</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion Required days (RR=1.5) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">Required days (RR=1.5)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:req_days_rr1.5</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_req_days_rr2.0 -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_req_days_rr2.0">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_req_days_rr2.0</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion Required days (RR=2.0) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">Required days (RR=2.0)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:req_days_rr2.0</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_req_days_rr4.0 -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_req_days_rr4.0">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_req_days_rr4.0</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion Required days (RR=4.0) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">Required days (RR=4.0)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:req_days_rr4.0</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_rr_bcpnn -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_rr_bcpnn">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_rr_bcpnn</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion RR(BCPNN) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">RR(BCPNN)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:rr_bcpnn</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_rr_gps -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_rr_gps">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_rr_gps</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion RR(GPS) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">RR(GPS)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:rr_gps</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_rr_lgps -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_rr_lgps">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_rr_lgps</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion RR(LGPS) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">RR(LGPS)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:rr_lgps</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_rr_mh -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_rr_mh">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_rr_mh</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion RR(MH) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">RR(MH)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:rr_mh</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_rr_sccs -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_rr_sccs">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_rr_sccs</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion RR(SCCS) sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">RR(SCCS)</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:rr_sccs</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_assertion_wp2_validation_set -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_assertion_wp2_validation_set">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_assertion_wp2_validation_set</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Assertion WP2 validation set sql</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">WP2 validation set</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">nanoadr:wp2_validation_set</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_atc -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_atc">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_atc</rdfs:label>
+        <coeus:query rdf:datatype="&xsd;string">ATC</coeus:query>
+        <dc:title rdf:datatype="&xsd;string">ATC id</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">dc:identifier</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_atc"/>
+        <coeus:isKeyOf rdf:resource="&nanoadr;resource_atc"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_event -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_event">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_event</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Event id</dc:title>
+        <coeus:query rdf:datatype="&xsd;string">EventType</coeus:query>
+        <coeus:property rdf:datatype="&xsd;string">dc:identifier</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_event"/>
+        <coeus:isKeyOf rdf:resource="&nanoadr;resource_event"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_nanopub2assertion_map -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_nanopub2assertion_map">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_nanopub2assertion_map</rdfs:label>
+        <coeus:query rdf:datatype="&xsd;string">ID</coeus:query>
+        <dc:title rdf:datatype="&xsd;string">SQL nanopub to assertion maping</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">np:hasAssertion</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_nanopub2assertion"/>
+        <coeus:isKeyOf rdf:resource="&nanoadr;resource_nanopub2assertion"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_nanopub2provenance_map -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_nanopub2provenance_map">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_nanopub2provenance_map</rdfs:label>
+        <coeus:query rdf:datatype="&xsd;string">ID</coeus:query>
+        <dc:title rdf:datatype="&xsd;string">SQL nanopub to provenance maping</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">np:hasProvenance</coeus:property>
+        <coeus:isKeyOf rdf:resource="&nanoadr;resource_nanopub2provenance"/>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_nanopub2provenance"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_nanopub2pubinfo_map -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_nanopub2pubinfo_map">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_nanopub2pubinfo_map</rdfs:label>
+        <coeus:query rdf:datatype="&xsd;string">ID</coeus:query>
+        <dc:title rdf:datatype="&xsd;string">SQL nanopub to pubinfo maping</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">np:hasPublicationInfo</coeus:property>
+        <coeus:isKeyOf rdf:resource="&nanoadr;resource_nanopub2pubinfo"/>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_nanopub2pubinfo"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_nanopub_id -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_nanopub_id">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_nanopub_id</rdfs:label>
+        <coeus:query rdf:datatype="&xsd;string">ID</coeus:query>
+        <dc:title rdf:datatype="&xsd;string">NanoPub identifier</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">dc:identifier</coeus:property>
+        <coeus:isKeyOf rdf:resource="&nanoadr;resource_assertion"/>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_assertion"/>
+        <coeus:isKeyOf rdf:resource="&nanoadr;resource_nanopub"/>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_nanopub"/>
+        <coeus:isKeyOf rdf:resource="&nanoadr;resource_provenance"/>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_provenance"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_provenance_author -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_provenance_author">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_provenance_author</rdfs:label>
+        <coeus:query rdf:datatype="&xsd;string">Name</coeus:query>
+        <dc:title rdf:datatype="&xsd;string">Nanopub Provenance Author</dc:title>
+        <coeus:property rdf:datatype="&xsd;string">dc:author</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_provenance"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/nanoadr/resource/sql_pubinfo_rights -->
+
+    <owl:NamedIndividual rdf:about="&nanoadr;sql_pubinfo_rights">
+        <rdf:type rdf:resource="&coeus;SQL"/>
+        <rdfs:label rdf:datatype="&xsd;string">sql_pubinfo_rights</rdfs:label>
+        <coeus:query rdf:datatype="&xsd;string">Name</coeus:query>
+        <dc:title rdf:datatype="&xsd;string">Nanopub pubinfo rights </dc:title>
+        <coeus:property rdf:datatype="&xsd;string">dc:rights</coeus:property>
+        <coeus:loadsFor rdf:resource="&nanoadr;resource_pubinfo"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+

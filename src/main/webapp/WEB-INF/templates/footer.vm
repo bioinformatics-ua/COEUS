@@ -1,0 +1,56 @@
+
+           
+                   
+               
+       
+
+#set ($has_text = false)
+<footer class="footer">
+      <div class="container">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+                <div class="container">
+#if ($sparql_endpoint)
+      This page shows information obtained from COEUS SPARQL endpoint at <a class="sparql-uri" href="$sparql_endpoint">$sparql_endpoint</a>.<br />
+#end
+#if ($rdf_link)
+      <a href="$rdf_link?output=ttl">As Turtle</a> |
+      <a href="$rdf_link?output=xml">As RDF/XML</a>
+#set ($has_text = true)
+#end 
+<p>&nbsp;</p>
+                    <p>&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2013
+                        <br />
+                        Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a>
+                        <br />
+                        <small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a> <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback"><i class="icon-envelope"></i></a></small>
+                        <br />
+                        <a href="http://twitter.github.com/bootstrap/" target="_blank"><small>Layout with Twitter Bootstrap</small></a>
+                    </p>
+</div>
+            
+    </section>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="assets/js/jquery.js"><\/script>')</script>
+        <script defer src="${server_base}assets/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-12230872-7']);
+            _gaq.push(['_trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+        <script>
+            $(document).ready(function(){
+            });
+        </script>
+        <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+             chromium.org/developers/how-tos/chrome-frame-getting-started -->
+        <!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+  </body>
+</html>

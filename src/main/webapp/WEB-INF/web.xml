@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <description>COEUS: Semantic Web Application Framework</description>
+    <display-name>COEUS</display-name>
+    <filter>
+        <filter-name>StripesFilter</filter-name>
+        <filter-class>net.sourceforge.stripes.controller.StripesFilter</filter-class>
+        <init-param>
+            <param-name>LocalePicker.Locales</param-name>
+            <param-value>en:utf-8</param-value>
+        </init-param>
+        <init-param>
+            <description>COEUS default actions</description>
+            <param-name>ActionResolver.Packages</param-name>
+            <param-value>pt.ua.bioinformatics.coeus.actions</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <description>Dynamically maps URLs to ActionBeans.</description>
+        <display-name>Stripes Dynamic Mapping Filter</display-name>
+        <filter-name>DynamicMappingFilter</filter-name>
+        <filter-class>net.sourceforge.stripes.controller.DynamicMappingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DynamicMappingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
+    <!-- Joseki -->
+    <servlet>
+        <servlet-name>SPARQL service processor</servlet-name>
+        <servlet-class>org.joseki.http.Servlet</servlet-class>
+        <init-param>
+            <param-name>org.joseki.rdfserver.config</param-name>
+            <!-- News Aggregator --><param-value>nanoadr/joseki.ttl</param-value>
+            <!-- Proteinator <param-value>proteinator/joseki.ttl</param-value>-->
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SPARQL service processor</servlet-name>
+        <url-pattern>/sparql</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SPARQL service processor</servlet-name>
+        <url-pattern>/sparql/*</url-pattern>
+    </servlet-mapping>
+    <!-- pubby -->
+    <context-param>
+        <param-name>config-file</param-name>
+        <!-- News Aggregator--><param-value>classes/nanoadr/pubby.ttl</param-value>
+        <!-- Proteinator <param-value>classes/proteinator/pubby.ttl</param-value>-->
+    </context-param>
+  
+    <servlet>
+        <servlet-name>WebURIServlet</servlet-name>
+        <servlet-class>de.fuberlin.wiwiss.pubby.servlets.WebURIServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet> 
+
+    <servlet>
+        <servlet-name>PageURLServlet</servlet-name>
+        <servlet-class>de.fuberlin.wiwiss.pubby.servlets.PageURLServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+<servlet>
+        <servlet-name>WebURLServlet</servlet-name>
+        <servlet-class>de.fuberlin.wiwiss.pubby.servlets.PageURLServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+     <servlet-mapping>
+        <servlet-name>WebURLServlet</servlet-name>
+        <url-pattern>/resource/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PageURLServlet</servlet-name>
+        <url-pattern>/page/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PathPageURLServlet</servlet-name>
+        <servlet-class>de.fuberlin.wiwiss.pubby.servlets.PathPageURLServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>PathPageURLServlet</servlet-name>
+        <url-pattern>/pathpage/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DataURLServlet</servlet-name>
+        <servlet-class>de.fuberlin.wiwiss.pubby.servlets.DataURLServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DataURLServlet</servlet-name>
+        <url-pattern>/data/*</url-pattern>
+    </servlet-mapping>
+  
+    <servlet>
+        <servlet-name>PathDataURLServlet</servlet-name>
+        <servlet-class>de.fuberlin.wiwiss.pubby.servlets.PathDataURLServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>PathDataURLServlet</servlet-name>
+        <url-pattern>/pathdata/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RootServlet</servlet-name>
+        <servlet-class>de.fuberlin.wiwiss.pubby.servlets.RootServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>    
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
