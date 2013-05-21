@@ -77,26 +77,54 @@ public class DeleteActionBean implements ActionBean {
 
     /**
      * Delete a triple from the KB. <p>Workflow</b><ol>
-     * <li>Check if obj is a Resource or a Literal</li> 
-     * <li>Create the statement depending on the obj</li> 
+     * <li>Check if obj is a Resource or a Literal</li>
+     * <li>Create the statement depending on the obj</li>
      * <li>Verify if the statement exists in the kb</li>
-     * <li>If exist try to remove the statement</li> 
+     * <li>If exist try to remove the statement</li>
      * <li>Finally check if has been deleted in the KB.</li>
      * </ol></p>
-     * @return 
+     *
+     * @return
      */
     @DefaultHandler
     public Resolution handle() {
         Boot.start();
-        if (Boot.getAPI().validateKey(apikey)) {
-            if (sub.indexOf(":") > 1) {
-                try {
-                    if (pred.indexOf(":") > 1) {
-                        if (obj.contains(":")) {
-                            //verify if the obj is a Resource or a Literal
-                            if (obj.indexOf(":") > 1) {
-                                // obj is a Resource
-                                Statement s = Boot.getAPI().createStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), Boot.getAPI().createResource(PrefixFactory.decode(obj)));
+        if (sub != null && pred != null && obj != null) {
+            if (Boot.getAPI().validateKey(apikey)) {
+                if (sub.indexOf(":") > 1) {
+                    try {
+                        if (pred.indexOf(":") > 1) {
+                            if (obj.contains(":")) {
+                                //verify if the obj is a Resource or a Literal
+                                if (obj.indexOf(":") > 1) {
+                                    // obj is a Resource
+                                    Statement s = Boot.getAPI().createStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), Boot.getAPI().createResource(PrefixFactory.decode(obj)));
+                                    //verify if exists in the kb
+                                    if (Boot.getAPI().containsStatement(s)) {
+                                        //Exists so try to remove
+                                        Boot.getAPI().removeStatement(s);
+                                        //verify if has been removed 
+                                        if (!Boot.getAPI().containsStatement(s)) {
+                                            result.put("status", 100);
+                                            result.put("message", "[COEUS][API][Delete] Triples removed from the knowledge base.");
+
+                                        } else {
+                                            result.put("status", 200);
+                                            result.put("message", "[COEUS][API][Delete] Triples not removed from knowledge base.");
+                                        }
+
+                                    } else {
+                                        result.put("status", 203);
+                                        result.put("message", "[COEUS][API][Delete] Unknown triples in the knowledge base.");
+                                    }
+                                } else {
+
+                                    result.put("status", 203);
+                                    result.put("message", "[COEUS][API][Delete] " + obj + " is an invalid object.");
+                                }
+                            } else {
+                                //obj is a literal
+                                Statement s = Boot.getAPI().createStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), obj);
                                 //verify if exists in the kb
                                 if (Boot.getAPI().containsStatement(s)) {
                                     //Exists so try to remove
@@ -113,57 +141,35 @@ public class DeleteActionBean implements ActionBean {
 
                                 } else {
                                     result.put("status", 203);
-                                    result.put("message", "[COEUS][API][Delete] Unkown triples in the knowledge base.");
+                                    result.put("message", "[COEUS][API][Delete] Unknown triples in the knowledge base.");
                                 }
-                            } else {
-
-                                result.put("status", 203);
-                                result.put("message", "[COEUS][API][Delete] " + obj + " is an invalid object.");
                             }
                         } else {
-                            //obj is a literal
-                            Statement s = Boot.getAPI().createStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), obj);
-                            //verify if exists in the kb
-                            if (Boot.getAPI().containsStatement(s)) {
-                                //Exists so try to remove
-                                Boot.getAPI().removeStatement(s);
-                                //verify if has been removed 
-                                if (!Boot.getAPI().containsStatement(s)) {
-                                    result.put("status", 100);
-                                    result.put("message", "[COEUS][API][Delete] Triples removed from the knowledge base.");
-
-                                } else {
-                                    result.put("status", 200);
-                                    result.put("message", "[COEUS][API][Delete] Triples not removed from knowledge base.");
-                                }
-
-                            } else {
-                                result.put("status", 203);
-                                result.put("message", "[COEUS][API][Delete] Unkown triples in the knowledge base.");
-                            }
+                            result.put("status", 202);
+                            result.put("message", "[COEUS][API][Delete] " + pred + " is an invalid predicate.");
                         }
-                    } else {
-                        result.put("status", 202);
-                        result.put("message", "[COEUS][API][Delete] " + pred + " is an invalid predicate.");
-                    }
 
-                } catch (Exception ex) {
-                    if (Config.isDebug()) {
-                        System.out.println("[COEUS][DeleteActionBean] Unable to add triple to knowledge base. Invalid request.");
-                        Logger.getLogger(DeleteActionBean.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (Exception ex) {
+                        if (Config.isDebug()) {
+                            System.out.println("[COEUS][DeleteActionBean] Unable to add triple to knowledge base. Invalid request.");
+                            Logger.getLogger(DeleteActionBean.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        result.put("status", 200);
+                        result.put("message", "[COEUS][API][Delete] Unable to remove triples to knowledge base, check exception.");
+                        result.put("exception", ex.toString());
                     }
-                    result.put("status", 200);
-                    result.put("message", "[COEUS][API][Delete] Unable to remove triples to knowledge base, check exception.");
-                    result.put("exception", ex.toString());
+                } else {
+                    result.put("status", 201);
+                    result.put("message", "[COEUS][API][Delete] " + sub + " is an invalid subject.");
                 }
-            } else {
-                result.put("status", 201);
-                result.put("message", "[COEUS][API][Delete] " + sub + " is an invalid subject.");
-            }
 
+            } else {
+                result.put("status", 403);
+                result.put("message", "[COEUS][API][Delete] Access is forbidden for key " + apikey + ".");
+            }
         } else {
-            result.put("status", 403);
-            result.put("message", "[COEUS][API][Delete] Access is forbidden for key " + apikey + ".");
+            result.put("status", 201);
+            result.put("message", "[COEUS][API][Update] Incorret access. Please verify the url structure.");
         }
 
         return new StreamingResolution("text/javascript", result.toString());

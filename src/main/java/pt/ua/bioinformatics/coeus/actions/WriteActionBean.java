@@ -18,14 +18,31 @@ import pt.ua.bioinformatics.coeus.data.Predicate;
  *
  * @author pedrolopes
  */
-@UrlBinding("/api/{apikey}/write/{sub}/{map}")
+@UrlBinding("/api/{apikey}/write/{sub}/{pred}/{obj}")
 public class WriteActionBean implements ActionBean {
 
     private ActionBeanContext context;
     private String apikey;
     private String sub;
-    private String map;
+    private String pred;
+    private String obj;
     private JSONObject result = new JSONObject();
+
+    public String getObj() {
+        return obj;
+    }
+
+    public void setObj(String obj) {
+        this.obj = obj;
+    }
+
+    public JSONObject getResult() {
+        return result;
+    }
+
+    public void setResult(JSONObject result) {
+        this.result = result;
+    }
 
     public String getApikey() {
         return apikey;
@@ -35,12 +52,12 @@ public class WriteActionBean implements ActionBean {
         this.apikey = apikey;
     }
 
-    public String getMap() {
-        return map;
+    public String getPred() {
+        return pred;
     }
 
-    public void setMap(String map) {
-        this.map = map;
+    public void setPred(String pred) {
+        this.pred = pred;
     }
 
     public String getSub() {
@@ -62,12 +79,11 @@ public class WriteActionBean implements ActionBean {
     @DefaultHandler
     public Resolution handle() {
         Boot.start();
-        if (Boot.getAPI().validateKey(apikey)) {
-            if (sub.indexOf(":") > 1) {
-                try {
-                    for (String match : map.split("\\|")) {
-                        String pred = match.split(",")[0];
-                        String obj = match.split(",")[1];
+        if (sub != null && pred != null && obj != null ) {
+            if (Boot.getAPI().validateKey(apikey)) {
+                if (sub.indexOf(":") > 1) {
+                    try {
+
                         if (pred.contains(":")) {
                             if (obj.contains(":")) {
                                 if (obj.indexOf(":") > 1) {
@@ -83,25 +99,29 @@ public class WriteActionBean implements ActionBean {
                             result.put("status", 202);
                             result.put("message", "[COEUS][API][Write] " + pred + " is an invalid predicate.");
                         }
+
+                        result.put("status", 100);
+                        result.put("message", "[COEUS][API][Write] Triples added to knowledge base.");
+                    } catch (Exception ex) {
+                        if (Config.isDebug()) {
+                            System.out.println("[COEUS][WriteActionBean] Unable to add triple to knowledge base. Invalid request.");
+                            Logger.getLogger(WriteActionBean.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        result.put("status", 200);
+                        result.put("message", "[COEUS][API][Write] Unable to add triples to knowledge base, check exception.");
+                        result.put("exception", ex.toString());
                     }
-                    result.put("status", 100);
-                    result.put("message", "[COEUS][API][Write] Triples added to knowledge base.");
-                } catch (Exception ex) {
-                    if (Config.isDebug()) {
-                        System.out.println("[COEUS][WriteActionBean] Unable to add triple to knowledge base. Invalid request.");
-                        Logger.getLogger(WriteActionBean.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    result.put("status", 200);
-                    result.put("message", "[COEUS][API][Write] Unable to add triples to knowledge base, check exception.");
-                    result.put("exception", ex.toString());
+                } else {
+                    result.put("status", 201);
+                    result.put("message", "[COEUS][API][Write] " + sub + " is an invalid subject.");
                 }
             } else {
-                result.put("status", 201);
-                result.put("message", "[COEUS][API][Write] " + sub + " is an invalid subject.");
+                result.put("status", 403);
+                result.put("message", "[COEUS][API][Write] Access is forbidden for key " + apikey + ".");
             }
         } else {
-            result.put("status", 403);
-            result.put("message", "[COEUS][API][Write] Access is forbidden for key " + apikey + ".");
+            result.put("status", 201);
+            result.put("message", "[COEUS][API][Update] Incorret access. Please verify the url structure.");
         }
         return new StreamingResolution("text/javascript", result.toString());
     }

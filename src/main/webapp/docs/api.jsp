@@ -106,13 +106,45 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
 
                 <li><a href="../api/triple/coeus:uniprot_Q13428/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:uniprot_Q13428/coeus:isAssociatedTo/obj/csv</a> gets all objects (<strong>obj</strong>) with a <em>coeus:isAssociatedTo</em> relationship to <strong>uniprot_Q13428</strong> (in CSV format)</li>
             </ul>
+            
+            <h2>Delete access</h2>
+            <p>To delete triples in COEUS Semantic Storage, you must combine the subject, predicate and object wildcard to iteratively remove the data. The delete API URL structure is: </p>
+            <ul>
+            	<li>../api/&lt;<em>API key</em>&gt;/delete/&lt;<em>subject</em>&gt;/<em>&lt;predicate&gt;</em>/&lt;object&gt;</li>
+            </ul>
+            <p></p>
 
-            <h2>Write Access</h2>
+            <p>Some examples are:</p>
+
+            <ul>
+            	<li>../api/<em>api_key</em>/delete/<em>coeus:uniprot_Q13428</em>/<em>dc:title</em>/Q13428</li>
+            </ul>
+            <ul>
+            	<li>../api/<em>api_key</em>/delete/<em>coeus:uniprot_P51587</em>/<em>coeus:isAssociatedTo</em>/coeus:go_GO:0033593</li>
+            </ul>
+            
+             <h2>Write access</h2>
+            <p>COEUS write API provides a simple URL to add new triples to a seed's knowledge base. This enables also writing sets of triples by being invoked recursively. The write API URL structure is: </p>
+            <ul>
+            	<li>../api/&lt;<em>API key</em>&gt;/write/&lt;<em>subject</em>&gt;/<em>&lt;predicate&gt;</em>/&lt;object&gt;</li>
+            </ul>
+            <p></p>
+
+            <p>Some examples are:</p>
+
+            <ul>
+            	<li>../api/<em>api_key</em>/write/<em>coeus:uniprot_Q13428</em>/<em>dc:title</em>/Q13428</li>
+            </ul>
+            <ul>
+            	<li>../api/<em>api_key</em>/write/<em>coeus:uniprot_P51587</em>/<em>coeus:isAssociatedTo</em>/coeus:go_GO:0033593</li>
+            </ul>
+
+            <h2>Update Access</h2>
             <p>
-            	COEUS write API provides a straightforward (and customisable) URL to add new triples to a seed's knowledge base. This enables writing sets of triples for a given subject from any client application.<br/>COEUS write API URLs are:
+            	COEUS update API provides a straightforward URL to update exiting triples in the knowledge base. The main difference between the delete or write API calls is the adding of the new object separated by a comma:<br/>
             </p>
             <ul>
-            	<li>../api/&lt;<em>API key</em>&gT;/write/&lt;<em>subject</em>&gt;/<em>&lt;predicate&gt;</em>,&lt;object&gt;</li>
+            	<li>../api/&lt;<em>API key</em>&gt;/write/&lt;<em>subject</em>&gt;/<em>&lt;predicate&gt;</em>/<em>&lt;old_object&gt;</em>,&lt;new_object&gt;</li>
             </ul>
             <table class="table table-condensed table-striped table-hover table-bordered">
             	<thead>
@@ -125,21 +157,32 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
             			<td><code>API key</code></td><td>Value for the seed access API key (defined in <strong>config.js</strong>).</td><td>coeus</td>
             		</tr>
             		<tr>
-            			<td><code>subject</code></td><td>The (new or existing) subject to where new triples will be built.</td><td>coeus:uniprot_P51582</td>
+            			<td><code>subject</code></td><td>The existing subject.</td><td>coeus:uniprot_P51582</td>
+            		</tr>
+                        <tr>
+            			<td><code>predicate</code></td><td>The existing predicate.</td><td>coeus:isAssociatedTo</td>
             		</tr>
             		<tr>
-            			<td><code>predicate,object</code></td><td>Predicate and object list to add to the knowledge base. Multiple predicate-object combinations can be added, delimited by <strong>|</strong>.</td><td>dc:description,a description|dc:title,new title</td>
+            			<td><code>old_object,new_object</code></td><td>Combination of the existing object (old_object) and the new one (new_object).</td><td>coeus:go_GO:0033593, coeus:pdb_1N0W</td>
             		</tr>
             	</tbody>
             </table>
+            <p>Some examples include:</p>
+
+            <ul>
+            	<li>../api/<em>api_key</em>/update/<em>coeus:uniprot_Q13428</em>/<em>dc:title</em>/BRCA2_HUMAN,TCOF_HUMAN</li>
+            </ul>
+            <ul>
+            	<li>../api/<em>api_key</em>/update/<em>coeus:uniprot_P51587</em>/<em>coeus:isAssociatedTo</em>/coeus:go_GO:0033593,coeus:pdb_1N0W</li>
+            </ul>
             <p>
-            	The write REST API returns a JSON object with the server response. The <strong>status</strong> field of that object contains a numeric value with the write operation output.
+            	The write/delete/update REST API returns a JSON object with the server response. The <strong>status</strong> field of that object contains a numeric value with the write operation output.
             </p>
             <dl>
             	<dt>100</dt>
-            	<dd>All OK, triples written to knowledge base.</dd>
+            	<dd>All OK, triples written/deleted/updated to knowledge base.</dd>
             	<dt>200</dt>
-            	<dd>Error adding triples to knowledge base (check exception output).</dd>
+            	<dd>Error adding/deleting/updating triples to knowledge base (check exception output).</dd>
             	<dt>201</dt>
             	<dd>Invalid subject.</dd>
             	<dt>202</dt>
