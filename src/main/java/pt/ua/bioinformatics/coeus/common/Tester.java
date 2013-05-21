@@ -51,7 +51,7 @@ public class Tester {
         if (SERVER) {
 
             String location = HOST + Config.getKeyPrefix();
-            String writeQuery = location + "/api/" + Config.getApikeys().get(0) + "/write/coeus:uniprot_P51587/coeus:isAssociatedTo,test";
+            String writeQuery = location + "/api/" + Config.getApikeys().get(0) + "/write/coeus:uniprot_P51587/coeus:isAssociatedTo/test";
             String readQuery = location + "/api/triple/coeus:uniprot_P51587/coeus:isAssociatedTo/obj";
 
             // Test REST Read access first to count the result objs
