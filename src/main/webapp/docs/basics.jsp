@@ -27,7 +27,7 @@
                 <li>Configure the resource integration settings. In this step we define what data we want to import, where the data comes from, how the data sources are connected, how they will be integrated, and, at last, 
                     to what ontologies/models will the newly imported data be matched.</li>
                 <li>
-                    Build the knowledge base. This step loads the configuration files and imports data using flexible <strong>connectors</strong> (for CSV, XML, SQL, and SPARQL) resources, abstracting it
+                    Build the knowledge base. This step loads the configuration files and imports data using flexible <strong>connectors</strong> (for CSV, XML, SQL, SPARQL, RDF, ...) resources, abstracting it
                     to a semantic environment, using advanced data/ontology <strong>selectors</strong>.
                 </li>
                 <li>

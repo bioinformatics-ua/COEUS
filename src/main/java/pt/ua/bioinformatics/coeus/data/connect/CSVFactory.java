@@ -4,7 +4,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -78,7 +78,7 @@ public class CSVFactory implements ResourceFactory {
                     extensions = res.getExtended(res.getExtension());
                 }
                 for (String l : extensions.keySet()) {
-                    u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(l)));
+                    u = new URL(res.getEndpoint().replace("#replace#", URLEncoder.encode(ItemFactory.getTokenFromItem(l), "UTF-8")));
                     in = new BufferedReader(new InputStreamReader(u.openStream()));
                     reader = new CSVReader(in, '\t', '"', 1);
                     list = reader.readAll();
@@ -181,7 +181,7 @@ public class CSVFactory implements ResourceFactory {
                         extensions = res.getExtended(res.getExtension());
                     }
                     for (String item : extensions.keySet()) {
-                        u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(item)));
+                        u = new URL(res.getEndpoint().replace("#replace#", URLEncoder.encode(ItemFactory.getTokenFromItem(item), "UTF-8")));
                         in = new BufferedReader(new InputStreamReader(u.openStream()));
                         reader = new CSVReader(in, '\t', '"', 1);
                         list = reader.readAll();

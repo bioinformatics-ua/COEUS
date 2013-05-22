@@ -34,7 +34,7 @@
         <servlet-class>org.joseki.http.Servlet</servlet-class>
         <init-param>
             <param-name>org.joseki.rdfserver.config</param-name>
-            <!-- News Aggregator --><param-value>tester/joseki.ttl</param-value>
+            <!-- News Aggregator --><param-value>joseki.ttl</param-value>
             <!-- Proteinator <param-value>proteinator/joseki.ttl</param-value>-->
         </init-param>
     </servlet>
@@ -49,7 +49,7 @@
     <!-- pubby -->
     <context-param>
         <param-name>config-file</param-name>
-        <!-- News Aggregator--><param-value>classes/tester/pubby.ttl</param-value>
+        <!-- News Aggregator--><param-value>classes/pubby.ttl</param-value>
         <!-- Proteinator <param-value>classes/proteinator/pubby.ttl</param-value>-->
     </context-param>
   

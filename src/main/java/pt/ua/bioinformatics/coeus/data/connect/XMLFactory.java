@@ -1,7 +1,7 @@
 package pt.ua.bioinformatics.coeus.data.connect;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,7 +12,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -120,7 +119,7 @@ public class XMLFactory implements ResourceFactory {
                     }
                     for (String item : extensions.keySet()) {
                         domFactory = DocumentBuilderFactory.newInstance();
-                        u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(item)));
+                        u = new URL(res.getEndpoint().replace("#replace#", URLEncoder.encode(ItemFactory.getTokenFromItem(item), "UTF-8")));
                         domFactory.setNamespaceAware(false);
                         builder = domFactory.newDocumentBuilder();
                         try {
@@ -193,7 +192,7 @@ public class XMLFactory implements ResourceFactory {
                 }
                 for (String item : extensions.keySet()) {
                     domFactory = DocumentBuilderFactory.newInstance();
-                    u = new URL(res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(item)));
+                    u = new URL(res.getEndpoint().replace("#replace#", URLEncoder.encode(ItemFactory.getTokenFromItem(item), "UTF-8")));
                     domFactory.setNamespaceAware(false);
                     builder = domFactory.newDocumentBuilder();
                     try {

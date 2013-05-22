@@ -125,7 +125,7 @@
                 <dt>Resource</dt>
 
                 <dd>External resource connector.<br />
-                    Resource individuals are used to store external resource integration properties. The configuration is further specialised with CSV, XML, SQL and SPARQL classes, mapping precise dataset results to the application model, through direct concept relationships. With the :hasResource property, the framework knows exactly what resources are connected to each concept and, subsequently, how to load data for each independent concept, generating new items.</dd>
+                    Resource individuals are used to store external resource integration properties. The configuration is further specialised with CSV, XML, JSON, RDF, TTL, SQL and SPARQL classes, mapping precise dataset results to the application model, through direct concept relationships. With the :hasResource property, the framework knows exactly what resources are connected to each concept and, subsequently, how to load data for each independent concept, generating new items.</dd>
 
                 <dt>CSV</dt>
 
@@ -135,6 +135,18 @@
 
                 <dd>External XML selector.<br />Defines individual configuration properties to perform custom data abstractions from XML files into COEUS' knowledge base.</dd>
 
+                <dt>JSON</dt>
+
+                <dd>External JSON selector.<br />Defines individual configuration properties to perform custom data abstractions from JSON files into COEUS' knowledge base.</dd>
+                
+                <dt>RDF</dt>
+
+                <dd>External RDF selector.<br />Defines individual configuration properties to perform data import from RDF files into COEUS' knowledge base.</dd>
+                
+                <dt>TTL</dt>
+
+                <dd>External TTL (Turtle) selector.<br />Defines individual configuration properties to perform data import from Turtle files into COEUS' knowledge base.</dd>
+                
                 <dt>SQL</dt>
 
                 <dd>External SQL selector.<br />Defines individual configuration properties to perform custom data abstractions from SQL query results into COEUS' knowledge base.</dd>
@@ -198,6 +210,10 @@
                                 <li>For <strong>CSV</strong> resources, endpoint is the file location URI.</li>
 
                                 <li>For <strong>XML</strong> resources, endpoint is the file location URI.</li>
+                                
+                                <li>For <strong>JSON</strong> resources, endpoint is the file location URI.</li>
+                                
+                                <li>For <strong>RDF or TTL</strong> resources, endpoint is the file location URI.</li>
 
                                 <li>For <strong>SQL</strong> resources, endpoint is the database connection string URI.</li>
 
@@ -322,6 +338,8 @@
                                         <li>For <strong>CSV</strong> resources, query is not needed.</li>
 
                                         <li>For <strong>XML</strong> resources, query is the global XPath query (//entry).</li>
+                                        
+                                        <li>For <strong>JSON</strong> resources, query is the global JSONPath query ($.results.bindings[*]).</li>
 
                                         <li>For <strong>SQL</strong> resources, query is the SELECT query (SELECT * FROM ...).</li>
 
@@ -335,6 +353,8 @@
                                         <li>For <strong>CSV</strong> selectors, query is the column number (0)</li>
 
                                         <li>For <strong>XML</strong> selectors, query is the internal XPath query (//item).</li>
+                                        
+                                        <li>For <strong>JSON</strong> selectors, query is the internal JSONPath query ($.obj.value).</li>
 
                                         <li>For <strong>SQL</strong> selectors, query is the query results column name (item).</li>
 
@@ -370,7 +390,7 @@
                     <tr>
                         <td><code>dc:publisher</code></td>
 
-                        <td>Defines the Resource connector type: CSV, XML, SQL or SPARQL. The selectors' configuration will be loaded according to this value.</td>
+                        <td>Defines the Resource connector type: CSV, XML, JSON, RDF, TTL, SQL or SPARQL. The selectors' configuration will be loaded according to this value.</td>
 
                         <td><span class="label label-success">YES</span></td>
 

@@ -4,16 +4,28 @@
     <s:layout-component name="custom_scripts">
         <script type="text/javascript">
             $(document).ready(function() {
-                $('#item_info').on('click', function() {
+                $('#pro_item_info').on('click', function() {
                     $('#query').val('SELECT ?predicate ?object {<http://bioinformatics.ua.pt/coeus/resource/uniprot_P51587> ?predicate ?object}');
                 });
 
-                $('#all_concept').on('click', function() {
+                $('#pro_all_concept').on('click', function() {
                     $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\nSELECT ?item {?item coeus:hasConcept coeus:concept_UniProt }');
                 });
 
-                $('#count_items').on('click', function() {
+                $('#pro_count_items').on('click', function() {
                     $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\n\nSELECT COUNT(DISTINCT ?tag) {?tag coeus:hasConcept coeus:concept_UniProt}');
+                });
+
+                $('#news_item_info').on('click', function() {
+                    $('#query').val('SELECT ?predicate ?object {<http://bioinformatics.ua.pt/coeus/resource/bbc_21774292> ?predicate ?object}');
+                });
+
+                $('#news_all_concept').on('click', function() {
+                    $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\nSELECT ?item {?item coeus:hasConcept coeus:concept_BBC }');
+                });
+
+                $('#news_count_items').on('click', function() {
+                    $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\n\nSELECT COUNT(DISTINCT ?tag) {?tag coeus:hasConcept coeus:concept_BBC}');
                 });
             });
         </script>
@@ -38,13 +50,31 @@
 
                         <p>You can test (or write) your SPARQL queries in the <span class="label label-info">query</span> box or use one of the samples below.</p>
 
-                        <ul>
-                            <li><a id="item_info" href="#">Get individual Item info</a></li>
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <p><strong>Proteinator</strong></p>
+                                <ul>
+                                    <li><a id="pro_item_info" href="#">Get individual Item info</a></li>
 
-                            <li><a id="all_concept" href="#">Get all Concept individuals</a></li>
+                                    <li><a id="pro_all_concept" href="#">Get all Concept individuals</a></li>
 
-                            <li><a id="count_items" href="#">Get Item count for Concept</a></li>
-                        </ul>
+                                    <li><a id="pro_count_items" href="#">Get Item count for Concept</a></li>
+                                </ul>
+                            </div>
+                            <div class="span4">
+                                <p><strong>NewsAggregator</strong></p>
+
+                                <ul>
+                                    <li><a id="news_item_info" href="#">Get individual Item info</a></li>
+
+                                    <li><a id="news_all_concept" href="#">Get all Concept individuals</a></li>
+
+                                    <li><a id="news_count_items" href="#">Get Item count for Concept</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+
 
                         <form action="../sparql" method="get">
                             <div class="clearfix">
@@ -94,11 +124,24 @@
                             <h1>Linked Data</h1>
                         </div>
                         <p>You can also browse COEUS content through LinkedData methods.</p>
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <p><strong>Proteinator</strong></p>
+                                <ul>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/uniprot_P51587" target="_top">Browse <em>UniProt P51587</em> data</a></li>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/pdb_1N0W" target="_top">Browse <em>PDB 1N0W</em> data</a></li>
+                                </ul>
+                            </div>
+                            <div class="span4">
+                                <p><strong>NewsAggregator</strong></p>
 
-                        <ul>
-                            <li><a href="http://bioinformatics.ua.pt/coeus/resource/uniprot_P51587" target="_top">Browse <em>UniProt P51587</em> data</a></li>
-                            <li><a href="http://bioinformatics.ua.pt/coeus/resource/pdb_1N0W" target="_top">Browse <em>PDB 1N0W</em> data</a></li>
-                        </ul>
+                                <ul>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/bbc_21774292" target="_top">Browse <em>BBC 21774292</em> data</a></li>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/reuters_20130319" target="_top">Browse <em>Reuters 20130319</em> data</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
                     </section>
                 </div>
             </div>

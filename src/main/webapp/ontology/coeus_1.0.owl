@@ -952,6 +952,21 @@ Example:
         <dc:title rdf:datatype="&xsd;string">XML</dc:title>
     </owl:Class>
     
+    
+    
+    <!-- http://bioinformatics.ua.pt/coeus/resource/class_json -->
+
+    <owl:Class rdf:about="http://bioinformatics.ua.pt/coeus/resource/class_json">
+        <rdfs:label rdf:datatype="&xsd;string">class_json</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
+        <owl:versionInfo rdf:datatype="&xsd;string">1.0a</owl:versionInfo>
+        <dc:date rdf:datatype="&xsd;date">2013-04-30</dc:date>
+        <dc:description rdf:datatype="&xsd;date">Class for JSON resource individuals and definitions</dc:description>
+        <rdfs:comment rdf:datatype="&xsd;string">Class for JSON resource individuals and definitions</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">JSON</dc:title>
+        <dc:creator rdf:datatype="&xsd;string">Pedro Lopes pedrolopes@ua.pt</dc:creator>
+    </owl:Class>
+
 
 
     <!-- http://www.w3.org/2002/07/owl#Thing -->
