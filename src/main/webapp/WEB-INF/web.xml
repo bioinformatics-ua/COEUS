@@ -118,6 +118,11 @@
         <servlet-class>de.fuberlin.wiwiss.pubby.servlets.RootServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>    
+    
+    <listener>
+	<listener-class>pt.ua.bioinformatics.coeus.common.ServletListener</listener-class>
+    </listener>
+    
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
