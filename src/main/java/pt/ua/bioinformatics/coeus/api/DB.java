@@ -2,6 +2,7 @@ package pt.ua.bioinformatics.coeus.api;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,6 +21,7 @@ public class DB {
 
     private Connection connection;
     private Statement statement;
+    private PreparedStatement pStatement;
     private String connectionString = "";
     private String database = "";
     private String build = "";
@@ -103,6 +105,9 @@ public class DB {
             if (!statement.isClosed()) {
                 statement.close();
             }
+            if (!pStatement.isClosed()) {
+                pStatement.close();
+            }
             if (!connection.isClosed()) {
                 connection.close();
             }
@@ -133,8 +138,9 @@ public class DB {
         query = query.replace("#build#", build);
 
         try {
-            if (!connection.isClosed() && !statement.isClosed()) {
-                statement.executeUpdate(query);
+            if (!connection.isClosed()) {
+                pStatement=connection.prepareStatement(query);
+                pStatement.executeUpdate();
             }
 
         } catch (SQLException e) {
@@ -161,8 +167,9 @@ public class DB {
     public boolean update(String what, String query) {
         query = query.replace("#build#", build);
         try {
-            if (!connection.isClosed() && !statement.isClosed()) {
-                statement.executeUpdate(query);
+            if (!connection.isClosed()) {
+                pStatement=connection.prepareStatement(query);
+                pStatement.executeUpdate();
             }
 
         } catch (SQLException e) {
@@ -189,8 +196,9 @@ public class DB {
     public boolean delete(String what, String query) {
         query = query.replace("#build#", build);
         try {
-            if (!connection.isClosed() && !statement.isClosed()) {
-                statement.executeUpdate(query);
+            if (!connection.isClosed()) {
+                pStatement=connection.prepareStatement(query);
+                pStatement.executeUpdate();
             }
 
         } catch (SQLException e) {
@@ -218,8 +226,9 @@ public class DB {
         ResultSet rs = null;
 
         try {
-            if (!connection.isClosed() && !statement.isClosed()) {
-                rs = statement.executeQuery(query);
+            if (!connection.isClosed()) {
+                pStatement=connection.prepareStatement(query);
+                rs = pStatement.executeQuery();
             }
         } catch (SQLException e) {
             System.out.println("[DB] Unable to retrieve data\n\t" + e.toString());

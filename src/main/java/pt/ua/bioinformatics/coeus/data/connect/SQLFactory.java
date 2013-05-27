@@ -77,7 +77,8 @@ public class SQLFactory implements ResourceFactory {
                                 InheritedResource c = (InheritedResource) o;
                                 String[] tmp = c.getProperty().split("\\|");
                                 for (String inside : tmp) {
-                                    rdfizer.add(inside, rs.getString(c.getQuery()));
+                                    String value=rs.getString(c.getQuery());
+                                    if(value!=null) rdfizer.add(inside, value);
                                 }
                             }
                             rdfizer.complete();
@@ -137,7 +138,8 @@ public class SQLFactory implements ResourceFactory {
                                 InheritedResource r = (InheritedResource) o;
                                 String[] tmp = r.getProperty().split("\\|");
                                 for (String inside : tmp) {
-                                    rdfizer.add(inside, rs.getString(r.getQuery()));
+                                    String value=rs.getString(r.getQuery());
+                                    if(value!=null) rdfizer.add(inside, value);
                                 }
                             }
                             if (key.getRegex() == null) {
@@ -176,7 +178,8 @@ public class SQLFactory implements ResourceFactory {
                                     InheritedResource r = (InheritedResource) o;
                                     String[] tmp = r.getProperty().split("\\|");
                                     for (String inside : tmp) {
-                                        rdfizer.add(inside, rs.getString(r.getQuery()));
+                                        String value=rs.getString(r.getQuery());
+                                        if(value!=null) rdfizer.add(inside, value);
                                     }
                                 }
                                 rdfizer.itemize(rs.getString(key.getQuery()));
