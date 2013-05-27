@@ -2,9 +2,11 @@ package pt.ua.bioinformatics.coeus.data.connect;
 
 import au.com.bytecode.opencsv.CSVReader;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -69,6 +71,8 @@ public class CSVFactory implements ResourceFactory {
      * </ol></p>
      */
     public void read() {
+        char defaultCsvQuotes = '"';
+        int defaultCsvHeader = 1;
         if (res.getMethod().equals("complete")) {
             try {
                 HashMap<String, String> extensions;
@@ -80,7 +84,28 @@ public class CSVFactory implements ResourceFactory {
                 for (String l : extensions.keySet()) {
                     u = new URL(res.getEndpoint().replace("#replace#", URLEncoder.encode(ItemFactory.getTokenFromItem(l), "UTF-8")));
                     in = new BufferedReader(new InputStreamReader(u.openStream()));
-                    reader = new CSVReader(in, '\t', '"', 1);
+                    //try to guess the delimiter 
+                    //if the resource query has no value apply defaults
+                    if (res.getQuery() == null || res.getQuery().equals("")) {
+                        char csvDelimiter = guessDelimiter(u, defaultCsvQuotes, defaultCsvHeader);
+                        reader = new CSVReader(in, csvDelimiter, defaultCsvQuotes, defaultCsvHeader);
+                    } else {
+                        String[] csvKeys = res.getQuery().split("\\|");
+                        char querySeparator = csvKeys[0].charAt(0);
+                        char queryQuotes = csvKeys[1].charAt(0);
+                        char queryLinesSkip = csvKeys[2].charAt(0);
+
+                        //Fix that
+                        if (querySeparator == 't') {
+                            querySeparator = '\t';
+                        }
+                        if (querySeparator == 'n') {
+                            querySeparator = '\n';
+                        }
+
+                        //System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
+                        reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
+                    }
                     list = reader.readAll();
                     try {
                         for (String[] s : list) {
@@ -115,7 +140,28 @@ public class CSVFactory implements ResourceFactory {
                 for (String item : extensions.keySet()) {
                     u = new URL(res.getEndpoint());
                     in = new BufferedReader(new InputStreamReader(u.openStream()));
-                    reader = new CSVReader(in, '\t', '"', 1);
+                    //try to guess the delimiter 
+                    //if the resource query has no value apply defaults
+                    if (res.getQuery() == null || res.getQuery().equals("")) {
+                        char csvDelimiter = guessDelimiter(u, defaultCsvQuotes, defaultCsvHeader);
+                        reader = new CSVReader(in, csvDelimiter, defaultCsvQuotes, defaultCsvHeader);
+                    } else {
+                        String[] csvKeys = res.getQuery().split("\\|");
+                        char querySeparator = csvKeys[0].charAt(0);
+                        char queryQuotes = csvKeys[1].charAt(0);
+                        char queryLinesSkip = csvKeys[2].charAt(0);
+
+                        //Fix that
+                        if (querySeparator == 't') {
+                            querySeparator = '\t';
+                        }
+                        if (querySeparator == 'n') {
+                            querySeparator = '\n';
+                        }
+
+                        //System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
+                        reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
+                    }
                     list = reader.readAll();
                     try {
                         rdfizer = new Triplify(res, extensions.get(item));
@@ -142,7 +188,28 @@ public class CSVFactory implements ResourceFactory {
                 if (res.getExtendsConcept().equals(res.getIsResourceOf().getUri())) {
                     u = new URL(res.getEndpoint());
                     in = new BufferedReader(new InputStreamReader(u.openStream()));
-                    reader = new CSVReader(in, '\t', '"', 1);
+                    //try to guess the delimiter 
+                    //if the resource query has no value apply defaults
+                    if (res.getQuery() == null || res.getQuery().equals("")) {
+                        char csvDelimiter = guessDelimiter(u, defaultCsvQuotes, defaultCsvHeader);
+                        reader = new CSVReader(in, csvDelimiter, defaultCsvQuotes, defaultCsvHeader);
+                    } else {
+                        String[] csvKeys = res.getQuery().split("\\|");
+                        char querySeparator = csvKeys[0].charAt(0);
+                        char queryQuotes = csvKeys[1].charAt(0);
+                        char queryLinesSkip = csvKeys[2].charAt(0);
+
+                        //Fix that
+                        if (querySeparator == 't') {
+                            querySeparator = '\t';
+                        }
+                        if (querySeparator == 'n') {
+                            querySeparator = '\n';
+                        }
+
+                        //System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
+                        reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
+                    }
                     list = reader.readAll();
                     try {
                         for (String[] s : list) {
@@ -183,7 +250,30 @@ public class CSVFactory implements ResourceFactory {
                     for (String item : extensions.keySet()) {
                         u = new URL(res.getEndpoint().replace("#replace#", URLEncoder.encode(ItemFactory.getTokenFromItem(item), "UTF-8")));
                         in = new BufferedReader(new InputStreamReader(u.openStream()));
-                        reader = new CSVReader(in, '\t', '"', 1);
+
+                        //try to guess the delimiter 
+                        //if the resource query has no value apply defaults
+                        if (res.getQuery() == null || res.getQuery().equals("")) {
+                            char csvDelimiter = guessDelimiter(u, defaultCsvQuotes, defaultCsvHeader);
+                            reader = new CSVReader(in, csvDelimiter, defaultCsvQuotes, defaultCsvHeader);
+                        } else {
+                            String[] csvKeys = res.getQuery().split("\\|");
+                            char querySeparator = csvKeys[0].charAt(0);
+                            char queryQuotes = csvKeys[1].charAt(0);
+                            char queryLinesSkip = csvKeys[2].charAt(0);
+
+                            //Fix that
+                            if (querySeparator == 't') {
+                                querySeparator = '\t';
+                            }
+                            if (querySeparator == 'n') {
+                                querySeparator = '\n';
+                            }
+
+                            //System.out.println(res.getQuery() + " - " + querySeparator + queryQuotes + queryLinesSkip);
+                            reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
+                        }
+
                         list = reader.readAll();
                         try {
                             for (String[] s : list) {
@@ -247,5 +337,61 @@ public class CSVFactory implements ResourceFactory {
             }
         }
         return success;
+    }
+
+    /**
+     * Try to guess the csv delimiter. If fail returns the default ',' otherwise
+     * return the delimiter.
+     *
+     * @param location
+     * @param quotes
+     * @param headerSkip
+     * @return
+     */
+    public char guessDelimiter(URL urlLocation, char quotes, int headerSkip) {
+        char failReturn = ',';
+        //popular delimiters by order 
+        char[] delimiters = {'\t', ';', ' ', '.'};
+        List<Integer> columsSizeDetected = new ArrayList<Integer>();
+        int minColums = 1;
+        int linesToCheck = 4;
+
+        try {
+
+            for (int a = 0; a < delimiters.length; a++) {
+                boolean b = true;
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(urlLocation.openStream()));
+                CSVReader testReader = new CSVReader(br, delimiters[a], quotes, headerSkip);
+                columsSizeDetected.clear();
+
+                for (int i = 0; i < linesToCheck; i++) {
+                    String[] rows = testReader.readNext();
+                    columsSizeDetected.add(rows.length);
+                    //System.out.println(delimiters[a] + " - " + rows.length);
+                }
+
+                // test the colums size in each line
+                for (int i = 0; i < linesToCheck - 1; i++) {
+                    if (columsSizeDetected.get(i) <= minColums) {
+                        b = false;
+                    }
+                    if (!columsSizeDetected.get(i).equals(columsSizeDetected.get(i + 1))) {
+                        b = false;
+                    }
+                }
+
+                if (b) {
+                    //System.out.println("Find:" + delimiters[a]);
+                    return delimiters[a];
+                }
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(CSVFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException ex) {
+            Logger.getLogger(CSVFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return failReturn;
     }
 }

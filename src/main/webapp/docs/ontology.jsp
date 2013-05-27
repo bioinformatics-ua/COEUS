@@ -62,7 +62,7 @@
                 </li>
             </ul>
         </section>
-           <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <!-- Ontology/ABSTRACTION -->
         <section id="abstraction">
             <div class="page-header">
@@ -76,7 +76,7 @@
                 </li>
             </ul>
         </section>
-           <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <!-- Ontology/TRIPIFLICATION -->
         <section id="triplification">
             <div class="page-header">
@@ -90,7 +90,7 @@
                 </li>
             </ul>
         </section>
-   <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
+        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <!-- Ontology/CLASSES -->
         <section id="classes">
             <div class="page-header">
@@ -138,15 +138,15 @@
                 <dt>JSON</dt>
 
                 <dd>External JSON selector.<br />Defines individual configuration properties to perform custom data abstractions from JSON files into COEUS' knowledge base.</dd>
-                
+
                 <dt>RDF</dt>
 
                 <dd>External RDF selector.<br />Defines individual configuration properties to perform data import from RDF files into COEUS' knowledge base.</dd>
-                
+
                 <dt>TTL</dt>
 
                 <dd>External TTL (Turtle) selector.<br />Defines individual configuration properties to perform data import from Turtle files into COEUS' knowledge base.</dd>
-                
+
                 <dt>SQL</dt>
 
                 <dd>External SQL selector.<br />Defines individual configuration properties to perform custom data abstractions from SQL query results into COEUS' knowledge base.</dd>
@@ -157,8 +157,8 @@
             </dl>
         </section>
         <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
-           
-                   <!-- Ontology/PROPERTIES -->
+
+        <!-- Ontology/PROPERTIES -->
         <section id="properties">
             <div class="page-header">
                 <h1>Properties</h1>
@@ -186,19 +186,6 @@
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td><code>coeus:delimiter</code></td>
-
-                        <td>Column separator in CSV file.</td>
-
-                        <td><span class="label label-warning">NO</span></td>
-
-                        <td>Resource</td>
-
-                        <td>String</td>
-
-                        <td>\t</td>
-                    </tr>
 
                     <tr>
                         <td><code>coeus:endpoint</code></td>
@@ -210,9 +197,9 @@
                                 <li>For <strong>CSV</strong> resources, endpoint is the file location URI.</li>
 
                                 <li>For <strong>XML</strong> resources, endpoint is the file location URI.</li>
-                                
+
                                 <li>For <strong>JSON</strong> resources, endpoint is the file location URI.</li>
-                                
+
                                 <li>For <strong>RDF or TTL</strong> resources, endpoint is the file location URI.</li>
 
                                 <li>For <strong>SQL</strong> resources, endpoint is the database connection string URI.</li>
@@ -335,10 +322,10 @@
                                 <li>For <strong>resources</strong>, this means the global object query. For each individual answer to this query, new Item individuals will be created.
 
                                     <ul>
-                                        <li>For <strong>CSV</strong> resources, query is not needed.</li>
+                                        <li>For <strong>CSV</strong> resources, query is the combination of the column delimiter with the quotes delimiter and with the headers skip number (Ex: t|"|1) <a href="#notes">[1]</a>. </li>
 
                                         <li>For <strong>XML</strong> resources, query is the global XPath query (//entry).</li>
-                                        
+
                                         <li>For <strong>JSON</strong> resources, query is the global JSONPath query ($.results.bindings[*]).</li>
 
                                         <li>For <strong>SQL</strong> resources, query is the SELECT query (SELECT * FROM ...).</li>
@@ -353,7 +340,7 @@
                                         <li>For <strong>CSV</strong> selectors, query is the column number (0)</li>
 
                                         <li>For <strong>XML</strong> selectors, query is the internal XPath query (//item).</li>
-                                        
+
                                         <li>For <strong>JSON</strong> selectors, query is the internal JSONPath query ($.obj.value).</li>
 
                                         <li>For <strong>SQL</strong> selectors, query is the query results column name (item).</li>
@@ -691,5 +678,12 @@
                 </tbody>
             </table>
         </section>
+        <section id="notes">
+            <small >
+                <strong>Notes:</strong>
+                <p>[1] If query is not provided it will be tested some popular delimiters (such '\t', ';', .. ) with the default values for the quotes delimiter ('"') and for the headers skip number (1).</p>
+            </small>
+        </section>
+
     </div>
 </div>

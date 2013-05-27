@@ -1,7 +1,5 @@
 package pt.ua.bioinformatics.coeus.common;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +23,6 @@ public class Run {
             // Start build process            
             Boot.start();
             // Test tester example
-
             
             // Import single resource (threaded) example
             //SingleImport single = new SingleImport("resource_json");
