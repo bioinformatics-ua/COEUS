@@ -87,8 +87,24 @@ public class XMLFactory implements ResourceFactory {
                                 String[] tmp = c.getProperty().split("\\|");
                                 for (String inside : tmp) {
                                     XPath x_element = factory.newXPath();
-                                    Node element = (Node) x_element.evaluate(c.getQuery(), n, XPathConstants.NODE);
-                                    rdfizer.add(inside, element.getTextContent());
+                                    try {
+                                        NodeList element = (NodeList) x_element.evaluate(c.getQuery(), n, XPathConstants.NODE);
+                                        if (element != null) {
+                                            //test if has more than one value
+                                            if (element.getLength() > 1) {
+                                                for (int k = 0; k < element.getLength(); k++) {
+                                                    rdfizer.add(inside, element.item(k).getTextContent());
+                                                }
+                                            } else {
+                                                Node e = (Node) element;
+                                                rdfizer.add(inside, e.getTextContent());
+                                            }
+                                        }
+                                    } catch (Exception ex) {
+                                        if (Config.isDebug()) {
+                                            Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                    }
                                 }
                             }
                             XPath x_key = factory.newXPath();
@@ -136,24 +152,23 @@ public class XMLFactory implements ResourceFactory {
                                     String[] tmp = c.getProperty().split("\\|");
                                     for (String inside : tmp) {
                                         XPath x_element = factory.newXPath();
-                                        NodeList element = (NodeList) x_element.evaluate(c.getQuery(), n, XPathConstants.NODE);
-                                        if (element != null) {
-                                            if (element.getLength() > 1) {
-                                                for (int k = 0; k < element.getLength(); k++) {
-                                                    try {
+                                        try {
+                                            NodeList element = (NodeList) x_element.evaluate(c.getQuery(), n, XPathConstants.NODE);
+                                            if (element != null) {
+                                                //test if has more than one value
+                                                if (element.getLength() > 1) {
+                                                    for (int k = 0; k < element.getLength(); k++) {
                                                         rdfizer.add(inside, element.item(k).getTextContent());
-                                                    } catch (Exception ex) {
-                                                        if (Config.isDebug()) {
-                                                            Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, ex);
-                                                        }
                                                     }
+                                                } else {
+                                                    Node e = (Node) element;
+                                                    rdfizer.add(inside, e.getTextContent());
                                                 }
-                                            } else {
-                                                Node e = (Node) element;
-                                                rdfizer.add(inside, e.getTextContent());
                                             }
-
-
+                                        } catch (Exception ex) {
+                                            if (Config.isDebug()) {
+                                                Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
                                         }
                                     }
                                 }
@@ -208,16 +223,22 @@ public class XMLFactory implements ResourceFactory {
                                 String[] tmp = c.getProperty().split("\\|");
                                 for (String inside : tmp) {
                                     XPath x_element = factory.newXPath();
-                                    NodeList element = (NodeList) x_element.evaluate(c.getQuery(), n, XPathConstants.NODE);
-                                    if (element != null) {
-                                        for (int k = 0; k < element.getLength(); k++) {
-                                            try {
-                                                rdfizer.add(inside, element.item(k).getTextContent());
-                                            } catch (Exception ex) {
-                                                if (Config.isDebug()) {
-                                                    Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, ex);
+                                    try {
+                                        NodeList element = (NodeList) x_element.evaluate(c.getQuery(), n, XPathConstants.NODE);
+                                        if (element != null) {
+                                            //test if has more than one value
+                                            if (element.getLength() > 1) {
+                                                for (int k = 0; k < element.getLength(); k++) {
+                                                    rdfizer.add(inside, element.item(k).getTextContent());
                                                 }
+                                            } else {
+                                                Node e = (Node) element;
+                                                rdfizer.add(inside, e.getTextContent());
                                             }
+                                        }
+                                    } catch (Exception ex) {
+                                        if (Config.isDebug()) {
+                                            Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, ex);
                                         }
                                     }
                                 }
