@@ -1417,7 +1417,7 @@
         <dc:publisher rdf:datatype="&xsd;string">csv</dc:publisher>
         <extension rdf:datatype="&xsd;string">dc:identifier</extension>
         <endpoint rdf:datatype="&xsd;string">http://www.uniprot.org/uniprot/?format=tab&amp;query=accession:#replace#&amp;columns=id,entry+name</endpoint>
-        <query rdf:datatype="&xsd;string">t|&quot;|1 </query>
+        <query rdf:datatype="&xsd;string">t|&quot;|1</query>
         <isResourceOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_hgnc"/>
         <extends rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_uniprot"/>
         <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/csv_uniprot_name"/>
