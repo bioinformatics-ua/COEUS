@@ -179,8 +179,8 @@ public class CSVFactory implements ResourceFactory {
                 }
             } catch (Exception ex) {
                 if (Config.isDebug()) {
-                    System.out.println("[COEUS][SQLFactory] unable to load data for " + res.getUri());
-                    Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("[COEUS][CSVFactory] unable to load data for " + res.getUri());
+                    Logger.getLogger(CSVFactory.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         } else if (res.getMethod().equals("cache")) {

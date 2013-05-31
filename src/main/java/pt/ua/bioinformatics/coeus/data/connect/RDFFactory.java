@@ -4,7 +4,16 @@
  */
 package pt.ua.bioinformatics.coeus.data.connect;
 
+import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.ua.bioinformatics.coeus.api.API;
@@ -12,6 +21,8 @@ import pt.ua.bioinformatics.coeus.api.ItemFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
 import pt.ua.bioinformatics.coeus.data.Predicate;
+import pt.ua.bioinformatics.coeus.data.Triplify;
+import pt.ua.bioinformatics.coeus.domain.InheritedResource;
 import pt.ua.bioinformatics.coeus.domain.Resource;
 
 /**
@@ -22,6 +33,7 @@ public class RDFFactory implements ResourceFactory {
 
     private Resource res;
     private API api = Boot.getAPI();
+    private Triplify rdfizer;
 
     public RDFFactory(Resource r) {
         this.res = r;
@@ -44,21 +56,44 @@ public class RDFFactory implements ResourceFactory {
     }
 
     /**
-     * Reads RDF data according to Resource information. <p>Workflow</b><ol>
-     * <li>Get resource endpoint</li> <li>Start to load</li></ol></p>
+     * Reads RDF data and links individuals according to Resource information. 
      */
     public void read() {
-
-        try {
-            if (res.getExtendsConcept().equals(res.getIsResourceOf().getUri())) {
-                if (res.getPublisher().equals("ttl")) {
-                    System.out.println(res.getEndpoint());
-                    api.readModel(res.getEndpoint(), "TURTLE");
+        if (res.getMethod().equals("cache")) {
+            try {
+                if (res.getExtendsConcept().equals(res.getIsResourceOf().getUri())) {
+                    if (res.getPublisher().equals("ttl")) {
+                        System.out.println(res.getEndpoint());
+                        api.readModel(res.getEndpoint(), "TURTLE");
+                    } else {
+                        api.readModel(res.getEndpoint());
+                    }
                 } else {
-                    api.readModel(res.getEndpoint());
+                    // load extension data
+                    HashMap<String, String> extensions;
+                    if (res.getExtension().equals("")) {
+                        extensions = res.getExtended();
+                    } else {
+                        extensions = res.getExtended(res.getExtension());
+                    }
+                    for (String item : extensions.keySet()) {
+                        String location = res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(item));
+                        if (res.getPublisher().equals("ttl")) {
+                            api.readModel(res.getEndpoint(), "TURTLE");
+                        } else {
+                            api.readModel(location);
+                        }
+                    }
                 }
-            } else {
-                // load extension data
+            } catch (Exception ex) {
+                if (Config.isDebug()) {
+                    System.out.println("[COEUS][RDFFactory] unable to load data for " + res.getUri());
+                    Logger.getLogger(RDFFactory.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else if (res.getMethod().equals("complete")) {
+
+            try {
                 HashMap<String, String> extensions;
                 if (res.getExtension().equals("")) {
                     extensions = res.getExtended();
@@ -66,18 +101,49 @@ public class RDFFactory implements ResourceFactory {
                     extensions = res.getExtended(res.getExtension());
                 }
                 for (String item : extensions.keySet()) {
-                    String location = res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(item));
-                    if (res.getPublisher().equals("ttl")) {
-                        api.readModel(res.getEndpoint(), "TURTLE");
-                    } else {
-                        api.readModel(location);
+                    try {
+                        String endpoint = res.getEndpoint().replace("#replace#", ItemFactory.getTokenFromItem(item));
+                        rdfizer = new Triplify(res, extensions.get(item));
+                        //auxiliar model
+                        OntModel auxModel = ModelFactory.createOntologyModel();
+                        auxModel.read(endpoint);
+                        ExtendedIterator<Individual> individuals = auxModel.listIndividuals();
+                        // if query is not provided link all individuals to the item
+                        if (res.getQuery() == null | res.getQuery().equals("")) {
+                            while (individuals.hasNext()) {
+                                Individual individual = individuals.next();
+                                rdfizer.getMap().add(individual.asResource().toString());
+                            }
+                        } else {
+                            while (individuals.hasNext()) {
+                                Individual individual = individuals.next();
+                                String uri = res.getQuery();
+                                if (!res.getQuery().startsWith("http")) {
+                                    uri = auxModel.getNsPrefixURI(uri);
+                                }
+                                if (individual.getNameSpace().equals(uri)) {
+                                    rdfizer.getMap().add(individual.asResource().toString());
+                                }
+                            }
+                        }
+                        //link all individuals
+                        rdfizer.link("coeus:isAssociatedTo");
+                        //import rdf data
+                        rdfizer.getApi().readModel(endpoint);
+
+                    } catch (Exception ex) {
+                        if (Config.isDebug()) {
+                            System.out.println("[COEUS][RDFFactory] unable to load data for " + item);
+                            Logger.getLogger(RDFFactory.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
-            }
-        } catch (Exception ex) {
-            if (Config.isDebug()) {
-                System.out.println("[COEUS][RDFFactory] unable to load data for " + res.getUri());
-                Logger.getLogger(RDFFactory.class.getName()).log(Level.SEVERE, null, ex);
+
+            } catch (Exception ex) {
+                if (Config.isDebug()) {
+                    System.out.println("[COEUS][RDFFactory] unable to load data for " + res.getUri());
+                    Logger.getLogger(RDFFactory.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }

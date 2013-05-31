@@ -213,6 +213,37 @@ public class Triplify {
     }
 
     /**
+     * Link(Data) two Item individual in SDB with respective statement
+     *
+     * @param predicate
+     * @return
+     */
+    public boolean link(String predicate) {
+        boolean success = false;
+        try {
+            com.hp.hpl.jena.rdf.model.Resource item = api.getResource(extension);
+            for (String s : map) {
+                try {
+                    com.hp.hpl.jena.rdf.model.Resource to = api.getResource(s);
+                    api.addStatement(item, Predicate.get(predicate), to);
+                    api.addStatement(to, Predicate.get(predicate), item);
+                } catch (Exception ex) {
+                    if (Config.isDebug()) {
+                        System.out.println("[COEUS][API] Unable to link " + extension.toString() + " for " + s);
+                    }
+                }
+            }
+            success = true;
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][API] Unable to link " + extension.toString());
+                Logger.getLogger(Triplify.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return success;
+    }
+
+    /**
      * Maps two Item individual lists in SDB with respective statements
      * according to setup file. <p><b>Workflow</b><ol> <li>Get Item from
      * <concept>_<key> structure</li> <li>Map new Item</li> </ol></p>

@@ -139,6 +139,10 @@
 
                 <dd>External JSON selector.<br />Defines individual configuration properties to perform custom data abstractions from JSON files into COEUS' knowledge base.</dd>
 
+                <dt>LinkedData</dt>
+
+                <dd>External LinkedData selector.<br />Defines individual configuration properties to perform external data link into COEUS' knowledge base.</dd>
+                
                 <dt>RDF</dt>
 
                 <dd>External RDF selector.<br />Defines individual configuration properties to perform data import from RDF files into COEUS' knowledge base.</dd>
@@ -199,6 +203,8 @@
                                 <li>For <strong>XML</strong> resources, endpoint is the file location URI.</li>
 
                                 <li>For <strong>JSON</strong> resources, endpoint is the file location URI.</li>
+                                
+                                <li>For <strong>LD</strong> resources, endpoint is the location URI.</li>
 
                                 <li>For <strong>RDF or TTL</strong> resources, endpoint is the file location URI.</li>
 
@@ -327,6 +333,8 @@
                                         <li>For <strong>XML</strong> resources, query is the global XPath query (//entry).</li>
 
                                         <li>For <strong>JSON</strong> resources, query is the global JSONPath query ($.results.bindings[*]).</li>
+                                        
+                                        <li>For <strong>RDF/TTL</strong> resources, query is the URI or prefix of the individuals to link.</li>
 
                                         <li>For <strong>SQL</strong> resources, query is the SELECT query (SELECT * FROM ...).</li>
 

@@ -906,6 +906,21 @@
     
 
 
+    <!-- http://bioinformatics.ua.pt/coeus/resource/LD -->
+
+    <owl:Class rdf:about="http://bioinformatics.ua.pt/coeus/resource/LD">
+        <rdfs:label rdf:datatype="&xsd;string">class_ld</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
+        <owl:versionInfo rdf:datatype="&xsd;string">1.0a</owl:versionInfo>
+        <dc:date rdf:datatype="&xsd;date">2013-05-31</dc:date>
+        <dc:description rdf:datatype="&xsd;string">Class for Linked Data resource individuals and definitions</dc:description>
+        <rdfs:comment rdf:datatype="&xsd;string">Class for Linked Data resource individuals and definitions</rdfs:comment>
+        <dc:title rdf:datatype="&xsd;string">LD</dc:title>
+        <dc:creator rdf:datatype="&xsd;string">Pedro Lopes pedrolopes@ua.pt</dc:creator>
+    </owl:Class>
+    
+
+
     <!-- http://bioinformatics.ua.pt/coeus/resource/Module -->
 
     <owl:Class rdf:about="http://bioinformatics.ua.pt/coeus/resource/Module">
@@ -1088,8 +1103,11 @@
         <isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_cache_ext"/>
         <isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_complete"/>
         <hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_complete"/>
-        <hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_rdf"/>
+        <hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_ld_complete"/>
+        <isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_ld_complete"/>
+        <hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_rdf_complete"/>
         <isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_rdf_ext"/>
+        <hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_rdf_ext"/>
     </owl:NamedIndividual>
     
 
@@ -1184,6 +1202,20 @@
         <property rdf:datatype="&xsd;string">dc:description</property>
         <dc:title rdf:datatype="&xsd;string">json mesh uri</dc:title>
         <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_mesh_complete"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/coeus/resource/ld_uniprot_complete -->
+
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/ld_uniprot_complete">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/LD"/>
+        <rdfs:label rdf:datatype="&xsd;string">ld_uniprot_complete</rdfs:label>
+        <query rdf:datatype="&xsd;string"></query>
+        <dc:title rdf:datatype="&xsd;string">linkeddata uniprot complete</dc:title>
+        <property rdf:datatype="&xsd;string">rdfs:seeAlso</property>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_ld_complete"/>
+        <isKeyOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_ld_complete"/>
     </owl:NamedIndividual>
     
 
@@ -1444,16 +1476,38 @@
     
 
 
-    <!-- http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_rdf -->
+    <!-- http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_ld_complete -->
 
-    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_rdf">
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_ld_complete">
         <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
-        <rdfs:label rdf:datatype="&xsd;string">resource_uniprot_rdf</rdfs:label>
-        <dc:title rdf:datatype="&xsd;string">Resource Uniprot RDF in Turtle</dc:title>
-        <method rdf:datatype="&xsd;string">cache</method>
-        <endpoint rdf:datatype="&xsd;string">http://www.nanopub.org/nschema</endpoint>
-        <rdfs:comment rdf:datatype="&xsd;string">resource uniprot for ttl data</rdfs:comment>
-        <dc:publisher rdf:datatype="&xsd;string">ttl</dc:publisher>
+        <rdfs:label rdf:datatype="&xsd;string">resource_uniprot_ld_complete</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Resource Uniprot Linked Data</dc:title>
+        <method rdf:datatype="&xsd;string">complete</method>
+        <extension rdf:datatype="&xsd;string">dc:identifier</extension>
+        <endpoint rdf:datatype="&xsd;string">http://purl.uniprot.org/uniprot/#replace#</endpoint>
+        <dc:publisher rdf:datatype="&xsd;string">ld</dc:publisher>
+        <rdfs:comment rdf:datatype="&xsd;string">resource uniprot for linked data </rdfs:comment>
+        <order>14</order>
+        <isResourceOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_uniprot"/>
+        <extends rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_uniprot"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/ld_uniprot_complete"/>
+        <hasKey rdf:resource="http://bioinformatics.ua.pt/coeus/resource/ld_uniprot_complete"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_rdf_complete -->
+
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/resource_uniprot_rdf_complete">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
+        <rdfs:label rdf:datatype="&xsd;string">resource_uniprot_rdf_complete</rdfs:label>
+        <dc:title rdf:datatype="&xsd;string">Resource Uniprot RDF complete</dc:title>
+        <method rdf:datatype="&xsd;string">complete</method>
+        <extension rdf:datatype="&xsd;string">dc:identifier</extension>
+        <query rdf:datatype="&xsd;string">http://purl.uniprot.org/uniprot/</query>
+        <endpoint rdf:datatype="&xsd;string">http://www.uniprot.org/uniprot/#replace#.rdf</endpoint>
+        <dc:publisher rdf:datatype="&xsd;string">rdf</dc:publisher>
+        <rdfs:comment rdf:datatype="&xsd;string">resource uniprot for rdf data</rdfs:comment>
         <order>12</order>
         <extends rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_uniprot"/>
         <isResourceOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_uniprot"/>
