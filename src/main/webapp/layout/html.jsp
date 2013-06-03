@@ -6,7 +6,7 @@
             <link rel="author" href="<c:url value="/humans.txt" />" />
             <link rel="icon" type="image/ico" href="<c:url value="/favicon.ico" />"></link> 
             <meta name="description" content="COEUS semantic web linkeddata linked data services rest integration heterogeneous distributed knowledge federation">
-            <meta name="author" content="Pedro Lopes pedrolopes@ua.pt">
+            <meta name="author" content="Pedro Lopes pedrolopes@ua.pt; Pedro Sernadela sernadela@ua.pt; Jose Luis Oliveira jlo@ua.pt">
             <title><s:layout-component name="title">COEUS</s:layout-component></title>
             <s:layout-component name="style">
                 <jsp:include page="style.jsp" />
@@ -49,15 +49,13 @@
 
                 <div class="modal-body">
                     <address>
-                        <strong>Pedro Lopes</strong><br>
-                        <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a><br>
+                        <strong>COEUS, A/C Pedro Lopes</strong><br>
                         DETI/IEETA, University of Aveiro<br>
                         Campus Universitario de Santiago<br>
                         3810 - 193 Aveiro<br>
                         Portugal
                     </address>
                 </div>
-
                 <div class="modal-footer">
                     <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback" class="btn btn-info">Send Mail <i class="icon-envelope icon-white"></i></a>
                 </div>
