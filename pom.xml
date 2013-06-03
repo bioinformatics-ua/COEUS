@@ -4,7 +4,7 @@
 
     <groupId>pt.ua.bioinformatics</groupId>
     <artifactId>coeus</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.3-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>coeus</name>
