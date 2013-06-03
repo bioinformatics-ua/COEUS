@@ -492,9 +492,9 @@ t.start();</pre>
                 To set the application to server mode, the following <code>config.js</code> configuration properties must be changed:
             <dl>
                 <dt><code>config.built</code></dt>
-                <dd>Must be change to <strong>true</strong>. The application is already built.</dd>
+                <dd>Must be changed to <strong>true</strong>. The application is already built.</dd>
                 <dt><code>config.debug</code></dt>
-                <dd>Can be change to <strong>false</strong>. With the debug mode on the server output will be much more verbose.</dd>
+                <dd>Can be changed to <strong>false</strong>. With the debug mode on the server output will be much more verbose.</dd>
             </dl>
             </p>
             <p>

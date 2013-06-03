@@ -1,20 +1,20 @@
 {
 "config": {
-"name": "tester",
-        "description": "COEUS tester",
+"name": "proteinator",
+        "description": "COEUS Protein Data Aggregator (Proteinator)",
         "keyprefix":"coeus",
         "version": "1.0a",
         "ontology": "http://bioinformatics.ua.pt/diseasecard/diseasecard.owl",
-        "setup": "tester/setup.rdf",
-        "sdb":"tester/sdb.ttl",
-        "predicates":"tester/predicates.csv",
-        "built": false,
+        "setup": "proteinator/setup.rdf",
+        "sdb":"proteinator/sdb.ttl",
+        "predicates":"proteinator/predicates.csv",
+        "built": true,
         "debug": true,
         "apikey":"coeus|uavr",
         "environment": "production"
 },
         "prefixes" : {
-"coeus": "http://bioinformatics.ua.pt/coeus/resource/",
+        "coeus": "http://bioinformatics.ua.pt/coeus/resource/",
         "owl2xml":"http://www.w3.org/2006/12/owl2-xml#",
         "xsd": "http://www.w3.org/2001/XMLSchema#",
         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
