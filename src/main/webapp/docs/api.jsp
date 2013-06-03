@@ -144,7 +144,7 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
             	COEUS update API provides a straightforward URL to update exiting triples in the knowledge base. The main difference between the delete or write API calls is the adding of the new object separated by a comma:<br/>
             </p>
             <ul>
-            	<li>../api/&lt;<em>API key</em>&gt;/write/&lt;<em>subject</em>&gt;/<em>&lt;predicate&gt;</em>/<em>&lt;old_object&gt;</em>,&lt;new_object&gt;</li>
+            	<li>../api/&lt;<em>API key</em>&gt;/update/&lt;<em>subject</em>&gt;/<em>&lt;predicate&gt;</em>/<em>&lt;old_object&gt;</em>,&lt;new_object&gt;</li>
             </ul>
             <table class="table table-condensed table-striped table-hover table-bordered">
             	<thead>
@@ -284,9 +284,9 @@ WHERE{
             <h2>Data Access</h2>
             <p>Easily perform SPARQL queries to your COEUS-generated endpoint with this new library.<br>
                 Check the documentation and the library at <a class="btn" href="<c:url value="/assets/js/coeus.sparql.js" />" target="_blank" title="Open COEUS Javascript SPARQL library">../assets/js/coeus.sparql.js</a>.</p>
-                <h2>Write</h2>
+                <h2>Changes on Seed</h2>
                 <p>
-                	COEUS Write API can be easily accessed in Javascript. <br />Check the documentation and sample at <a class="btn" href="<c:url value="/assets/js/coeus.sparql.js" />" target="_blank" title="Open COEUS Javascript SPARQL library">../assets/js/coeus.write.js</a>.</p>
+                	COEUS Write/Update/Delete API can be easily accessed in Javascript. <br />Check the documentation and sample at <a class="btn" href="<c:url value="/assets/js/coeus.api.js" />" target="_blank" title="Open COEUS Javascript SPARQL library">../assets/js/coeus.api.js</a>.</p>
                 </p>
         </section>
     </div>

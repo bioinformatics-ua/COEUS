@@ -19,7 +19,7 @@
                 </p>
                 <ul class="masthead-links">
                     <li><a href="https://github.com/pdrlps/COEUS/tree/master" target="_blank">GitHub project</a></li>
-                    <li>Version 1.2</li>
+                    <li>Version 1.3</li>
                 </ul>                
             </div>
         </div>
