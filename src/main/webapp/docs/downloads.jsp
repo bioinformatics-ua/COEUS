@@ -20,9 +20,9 @@
                 <h1>Package</h1>
             </div>
 
-            <p><a href="https://github.com/pdrlps/COEUS/archive/master.zip" target="_blank" class="btn btn-large btn-info">Download COEUS</a></p>
+            <p><a href="https://github.com/bioinformatics-ua/COEUS/archive/master.zip" target="_blank" class="btn btn-large btn-info">Download COEUS</a></p>
 
-            <p>Or you can fork the latest stable version from <a href="https://github.com/pdrlps/COEUS/tree/master" target="_blank">GitHub</a>.</p>
+            <p>Or you can fork the latest stable version from <a href="https://github.com/bioinformatics-ua/COEUS" target="_blank">GitHub</a>.</p>
         </section>
         <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
 
@@ -56,7 +56,7 @@
                 <h1>Code</h1>
             </div>
 
-            <p>COEUS' code is organised in a traditional Maven Java Web application file structure.<br></p>
+            <p>COEUS' code is organised in a traditional <a href="http://maven.apache.org/" >Maven</a> Java Web application file structure.<br></p>
 
             <ul>
                 <!--<li><code><code>target</code></code>: destination for application builds (on deployment)</li>-->
@@ -115,8 +115,6 @@
             <p></p>
 
             <p>COEUS follows a "Semantic Web in a box" approach. This means that all the required components to kickstart a new application are available by default in the COEUS package.</p>
-
-            <h3>Maven dependencies</h3>
             
             <dl>
                 <dt><a href="http://jena.apache.org/" target="_blank">Jena</a></dt>
@@ -151,14 +149,10 @@
 
                 <dd>Stripes is a presentation framework for building web applications using the latest Java technologies.</dd>
                 
-                <dt><a href="http://code.google.com/p/json-path/" target="_blank">Apache velocity</a></dt>
+                <dt><a href="http://velocity.apache.org" target="_blank">Apache velocity</a></dt>
 
                 <dd>Java-based template engine.</dd>
-           </dl>
-            
-            <h3>JavaScript</h3>
-            
-            <dl>
+
                 <dt><a href="http://twitter.github.com/bootstrap/" target="_blank" title="">Bootstrap</a></dt>
 
                 <dd>Sleek, intuitive, and powerful front-end framework for faster and easier web development..</dd>

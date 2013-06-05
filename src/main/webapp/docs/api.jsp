@@ -91,11 +91,7 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
                 <h1>REST</h1>
             </div>
             <h2>Read access</h2>
-            <p>To access all triples in COEUS Semantic Storage, you can combine subjects, objects or predicates wildcards to iteratively get data. The wildcards' usage is highlighted in the following diagram.</p>
-
-            <ul class="thumbnails">
-                <li class="span9"><a href="#" class="thumbnail pull-left"><img src="<c:url value="/assets/img/rest.png" />" alt="REST"></a></li>
-            </ul>
+            <p>To access all triples in COEUS Semantic Storage, you can combine subjects, objects or predicates wildcards to iteratively get data. The wildcards' usage is highlighted in the following table.</p>
 
             <table class="table table-condensed table-striped table-hover table-bordered">
             	<thead>
@@ -122,6 +118,8 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
             <p>Some data output examples are:</p>
 
             <ul>
+                <!--<li><a href="../api/triple/s/p/o" target="_blank">../api/triple/s/p/o</a> gets all triples: subject(<strong>s</strong>) - predicate(<strong>p</strong>) - object (<strong>o</strong>) in the Knowledge Base</li>-->
+
                 <li><a href="../api/triple/coeus:uniprot_P78312/p/o" target="_blank">../api/triple/coeus:uniprot_P78312/p/o</a> gets all predicates (<strong>p</strong>) and objects (<strong>o</strong>) related to <strong>uniprot_P78312</strong></li>
 
                 <li><a href="../api/triple/coeus:uniprot_P78312/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:uniprot_P78312/coeus:isAssociatedTo/obj/csv</a> gets all objects (<strong>obj</strong>) with a <em>coeus:isAssociatedTo</em> relationship to <strong>uniprot_P78312</strong> (in CSV format)</li>
