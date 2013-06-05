@@ -24,7 +24,7 @@ import pt.ua.bioinformatics.coeus.api.DB;
 public class Tester {
 
     // flag to test the REST server
-    static boolean SERVER = false;
+    static boolean SERVER = true;
     // Server host
     static String HOST = "http://localhost:8080/";
 
@@ -40,29 +40,38 @@ public class Tester {
 
         try {
             // clean sdb
-            cleanSDB("coeus", "demo", "demo");
+            cleanSDB("localhost","coeus", "demo", "demo");
             // Start import process            
-            //Boot.start();
+            Boot.start();
 
         } catch (Exception ex) {
             Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        try {
+            if (SERVER) {
 
-        if (SERVER) {
+                String location = HOST + Config.getKeyPrefix();
+                String writeQuery = location + "/api/" + Config.getApikeys().get(0) + "/write/coeus:uniprot_P51587/coeus:isAssociatedTo/test";
+                String readQuery = location + "/api/triple/coeus:uniprot_P51587/coeus:isAssociatedTo/obj";
 
-            String location = HOST + Config.getKeyPrefix();
-            String writeQuery = location + "/api/" + Config.getApikeys().get(0) + "/write/coeus:uniprot_P51587/coeus:isAssociatedTo/test";
-            String readQuery = location + "/api/triple/coeus:uniprot_P51587/coeus:isAssociatedTo/obj";
-
-            // Test REST Read access first to count the result objs
-            int initSize = initRestRead(readQuery);
-            // Test REST Write access to add a new obj
-            restWrite(writeQuery);
-            // Test REST Read again to verify if has new data
-            verifyRestRead(readQuery, initSize);
+                // Test REST Read access first to count the result objs
+                int initSize = initRestRead(readQuery);
+                // Test REST Write access to add a new obj
+                restWrite(writeQuery);
+                // Test REST Read again to verify if has new data
+                verifyRestRead(readQuery, initSize);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
         }
-        // Test SPARQL Query 
-        testSparqlQuery();
+        
+        try {
+            // Test SPARQL Query 
+            testSparqlQuery();
+        } catch (Exception ex) {
+            Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -72,9 +81,9 @@ public class Tester {
      * @param dbUserName
      * @param dbPassword
      */
-    public static void cleanSDB(String dbname, String dbUserName, String dbPassword) {
+    public static void cleanSDB(String host, String dbname, String dbUserName, String dbPassword) {
 
-        DB db = new DB(dbname, "jdbc:mysql://localhost:3306/" + dbname + "?autoReconnect=true&user=" + dbUserName + "&password=" + dbPassword);
+        DB db = new DB(dbname, "jdbc:mysql://"+host+":3306/" + dbname + "?autoReconnect=true&user=" + dbUserName + "&password=" + dbPassword);
         // test db connection
         boolean success = db.connectX();
 
