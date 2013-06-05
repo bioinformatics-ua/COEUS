@@ -162,6 +162,112 @@ coeus:csv_UniProt_proteinname coeus:loadsFor coeus:resource_UniProt;
 	a coeus:CSV,
 		owl:NamedIndividual;
 	rdfs:label "csv_uniprot_proteinname"^^&lt;&xsd;string&gt;.</pre>
+            
+            <h2>JSON</h2>
+
+            <div class="bs-docs-example">
+                This sample configuration details how to specify data imports from JSON files into COEUS' knowledge base. This example was taken from the Tester sample.                    
+            </div>
+            <pre class="prettyprint linenums">
+# Mesh Json Resource configuration
+coeus:resource_mesh_cache coeus:endpoint "http://bioinformatics.ua.pt/diseasecard/api/triple/diseasecard:uniprot_P51587/coeus:isAssociatedTo/obj"^^<&xsd;string>;
+	coeus:extends coeus:concept_mesh;
+	coeus:hasKey coeus:json_mesh_type;
+	coeus:isResourceOf coeus:concept_mesh;
+	coeus:loadsFrom coeus:json_mesh_type;
+	coeus:method "cache"^^<&xsd;string>;
+	coeus:order "5"^^<&xsd;string>;
+	coeus:query "$.results.bindings[*]"^^<&xsd;string>;
+	dc:publisher "json"^^<&xsd;string>;
+	dc:title "Resource mesh cache"^^<&xsd;string>;
+	a coeus:Resource,
+		owl:NamedIndividual;
+	rdfs:comment "resource for mesh terms cache"^^<&xsd;string>;
+	rdfs:label "resource_mesh_cache"^^<&xsd;string>.
+# Loading mesh id from Json 
+coeus:json_mesh_id coeus:isKeyOf coeus:resource_mesh_cache_ext;
+	coeus:loadsFor coeus:resource_mesh_cache_ext;
+	coeus:property "dc:identifier"^^<&xsd;string>;
+	coeus:query "$.obj.value"^^<&xsd;string>;
+	coeus:regex "D[0-9]{6}"^^<&xsd;string>;
+	dc:title "json mesh identifier"^^<&xsd;string>;
+	a coeus:class_json,
+		owl:NamedIndividual;
+	rdfs:label "json_mesh_id"^^<&xsd;string>.
+# Loading mesh type from Json 
+coeus:json_mesh_type coeus:loadsFor coeus:resource_mesh_cache;
+	coeus:property "rdfs:comment"^^<&xsd;string>;
+	coeus:query "$.obj.type"^^<&xsd;string>;
+	dc:title "json mesh type"^^<&xsd;string>;
+	a coeus:class_json,
+		owl:NamedIndividual;
+	rdfs:label "json_mesh_type"^^<&xsd;string>.
+# Loading mesh uri from Json 
+coeus:json_mesh_uri coeus:loadsFor coeus:resource_mesh_complete;
+	coeus:property "dc:description"^^<&xsd;string>;
+	coeus:query "$.obj.value"^^<&xsd;string>;
+	dc:title "json mesh uri"^^<&xsd;string>;
+	a coeus:class_json,
+		owl:NamedIndividual;
+	rdfs:label "json_mesh_uri"^^<&xsd;string>.
+
+            </pre>
+            <h2>RDF</h2>
+
+            <div class="bs-docs-example">
+                This sample configuration details how to specify data imports and individuals association from RDF/XML files into COEUS' knowledge base. This example was taken from the Tester sample.                    
+            </div>
+            <pre class="prettyprint linenums">
+# UniProt RDF Resource configuration
+coeus:resource_uniprot_rdf_complete coeus:endpoint "http://www.uniprot.org/uniprot/#replace#.rdf"^^<&xsd;string>;
+	coeus:extends coeus:concept_uniprot;
+	coeus:extension "dc:identifier"^^<&xsd;string>;
+	coeus:isResourceOf coeus:concept_uniprot;
+	coeus:method "complete"^^<&xsd;string>;
+	coeus:order "12";
+	coeus:query "http://purl.uniprot.org/uniprot/"^^<&xsd;string>;
+	dc:publisher "rdf"^^<&xsd;string>;
+	dc:title "Resource Uniprot RDF complete"^^<&xsd;string>;
+	a coeus:Resource,
+		owl:NamedIndividual;
+	rdfs:comment "resource uniprot for rdf data"^^<&xsd;string>;
+	rdfs:label "resource_uniprot_rdf_complete"^^<&xsd;string>.
+
+            </pre>
+            
+            <h2>LinkedData</h2>
+
+            <div class="bs-docs-example">
+                This sample configuration details how to link data into COEUS' knowledge base. This example was taken from the Tester sample.                    
+            </div>
+            <pre class="prettyprint linenums">
+# UniProt LinkedData Resource configuration
+coeus:resource_uniprot_ld_complete coeus:endpoint "http://purl.uniprot.org/uniprot/#replace#"^^<&xsd;string>;
+	coeus:extends coeus:concept_uniprot;
+	coeus:extension "dc:identifier"^^<&xsd;string>;
+	coeus:hasKey coeus:ld_uniprot_complete;
+	coeus:isResourceOf coeus:concept_uniprot;
+	coeus:loadsFrom coeus:ld_uniprot_complete;
+	coeus:method "complete"^^<&xsd;string>;
+	coeus:order "14";
+	dc:publisher "ld"^^<&xsd;string>;
+	dc:title "Resource Uniprot Linked Data"^^<&xsd;string>;
+	a coeus:Resource,
+		owl:NamedIndividual;
+	rdfs:comment "resource uniprot for linked data "^^<&xsd;string>;
+	rdfs:label "resource_uniprot_ld_complete"^^<&xsd;string>.
+# Make the association
+coeus:ld_uniprot_complete coeus:isKeyOf coeus:resource_uniprot_ld_complete;
+	coeus:loadsFor coeus:resource_uniprot_ld_complete;
+	coeus:property "rdfs:seeAlso"^^<&xsd;string>;
+	coeus:query ""^^<&xsd;string>;
+	dc:title "linkeddata uniprot complete"^^<&xsd;string>;
+	a coeus:LD,
+		owl:NamedIndividual;
+	rdfs:label "ld_uniprot_complete"^^<&xsd;string>.
+
+            </pre>
+            
         </section>
         <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
         <section id="datasources">

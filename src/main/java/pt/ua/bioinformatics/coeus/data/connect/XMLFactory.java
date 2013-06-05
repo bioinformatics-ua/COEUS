@@ -174,13 +174,19 @@ public class XMLFactory implements ResourceFactory {
                                 }
                                 XPath x_key = factory.newXPath();
                                 Node xmlkey = (Node) x_key.evaluate(key.getQuery(), n, XPathConstants.NODE);
-                                if (key.getRegex() == null) {
-                                    rdfizer.itemize(xmlkey.getTextContent());
-                                } else {
-                                    Pattern p = Pattern.compile(key.getRegex());
-                                    Matcher m = p.matcher(xmlkey.getTextContent());
-                                    if (m.find()) {
-                                        rdfizer.itemize(m.group());
+                                try {
+                                    if (key.getRegex() == null) {
+                                        rdfizer.itemize(xmlkey.getTextContent());
+                                    } else {
+                                        Pattern p = Pattern.compile(key.getRegex());
+                                        Matcher m = p.matcher(xmlkey.getTextContent());
+                                        if (m.find()) {
+                                            rdfizer.itemize(m.group());
+                                        }
+                                    }
+                                } catch (NullPointerException nu) {
+                                    if (Config.isDebug()) {
+                                        System.out.println("[COEUS][XMLFactory] XPath query " +key.getQuery()+ " empty result on "+ res.getUri());
                                     }
                                 }
                             }

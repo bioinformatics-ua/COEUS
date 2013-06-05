@@ -1,13 +1,13 @@
 {
 "config": {
-"name": "tester",
-        "description": "COEUS tester",
+"name": "proteinator",
+        "description": "COEUS Protein Data Aggregator (Proteinator)",
         "keyprefix":"coeus",
         "version": "1.0a",
         "ontology": "http://bioinformatics.ua.pt/diseasecard/diseasecard.owl",
-        "setup": "tester/setup.rdf",
-        "sdb":"tester/sdb.ttl",
-        "predicates":"tester/predicates.csv",
+        "setup": "proteinator/setup.rdf",
+        "sdb":"proteinator/sdb.ttl",
+        "predicates":"proteinator/predicates.csv",
         "built": false,
         "debug": true,
         "apikey":"coeus|uavr",

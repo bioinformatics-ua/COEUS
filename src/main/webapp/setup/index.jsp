@@ -19,7 +19,8 @@
         <div class="container">
             <br><br>
             <div class="page-header">
-                <h1>Project <small>Production</small></h1>
+                <h1>${actionBean.name} <small>Production</small></h1>
+                <a href="../seed/">refresh</a>
             </div>
 
             <div class="row-fluid">

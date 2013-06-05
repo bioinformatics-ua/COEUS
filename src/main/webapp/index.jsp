@@ -15,10 +15,10 @@
                 <h1>COEUS</h1>
                 <p>Streamlined back-end framework for rapid semantic web application development.</p>
                 <p>
-                    <a href="https://github.com/pdrlps/COEUS/zipball/master" class="btn btn-inverse btn-large">Get COEUS</a>
+                    <a href="https://github.com/bioinformatics-ua/COEUS/archive/master.zip" class="btn btn-inverse btn-large">Get COEUS</a>
                 </p>
                 <ul class="masthead-links">
-                    <li><a href="https://github.com/pdrlps/COEUS/tree/master" target="_blank">GitHub project</a></li>
+                    <li><a href="https://github.com/bioinformatics-ua/COEUS" target="_blank">GitHub project</a></li>
                     <li>Version 1.3</li>
                 </ul>                
             </div>

@@ -145,6 +145,8 @@
                     <compilerArguments>
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>
+                    <meminitial>1024m</meminitial>
+                    <maxmem>2024m</maxmem>
                 </configuration>
             </plugin>
             <plugin>
