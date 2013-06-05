@@ -97,14 +97,34 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
                 <li class="span9"><a href="#" class="thumbnail pull-left"><img src="<c:url value="/assets/img/rest.png" />" alt="REST"></a></li>
             </ul>
 
-            <p></p>
+            <table class="table table-condensed table-striped table-hover table-bordered">
+            	<thead>
+            		<tr>
+            			<th>Element</th><th>Description</th><th>Sample</th>
+            		</tr>
+            	</thead>
+            	<tbody>
+            		<tr>
+            			<td><code>subject</code></td><td>The existing or matching subject.</td><td>coeus:uniprot_P51582</td>
+            		</tr>
+                        <tr>
+            			<td><code>predicate</code></td><td>The existing or matching predicate.</td><td>coeus:isAssociatedTo</td>
+            		</tr>
+            		<tr>
+            			<td><code>object</code></td><td>The existing or matching object.</td><td>obj</td>
+            		</tr>
+                        <tr>
+            			<td><code>format</code></td><td>The output format.</td><td>csv</td>
+            		</tr>
+            	</tbody>
+            </table>
 
             <p>Some data output examples are:</p>
 
             <ul>
-                <li><a href="../api/triple/coeus:uniprot_Q13428/p/o" target="_blank">../api/triple/coeus:uniprot_Q13428/p/o</a> gets all predicates (<strong>p</strong>) and objects (<strong>o</strong>) related to <strong>uniprot_Q13428</strong></li>
+                <li><a href="../api/triple/coeus:uniprot_P78312/p/o" target="_blank">../api/triple/coeus:uniprot_P78312/p/o</a> gets all predicates (<strong>p</strong>) and objects (<strong>o</strong>) related to <strong>uniprot_P78312</strong></li>
 
-                <li><a href="../api/triple/coeus:uniprot_Q13428/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:uniprot_Q13428/coeus:isAssociatedTo/obj/csv</a> gets all objects (<strong>obj</strong>) with a <em>coeus:isAssociatedTo</em> relationship to <strong>uniprot_Q13428</strong> (in CSV format)</li>
+                <li><a href="../api/triple/coeus:uniprot_P78312/coeus:isAssociatedTo/obj/csv" target="_blank">../api/triple/coeus:uniprot_P78312/coeus:isAssociatedTo/obj/csv</a> gets all objects (<strong>obj</strong>) with a <em>coeus:isAssociatedTo</em> relationship to <strong>uniprot_P78312</strong> (in CSV format)</li>
             </ul>
             
             <h2>Delete access</h2>
@@ -112,7 +132,27 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
             <ul>
             	<li>../api/&lt;<em>API key</em>&gt;/delete/&lt;<em>subject</em>&gt;/<em>&lt;predicate&gt;</em>/&lt;object&gt;</li>
             </ul>
-            <p></p>
+            <table class="table table-condensed table-striped table-hover table-bordered">
+            	<thead>
+            		<tr>
+            			<th>Element</th><th>Description</th><th>Sample</th>
+            		</tr>
+            	</thead>
+            	<tbody>
+            		<tr>
+            			<td><code>API key</code></td><td>Value for the seed access API key (defined in <strong>config.js</strong>).</td><td>coeus</td>
+            		</tr>
+            		<tr>
+            			<td><code>subject</code></td><td>The existing subject.</td><td>coeus:uniprot_P51582</td>
+            		</tr>
+                        <tr>
+            			<td><code>predicate</code></td><td>The existing predicate.</td><td>coeus:isAssociatedTo</td>
+            		</tr>
+            		<tr>
+            			<td><code>object</code></td><td>The existing object.</td><td>coeus:go_GO:0033593</td>
+            		</tr>
+            	</tbody>
+            </table>
 
             <p>Some examples are:</p>
 
@@ -128,7 +168,27 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
             <ul>
             	<li>../api/&lt;<em>API key</em>&gt;/write/&lt;<em>subject</em>&gt;/<em>&lt;predicate&gt;</em>/&lt;object&gt;</li>
             </ul>
-            <p></p>
+            <table class="table table-condensed table-striped table-hover table-bordered">
+            	<thead>
+            		<tr>
+            			<th>Element</th><th>Description</th><th>Sample</th>
+            		</tr>
+            	</thead>
+            	<tbody>
+            		<tr>
+            			<td><code>API key</code></td><td>Value for the seed access API key (defined in <strong>config.js</strong>).</td><td>coeus</td>
+            		</tr>
+            		<tr>
+            			<td><code>subject</code></td><td>The subject to write.</td><td>coeus:uniprot_P51582</td>
+            		</tr>
+                        <tr>
+            			<td><code>predicate</code></td><td>The predicate to write.</td><td>coeus:isAssociatedTo</td>
+            		</tr>
+            		<tr>
+            			<td><code>object</code></td><td>The object to write.</td><td>coeus:go_GO:0033593</td>
+            		</tr>
+            	</tbody>
+            </table>
 
             <p>Some examples are:</p>
 
@@ -268,9 +328,9 @@ WHERE{
                 Using the <em>../resource/*</em> pattern, you can access object data in the web or RDF browsers.</p>
 
             <ul>
-                <li><a href="../resource/uniprot_P51687">../resource/uniprot_P51687</a> HTML page for UniProt P51587</li>
+                <li><a href="../resource/uniprot_P78312">../resource/uniprot_P78312</a> HTML page for UniProt P78312</li>
 
-                <li><a href="../data/entrezgene_5002?output=xml">../data/entrezgene_5002?output=xml</a> RDF content for EntrezGene 5002</li>
+                <li><a href="../data/uniprot_P78312?output=xml">../data/uniprot_P78312?output=xml</a> RDF content for UniProt P78312</li>
             </ul>
         </section>
         <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>

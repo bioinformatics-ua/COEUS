@@ -5,19 +5,19 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 $('#pro_item_info').on('click', function() {
-                    $('#query').val('SELECT ?predicate ?object {<http://bioinformatics.ua.pt/coeus/resource/uniprot_P51587> ?predicate ?object}');
+                    $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\n\nSELECT * { \n?uniprot coeus:hasConcept coeus:concept_UniProt . \n?uniprot dc:identifier ?id .\n?uniprot dc:title ?name \n}');
                 });
 
                 $('#pro_all_concept').on('click', function() {
-                    $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\nSELECT ?item {?item coeus:hasConcept coeus:concept_UniProt }');
+                    $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\n\nSELECT ?item {\n?item coeus:hasConcept coeus:concept_UniProt \n}');
                 });
 
                 $('#pro_count_items').on('click', function() {
-                    $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\n\nSELECT COUNT(DISTINCT ?tag) {?tag coeus:hasConcept coeus:concept_UniProt}');
+                    $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\n\nSELECT COUNT(DISTINCT ?tag) {\n?tag coeus:hasConcept coeus:concept_UniProt\n}');
                 });
 
                 $('#news_item_info').on('click', function() {
-                    $('#query').val('SELECT ?predicate ?object {<http://bioinformatics.ua.pt/coeus/resource/bbc_21774292> ?predicate ?object}');
+                    $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\n\nSELECT * { \n?bbc coeus:hasConcept coeus:concept_BBC .\n?bbc dc:identifier ?from .\n?bbc dc:title ?title \n}');
                 });
 
                 $('#news_all_concept').on('click', function() {
@@ -54,7 +54,7 @@
                             <div class="span4">
                                 <p><strong>Proteinator</strong></p>
                                 <ul>
-                                    <li><a id="pro_item_info" href="#">Get individual Item info</a></li>
+                                    <li><a id="pro_item_info" href="#">Get Uniprot individuals info</a></li>
 
                                     <li><a id="pro_all_concept" href="#">Get all Concept individuals</a></li>
 
@@ -65,7 +65,7 @@
                                 <p><strong>NewsAggregator</strong></p>
 
                                 <ul>
-                                    <li><a id="news_item_info" href="#">Get individual Item info</a></li>
+                                    <li><a id="news_item_info" href="#">Get BBC individuals info</a></li>
 
                                     <li><a id="news_all_concept" href="#">Get all Concept individuals</a></li>
 
@@ -128,16 +128,16 @@
                             <div class="span4">
                                 <p><strong>Proteinator</strong></p>
                                 <ul>
-                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/uniprot_P51587" target="_top">Browse <em>UniProt P51587</em> data</a></li>
-                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/pdb_1N0W" target="_top">Browse <em>PDB 1N0W</em> data</a></li>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/uniprot_O15350" target="_top">Browse <em>UniProt P78312</em> data </a></li>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/resource_UniProt" target="_top">Browse <em>UniProt Resource</em> </a></li>
                                 </ul>
                             </div>
                             <div class="span4">
                                 <p><strong>NewsAggregator</strong></p>
 
                                 <ul>
-                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/bbc_21774292" target="_top">Browse <em>BBC 21774292</em> data</a></li>
-                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/reuters_20130319" target="_top">Browse <em>Reuters 20130319</em> data</a></li>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/concept_BBC" target="_top">Browse <em>BBC Concept</em> </a></li>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/resource_BBC" target="_top">Browse <em>BBC Resource</em> </a></li>
                                 </ul>
                             </div>
                         </div>

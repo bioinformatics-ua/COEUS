@@ -24,7 +24,7 @@ import pt.ua.bioinformatics.coeus.api.DB;
 public class Tester {
 
     // flag to test the REST server
-    static boolean SERVER = true;
+    static boolean SERVER = false;
     // Server host
     static String HOST = "http://localhost:8080/";
 
@@ -42,7 +42,7 @@ public class Tester {
             // clean sdb
             cleanSDB("coeus", "demo", "demo");
             // Start import process            
-            Boot.start();
+            //Boot.start();
 
         } catch (Exception ex) {
             Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);

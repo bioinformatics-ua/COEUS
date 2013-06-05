@@ -116,6 +116,8 @@
 
             <p>COEUS follows a "Semantic Web in a box" approach. This means that all the required components to kickstart a new application are available by default in the COEUS package.</p>
 
+            <h3>Maven dependencies</h3>
+            
             <dl>
                 <dt><a href="http://jena.apache.org/" target="_blank">Jena</a></dt>
 
@@ -128,18 +130,42 @@
                 <dt><a href="http://www4.wiwiss.fu-berlin.de/pubby/" target="_blank">Pubby</a></dt>
 
                 <dd>A Linked Data Frontend for SPARQL Endpoints.</dd>
+                
+                <dt><a href="http://code.google.com/p/json-path/" target="_blank">JsonPath</a></dt>
 
-                <dt>SPARQL.js</dt>
+                <dd>Java DSL for reading and testing JSON documents.</dd>
+                
+                <dt><a href="http://opencsv.sourceforge.net" target="_blank">OpenCSV</a></dt>
 
-                <dd>JavaScript library to query remote SPARQL endpoints.</dd>
+                <dd>A simple CSV parser library for Java.</dd>
+                
+                <dt><a href="http://mysql.com/downloads/connector/j/?" target="_blank">MySQL Connector</a></dt>
+
+                <dd>JDBC driver for MySQL.</dd>
+                
+                <dt><a href="http://msdn.microsoft.com/en-us/sqlserver/aa937724.aspx" target="_blank">SQL Server</a></dt>
+
+                <dd>Microsoft JDBC Driver for SQL Server.</dd>
 
                 <dt><a href="http://www.stripesframework.org/" target="_blank" title="">Stripes</a></dt>
 
                 <dd>Stripes is a presentation framework for building web applications using the latest Java technologies.</dd>
+                
+                <dt><a href="http://code.google.com/p/json-path/" target="_blank">Apache velocity</a></dt>
 
+                <dd>Java-based template engine.</dd>
+           </dl>
+            
+            <h3>JavaScript</h3>
+            
+            <dl>
                 <dt><a href="http://twitter.github.com/bootstrap/" target="_blank" title="">Bootstrap</a></dt>
 
                 <dd>Sleek, intuitive, and powerful front-end framework for faster and easier web development..</dd>
+                
+                <dt>SPARQL.js</dt>
+
+                <dd>JavaScript library to query remote SPARQL endpoints.</dd>
             </dl>
 
             <p></p>
