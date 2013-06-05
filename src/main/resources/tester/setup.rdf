@@ -1502,7 +1502,7 @@
         <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
         <rdfs:label rdf:datatype="&xsd;string">resource_uniprot_rdf_complete</rdfs:label>
         <dc:title rdf:datatype="&xsd;string">Resource Uniprot RDF complete</dc:title>
-        <method rdf:datatype="&xsd;string">complete</method>
+        <!--<method rdf:datatype="&xsd;string">complete</method>-->
         <extension rdf:datatype="&xsd;string">dc:identifier</extension>
         <query rdf:datatype="&xsd;string">http://purl.uniprot.org/uniprot/</query>
         <endpoint rdf:datatype="&xsd;string">http://www.uniprot.org/uniprot/#replace#.rdf</endpoint>
