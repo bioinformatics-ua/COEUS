@@ -52,8 +52,9 @@ sdb:Model rdfs:subClassOf  ja:Model .
     sdb:connection 
     [ rdf:type sdb:SDBConnection ;
        sdb:sdbType        "mysql" ;
-       sdb:sdbHost        "localhost:3306" ;
-       sdb:sdbName        "coeus" ;
+       #sdb:sdbHost        "localhost:3306" ;
+       #sdb:sdbName        "coeus" ;
+       sdb:jdbcURL        "jdbc:mysql://localhost:3306/coeus?autoReconnect=true" ;
      sdb:sdbUser       "demo" ;
     sdb:sdbPassword   "demo" ;
     ]

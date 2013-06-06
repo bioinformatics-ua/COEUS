@@ -120,7 +120,7 @@
     </servlet>    
     
     <listener>
-	<listener-class>pt.ua.bioinformatics.coeus.common.ServletListener</listener-class>
+	<listener-class>pt.ua.bioinformatics.coeus.common.HttpListener</listener-class>
     </listener>
     
     <welcome-file-list>
