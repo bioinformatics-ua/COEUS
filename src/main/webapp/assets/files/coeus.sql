@@ -63,7 +63,7 @@ CREATE TABLE `quads` (
 # Dump of table triples
 # ------------------------------------------------------------
 
-CREATE TABLE `triples` (
+CREATE TABLE `Triples` (
   `s` bigint(20) NOT NULL,
   `p` bigint(20) NOT NULL,
   `o` bigint(20) NOT NULL,
