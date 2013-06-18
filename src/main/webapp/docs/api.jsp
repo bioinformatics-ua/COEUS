@@ -233,6 +233,13 @@ pt.ua.bioinformatics.api.ItemFactory.getTokenFromItem("http://bioinformatics.ua.
             <ul>
             	<li>../api/<em>api_key</em>/update/<em>coeus:uniprot_P51587</em>/<em>coeus:isAssociatedTo</em>/coeus:go_GO:0033593,coeus:pdb_1N0W</li>
             </ul>
+            
+            <p>For XSD types just append the datatype (xsd:int, xsd:string,..) at the start of the literal:</p>
+            
+            <ul>
+            	<li>../api/<em>api_key</em>/update/<em>coeus:resource_BBC</em>/<em>dc:creator</em>/xsd:string:pdrlps,xsd:string:uavr</li>
+            </ul>
+            
             <p>
             	The write/delete/update REST API returns a JSON object with the server response. The <strong>status</strong> field of that object contains a numeric value with the write operation output.
             </p>

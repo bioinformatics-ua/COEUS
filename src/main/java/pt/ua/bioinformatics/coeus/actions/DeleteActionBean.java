@@ -4,6 +4,7 @@
  */
 package pt.ua.bioinformatics.coeus.actions;
 
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,56 +95,35 @@ public class DeleteActionBean implements ActionBean {
                 if (sub.indexOf(":") > 1) {
                     try {
                         if (pred.indexOf(":") > 1) {
-                            if (obj.contains(":")) {
-                                //verify if the obj is a Resource or a Literal
-                                if (obj.indexOf(":") > 1) {
-                                    // obj is a Resource
-                                    Statement s = Boot.getAPI().createStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), Boot.getAPI().createResource(PrefixFactory.decode(obj)));
-                                    //verify if exists in the kb
-                                    if (Boot.getAPI().containsStatement(s)) {
-                                        //Exists so try to remove
-                                        Boot.getAPI().removeStatement(s);
-                                        //verify if has been removed 
-                                        if (!Boot.getAPI().containsStatement(s)) {
-                                            result.put("status", 100);
-                                            result.put("message", "[COEUS][API][Delete] Triples removed from the knowledge base.");
-
-                                        } else {
-                                            result.put("status", 200);
-                                            result.put("message", "[COEUS][API][Delete] Triples not removed from knowledge base.");
-                                        }
-
-                                    } else {
-                                        result.put("status", 203);
-                                        result.put("message", "[COEUS][API][Delete] Unknown triples in the knowledge base.");
-                                    }
-                                } else {
-
-                                    result.put("status", 203);
-                                    result.put("message", "[COEUS][API][Delete] " + obj + " is an invalid object.");
-                                }
+                            
+                            // test obj
+                            String xsd = "http://www.w3.org/2001/XMLSchema#";
+                            Statement statToRemove = null;
+                            //verify if is a xsd type
+                            if (obj.startsWith("xsd:")) {
+                                String[] old = obj.split(":", 3);
+                                Literal l = Boot.getAPI().getModel().createTypedLiteral(old[2], xsd + old[1]);
+                                statToRemove = Boot.getAPI().getModel().createLiteralStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), l);
+                            } else if (obj.indexOf(":") > 1) {
+                                //is a Resource
+                                statToRemove = Boot.getAPI().createStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), Boot.getAPI().createResource(PrefixFactory.decode(obj)));
                             } else {
-                                //obj is a literal
-                                Statement s = Boot.getAPI().createStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), obj);
-                                //verify if exists in the kb
-                                if (Boot.getAPI().containsStatement(s)) {
-                                    //Exists so try to remove
-                                    Boot.getAPI().removeStatement(s);
-                                    //verify if has been removed 
-                                    if (!Boot.getAPI().containsStatement(s)) {
-                                        result.put("status", 100);
-                                        result.put("message", "[COEUS][API][Delete] Triples removed from the knowledge base.");
-
-                                    } else {
-                                        result.put("status", 200);
-                                        result.put("message", "[COEUS][API][Delete] Triples not removed from knowledge base.");
-                                    }
-
-                                } else {
-                                    result.put("status", 203);
-                                    result.put("message", "[COEUS][API][Delete] Unknown triples in the knowledge base.");
-                                }
+                                //is a Literal
+                                statToRemove = Boot.getAPI().createStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), obj);
                             }
+
+                            if (Boot.getAPI().containsStatement(statToRemove)) {
+                                
+                                Boot.getAPI().removeStatement(statToRemove);
+
+                                result.put("status", 100);
+                                result.put("message", "[COEUS][API][Delete] Triples removed from the knowledge base.");
+
+                            } else {
+                                result.put("status", 201);
+                                result.put("message", "[COEUS][API][Delete] Triple do not existe in this model in order to remove it.");
+                            }
+                            
                         } else {
                             result.put("status", 202);
                             result.put("message", "[COEUS][API][Delete] " + pred + " is an invalid predicate.");

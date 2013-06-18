@@ -158,21 +158,21 @@ public class Builder {
         ResourceFactory factory;
         try {
             if (!r.isBuilt()) {
-                if (r.getPublisher().equals("plugin")) {
+                if (r.getPublisher().equalsIgnoreCase("plugin")) {
                     factory = new PluginFactory(r);
-                } else if (r.getPublisher().equals("csv")) {
+                } else if (r.getPublisher().equalsIgnoreCase("csv")) {
                     factory = new CSVFactory(r);
-                } else if (r.getPublisher().equals("xml")) {
+                } else if (r.getPublisher().equalsIgnoreCase("xml")) {
                     factory = new XMLFactory(r);
-                } else if (r.getPublisher().equals("sql")) {
+                } else if (r.getPublisher().equalsIgnoreCase("sql")) {
                     factory = new SQLFactory(r);
-                } else if (r.getPublisher().equals("sparql")) {
+                } else if (r.getPublisher().equalsIgnoreCase("sparql")) {
                     factory = new SPARQLFactory(r);
-                } else if (r.getPublisher().equals("json")) {
+                } else if (r.getPublisher().equalsIgnoreCase("json")) {
                     factory = new JSONFactory(r);
-                } else if (r.getPublisher().equals("ld")) {
+                } else if (r.getPublisher().equalsIgnoreCase("ld") | r.getPublisher().equalsIgnoreCase("linkeddata")) {
                     factory = new LinkedDataFactory(r);
-                } else if (r.getPublisher().equals("rdf") | r.getPublisher().equals("ttl")) {
+                } else if (r.getPublisher().equalsIgnoreCase("rdf") | r.getPublisher().equalsIgnoreCase("ttl")) {
                     factory = new RDFFactory(r);
                 } else {
                     factory = null;
