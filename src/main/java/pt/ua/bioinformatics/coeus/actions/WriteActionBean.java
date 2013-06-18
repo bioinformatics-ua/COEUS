@@ -1,5 +1,7 @@
 package pt.ua.bioinformatics.coeus.actions;
 
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sourceforge.stripes.action.ActionBean;
@@ -79,29 +81,38 @@ public class WriteActionBean implements ActionBean {
     @DefaultHandler
     public Resolution handle() {
         Boot.start();
-        if (sub != null && pred != null && obj != null ) {
+        if (sub != null && pred != null && obj != null) {
             if (Boot.getAPI().validateKey(apikey)) {
                 if (sub.indexOf(":") > 1) {
                     try {
 
                         if (pred.contains(":")) {
-                            if (obj.contains(":")) {
-                                if (obj.indexOf(":") > 1) {
-                                    Boot.getAPI().addStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), Boot.getAPI().createResource(PrefixFactory.decode(obj)));
-                                } else {
-                                    result.put("status", 203);
-                                    result.put("message", "[COEUS][API][Write] " + obj + " is an invalid object.");
-                                }
+                            String xsd = "http://www.w3.org/2001/XMLSchema#";
+                            Statement statToAdd = null;
+                            //verify if is a xsd type
+                            if (obj.startsWith("xsd:")) {
+                                String[] old = obj.split(":", 3);
+                                Literal l = Boot.getAPI().getModel().createTypedLiteral(old[2], xsd + old[1]);
+                                statToAdd = Boot.getAPI().getModel().createLiteralStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), l);
+                            } else if (obj.indexOf(":") > 1) {
+                                //is a Resource
+                                statToAdd = Boot.getAPI().createStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), Boot.getAPI().createResource(PrefixFactory.decode(obj)));
                             } else {
-                                Boot.getAPI().addStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), obj);
+                                //is a Literal
+                                statToAdd = Boot.getAPI().createStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), obj);
                             }
+
+                            Boot.getAPI().addStatement(statToAdd);
+
+                            result.put("status", 100);
+                            result.put("message", "[COEUS][API][Write] Triples added to knowledge base.");
+
                         } else {
                             result.put("status", 202);
                             result.put("message", "[COEUS][API][Write] " + pred + " is an invalid predicate.");
                         }
 
-                        result.put("status", 100);
-                        result.put("message", "[COEUS][API][Write] Triples added to knowledge base.");
+
                     } catch (Exception ex) {
                         if (Config.isDebug()) {
                             System.out.println("[COEUS][WriteActionBean] Unable to add triple to knowledge base. Invalid request.");

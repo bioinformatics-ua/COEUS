@@ -461,8 +461,7 @@ public class API {
         }
 
     }
-    
-    /**
+        /**
      * Verify if the statement exists in the model
      * 
      * @param statement
@@ -477,6 +476,24 @@ public class API {
             }
             Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
             return false;
+        }
+        
+    }
+    /**
+     * Add statement to the model
+     * 
+     * @param statement
+     * @return 
+     */
+    public void addStatement(Statement statement) {
+         try {
+            this.model.add(statement);
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                String stat=statement.getSubject()+" "+statement.getPredicate()+" "+statement.getObject();
+                System.out.println("[COEUS][API] Unable add statement in the model: "+stat);
+                Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
+            } 
         }
         
     }
