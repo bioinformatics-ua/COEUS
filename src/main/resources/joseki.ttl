@@ -43,7 +43,7 @@ sdb:Model rdfs:subClassOf  ja:Model .
 
 <#sdb> rdf:type sdb:DatasetStore ;
     ## Number of concurrent connections allowed to this dataset.
-    joseki:poolSize     200;         
+    joseki:poolSize     2;         
     sdb:store <#store> .
 
 <#store> rdf:type sdb:Store  ;

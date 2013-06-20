@@ -17,7 +17,7 @@ import pt.ua.bioinformatics.coeus.common.Config;
  *
  * @author sernadela
  */
-@UrlBinding("/seed/")
+@UrlBinding("/manager/")
 public class SeedActionBean implements ActionBean{
     private static final String VIEW="/setup/index.jsp";
     private String name;

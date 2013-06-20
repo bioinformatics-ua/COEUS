@@ -1,14 +1,14 @@
 {
 "config": {
-"name": "proteinator",
-        "description": "COEUS Protein Data Aggregator (Proteinator)",
+"name": "coeus.NA",
+        "description": "COEUS News Aggregator",
         "keyprefix":"coeus",
         "version": "1.0a",
-        "ontology": "http://bioinformatics.ua.pt/diseasecard/diseasecard.owl",
-        "setup": "proteinator/setup.rdf",
-        "sdb":"proteinator/sdb.ttl",
-        "predicates":"proteinator/predicates.csv",
-        "built": false,
+        "ontology": "http://bioinformatics.ua.pt/coeus/ontology/",
+        "setup": "newsaggregator/setup.rdf",
+        "sdb":"newsaggregator/sdb.ttl",
+        "predicates":"newsaggregator/predicates.csv",
+        "built": true,
         "debug": true,
         "apikey":"coeus|uavr",
         "environment": "production"

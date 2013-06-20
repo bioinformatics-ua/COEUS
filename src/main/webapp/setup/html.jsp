@@ -25,9 +25,9 @@
 
                         <div class="nav-collapse collapse">
                             <ul class="nav">
-                                <li class="active"><a href="<c:url value="/setup/" />">Home</a></li>
+                                <li class="active"><a href="<c:url value="/manager/" />">Home</a></li>
 
-                                <li><a href="<c:url value="/setup/seed.jsp" />">Seed</a></li>
+                                <li><a href="<c:url value="/manager/seed.jsp" />">Seed</a></li>
 
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Setup <b class="caret"></b></a>
@@ -40,7 +40,7 @@
                                     </ul>
                                 </li>
 
-                                <li><a href="<c:url value="/setup/management.jsp" />">Management</a></li>
+                                <li><a href="<c:url value="/manager/management.jsp" />">Management</a></li>
 
                                 <li><a href="<c:url value="/documentation/" />">Documentation</a></li>
 
