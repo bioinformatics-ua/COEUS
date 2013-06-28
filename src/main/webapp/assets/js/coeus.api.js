@@ -160,3 +160,16 @@ function callAPI(url, html) {
 function getApiKey() {
    return "coeus";
 }
+/**
+ * Return last element divided by / of url
+ * @returns {unresolved}
+ */
+function lastPath(){
+    var pathArray = window.location.pathname.split( '/' );
+    var path=pathArray[pathArray.length-1];
+    return path;
+}
+
+function redirect(location){
+    window.location=location;
+}

@@ -57,10 +57,10 @@
             }
 
             $(document).ready(function() {
-
+                var seed=lastPath();
                 var query = initSparqlerQuery();
                 // passes standard JSON results object to success callback
-                var qEntities = "SELECT DISTINCT ?entity ?e {?entity a coeus:Entity . ?entity dc:title ?e . }";
+                var qEntities = "SELECT DISTINCT ?entity ?e {"+seed+" coeus:includes ?entity . ?entity dc:title ?e . }";
 
                 query.query(qEntities,
                         {success: function(json) {
@@ -86,10 +86,8 @@
                             }}
                 );
                 //header name
-                $.get('../home/config', function(config, status) {
-                    console.log(config);
-                    $('#header').append('<h1>' + config.config.name + '<small> ' + config.config.environment + '</small></h1>');
-                }, 'json');
+                var path=lastPath();
+                $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
             });
         </script>
     </s:layout-component>
@@ -106,7 +104,7 @@
                 </div>
                 <div class="span6 text-right" >
                     <div class="btn-group">
-                        <a href="../entity/add" class="btn btn-success">Add Entity</a>
+                        <a onclick="redirect('../entity/add/'+lastPath())" class="btn btn-success">Add Entity</a>
                     </div>
                 </div>
 

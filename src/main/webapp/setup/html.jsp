@@ -10,7 +10,7 @@
             <title><s:layout-component name="title">COEUS Setup</s:layout-component></title>
             <s:layout-component name="style">
                 <jsp:include page="/layout/style.jsp" />
-            </s:layout-component>
+            </s:layout-component>            
         </head>
         <body>
             <noscript>
@@ -25,22 +25,22 @@
 
                         <div class="nav-collapse collapse">
                             <ul class="nav">
-                                <li class="active"><a href="<c:url value="/manager/home/" />">Home</a></li>
+                                <li class="active"><a href="<c:url value="/manager/seed/" />">Home</a></li>
 
-                                <li><a href="<c:url value="/manager/seed.jsp" />">Seed</a></li>
+                                <li><a href="<c:url value="/manager/seed/" />">Seeds</a></li>
 
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Setup <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="../entity/">Entities</a></li>
-                                        <li><a href="#">Concepts</a></li>
-                                        <li><a href="#">Resources</a></li>
+                                        <li><a id="entity" href="../entity/${actionBean.method}">Entities</a></li>
+                                        <li><a href="../concept/">Concepts</a></li>
+                                        <li><a href="../resource/">Resources</a></li>
                                         <li class="divider"></li>
                                         <li><a href="#">View All</a></li>
                                     </ul>
                                 </li>
 
-                                <li><a href="<c:url value="/manager/management.jsp" />">Management</a></li>
+                                <li><a href="<c:url value="/manager/management/" />">Management</a></li>
 
                                 <li><a href="<c:url value="/documentation/" />">Documentation</a></li>
 

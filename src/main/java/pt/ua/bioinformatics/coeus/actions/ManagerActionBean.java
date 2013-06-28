@@ -17,51 +17,94 @@ import org.json.simple.parser.ParseException;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
 
-
 /**
  *
  * @author sernadela
  */
-@UrlBinding("/manager/home/{param}")
-public class ManagerActionBean implements ActionBean{
-    private static final String VIEW="/setup/index.jsp";
-    private String name;
-    private String param;
+@UrlBinding("/manager/{model}/{method}")
+public class ManagerActionBean implements ActionBean {
+
+    private static final String INDEX_VIEW = "/setup/index.jsp";
+    private static final String SEEDS_VIEW = "/setup/seeds.jsp";
+    private static final String SEEDS_ADD_VIEW = "/setup/addseed.jsp";
+    private static final String ENTITY_ADD_VIEW = "/setup/addentity.jsp";
+    private static final String ENTITIES_VIEW = "/setup/entities.jsp";
+    private static final String CONCEPT_ADD_VIEW = "/setup/addconcept.jsp";
+    private static final String CONCEPTS_VIEW = "/setup/concepts.jsp";
+    private static final String NOTFOUND_VIEW = "/setup/404.jsp";
+    private String method;
+    private String model;
     private ActionBeanContext context;
 
     @DefaultHandler
-    public Resolution handle() throws ParseException{
-        setName(Config.getName());
-        if(param==null)
-        return new ForwardResolution(VIEW);
-        else {
-            Boot.start();
-            return new StreamingResolution("application/json", Config.getFile().toJSONString());
+    public Resolution handle() {
+
+
+        if (model.equals("entity")) {
+            if (method.startsWith("add")) {
+                return new ForwardResolution(ENTITY_ADD_VIEW);
+            } else {
+                return new ForwardResolution(ENTITIES_VIEW);
+            }
+        } else if (model.equals("concept")) {
+            if (method.startsWith("add")) {
+                return new ForwardResolution(CONCEPT_ADD_VIEW);
+            } else {
+                return new ForwardResolution(CONCEPTS_VIEW);
+            }
+        } 
+        else if (model.equals("seed")) {
+            //if (method.equals("add")) return new ForwardResolution(SEEDS_ADD_VIEW);
+            //else
+            if(method==null) return new ForwardResolution(SEEDS_VIEW);
+            else return new ForwardResolution(INDEX_VIEW);
+            
+        }else {
+            return new ForwardResolution(NOTFOUND_VIEW);
         }
-    }
+
+        //setName(Config.getName());
+        /*if(model==null) return new ForwardResolution(SEEDS_VIEW);
+         //else if(model.equals("seeds")) {return new ForwardResolution(SEEDS);}
+         else{
+         if(model.equals("entity")){ 
+         if(method.equals("add"))
+         return new ForwardResolution(ENTITY_ADD_VIEW);
+         else return new ForwardResolution(ENTITIES_VIEW);
+         }
+         else if(model.equals("concept")){ 
+         if(method.equals("add"))
+         return new ForwardResolution(CONCEPT_ADD_VIEW);
+         else return new ForwardResolution(CONCEPTS_VIEW);
+         }
+         else {return new ForwardResolution(INDEX_VIEW);}
+         //Boot.start();
+         //return new StreamingResolution("application/json", Config.getFile().toJSONString());
+         */
     
-    public String getParam() {
-        return param;
+}
+    public String getModel() {
+        return model;
     }
 
-    public void setParam(String param) {
-        this.param = param;
+    public void setModel(String model) {
+        this.model = model;
     }
 
-    public String getName() {
-        return name;
+    public String getMethod() {
+        return method;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     @Override
-    public void setContext(ActionBeanContext actionBeanContext) {
+        public void setContext(ActionBeanContext actionBeanContext) {
         this.context=actionBeanContext;}
 
     @Override
-    public ActionBeanContext getContext() {
+        public ActionBeanContext getContext() {
         return context;
     }
     

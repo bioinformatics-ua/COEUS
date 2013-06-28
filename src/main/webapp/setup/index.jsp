@@ -10,6 +10,7 @@
     <s:layout-component name="custom_scripts">
         <script src="<c:url value="/assets/js/jquery.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
+        <script src="<c:url value="/assets/js/coeus.api.js" />"></script>
         <script type="text/javascript">
             /*function appendConcept(data, query, key) {
              $.get(query, function(dataconcepts, status) {
@@ -66,18 +67,20 @@
                         console.log('Append on #' + entity + ': ' + c);
                     }});
             }
+            
+            function selectEntity(){
+                var path=lastPath();
+                window.location="../entity/"+path;
+            }
 
             $(document).ready(function() {
-
-                //fillEntities();
-                var sparqler = new SPARQL.Service("../../sparql");
-                sparqler.setPrefix("dc", "http://purl.org/dc/elements/1.1/");
-                sparqler.setPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-                sparqler.setPrefix("coeus", "http://bioinformatics.ua.pt/coeus/resource/");
-
-                var query = sparqler.createQuery();
+                //get seed from url
+                var seed=lastPath();
+                $('#header').append('<h1>'+seed+'<small> enviroment</small></h1>');
+               
+                var query = initSparqlerQuery();
                 // passes standard JSON results object to success callback
-                var qEntities = "SELECT DISTINCT ?e ?entity {?concept coeus:hasEntity ?entity . ?entity dc:title ?e . }";
+                var qEntities = "SELECT DISTINCT ?entity ?e ?s {"+seed+" coeus:includes ?entity . ?concept coeus:hasEntity ?entity . ?entity dc:title ?e . }";
 
                 query.query(qEntities,
                         {success: function(json) {
@@ -101,10 +104,10 @@
                             }}
                 );
              //header name
-             $.get('../home/config', function(config, status) {
-                console.log(config);        
-                $('#header').append('<h1>'+config.config.name+'<small> '+config.config.environment+'</small></h1>');
-             }, 'json'); 
+             //$.get('../home/config', function(config, status) {
+             //   console.log(config);        
+                
+            // }, 'json'); 
             });
         </script>
     </s:layout-component>
@@ -113,7 +116,7 @@
         <div class="container">
             <br><br>
             <div id="header" class="page-header">
-                <!--<h1>${actionBean.name} <small>Production</small></h1>-->
+                
             </div>
 
             <div class="row-fluid">
@@ -179,6 +182,7 @@
                         </div>
                         <div class="span4">
                             <div class="btn-group">
+                                <a onclick="selectEntity();" class="btn ">Manage</a>
                                 <a href="../manager/entity/" class="btn btn-info">Add new Entity</a>
                             </div>
                         </div>

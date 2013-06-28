@@ -16,28 +16,10 @@
 
             $(document).ready(function() {
 
-                var sparqler = new SPARQL.Service("../../sparql");
-                sparqler.setPrefix("dc", "http://purl.org/dc/elements/1.1/");
-                sparqler.setPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-                sparqler.setPrefix("coeus", "http://bioinformatics.ua.pt/coeus/resource/");
-
-                var query = sparqler.createQuery();
-                // passes standard JSON results object to success callback
-                var qSeed = "SELECT DISTINCT ?s ?seed {?e coeus:isIncludedIn ?seed . ?seed dc:title ?s . }";
-
-                query.query(qSeed,
-                        {success: function(json) {
-                                for (var key = 0, size = json.results.bindings.length; key < size; key++) {
-                                    $('#seed').append('<option>' + json.results.bindings[key].s.value + '</option>');
-                                }
-
-                            }}
-                );
                 //header name
-                $.get('../home/config', function(config, status) {
-                    console.log(config);
-                    $('#header').append('<h1>' + config.config.name + '<small> ' + config.config.environment + '</small></h1>');
-                }, 'json');
+                var path=lastPath();
+                $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
+                
                 //activate tooltip (bootstrap-tooltip.js is need)
                 $('.icon-question-sign').tooltip();
             });
@@ -68,7 +50,7 @@
                 var predSeed = "coeus:isIncludedIn";
                 var predComment = "rdfs:comment";
 
-                var urlWrite = "../../api/" + getApiKey() + "/write/";
+                var urlWrite = "../../../api/" + getApiKey() + "/write/";
 
                 // verify all fields:
                 var empty = false;
@@ -90,7 +72,7 @@
                     callAPI(urlWrite + individual + "/" + predType + "/coeus:" + type, '#result');
                     callAPI(urlWrite + individual + "/" + predTitle + "/xsd:string:" + title, '#result');
                     callAPI(urlWrite + individual + "/" + predLabel + "/xsd:string:" + label, '#result');
-                    callAPI(urlWrite + individual + "/" + predSeed + "/coeus:seed_" + seed, '#result');
+                    callAPI(urlWrite + individual + "/" + predSeed + "/" + lastPath(), '#result');
                     callAPI(urlWrite + individual + "/" + predComment + "/xsd:string:" + comment, '#result');
 
                     // /api/coeus/write/coeus:uniprot_Q13428/dc:title/Q13428
@@ -128,9 +110,7 @@
                         <label class="control-label" for="label">Label</label>
                         <input id="label" type="text" placeholder="Ex: Uniprot Entity"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:label property" ></i>
                     </div>
-                    <label>coeus:isIncludedIn</label>
-                    <select id="seed">
-                    </select>
+                   
                     <br/>
                     <div class="span4">
                         <button  type="button" id="submit" class="btn btn-success">Add <i class="icon-plus icon-white"></i> </button>
