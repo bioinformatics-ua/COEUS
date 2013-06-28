@@ -10,20 +10,55 @@
     <s:layout-component name="custom_scripts">
         <script src="<c:url value="/assets/js/jquery.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
+        <script src="<c:url value="/assets/js/coeus.api.js" />"></script>
         <script type="text/javascript">
-            function deleteEntity(entity){
-                alert(entity);
+
+            function selectEntity(entity) {
+                $('#removeModalLabel').html('coeus:entity_' + entity.split(' ').join('_'));
+            }
+            function removeEntity() {
+                var entity = $('#removeModalLabel').html();
+                var query = initSparqlerQuery();
+                console.log('Remove: ' + entity);
+                //remove all predicates and objects associated.
+                var qEntity = "SELECT ?predicate ?object {" + entity + " ?predicate ?object . }";
+                query.query(qEntity,
+                        {success: function(json) {
+                                var result = json.results.bindings;
+                                console.log(result);
+                                for (r in result) {
+                                    var splitedPredicate = splitURIPrefix(result[r].predicate.value);
+                                    var splitedObject = splitURIPrefix(result[r].object.value);
+
+                                    var predicatePrefix = getPrefix(splitedPredicate.namespace);
+                                    if (predicatePrefix !== '')
+                                        predicatePrefix = predicatePrefix + ':';
+                                    var objectPrefix = getPrefix(splitedObject.namespace);
+                                    if (objectPrefix !== '')
+                                        objectPrefix = objectPrefix + ':';
+                                    else objectPrefix = 'xsd:string:' + objectPrefix ;
+
+                                    var url = entity + '/' + predicatePrefix + splitedPredicate.value + '/' + objectPrefix + splitedObject.value;
+                                    var urlDelete = "../../api/" + getApiKey() + "/delete/";
+                                    console.log(urlDelete + url);
+                                    callAPI(urlDelete+url,"#result");
+
+                                }
+                                
+                            }}
+                );
+                //remove all subjects and predicates associated.
+                // TODO
+                
+                //if success refresh page
+                if (document.getElementById('result').className === 'alert alert-success') {                    
+                    window.location="../entity/";
+                 }
             }
 
             $(document).ready(function() {
 
-                //fillEntities();
-                var sparqler = new SPARQL.Service("../../sparql");
-                sparqler.setPrefix("dc", "http://purl.org/dc/elements/1.1/");
-                sparqler.setPrefix("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-                sparqler.setPrefix("coeus", "http://bioinformatics.ua.pt/coeus/resource/");
-
-                var query = sparqler.createQuery();
+                var query = initSparqlerQuery();
                 // passes standard JSON results object to success callback
                 var qEntities = "SELECT DISTINCT ?entity ?e {?entity a coeus:Entity . ?entity dc:title ?e . }";
 
@@ -35,8 +70,13 @@
                                     var a = '<tr><td><a href=' + json.results.bindings[key].entity.value + '>'
                                             + json.results.bindings[key].entity.value + '</a></td><td>'
                                             + json.results.bindings[key].e.value + '</td><td>'
-                                            + '<a href="#deleteModal" role="button" data-toggle="modal" onclick="deleteEntity(\''+json.results.bindings[key].e.value+'\')">Delete</a>'
-                                            +'</td></tr>';
+                                            +'<div class="btn-group">'
+                                                +'<button class="btn btn">Edit</button>'
+                                                +'<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</button>'
+                                            +'</div>'
+                                            +' <button class="btn btn-info">View Concepts</button>'
+                                            //+ '<a href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</a>'
+                                            + '</td></tr>';
                                     $('#entities').append(a);
 
                                 }
@@ -66,7 +106,7 @@
                 </div>
                 <div class="span6 text-right" >
                     <div class="btn-group">
-                        <a href="../entity/add" class="btn btn-info">Add Entity</a>
+                        <a href="../entity/add" class="btn btn-success">Add Entity</a>
                     </div>
                 </div>
 
@@ -85,23 +125,30 @@
                     </tbody>
                 </table>
 
-<!-- Button to trigger modal -->
+                <!-- Button to trigger modal -->
 
- 
-<!-- Modal -->
-<div id="deleteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-    <h3 id="myModalLabel">Delete Entity</h3>
-  </div>
-  <div class="modal-body">
-    <p>One fine body..</p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary">Save changes</button>
-  </div>
-</div>
+
+                <!-- Modal -->
+                <div id="removeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button id="closeRemoveModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 >Remove Entity</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure do you want to remove the <strong><a class="text-error" id="removeModalLabel"></a></strong> entity?</p>
+                        <p class="text-warning">Warning: All dependents triples are removed too.</p>
+
+                        <div id="result">
+
+                        </div>
+                        
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button class="btn btn-danger" onclick="removeEntity();">Remove</button>
+                    </div>
+                </div>
 
             </div>
 

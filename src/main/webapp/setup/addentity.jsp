@@ -10,6 +10,7 @@
     <s:layout-component name="custom_scripts">
         <script src="<c:url value="/assets/js/jquery.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
+        <script src="<c:url value="/assets/js/coeus.api.js" />"></script>
         <script src="<c:url value="/assets/js/bootstrap-tooltip.js" />"></script>
         <script type="text/javascript">
 
@@ -44,10 +45,10 @@
             $('#submit').click(function() {
                 submit();
                 //if one fail the others fails too
-                if (document.getElementById('typeResult').className === 'alert alert-error') {
+                if (document.getElementById('result').className === 'alert alert-error') {
                     $('#callModal').click();
                 }
-                if (document.getElementById('typeResult').className === 'alert alert-success') {
+                if (document.getElementById('result').className === 'alert alert-success') {
                     window.location = "../entity/";
                 }
             });
@@ -67,8 +68,7 @@
                 var predSeed = "coeus:isIncludedIn";
                 var predComment = "rdfs:comment";
 
-                var apikey = "coeus";
-                var urlWrite = "../../api/" + apikey + "/write/";
+                var urlWrite = "../../api/" + getApiKey() + "/write/";
 
                 // verify all fields:
                 var empty = false;
@@ -86,11 +86,12 @@
                 }
                 if (!empty) {
 
-                    callAPI(urlWrite + individual + "/" + predType + "/coeus:" + type, '#typeResult');
-                    callAPI(urlWrite + individual + "/" + predTitle + "/xsd:string:" + title, '#titleResult');
-                    callAPI(urlWrite + individual + "/" + predLabel + "/xsd:string:" + label, '#labelResult');
-                    callAPI(urlWrite + individual + "/" + predSeed + "/coeus:seed_" + seed, '#seedResult');
-                    callAPI(urlWrite + individual + "/" + predComment + "/xsd:string:" + comment, '#commentResult');
+                    callAPI(urlWrite + individual + "/" + predType + "/owl:NamedIndividual", '#result');
+                    callAPI(urlWrite + individual + "/" + predType + "/coeus:" + type, '#result');
+                    callAPI(urlWrite + individual + "/" + predTitle + "/xsd:string:" + title, '#result');
+                    callAPI(urlWrite + individual + "/" + predLabel + "/xsd:string:" + label, '#result');
+                    callAPI(urlWrite + individual + "/" + predSeed + "/coeus:seed_" + seed, '#result');
+                    callAPI(urlWrite + individual + "/" + predComment + "/xsd:string:" + comment, '#result');
 
                     // /api/coeus/write/coeus:uniprot_Q13428/dc:title/Q13428
                     //window.location = "../entity/";
@@ -98,24 +99,7 @@
 
 
             }
-            function callAPI(url, html) {
-
-                $.ajax({url: url, async: false, dataType: 'json'}).done(function(data) {
-                    console.log(url + ' ' + data.status);
-                    if (data.status === 100) {
-                        $(html).html('Call: ' + url + '<br/> Message: ' + data.message);
-                        $(html).addClass('alert alert-success');
-                    } else {
-                        $(html).html(url + '<br/>Status: ' + data.status + ' Message: ' + data.message);
-                        $(html).addClass('alert alert-error');
-                    }
-
-                }).fail(function(jqXHR, textStatus) {
-                    $(html).addClass('alert alert-error');
-                    $(html).html(url + '<br/> ' + 'ERROR: ' + textStatus);
-                    // Server communication error function handler.
-                });
-            }
+            
             function changeURI(value) {
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
                 document.getElementById('uri').innerHTML = 'coeus:entity_' + value.split(' ').join('_');
@@ -140,7 +124,7 @@
                         <label class="control-label" for="title">Title</label>
                         <input id="title" type="text" placeholder="Ex: Uniprot" onkeyup="changeURI(this.value);" > <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the dc:title property" ></i>
                     </div>
-                    <div id="labelForm">
+                    <div id="labelForm"> 
                         <label class="control-label" for="label">Label</label>
                         <input id="label" type="text" placeholder="Ex: Uniprot Entity"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:label property" ></i>
                     </div>
@@ -177,7 +161,10 @@
                 <h3 id="myModalLabel">Output</h3>
             </div>
             <div class="modal-body">
-                <div id="titleResult">
+                <div id="result">
+
+                </div>
+               <!-- <div id="titleResult">
 
                 </div>
                 <div id="labelResult">
@@ -191,7 +178,7 @@
                 </div>
                 <div id="typeResult">
 
-                </div>
+                </div>-->
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
