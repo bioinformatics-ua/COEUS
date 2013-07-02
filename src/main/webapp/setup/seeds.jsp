@@ -31,8 +31,8 @@
                                         +'<a href="./'+seed+'" class="btn btn-primary icon  pull-right">Select</a>'
                                         +'<h4>'+result[key].s.value+'</h4>'
                                         +'<small><b>URI: </b><a href="'+result[key].seed.value+'">'+seed+'</a></small>'
-                                        +'<a href="#" class="pull-right"><i class="icon-remove"></i></a>'
-                                        +'<a href="#" class="pull-right"><i class="icon-edit"></i> </a>'
+                                        +'<a href="#removeModal" class="pull-right" data-toggle="modal" onclick="selectSeed(\''+seed+'\');"><i class="icon-remove"></i></a>'
+                                        +'<a href="'+'../seed/edit/'+seed+'" class="pull-right"><i class="icon-edit"></i> </a>'
                                         +'</div></div></li>';
                                     $('#seeds').append(a);
 
@@ -43,6 +43,23 @@
 
 
             });
+            
+            
+            function selectSeed(seed) {
+                $('#removeModalLabel').html(seed);
+            }
+            function removeSeed() {
+                var seed = $('#removeModalLabel').html();
+                //var query = initSparqlerQuery();
+                console.log('Remove: ' + seed);
+                
+                var urlPrefix = "../../api/" + getApiKey();
+                //remove all subjects and predicates associated.
+                removeAllTriplesFromObject(urlPrefix,seed);
+                //remove all predicates and objects associated.            
+                removeAllTriplesFromSubject(urlPrefix,seed);
+
+            }
         </script>
     </s:layout-component>
     <s:layout-component name="body">
@@ -55,7 +72,7 @@
             </div>
             <div class=" text-right" >
                 <div class="btn-group">
-                    <a href="../seeds/add" class="btn btn-success">Add <i class="icon-plus icon-white"></i></a>
+                    <a href="../seed/add/" class="btn btn-success">Add <i class="icon-plus icon-white"></i></a>
                 </div>
             </div>
             <ul id="seeds" class="thumbnails">
@@ -63,5 +80,27 @@
             </ul>
 
         </div>
+        
+                        <!-- Modal -->
+                <div id="removeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button id="closeRemoveModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 >Remove Seed</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure do you want to remove the <strong><a class="text-error" id="removeModalLabel"></a></strong> seed?</p>
+                        <p class="text-warning">Warning: All dependents triples are removed too.</p>
+
+                        <div id="result">
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button class="btn btn-danger" onclick="removeSeed();">Remove</button>
+                    </div>
+                </div>
     </s:layout-component>
 </s:layout-render>

@@ -54,9 +54,8 @@ public class ManagerActionBean implements ActionBean {
             }
         } 
         else if (model.equals("seed")) {
-            //if (method.equals("add")) return new ForwardResolution(SEEDS_ADD_VIEW);
-            //else
             if(method==null) return new ForwardResolution(SEEDS_VIEW);
+            else if (method.equals("add") | method.startsWith("edit")) return new ForwardResolution(SEEDS_ADD_VIEW);
             else return new ForwardResolution(INDEX_VIEW);
             
         }else {
