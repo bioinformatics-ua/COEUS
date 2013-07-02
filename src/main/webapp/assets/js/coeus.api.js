@@ -75,7 +75,7 @@ function deleteTriple(subject, predicate, object, key) {
  * init service prefix
  * @returns {query} */
 function initSparqlerQuery() {
-    var sparqler = new SPARQL.Service("../../sparql");
+    var sparqler = new SPARQL.Service("/coeus/sparql");
 
     var prefixes = getPrefixURI();
     for (var key in prefixes) {
@@ -107,7 +107,8 @@ function getPrefix(uri) {
     var prefixes = getPrefixURI();
 
     for (var key in prefixes) {
-        if (prefixes[key] === uri) return key;   
+        if (prefixes[key] === uri)
+            return key;
     }
     return '';
 }
@@ -147,29 +148,115 @@ function callAPI(url, html) {
             //$(html).append('Call: ' + url + '<br/> Message: ' + data.message+'<br/><br/>');
             $(html).addClass('alert alert-success');
         } else {
-            $(html).append('Call: '+url + '<br/>Status: ' + data.status + ' Message: ' + data.message+'<br/><br/>');
             $(html).addClass('alert alert-error');
+            $(html).append('Call: ' + url + '<br/>Status: ' + data.status + ' Message: ' + data.message + '<br/><br/>');
         }
 
     }).fail(function(jqXHR, textStatus) {
         $(html).addClass('alert alert-error');
-        $(html).html('Call: '+url + '<br/> ' + 'ERROR: ' + textStatus+'<br/><br/>');
+        $(html).append('Call: ' + url + '<br/> ' + 'ERROR: ' + textStatus + '<br/><br/>');
         // Server communication error function handler.
     });
 }
 function getApiKey() {
-   return "coeus";
+    return "coeus";
 }
 /**
  * Return last element divided by / of url
  * @returns {unresolved}
  */
-function lastPath(){
-    var pathArray = window.location.pathname.split( '/' );
-    var path=pathArray[pathArray.length-1];
+function lastPath() {
+    var pathArray = window.location.pathname.split('/');
+    var path = pathArray[pathArray.length - 1];
     return path;
 }
 
-function redirect(location){
-    window.location=location;
+/**
+ * Return penultimate element divided by / of url
+ * @returns {unresolved}
+ */
+function penulPath() {
+    var pathArray = window.location.pathname.split('/');
+    var path = pathArray[pathArray.length - 2];
+    return path;
+}
+
+function redirect(location) {
+    window.location = location;
+}
+/**
+ * 
+ * remove all subjects and predicates associated.
+ * 
+ * example urlPrefix = "../../api/" + getApiKey() ;
+ * 
+ * @param {type} urlPrefix
+ * @param {type} object
+ * @returns {undefined}
+ */
+function removeAllTriplesFromObject(urlPrefix, object) {
+    var query = initSparqlerQuery();
+    var qObject = "SELECT ?subject ?predicate {?subject ?predicate " + object + " . }";
+    query.query(qObject,
+            {success: function(json) {
+                    var result = json.results.bindings;
+                    console.log(result);
+                    for (r in result) {
+                        var splitedPredicate = splitURIPrefix(result[r].predicate.value);
+                        var splitedSubject = splitURIPrefix(result[r].subject.value);
+
+                        var predicatePrefix = getPrefix(splitedPredicate.namespace);
+                        if (predicatePrefix !== '')
+                            predicatePrefix = predicatePrefix + ':';
+                        var objectPrefix = getPrefix(splitedSubject.namespace);
+                        if (objectPrefix !== '')
+                            objectPrefix = objectPrefix + ':';
+                        else
+                            objectPrefix = 'xsd:string:' + objectPrefix;
+
+                        var url = "/delete/"+ objectPrefix + splitedSubject.value + '/' + predicatePrefix + splitedPredicate.value + '/' + object;
+                        callAPI(urlPrefix + url, "#result");
+
+                    }
+
+
+                }}
+    );
+
+}
+
+function removeAllTriplesFromSubject(urlPrefix, subject) {
+    var query = initSparqlerQuery();
+    var qSubject = "SELECT ?predicate ?object {" + subject + " ?predicate ?object . }";
+    query.query(qSubject,
+            {success: function(json) {
+                    var result = json.results.bindings;
+                    console.log(result);
+                    for (r in result) {
+                        var splitedPredicate = splitURIPrefix(result[r].predicate.value);
+                        var splitedObject = splitURIPrefix(result[r].object.value);
+
+                        var predicatePrefix = getPrefix(splitedPredicate.namespace);
+                        if (predicatePrefix !== '')
+                            predicatePrefix = predicatePrefix + ':';
+                        var objectPrefix = getPrefix(splitedObject.namespace);
+                        if (objectPrefix !== '')
+                            objectPrefix = objectPrefix + ':';
+                        else
+                            objectPrefix = 'xsd:string:' + objectPrefix;
+
+                        var url = "/delete/"+ subject + '/' + predicatePrefix + splitedPredicate.value + '/' + objectPrefix + splitedObject.value;
+
+                        callAPI(urlPrefix + url, "#result");
+
+                    }
+
+                    //if success refresh page
+                    if (document.getElementById('result').className !== 'alert alert-error') {
+                        // window.location="../entity/"+lastPath();
+                        console.log("REDIRECTING...");
+                        window.location.reload(true);
+                    }
+                }}
+    );
 }

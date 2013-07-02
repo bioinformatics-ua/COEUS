@@ -17,22 +17,56 @@
             $(document).ready(function() {
 
                 //header name
-                var path=lastPath();
-                $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
-                
+                var path = lastPath();
+                $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
+
+                //if the type mode is EDIT
+                if (penulPath() === 'edit') {
+                    $('#type').html("Edit Entity:");
+                    $('#submit').html('Edit <i class="icon-edit icon-white"></i>');
+
+                    var query = initSparqlerQuery();
+                    var q = "SELECT ?seed ?title ?label ?comment {" + path + " coeus:isIncludedIn ?seed . " + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . }";
+                    query.query(q,
+                            {success: function(json) {
+                                    //var resultTitle = json.results.bindings[0].title;
+                                    console.log(json);
+                                    $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
+                                    //PUT VALUES IN THE INPUT FIELD
+                                    $('#title').val(json.results.bindings[0].title.value);
+                                    changeURI(json.results.bindings[0].title.value);
+                                    document.getElementById('title').setAttribute("disabled");
+                                    $('#label').val(json.results.bindings[0].label.value);
+                                    $('#comment').val(json.results.bindings[0].comment.value);
+                                    //PUT OLD VALUES IN THE STATIC FIELD
+                                    //$('#titleForm').append('<input type="hidden" id="'+'oldTitle'+'" value="'+$('#title').val()+'"/>');
+                                    $('#labelForm').append('<input type="hidden" id="' + 'oldLabel' + '" value="' + $('#label').val() + '"/>');
+                                    $('#commentForm').append('<input type="hidden" id="' + 'oldComment' + '" value="' + $('#comment').val() + '"/>');
+                                }}
+                    );
+                }
+                //end of EDIT
+
                 //activate tooltip (bootstrap-tooltip.js is need)
                 $('.icon-question-sign').tooltip();
             });
 
             $('#submit').click(function() {
-                submit();
+                //EDIT
+                if (penulPath() === 'edit') {
+                    update();
+                } else {
+                    //ADD
+                    submit();
+                }
                 //if one fail the others fails too
                 if (document.getElementById('result').className === 'alert alert-error') {
                     $('#callModal').click();
                 }
                 if (document.getElementById('result').className === 'alert alert-success') {
-                    window.location = "../entity/";
+                    window.location = document.referrer;
                 }
+
             });
 
             function submit() {
@@ -41,7 +75,6 @@
                 var individual = $('#uri').html();
                 var title = $('#title').val();
                 var label = $('#label').val();
-                var seed = $('#seed').val();
                 var comment = $('#comment').val();
 
                 var predType = "rdf:type";
@@ -49,6 +82,7 @@
                 var predLabel = "rdfs:label";
                 var predSeed = "coeus:isIncludedIn";
                 var predComment = "rdfs:comment";
+                var seedIncludes = "coeus:includes";
 
                 var urlWrite = "../../../api/" + getApiKey() + "/write/";
 
@@ -68,11 +102,13 @@
                 }
                 if (!empty) {
 
+
                     callAPI(urlWrite + individual + "/" + predType + "/owl:NamedIndividual", '#result');
                     callAPI(urlWrite + individual + "/" + predType + "/coeus:" + type, '#result');
                     callAPI(urlWrite + individual + "/" + predTitle + "/xsd:string:" + title, '#result');
-                    callAPI(urlWrite + individual + "/" + predLabel + "/xsd:string:" + label, '#result');
                     callAPI(urlWrite + individual + "/" + predSeed + "/" + lastPath(), '#result');
+                    callAPI(urlWrite + lastPath() + "/" + seedIncludes + "/" + individual, '#result');
+                    callAPI(urlWrite + individual + "/" + predLabel + "/xsd:string:" + label, '#result');
                     callAPI(urlWrite + individual + "/" + predComment + "/xsd:string:" + comment, '#result');
 
                     // /api/coeus/write/coeus:uniprot_Q13428/dc:title/Q13428
@@ -81,7 +117,15 @@
 
 
             }
-            
+            function update() {
+                var urlUpdate = "../../../api/" + getApiKey() + "/update/";
+                if ($('#oldLabel').val() !== $('#label').val())
+                    callAPI(urlUpdate + lastPath() + "/" + "rdfs:label" + "/xsd:string:" + $('#oldLabel').val() + ",xsd:string:" + $('#label').val(), '#result');
+                if ($('#oldComment').val() !== $('#comment').val())
+                    callAPI(urlUpdate + lastPath() + "/" + "rdfs:comment" + "/xsd:string:" + $('#oldComment').val() + ",xsd:string:" + $('#comment').val(), '#result');
+
+            }
+
             function changeURI(value) {
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
                 document.getElementById('uri').innerHTML = 'coeus:entity_' + value.split(' ').join('_');
@@ -98,7 +142,7 @@
             <p class="lead" >Entity URI - <a class="lead" id="uri">coeus: </a></p>
 
             <div class="row-fluid">
-                <h4>New Entity: </h4>
+                <h4 id="type" >New Entity: </h4>
                 <div class="span4" >
 
 
@@ -110,13 +154,13 @@
                         <label class="control-label" for="label">Label</label>
                         <input id="label" type="text" placeholder="Ex: Uniprot Entity"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:label property" ></i>
                     </div>
-                   
+
                     <br/>
                     <div class="span4">
                         <button  type="button" id="submit" class="btn btn-success">Add <i class="icon-plus icon-white"></i> </button>
                     </div>
                     <div class="span4">
-                        <button type="button" id="done" class="btn btn-danger" onclick="window.location = '../entity/';">Cancel</button>
+                        <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel</button>
                     </div>
                 </div>
                 <div class="span8"></div>
@@ -144,21 +188,21 @@
                 <div id="result">
 
                 </div>
-               <!-- <div id="titleResult">
-
-                </div>
-                <div id="labelResult">
-
-                </div>
-                <div id="commentResult">
-
-                </div>
-                <div id="seedResult">
-
-                </div>
-                <div id="typeResult">
-
-                </div>-->
+                <!-- <div id="titleResult">
+ 
+                 </div>
+                 <div id="labelResult">
+ 
+                 </div>
+                 <div id="commentResult">
+ 
+                 </div>
+                 <div id="seedResult">
+ 
+                 </div>
+                 <div id="typeResult">
+ 
+                 </div>-->
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

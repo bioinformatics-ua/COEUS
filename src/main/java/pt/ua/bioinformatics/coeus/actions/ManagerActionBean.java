@@ -41,7 +41,7 @@ public class ManagerActionBean implements ActionBean {
 
 
         if (model.equals("entity")) {
-            if (method.startsWith("add")) {
+            if (method.startsWith("add") | method.startsWith("edit")) {
                 return new ForwardResolution(ENTITY_ADD_VIEW);
             } else {
                 return new ForwardResolution(ENTITIES_VIEW);
