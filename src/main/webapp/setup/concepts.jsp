@@ -13,44 +13,56 @@
         <script src="<c:url value="/assets/js/coeus.api.js" />"></script>
         <script type="text/javascript">
 
-            function selectEntity(entity) {
-                $('#removeModalLabel').html('coeus:entity_' + entity.split(' ').join('_'));
+            function selectConcept(concept) {
+                $('#removeModalLabel').html('coeus:concept_' + concept.split(' ').join('_'));
             }
-            function removeEntity() {
-                var entity = $('#removeModalLabel').html();
+            function removeConcept() {
+                var concept = $('#removeModalLabel').html();
                 //var query = initSparqlerQuery();
-                console.log('Remove: ' + entity);
+                console.log('Remove: ' + concept);
                 
                 var urlPrefix = "../../api/" + getApiKey();
                 //remove all subjects and predicates associated.
-                removeAllTriplesFromObject(urlPrefix,entity);
+                removeAllTriplesFromObject(urlPrefix,concept);
                 //remove all predicates and objects associated.            
-                removeAllTriplesFromSubject(urlPrefix,entity);
+                removeAllTriplesFromSubject(urlPrefix,concept);
 
             }
 
             $(document).ready(function() {
-                var seed = lastPath();
+                var entity = lastPath();
                 var query = initSparqlerQuery();
-                // passes standard JSON results object to success callback
-                var qEntities = "SELECT DISTINCT ?entity ?e {" + seed + " coeus:includes ?entity . ?entity dc:title ?e . }";
+                
+                var qconcept = "SELECT DISTINCT ?seed {" + entity + " coeus:isIncludedIn ?seed }";
 
-                query.query(qEntities,
+                query.query(qconcept,
+                        {success: function(json) {
+                                var seed=json.results.bindings[0].seed.value;
+                                seed="coeus:"+splitURIPrefix(seed).value;
+                                $('#breadSeed').html('<a href="../seed/'+seed+'">Seed</a> <span class="divider">/</span>');
+                                $('#breadEntity').html('<a href="../entity/'+seed+'">Entities</a> <span class="divider">/</span>');   
+                    }}
+                );
+                
+                var qconcept = "SELECT DISTINCT ?concept ?c {" + entity + " coeus:isEntityOf ?concept . ?concept dc:title ?c . }";
+
+                query.query(qconcept,
                         {success: function(json) {
                                 // fill Entities
 
                                 for (var key = 0, size = json.results.bindings.length; key < size; key++) {
-                                    var a = '<tr><td><a href=' + json.results.bindings[key].entity.value + '>'
-                                            + json.results.bindings[key].entity.value + '</a></td><td>'
-                                            + json.results.bindings[key].e.value + '</td><td>'
+                                    var a = '<tr><td><a href=' + json.results.bindings[key].concept.value + '>'
+                                            + json.results.bindings[key].concept.value + '</a></td><td>'
+                                            + json.results.bindings[key].c.value + '</td><td>'
                                             + '<div class="btn-group">'
-                                            + '<a class="btn btn" href="../entity/edit/coeus:'+splitURIPrefix(json.results.bindings[key].entity.value).value+'">Edit</a>'
-                                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</button>'
+                                            + '<a class="btn btn" href="../concept/edit/coeus:'+splitURIPrefix(json.results.bindings[key].concept.value).value+'">Edit</a>'
+                                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectConcept(\'' + json.results.bindings[key].c.value + '\')">Remove</button>'
                                             + '</div>'
-                                            + ' <button class="btn btn-info">View Concepts</button>'
+                                            + ' <a class="btn btn-info">Resources</a>'
+                                            + ' <a class="btn btn-warning">Extensions</a>'
                                             //+ '<a href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</a>'
                                             + '</td></tr>';
-                                    $('#entities').append(a);
+                                    $('#concepts').append(a);
 
                                 }
 
@@ -61,6 +73,7 @@
                 //header name
                 var path = lastPath();
                 $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
+                
             });
         </script>
     </s:layout-component>
@@ -71,13 +84,18 @@
             <div id="header" class="page-header">
 
             </div>
+            <ul class="breadcrumb">
+                <li id="breadSeed"></li>
+                <li id="breadEntity"></li>
+                <li class="active">Concepts</li>
+            </ul>
             <div class="row-fluid">
                 <div class="span6">
-                    <h3>List of Entities</h3>
+                    <h3>List of Concepts</h3>
                 </div>
                 <div class="span6 text-right" >
                     <div class="btn-group">
-                        <a onclick="redirect('../entity/add/' + lastPath())" class="btn btn-success">Add Entity</a>
+                        <a onclick="redirect('../concept/add/' + lastPath())" class="btn btn-success">Add Concept</a>
                     </div>
                 </div>
 
@@ -86,12 +104,12 @@
 
                     <thead>
                         <tr>
-                            <th>Entity</th>
+                            <th>Concept</th>
                             <th>Title</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="entities">
+                    <tbody id="concepts">
 
                     </tbody>
                 </table>
@@ -103,10 +121,10 @@
                 <div id="removeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-header">
                         <button id="closeRemoveModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                        <h3 >Remove Entity</h3>
+                        <h3 >Remove Concept</h3>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure do you want to remove the <strong><a class="text-error" id="removeModalLabel"></a></strong> entity?</p>
+                        <p>Are you sure do you want to remove the <strong><a class="text-error" id="removeModalLabel"></a></strong> concept?</p>
                         <p class="text-warning">Warning: All dependents triples are removed too.</p>
 
                         <div id="result">
@@ -117,7 +135,7 @@
 
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-danger" onclick="removeEntity();">Remove</button>
+                        <button class="btn btn-danger" onclick="removeConcept();">Remove</button>
                     </div>
                 </div>
 

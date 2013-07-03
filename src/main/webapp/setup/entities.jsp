@@ -20,12 +20,12 @@
                 var entity = $('#removeModalLabel').html();
                 //var query = initSparqlerQuery();
                 console.log('Remove: ' + entity);
-                
+
                 var urlPrefix = "../../api/" + getApiKey();
                 //remove all subjects and predicates associated.
-                removeAllTriplesFromObject(urlPrefix,entity);
+                removeAllTriplesFromObject(urlPrefix, entity);
                 //remove all predicates and objects associated.            
-                removeAllTriplesFromSubject(urlPrefix,entity);
+                removeAllTriplesFromSubject(urlPrefix, entity);
 
             }
 
@@ -44,10 +44,10 @@
                                             + json.results.bindings[key].entity.value + '</a></td><td>'
                                             + json.results.bindings[key].e.value + '</td><td>'
                                             + '<div class="btn-group">'
-                                            + '<a class="btn btn" href="../entity/edit/coeus:'+splitURIPrefix(json.results.bindings[key].entity.value).value+'">Edit</a>'
+                                            + '<a class="btn btn" href="../entity/edit/coeus:' + splitURIPrefix(json.results.bindings[key].entity.value).value + '">Edit</a>'
                                             + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</button>'
                                             + '</div>'
-                                            + ' <button class="btn btn-info">View Concepts</button>'
+                                            + ' <a class="btn btn-info" href="../concept/coeus:' + splitURIPrefix(json.results.bindings[key].entity.value).value + '">View Concepts</a>'
                                             //+ '<a href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</a>'
                                             + '</td></tr>';
                                     $('#entities').append(a);
@@ -61,6 +61,7 @@
                 //header name
                 var path = lastPath();
                 $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
+                $('#breadSeed').html('<a href="../seed/'+path+'">Seed</a> <span class="divider">/</span>');
             });
         </script>
     </s:layout-component>
@@ -71,10 +72,18 @@
             <div id="header" class="page-header">
 
             </div>
+
+            <ul class="breadcrumb">
+                <li id="breadSeed"></li>
+                <li class="active">Entities</li>
+            </ul>
             <div class="row-fluid">
+
                 <div class="span6">
                     <h3>List of Entities</h3>
                 </div>
+
+
                 <div class="span6 text-right" >
                     <div class="btn-group">
                         <a onclick="redirect('../entity/add/' + lastPath())" class="btn btn-success">Add Entity</a>

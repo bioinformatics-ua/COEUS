@@ -33,8 +33,8 @@
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Setup <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a id="entity" href="../entity/${actionBean.method}">Entities</a></li>
-                                        <li><a href="../concept/">Concepts</a></li>
-                                        <li><a href="../resource/">Resources</a></li>
+                                        <li><a href="#">Concepts</a></li>
+                                        <li><a href="#">Resources</a></li>
                                         <li class="divider"></li>
                                         <li><a href="#">View All</a></li>
                                     </ul>

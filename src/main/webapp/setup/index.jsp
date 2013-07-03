@@ -55,7 +55,7 @@
              });
              }*/
 
-            function queryConcepts(entity,query) {
+            function queryConcepts(entity, query) {
                 var qConcepts = "SELECT DISTINCT ?c ?concept {?concept coeus:hasEntity coeus:entity_" + entity + " . ?concept dc:title ?c  }";
                 var c = '';
                 query.query(qConcepts, {success: function(json) {
@@ -67,20 +67,20 @@
                         console.log('Append on #' + entity + ': ' + c);
                     }});
             }
-            
-            function selectEntity(){
-                var path=lastPath();
-                window.location="../entity/"+path;
+
+            function selectEntity() {
+                var path = lastPath();
+                window.location = "../entity/" + path;
             }
 
             $(document).ready(function() {
                 //get seed from url
-                var seed=lastPath();
-                $('#header').append('<h1>'+seed+'<small> enviroment</small></h1>');
-               
+                var seed = lastPath();
+                $('#header').append('<h1>' + seed + '<small> enviroment</small></h1>');
+
                 var query = initSparqlerQuery();
                 // passes standard JSON results object to success callback
-                var qEntities = "SELECT DISTINCT ?entity ?e ?s {"+seed+" coeus:includes ?entity . ?concept coeus:hasEntity ?entity . ?entity dc:title ?e . }";
+                var qEntities = "SELECT DISTINCT ?entity ?e ?s {" + seed + " coeus:includes ?entity . ?concept coeus:hasEntity ?entity . ?entity dc:title ?e . }";
 
                 query.query(qEntities,
                         {success: function(json) {
@@ -98,17 +98,34 @@
 
                                 // fill Concepts
                                 for (var k = 0, s = arrayOfEntities.length; k < s; k++) {
-                                    $('#addentity').append('<option>'+arrayOfEntities[k]+'</option>');
-                                    queryConcepts(arrayOfEntities[k],query);
+                                    //$('#addentity').append('<option>' + arrayOfEntities[k] + '</option>');
+                                    queryConcepts(arrayOfEntities[k], query);
                                 }
                             }}
                 );
-             //header name
-             //$.get('../home/config', function(config, status) {
-             //   console.log(config);        
-                
-            // }, 'json'); 
+                //header name
+                //$.get('../home/config', function(config, status) {
+                //   console.log(config);        
+
+                // }, 'json'); 
+
+                var qseeds = "SELECT DISTINCT ?seed ?s {?seed a coeus:Seed . ?seed dc:title ?s . }";
+
+                query.query(qseeds,
+                        {success: function(json) {
+                                // fill Concepts
+                                for (var k = 0, s = json.results.bindings.length; k < s; k++) {
+                                    $('#seeds').append('<option>' + json.results.bindings[k].s.value + '</option>');
+                                }
+                            }}
+                );
             });
+
+            function changeSeed() {
+                var title = $('#seeds').val();
+                redirect("../seed/" + "coeus:seed_" + title.split(' ').join('_'));
+            }
+
         </script>
     </s:layout-component>
     <s:layout-component name="body">
@@ -116,7 +133,7 @@
         <div class="container">
             <br><br>
             <div id="header" class="page-header">
-                
+
             </div>
 
             <div class="row-fluid">
@@ -134,25 +151,23 @@
                 </div>
                 <div class="span6">
                     <h4>Actions</h4>
-                    
+
                     <div class="row-fluid">
                         <div class="span4">
-                            Projects
+                            Seeds
                         </div>
-                        <div class="span4">
-                            <select class="span10">
-                                <option>Production</option>
-                                <option>Testing</option>
-                                <option>Development</option>
+                        <div  class="span4">
+                            <select class="span10" id="seeds">
+
                             </select>
                         </div>
                         <div class="span4">
                             <div class="btn-group">
-                                <a href="#" class="btn btn-danger">Change project</a>
+                                <a onclick="changeSeed();" class="btn btn-danger">Change seed</a>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row-fluid">
                         <div class="span4">
                             Environments
@@ -173,55 +188,20 @@
 
                     <div class="row-fluid">
                         <div class="span4">
-                            Entities
+
                         </div>
                         <div class="span4">
-                            <select id="addentity"class="span10">
-                                <!--javascript fill-->
-                            </select>
+
                         </div>
                         <div class="span4">
                             <div class="btn-group">
-                                <a onclick="selectEntity();" class="btn ">Manage</a>
-                                <a href="../manager/entity/" class="btn btn-info">Add new Entity</a>
+                                <a onclick="selectEntity();" class="btn btn-large btn-primary">Manage Entities</a>
+
                             </div>
                         </div>
                     </div>
 
-                    <div class="row-fluid">
-                        <div class="span4">
-                            Concepts
-                        </div>
-                        <div class="span4">
-                            <select id="addconcept"class="span10">
-                                 <!--javascript fill-->
-                            </select>
-                        </div>
-                        <div class="span4">
-                            <div class="btn-group">
-                                <a href="#" class="btn btn-info">Add new Concept</a>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="row-fluid">
-                        <div class="span4">
-                            Resources
-                        </div>
-                        <div class="span4">
-                            <select class="span10">
-                                <option>Production</option>
-                                <option>Testing</option>
-                                <option>Development</option>
-                            </select>
-                        </div>
-                        <div class="span4">
-                            <div class="btn-group">
-                                <a href="#" class="btn btn-info">Add new Resource</a>
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
             </div>
 

@@ -186,7 +186,7 @@ function redirect(location) {
 }
 /**
  * 
- * remove all subjects and predicates associated.
+ * remove all subjects and predicates associated. The objects are recursively removed too.
  * 
  * example urlPrefix = "../../api/" + getApiKey() ;
  * 
@@ -215,14 +215,65 @@ function removeAllTriplesFromObject(urlPrefix, object) {
                             objectPrefix = 'xsd:string:' + objectPrefix;
 
                         var url = "/delete/"+ objectPrefix + splitedSubject.value + '/' + predicatePrefix + splitedPredicate.value + '/' + object;
+                        
+                        console.log("Delete call: "+urlPrefix+url);
                         callAPI(urlPrefix + url, "#result");
+                        if((splitedPredicate.value!== "includes") & (splitedPredicate.value!== "isEntityOf") & (splitedPredicate.value!== "isConceptOf") & (splitedPredicate.value!== "isResourceOff")) 
+                            removeRecursive(urlPrefix,objectPrefix + splitedSubject.value);
+                        
+                       
+                    }
+                    
 
+                }}
+    );
+
+}
+
+function isModel(key){
+    var b=false;
+    
+    if(key.indexOf("coeus:seed_") !== -1 | key.indexOf("coeus:entity_") !== -1 | key.indexOf("coeus:concept_") !== -1 | key.indexOf("coeus:resource_") !== -1) b=true;
+
+    console.log(key+' '+b);
+    return b;
+                        
+}
+
+function removeRecursive(urlPrefix,subject){
+    var query=initSparqlerQuery();
+    var qObject = "SELECT ?predicate ?object {"+subject+" ?predicate ?object . }";
+    console.log("Recursive call: "+qObject);
+    query.query(qObject,
+            {success: function(json) {
+                    var result = json.results.bindings;
+                    
+                    for (r in result) {
+                      var splitedPredicate = splitURIPrefix(result[r].predicate.value);
+                        var splitedObject = splitURIPrefix(result[r].object.value);
+
+                        var predicatePrefix = getPrefix(splitedPredicate.namespace);
+                        if (predicatePrefix !== '')
+                            predicatePrefix = predicatePrefix + ':';
+                        var objectPrefix = getPrefix(splitedObject.namespace);
+                        if (objectPrefix !== '')
+                            objectPrefix = objectPrefix + ':';
+                        else
+                            objectPrefix = 'xsd:string:' + objectPrefix;
+
+                        var url = "/delete/"+ subject + '/' + predicatePrefix + splitedPredicate.value + '/' + objectPrefix + splitedObject.value;
+                        console.log("Recursive Delete call: "+urlPrefix+url);
+                        callAPI(urlPrefix + url, "#result");
+                        if(isModel(objectPrefix + splitedObject.value)) {
+                           // console.log("Another recursive call: "+url);
+                            removeRecursive(urlPrefix,objectPrefix + splitedObject.value);
+                        }
+                          
                     }
 
 
                 }}
     );
-
 }
 
 function removeAllTriplesFromSubject(urlPrefix, subject) {
@@ -247,7 +298,7 @@ function removeAllTriplesFromSubject(urlPrefix, subject) {
 
                         var url = "/delete/"+ subject + '/' + predicatePrefix + splitedPredicate.value + '/' + objectPrefix + splitedObject.value;
 
-                        callAPI(urlPrefix + url, "#result");
+                            callAPI(urlPrefix + url, "#result");
 
                     }
 
@@ -255,8 +306,20 @@ function removeAllTriplesFromSubject(urlPrefix, subject) {
                     if (document.getElementById('result').className !== 'alert alert-error') {
                         // window.location="../entity/"+lastPath();
                         console.log("REDIRECTING...");
-                        window.location.reload(true);
+                        //window.location.reload(true);
                     }
                 }}
     );
 }
+//function test(callback){
+//    var query = initSparqlerQuery();
+//    var qSubject = "SELECT ?predicate ?object {coeus:seed_xxx ?predicate ?object . }";
+//    query.query(qSubject,
+//            {success: function(json) {
+//                    var result = json.results.bindings;
+//                    //console.log(result);
+//                    callback(result);
+//                }}
+//        );
+//    console.log('Do others things...');
+//}
