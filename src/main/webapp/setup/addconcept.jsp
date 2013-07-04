@@ -80,8 +80,6 @@
                 var predType = "rdf:type";
                 var predTitle = "dc:title";
                 var predLabel = "rdfs:label";
-                var predHasEntity = "coeus:hasEntity";
-                var predComment = "rdfs:comment";
 
                 var urlWrite = "../../../api/" + getApiKey() + "/write/";
 
@@ -102,7 +100,7 @@
                     callAPI(urlWrite + individual + "/" + predType + "/owl:NamedIndividual", '#result');
                     callAPI(urlWrite + individual + "/" + predType + "/coeus:" + type, '#result');
                     callAPI(urlWrite + individual + "/" + predTitle + "/xsd:string:" + title, '#result');
-                    callAPI(urlWrite + individual + "/" + predHasEntity + "/" + lastPath(), '#result');
+                    callAPI(urlWrite + individual + "/" + "coeus:hasEntity" + "/" + lastPath(), '#result');
                     callAPI(urlWrite + lastPath() + "/" + "coeus:isEntityOf" + "/" + individual, '#result');
                     callAPI(urlWrite + individual + "/" + predLabel + "/xsd:string:" + label, '#result');
                     //callAPI(urlWrite + individual + "/" + predComment + "/xsd:string:" + comment, '#result');

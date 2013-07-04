@@ -311,15 +311,22 @@ function removeAllTriplesFromSubject(urlPrefix, subject) {
                 }}
     );
 }
-//function test(callback){
-//    var query = initSparqlerQuery();
-//    var qSubject = "SELECT ?predicate ?object {coeus:seed_xxx ?predicate ?object . }";
-//    query.query(qSubject,
-//            {success: function(json) {
-//                    var result = json.results.bindings;
-//                    //console.log(result);
-//                    callback(result);
-//                }}
-//        );
-//    console.log('Do others things...');
-//}
+/**
+ * Do a query to retrive the result in a callback way 
+ * 
+ * return callback(result);
+ * 
+ * @param {type} selectQuery
+ * @param {type} callback
+ * @returns {undefined}
+ */
+function queryToResult(selectQuery, callback){
+    var query = initSparqlerQuery();
+    query.query(selectQuery,
+            {success: function(json) {
+                    var result = json.results.bindings;
+                    //console.log(result);
+                    callback(result);
+                }}
+        );
+}

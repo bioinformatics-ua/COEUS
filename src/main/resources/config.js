@@ -1,11 +1,11 @@
 {
 "config": {
-"name": "coeus.NA",
-        "description": "COEUS News Aggregator",
+"name": "Model",
+        "description": "COEUS Model Test",
         "keyprefix":"coeus",
         "version": "1.0a",
         "ontology": "http://bioinformatics.ua.pt/coeus/ontology/",
-        "setup": "newsaggregator/setup.rdf",
+
         "sdb":"newsaggregator/sdb.ttl",
         "predicates":"newsaggregator/predicates.csv",
         "built": true,

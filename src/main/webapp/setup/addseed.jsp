@@ -17,8 +17,8 @@
             $(document).ready(function() {
 
                 //header name
-                var path = lastPath();
-                $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
+                //var path = lastPath();
+                $('#header').html('<h1>COEUS<small> env.. </small></h1>');
 
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
