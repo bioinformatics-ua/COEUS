@@ -44,11 +44,11 @@
                             + result[key].resource.value + '</a></td><td>'
                             + result[key].c.value + '</td><td>'
                             + result[key].order.value + '</td><td>'
-                            + '<div class="btn-group">'
-                            + '<a class="btn btn" href="../resource/edit/coeus:' + splitURIPrefix(result[key].resource.value).value + '">Edit</a>'
-                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectResource(\'' + result[key].c.value + '\')">Remove</button>'
-                            + '</div>'
-                            + ' <a class="btn btn-info">Selectors</a>'
+                            //+ '<div class="btn-group">'
+                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectResource(\'' + result[key].c.value + '\')">Remove</button> '       
+                            + '<a class="btn btn-warning" href="../resource/edit/coeus:' + splitURIPrefix(result[key].resource.value).value + '">Configuration</a> '
+                            //+ '</div>'
+                            //+ ' <a class="btn btn-info">Selectors</a>'
                             //+ '<a href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</a>'
                             + '</td></tr>';
                     $('#resources').append(a);
@@ -135,7 +135,7 @@
                         <button class="btn btn-danger" onclick="removeResource();">Remove</button>
                     </div>
                 </div>
-
+                
             </div>
 
         </s:layout-component>

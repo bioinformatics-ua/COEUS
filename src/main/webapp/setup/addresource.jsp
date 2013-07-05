@@ -13,10 +13,18 @@
         <script src="<c:url value="/assets/js/coeus.api.js" />"></script>
         <script src="<c:url value="/assets/js/bootstrap-tooltip.js" />"></script>
         <script type="text/javascript">
-            function fillConceptsExtension(result){
-                for(var r in result){
-                    var concept=splitURIPrefix(result[r].concept.value);
-                    $('#extends').append('<option>'+concept.value+'</option>');
+            function fillConceptsExtension(result) {
+                for (var r in result) {
+                    var concept = splitURIPrefix(result[r].concept.value);
+                    $('#extends').append('<option>' + concept.value + '</option>');
+                }
+            }
+            function fillSelectors(result) {
+                for (var r in result) {
+                   var a= '<tr><td>'
+                    +result[r].selector.value+'</td></tr>';
+                    
+                    $('#selectors').append(a);
                 }
             }
             $(document).ready(function() {
@@ -24,16 +32,19 @@
                 //header name
                 var path = lastPath();
                 $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
-                
+
                 //fill the concepts extensions
-                var q="SELECT ?concept ?c {?concept a coeus:Concept . ?concept dc:title ?c}";
-                queryToResult(q,fillConceptsExtension);
+                var q = "SELECT ?concept ?c {?concept a coeus:Concept . ?concept dc:title ?c}";
+                queryToResult(q, fillConceptsExtension);
 
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
                     $('#type').html("Edit Resource");
                     $('#submit').html('Edit <i class="icon-edit icon-white"></i>');
-
+                    
+                    var qselectors="SELECT * {"+path+" coeus:loadsFrom ?selector . ?selector dc:title ?title . ?selector dc:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . }";
+                    queryToResult(qselectors,fillSelectors);
+                    
                     var query = initSparqlerQuery();
                     var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . " + path + " coeus:method ?method . " + path + " dc:publisher ?publisher . " + path + " coeus:endpoint ?endpoint . " + path + " coeus:query ?query . " + path + " coeus:order ?order . " + path + " coeus:extends ?extends . }";
                     query.query(q,
@@ -67,8 +78,12 @@
 
                                 }}
                     );
-                }
                 //end of EDIT
+                }else{
+                    //not showing selectores if one resource is been add 
+                    $('#selectorsForm').addClass('hide');
+                }
+                
 
                 //activate tooltip (bootstrap-tooltip.js is need)
                 $('.icon-question-sign').tooltip();
@@ -155,7 +170,7 @@
                     callAPI(urlWrite + individual + "/" + "coeus:query" + "/xsd:string:" + query, '#result');
                     callAPI(urlWrite + individual + "/" + "coeus:order" + "/xsd:string:" + order, '#result');
                     callAPI(urlWrite + individual + "/" + "coeus:extends" + "/coeus:" + concept_ext, '#result');
-                    callAPI(urlWrite + "coeus:" + concept_ext + "/" + "coeus:isExtendedBy" + "/" + individual , '#result');
+                    callAPI(urlWrite + "coeus:" + concept_ext + "/" + "coeus:isExtendedBy" + "/" + individual, '#result');
 
                     // /api/coeus/write/coeus:uniprot_Q13428/dc:title/Q13428
                     //window.location = "../entity/";
@@ -181,16 +196,20 @@
                     callAPI(urlUpdate + lastPath() + "/" + "coeus:query" + "/xsd:string:" + $('#oldQuery').val() + ",xsd:string:" + $('#query').val(), '#result');
                 if ($('#oldOrder').val() !== $('#order').val())
                     callAPI(urlUpdate + lastPath() + "/" + "coeus:order" + "/xsd:string:" + $('#oldOrder').val() + ",xsd:string:" + $('#order').val(), '#result');
-                if ($('#oldExtends').val() !== $('#extends').val()){
+                if ($('#oldExtends').val() !== $('#extends').val()) {
                     callAPI(urlUpdate + lastPath() + "/" + "coeus:extends" + "/coeus:" + $('#oldExtends').val() + ",coeus:" + $('#extends').val(), '#result');
-                    callAPI(urlDelete + "coeus:" +$('#oldExtends').val() + "/" + "coeus:isExtendedBy" +"/" + lastPath(), '#result');
-                    callAPI(urlWrite + "coeus:" +$('#extends').val() + "/" + "coeus:isExtendedBy" +"/" + lastPath(), '#result');
+                    callAPI(urlDelete + "coeus:" + $('#oldExtends').val() + "/" + "coeus:isExtendedBy" + "/" + lastPath(), '#result');
+                    callAPI(urlWrite + "coeus:" + $('#extends').val() + "/" + "coeus:isExtendedBy" + "/" + lastPath(), '#result');
                 }
             }
 
             function changeURI(value) {
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
                 document.getElementById('uri').innerHTML = 'coeus:resource_' + value.split(' ').join('_');
+            }
+            function changeSelectorURI(value) {
+                //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
+                document.getElementById('selectorUri').innerHTML = 'coeus:selector_' + value.split(' ').join('_');
             }
         </script>
     </s:layout-component>
@@ -261,11 +280,30 @@
                         <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel</button>
                     </div>
                 </div>
-                <div class="span8"></div>
+
                 <div id="commentForm">
                     <label class="control-label" for="comment">Comment</label> 
                     <textarea rows="4" style="max-width: 500px;width: 400px;" id="comment" type="text" placeholder="Ex: Describes the Uniprot Resource"></textarea> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:comment property" ></i>
                 </div>
+                <div id="selectorsForm" >
+                    <label class="control-label" for="comment">Selectors</label> 
+                <table class="table table-hover table-bordered span4">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Query</th>
+                            <th>Property</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="selectors">
+
+                    </tbody>
+                </table>
+                <div class="span4 text-right">
+                    <button  type="button" id="addselector" href="#selectorsModal" role="button" data-toggle="modal" class="btn btn-success">Add <i class="icon-plus icon-white"></i> </button>
+                </div>
+             </div>
                 
 
             </div>
@@ -306,6 +344,44 @@
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
                 <button class="btn btn-primary" onclick="submit();">Retry</button>
+            </div>
+        </div>
+        
+                <!-- Modal -->
+        <div id="selectorsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="selectorsModal" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 id="myModalLabel">Add Selector</h3>
+            </div>
+            <div class="modal-body">
+                <p class="lead" >Selector URI - <a class="lead" id="selectorUri">coeus: </a></p>
+                <div id="titleSelectorsForm" >
+                        <label class="control-label" for="title">Title</label>
+                        <input id="titleSelectors" type="text" placeholder="Ex: Id" onkeyup="changeSelectorURI(this.value);" > <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the dc:title property" ></i>
+                    </div>
+                    <div id="labelSelectorsForm"> 
+                        <label class="control-label" for="label">Label</label>
+                        <input id="labelSelectors" type="text" placeholder="Ex: Uniprot Resource"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:label property" ></i>
+                    </div>
+                <div id="propertySelectorsForm"> 
+                        <label class="control-label" for="label">Property</label>
+                        <input id="propertySelectors" type="text" placeholder="Ex: dc:identifier"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:property property" ></i>
+                    </div>
+                <div id="querySelectorsForm"> 
+                        <label class="control-label" for="label">Query</label>
+                        <input id="querySelectors" type="text" placeholder="Ex: /name"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:query property" ></i>
+                    </div>
+                <label class="checkbox" >
+                    <input type="checkbox" id="keySelectorsForm"> Key
+                </label>
+                <div id="res">
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn btn-success" onclick="">Add</button>
             </div>
         </div>
 
