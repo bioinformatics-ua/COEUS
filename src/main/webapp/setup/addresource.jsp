@@ -13,12 +13,21 @@
         <script src="<c:url value="/assets/js/coeus.api.js" />"></script>
         <script src="<c:url value="/assets/js/bootstrap-tooltip.js" />"></script>
         <script type="text/javascript">
-
+            function fillConceptsExtension(result){
+                for(var r in result){
+                    var concept=splitURIPrefix(result[r].concept.value);
+                    $('#extends').append('<option>'+concept.value+'</option>');
+                }
+            }
             $(document).ready(function() {
 
                 //header name
                 var path = lastPath();
                 $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
+                
+                //fill the concepts extensions
+                var q="SELECT ?concept ?c {?concept a coeus:Concept . ?concept dc:title ?c}";
+                queryToResult(q,fillConceptsExtension);
 
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
@@ -26,7 +35,7 @@
                     $('#submit').html('Edit <i class="icon-edit icon-white"></i>');
 
                     var query = initSparqlerQuery();
-                    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . " + path + " coeus:method ?method . " + path + " dc:publisher ?publisher . " + path + " coeus:endpoint ?endpoint . " + path + " coeus:query ?query . " + path + " coeus:order ?order . }";
+                    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . " + path + " coeus:method ?method . " + path + " dc:publisher ?publisher . " + path + " coeus:endpoint ?endpoint . " + path + " coeus:query ?query . " + path + " coeus:order ?order . " + path + " coeus:extends ?extends . }";
                     query.query(q,
                             {success: function(json) {
                                     //var resultTitle = json.results.bindings[0].title;
@@ -43,6 +52,8 @@
                                     $('#endpoint').val(json.results.bindings[0].endpoint.value);
                                     $('#query').val(json.results.bindings[0].query.value);
                                     $('#order').val(json.results.bindings[0].order.value);
+                                    $('#extends option:contains(' + splitURIPrefix(json.results.bindings[0].extends.value).value + ')').prop({selected: true});
+                                    //$('#extends').val(json.results.bindings[0].extends.value);
                                     //PUT OLD VALUES IN THE STATIC FIELD
                                     //$('#titleForm').append('<input type="hidden" id="'+'oldTitle'+'" value="'+$('#title').val()+'"/>');
                                     $('#labelForm').append('<input type="hidden" id="' + 'oldLabel' + '" value="' + $('#label').val() + '"/>');
@@ -52,6 +63,7 @@
                                     $('#endpointForm').append('<input type="hidden" id="' + 'oldEndpoint' + '" value="' + $('#endpoint').val() + '"/>');
                                     $('#queryForm').append('<input type="hidden" id="' + 'oldQuery' + '" value="' + $('#query').val() + '"/>');
                                     $('#orderForm').append('<input type="hidden" id="' + 'oldOrder' + '" value="' + $('#order').val() + '"/>');
+                                    $('#extendsForm').append('<input type="hidden" id="' + 'oldExtends' + '" value="' + splitURIPrefix(json.results.bindings[0].extends.value).value + '"/>');
 
                                 }}
                     );
@@ -92,6 +104,7 @@
                 var endpoint = $('#endpoint').val();
                 var query = $('#query').val();
                 var order = $('#order').val();
+                var concept_ext = $('#extends').val();
 
                 var predType = "rdf:type";
                 var predTitle = "dc:title";
@@ -141,6 +154,8 @@
                     callAPI(urlWrite + individual + "/" + "coeus:endpoint" + "/xsd:string:" + endpoint, '#result');
                     callAPI(urlWrite + individual + "/" + "coeus:query" + "/xsd:string:" + query, '#result');
                     callAPI(urlWrite + individual + "/" + "coeus:order" + "/xsd:string:" + order, '#result');
+                    callAPI(urlWrite + individual + "/" + "coeus:extends" + "/coeus:" + concept_ext, '#result');
+                    callAPI(urlWrite + "coeus:" + concept_ext + "/" + "coeus:isExtendedBy" + "/" + individual , '#result');
 
                     // /api/coeus/write/coeus:uniprot_Q13428/dc:title/Q13428
                     //window.location = "../entity/";
@@ -150,6 +165,8 @@
             }
             function update() {
                 var urlUpdate = "../../../api/" + getApiKey() + "/update/";
+                var urlDelete = "../../../api/" + getApiKey() + "/delete/";
+                var urlWrite = "../../../api/" + getApiKey() + "/write/";
                 if ($('#oldLabel').val() !== $('#label').val())
                     callAPI(urlUpdate + lastPath() + "/" + "rdfs:label" + "/xsd:string:" + $('#oldLabel').val() + ",xsd:string:" + $('#label').val(), '#result');
                 if ($('#oldComment').val() !== $('#comment').val())
@@ -164,7 +181,11 @@
                     callAPI(urlUpdate + lastPath() + "/" + "coeus:query" + "/xsd:string:" + $('#oldQuery').val() + ",xsd:string:" + $('#query').val(), '#result');
                 if ($('#oldOrder').val() !== $('#order').val())
                     callAPI(urlUpdate + lastPath() + "/" + "coeus:order" + "/xsd:string:" + $('#oldOrder').val() + ",xsd:string:" + $('#order').val(), '#result');
-
+                if ($('#oldExtends').val() !== $('#extends').val()){
+                    callAPI(urlUpdate + lastPath() + "/" + "coeus:extends" + "/coeus:" + $('#oldExtends').val() + ",coeus:" + $('#extends').val(), '#result');
+                    callAPI(urlDelete + "coeus:" +$('#oldExtends').val() + "/" + "coeus:isExtendedBy" +"/" + lastPath(), '#result');
+                    callAPI(urlWrite + "coeus:" +$('#extends').val() + "/" + "coeus:isExtendedBy" +"/" + lastPath(), '#result');
+                }
             }
 
             function changeURI(value) {
@@ -214,6 +235,12 @@
                             <option>rdf</option>
                         </select> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:publisher property" ></i>
                     </div>
+                    <div id="extendsForm" > 
+                        <label class="control-label" for="label">Extends</label>
+                        <select id="extends" class="span10">
+
+                        </select> <i class="icon-question-sign" data-toggle="tooltip" title="Select the concept to extends" ></i>
+                    </div>
                     <div id="endpointForm"> 
                         <label class="control-label" for="label">Endpoint</label>
                         <input id="endpoint" type="text" placeholder="Ex: http://someurl.com"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:endpoint property" ></i>
@@ -239,6 +266,7 @@
                     <label class="control-label" for="comment">Comment</label> 
                     <textarea rows="4" style="max-width: 500px;width: 400px;" id="comment" type="text" placeholder="Ex: Describes the Uniprot Resource"></textarea> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:comment property" ></i>
                 </div>
+                
 
             </div>
 
