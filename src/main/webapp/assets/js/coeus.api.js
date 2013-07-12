@@ -141,7 +141,7 @@ function splitURIPrefix(uri) {
  * @returns {undefined}
  */
 function callAPI(url, html) {
-
+    url=encodeURI(url);
     $.ajax({url: url, async: false, dataType: 'json'}).done(function(data) {
         console.log(url + ' ' + data.status);
         if (data.status === 100) {
@@ -283,7 +283,7 @@ function removeAllTriplesFromSubject(urlPrefix, subject) {
             {success: function(json) {
                     var result = json.results.bindings;
                     console.log(result);
-                    for (r in result) {
+                    for (var r in result) {
                         var splitedPredicate = splitURIPrefix(result[r].predicate.value);
                         var splitedObject = splitURIPrefix(result[r].object.value);
 
@@ -295,10 +295,12 @@ function removeAllTriplesFromSubject(urlPrefix, subject) {
                             objectPrefix = objectPrefix + ':';
                         else
                             objectPrefix = 'xsd:string:' + objectPrefix;
-
-                        var url = "/delete/"+ subject + '/' + predicatePrefix + splitedPredicate.value + '/' + objectPrefix + splitedObject.value;
-
-                            callAPI(urlPrefix + url, "#result");
+                        
+                        var url = "/delete/"+ subject + '/' + predicatePrefix + splitedPredicate.value + '/' + objectPrefix;
+                        //TO ALLOW '/' in the string 
+                        if(splitedPredicate.value==='query') url=url+result[r].object.value.split("/").join("%2F"); else url=url+splitedObject.value;
+                        
+                        callAPI(urlPrefix + url, "#result");
 
                     }
 

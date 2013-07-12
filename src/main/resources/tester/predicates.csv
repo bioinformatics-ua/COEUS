@@ -77,3 +77,4 @@ http://bioinformatics.ua.pt/coeus/resource/loadsFrom
 http://bioinformatics.ua.pt/coeus/resource/hasBridge
 http://bioinformatics.ua.pt/coeus/resource/hasConcept
 http://www.w3.org/2000/01/rdf-schema#seeAlso
+http://bioinformatics.ua.pt/coeus/resource/regex
