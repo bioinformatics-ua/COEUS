@@ -332,3 +332,7 @@ function queryToResult(selectQuery, callback){
                 }}
         );
 }
+
+function encodeBars(value){
+    return value.split('/').join('%2F');
+}

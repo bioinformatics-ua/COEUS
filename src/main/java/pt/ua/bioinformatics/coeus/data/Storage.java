@@ -189,7 +189,7 @@ public class Storage {
         } catch (Exception ex) {
             if (Config.isDebug()) {
                 System.out.println("[COEUS][Storage] Unable to load " + Config.getName() + " setup");
-                Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return success;

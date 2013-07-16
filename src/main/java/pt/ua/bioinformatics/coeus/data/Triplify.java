@@ -107,7 +107,7 @@ public class Triplify {
         boolean success = false;
         try {
             // create initial Item triple with <concept>_<key> structure
-            String[] itemTmp = resource.getIsResourceOf().getLabel().split("_");
+            String[] itemTmp = resource.getIsResourceOf().getUri().split("_");
             com.hp.hpl.jena.rdf.model.Resource item = api.createResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + itemTmp[1] + "_" + i);
             com.hp.hpl.jena.rdf.model.Resource obj = api.createResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "Item");
             api.addStatement(item, Predicate.get("rdf:type"), obj);

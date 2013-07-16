@@ -40,8 +40,11 @@
             }
             function fillListOfResources(result) {
                 for (var key = 0, size = result.length; key < size; key++) {
+                    var built = '<span class="label ">not built</span>';
+                    if (result[key].built.value === "true")
+                        built = '<span class="label label-success">Built</span>';
                     var a = '<tr><td><a href=' + result[key].resource.value + '>'
-                            + result[key].resource.value + '</a></td><td>'
+                            + result[key].resource.value + '</a> '+built+'</td><td>'
                             + result[key].c.value + '</td><td>'
                             + result[key].order.value + '</td><td>'
                             //+ '<div class="btn-group">'
@@ -61,7 +64,7 @@
                 var qresource = "SELECT DISTINCT ?seed ?entity {" + concept + " coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
                 queryToResult(qresource, fillBreadcumb);
 
-                var qresource = "SELECT DISTINCT ?resource ?c ?order {" + concept + " coeus:hasResource ?resource . ?resource dc:title ?c . ?resource coeus:order ?order . }";
+                var qresource = "SELECT DISTINCT ?resource ?c ?order ?built {" + concept + " coeus:hasResource ?resource . ?resource dc:title ?c . ?resource coeus:order ?order . OPTIONAL{ ?resource coeus:built ?built }}";
                 queryToResult(qresource, fillListOfResources);
                 
                 

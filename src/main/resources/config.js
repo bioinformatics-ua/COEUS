@@ -1,14 +1,14 @@
 {
 "config": {
-"name": "Model",
+"name": "Model Test",
         "description": "COEUS Model Test",
         "keyprefix":"coeus",
         "version": "1.0a",
         "ontology": "http://bioinformatics.ua.pt/coeus/ontology/",
-
+        "setup": "",
         "sdb":"newsaggregator/sdb.ttl",
         "predicates":"newsaggregator/predicates.csv",
-        "built": true,
+        "built": false,
         "debug": true,
         "apikey":"coeus|uavr",
         "environment": "production"

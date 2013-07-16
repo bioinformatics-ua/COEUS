@@ -142,8 +142,9 @@ public class UpdateActionBean implements ActionBean {
 
                             if (Boot.getAPI().containsStatement(statToRemove)) {
 
-                                Boot.getAPI().addStatement(statToAdd);
                                 Boot.getAPI().removeStatement(statToRemove);
+                                Boot.getAPI().addStatement(statToAdd);
+                                
 
                                 result.put("status", 100);
                                 result.put("message", "[COEUS][API][Update] Triples updated in the knowledge base.");

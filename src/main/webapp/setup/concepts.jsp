@@ -34,20 +34,42 @@
                 $('#breadSeed').html('<a href="../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
                 $('#breadEntity').html('<a href="../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
             }
-            function fillListOfEntities(result) {
-                for (var key = 0, size = result.length; key < size; key++) {
+            function fillListOfConcepts(result) {
+                for (var key in result) {
+                    var concept='coeus:'+splitURIPrefix(result[key].concept.value).value;
                     var a = '<tr><td><a href=' + result[key].concept.value + '>'
                             + result[key].concept.value + '</a></td><td>'
                             + result[key].c.value + '</td><td>'
                             + '<div class="btn-group">'
-                            + '<a class="btn btn" href="../concept/edit/coeus:' + splitURIPrefix(result[key].concept.value).value + '">Edit</a>'
+                            + '<a class="btn btn" href="../concept/edit/' +concept + '">Edit</a>'
                             + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectConcept(\'' + result[key].c.value + '\')">Remove</button>'
                             + '</div>'
-                            + ' <a class="btn btn-info" href="../resource/coeus:' + splitURIPrefix(result[key].concept.value).value + '">Resources</a>'
-                            + ' <a class="btn btn-warning">Extensions</a>'
-                            //+ '<a href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</a>'
+                            + ' <a class="btn btn-info" href="../resource/' + concept + '">Resources</a>'
+                            
+                            +' <a class="dropdown">'
+                            +'<button class="dropdown-toggle btn btn-warning" role="button" data-toggle="dropdown" data-target="#">'
+                            +'Extensions '
+                            +'<b class="caret"></b>'
+                            +'</button>'
+                            +'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdown" id="'+concept+'">'
+                                //<li><a href="#">Action</a></li>
+                            +'</ul>'
+                            +'</a>'
+                            
                             + '</td></tr>';
                     $('#concepts').append(a);
+                }
+                for(var r in result){
+                    var ext='coeus:'+splitURIPrefix(result[r].concept.value).value;
+                    //FILL THE EXTENSIONS
+                    var extensions="SELECT ?resource {"+ext+" coeus:isExtendedBy ?resource }";console.log(extensions);
+                    queryToResult(extensions,function (res){
+                        console.log(res);
+                        for(var rs in res){
+                            console.log(res[rs].resource.value+' - '+ext);
+                            $('#'+ext).append('<li><a tabindex="-1" href="../resource/edit/coeus:'+ext+'">coeus:'+ext+'</a></li>');
+                        }
+                    });
                 }
             }
 
@@ -58,7 +80,7 @@
                 queryToResult(qconcept, fillBreadcumb);
 
                 var qconcept = "SELECT DISTINCT ?concept ?c {" + entity + " coeus:isEntityOf ?concept . ?concept dc:title ?c . }";
-                queryToResult(qconcept, fillListOfEntities);
+                queryToResult(qconcept, fillListOfConcepts);
                 
                 
                 //header name

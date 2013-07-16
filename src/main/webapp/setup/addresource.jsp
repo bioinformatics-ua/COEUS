@@ -32,11 +32,11 @@
                     queryToResult(qselectors, fillSelectors);
 
                     var query = initSparqlerQuery();
-                    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . " + path + " coeus:method ?method . " + path + " dc:publisher ?publisher . " + path + " coeus:endpoint ?endpoint . " + path + " coeus:query ?query . " + path + " coeus:order ?order . " + path + " coeus:extends ?extends . }";
+                    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?built {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . " + path + " coeus:method ?method . " + path + " dc:publisher ?publisher . " + path + " coeus:endpoint ?endpoint . " + path + " coeus:query ?query . " + path + " coeus:order ?order . " + path + " coeus:extends ?extends . " + path + " coeus:built ?built . }";
                     query.query(q,
                             {success: function(json) {
                                     //var resultTitle = json.results.bindings[0].title;
-                                    console.log(q);
+                                    console.log(json);
                                     $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
                                     //PUT VALUES IN THE INPUT FIELD
                                     $('#title').val(json.results.bindings[0].title.value);
@@ -50,6 +50,8 @@
                                     $('#query').val(json.results.bindings[0].query.value);
                                     $('#order').val(json.results.bindings[0].order.value);
                                     $('#extends option:contains(' + splitURIPrefix(json.results.bindings[0].extends.value).value + ')').prop({selected: true});
+                                    if(json.results.bindings[0].built.value==="true") $('#built').prop('checked', true);
+                                    else $('#built').prop('checked', false);
                                     //$('#extends').val(json.results.bindings[0].extends.value);
                                     //PUT OLD VALUES IN THE STATIC FIELD
                                     //$('#titleForm').append('<input type="hidden" id="'+'oldTitle'+'" value="'+$('#title').val()+'"/>');
@@ -61,13 +63,15 @@
                                     $('#queryForm').append('<input type="hidden" id="' + 'oldQuery' + '" value="' + $('#query').val() + '"/>');
                                     $('#orderForm').append('<input type="hidden" id="' + 'oldOrder' + '" value="' + $('#order').val() + '"/>');
                                     $('#extendsForm').append('<input type="hidden" id="' + 'oldExtends' + '" value="' + splitURIPrefix(json.results.bindings[0].extends.value).value + '"/>');
-
+                                    $('#builtForm').append('<input type="hidden" id="' + 'oldBuilt' + '" value="' + $('#built').is(':checked') + '"/>');
+                                    
                                 }}
                     );
                     //end of EDIT
                 } else {
-                    //not showing selectores if one resource is been add 
+                    //not showing selectores and built option if one resource is been add 
                     $('#selectorsForm').addClass('hide');
+                    $('#builtForm').addClass('hide');
                 }
 
 
@@ -127,7 +131,9 @@
                 $('#selectorUri').html("coeus:"+selector);
                 var q="SELECT * {coeus:"+selector+" dc:title ?title . coeus:"+selector+" rdfs:label ?label . coeus:"+selector+" coeus:property ?property . coeus:"+selector+" coeus:query ?query . OPTIONAL { coeus:"+selector+" coeus:isKeyOf ?key } . OPTIONAL { coeus:"+selector+" coeus:regex ?regex }}";
                 queryToResult(q,function (result){
+                    //FILL THE VALUES
                     $('#titleSelectors').val(result[0].title.value);
+                    document.getElementById('titleSelectors').setAttribute("disabled");
                     $('#labelSelectors').val(result[0].label.value);
                     $('#propertySelectors').val(result[0].property.value);
                     $('#querySelectors').val(result[0].query.value);
@@ -138,6 +144,13 @@
                     }
                     if(result[0].key!==undefined) $('#keySelectorsForm').prop('checked', true);
                     else $('#keySelectorsForm').prop('checked', false);
+                    //SAVE OLD VALUES IN A STATIC FIELD
+                    $('#titleSelectorsForm').append('<input type="hidden" id="' + 'oldTitleSelectors' + '" value="' + $('#titleSelectors').val() + '"/>');
+                    $('#labelSelectorsForm').append('<input type="hidden" id="' + 'oldLabelSelectors' + '" value="' + $('#labelSelectors').val() + '"/>');
+                    $('#propertySelectorsForm').append('<input type="hidden" id="' + 'oldPropertySelectors' + '" value="' + $('#propertySelectors').val() + '"/>');
+                    $('#querySelectorsForm').append('<input type="hidden" id="' + 'oldQuerySelectors' + '" value="' + $('#querySelectors').val() + '"/>');
+                    $('#regexSelectorsForm').append('<input type="hidden" id="' + 'oldRegexSelectors' + '" value="' + $('#regexSelectors').val() + '"/>');
+                    $('#titleSelectorsForm').append('<input type="hidden" id="oldKeySelectors'+ '" value="' + $('#keySelectorsForm').is(':checked') + '"/>');
   
                 });
                 
@@ -234,9 +247,8 @@
                 }
             }
             function submitSelector() {
-                
-                //TODO: edit Selector
-                addSelector();
+                if($('#selectorsModalLabel').html()==="Edit Selector") updateSelector();
+                else addSelector();
             }
             function submit() {
 
@@ -297,8 +309,8 @@
                     callAPI(urlWrite + individual + "/" + predComment + "/xsd:string:" + comment, '#result');
                     callAPI(urlWrite + individual + "/" + "coeus:method" + "/xsd:string:" + method, '#result');
                     callAPI(urlWrite + individual + "/" + "dc:publisher" + "/xsd:string:" + publisher, '#result');
-                    callAPI(urlWrite + individual + "/" + "coeus:endpoint" + "/xsd:string:" + endpoint, '#result');
-                    callAPI(urlWrite + individual + "/" + "coeus:query" + "/xsd:string:" + query, '#result');
+                    callAPI(urlWrite + individual + "/" + "coeus:endpoint" + "/xsd:string:" + encodeBars(endpoint), '#result');
+                    callAPI(urlWrite + individual + "/" + "coeus:query" + "/xsd:string:" + encodeBars(query), '#result');
                     callAPI(urlWrite + individual + "/" + "coeus:order" + "/xsd:string:" + order, '#result');
                     callAPI(urlWrite + individual + "/" + "coeus:extends" + "/coeus:" + concept_ext, '#result');
                     callAPI(urlWrite + "coeus:" + concept_ext + "/" + "coeus:isExtendedBy" + "/" + individual, '#result');
@@ -327,9 +339,9 @@
                 if ($('#oldMethod').val() !== $('#method').val())
                     callAPI(urlUpdate + lastPath() + "/" + "coeus:method" + "/xsd:string:" + $('#oldMethod').val() + ",xsd:string:" + $('#method').val(), '#result');
                 if ($('#oldEndpoint').val() !== $('#endpoint').val())
-                    callAPI(urlUpdate + lastPath() + "/" + "coeus:endpoint" + "/xsd:string:" + $('#oldEndpoint').val() + ",xsd:string:" + $('#endpoint').val(), '#result');
+                    callAPI(urlUpdate + lastPath() + "/" + "coeus:endpoint" + "/xsd:string:" + encodeBars($('#oldEndpoint').val()) + ",xsd:string:" + encodeBars($('#endpoint').val()), '#result');
                 if ($('#oldQuery').val() !== $('#query').val())
-                    callAPI(urlUpdate + lastPath() + "/" + "coeus:query" + "/xsd:string:" + $('#oldQuery').val() + ",xsd:string:" + $('#query').val(), '#result');
+                    callAPI(urlUpdate + lastPath() + "/" + "coeus:query" + "/xsd:string:" + encodeBars($('#oldQuery').val()) + ",xsd:string:" + encodeBars($('#query').val()), '#result');
                 if ($('#oldOrder').val() !== $('#order').val())
                     callAPI(urlUpdate + lastPath() + "/" + "coeus:order" + "/xsd:string:" + $('#oldOrder').val() + ",xsd:string:" + $('#order').val(), '#result');
                 if ($('#oldExtends').val() !== $('#extends').val()) {
@@ -340,6 +352,47 @@
                 if ($('#oldPublisher').val() !== $('#publisher').val()) {
                     callAPI(urlUpdate + lastPath() + "/" + "dc:publisher" + "/xsd:string:" + $('#oldPublisher').val() + ",xsd:string:" + $('#publisher').val(), '#result');
                     updatePublisherOnSelectores(urlUpdate, lastPath(), $('#oldPublisher').val(), $('#publisher').val());
+                }
+                if ($('#oldBuilt').val().toString() !== $('#built').is(':checked').toString())
+                    callAPI(urlUpdate + lastPath() + "/" + "coeus:built" + "/xsd:boolean:" + $('#oldBuilt').val() + ",xsd:boolean:" + $('#built').is(':checked'), '#result'); 
+            
+                if (document.getElementById('result').className === 'alert alert-success') {
+                    window.location = document.referrer;
+                }
+                //if one fail the others fails too
+                if (document.getElementById('result').className === 'alert alert-error') {
+                    $('#callModal').click();
+                }
+            }
+            function updateSelector(){
+                var urlUpdate = "../../../api/" + getApiKey() + "/update/";
+                var urlDelete = "../../../api/" + getApiKey() + "/delete/";
+                var urlWrite = "../../../api/" + getApiKey() + "/write/";
+                
+                var individual = $('#selectorUri').html();
+                if ($('#oldTitleSelectors').val() !== $('#titleSelectors').val())
+                    callAPI(urlUpdate + individual + "/" + "dc:title" + "/xsd:string:" + $('#oldTitleSelectors').val() + ",xsd:string:" + $('#titleSelectors').val(), '#res');
+                if ($('#oldLabelSelectors').val() !== $('#labelSelectors').val())
+                    callAPI(urlUpdate + individual + "/" + "rdfs:label" + "/xsd:string:" + $('#oldLabelSelectors').val() + ",xsd:string:" + $('#labelSelectors').val(), '#res');
+                if ($('#oldPropertySelectors').val() !== $('#propertySelectors').val())
+                    callAPI(urlUpdate + individual + "/" + "coeus:property" + "/xsd:string:" + $('#oldPropertySelectors').val() + ",xsd:string:" + $('#propertySelectors').val(), '#res');
+                if ($('#oldQuerySelectors').val() !== $('#querySelectors').val())
+                    callAPI(urlUpdate + individual + "/" + "coeus:query" + "/xsd:string:" + encodeBars($('#oldQuerySelectors').val()) + ",xsd:string:" + encodeBars($('#querySelectors').val()), '#res');
+                if (($('#oldRegexSelectors').val() !== $('#regexSelectors').val()) && ($('#regexSelectors').val() !== ''))
+                    callAPI(urlUpdate + individual + "/" + "coeus:regex" + "/xsd:string:" + $('#oldRegexSelectors').val() + ",xsd:string:" + $('#regexSelectors').val(), '#res');
+                if ($('#oldKeySelectors').val().toString() !== $('#keySelectorsForm').is(':checked').toString()){
+                    //change: false to true
+                    if($('#keySelectorsForm').is(':checked')){
+                        callAPI(urlWrite + individual + "/" + "coeus:isKeyOf" + "/" + lastPath(), '#res');
+                        callAPI(urlWrite + lastPath() + "/" + "coeus:hasKey" + "/" +individual , '#res');
+                    }//change: true to false
+                    else{
+                        callAPI(urlDelete + individual + "/" + "coeus:isKeyOf" + "/" + lastPath(), '#res');
+                        callAPI(urlDelete + lastPath() + "/" + "coeus:hasKey" + "/" +individual , '#res');
+                    }
+                }
+                if (document.getElementById('res').className === 'alert alert-success') {
+                    window.location = document.referrer;
                 }
             }
 
@@ -392,7 +445,11 @@
                 <h4 id="type" >New Resource </h4>
                 <div class="span4" >
 
-
+                    <div id="builtForm"> 
+                        <label class="checkbox" >
+                            <input type="checkbox" id="built"><span class="label label-success">Built</span>
+                        </label>
+                    </div>
                     <div id="titleForm" >
                         <label class="control-label" for="title">Title</label>
                         <input id="title" type="text" placeholder="Ex: Uniprot" onkeyup="changeURI(this.value);" > <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the dc:title property" ></i>
@@ -401,12 +458,12 @@
                         <label class="control-label" for="label">Label</label>
                         <input id="label" type="text" placeholder="Ex: Uniprot Resource"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:label property" ></i>
                     </div>
-                    <div id="conceptForm" > 
-                        <label class="control-label" for="label">Concept (fix that)</label>
+                    <!--<div id="conceptForm" > 
+                        <label class="control-label" for="label">Concept (fix to allow change of concept)</label>
                         <select id="concept" class="span10">
 
                         </select> <i class="icon-question-sign" data-toggle="tooltip" title="Select the concept associated" ></i>
-                    </div>
+                    </div>-->
                     <div id="extendsForm" > 
                         <label class="control-label" for="label">Extends</label>
                         <select id="extends" class="span10">
