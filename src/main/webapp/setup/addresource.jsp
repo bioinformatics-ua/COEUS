@@ -32,7 +32,7 @@
                     queryToResult(qselectors, fillSelectors);
 
                     var query = initSparqlerQuery();
-                    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?built {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . " + path + " coeus:method ?method . " + path + " dc:publisher ?publisher . " + path + " coeus:endpoint ?endpoint . " + path + " coeus:query ?query . " + path + " coeus:order ?order . " + path + " coeus:extends ?extends . " + path + " coeus:built ?built . }";
+                    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?built {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . " + path + " coeus:method ?method . " + path + " dc:publisher ?publisher . " + path + " coeus:endpoint ?endpoint . " + path + " coeus:query ?query . " + path + " coeus:order ?order . " + path + " coeus:extends ?extends . OPTIONAL{" + path + " coeus:built ?built } }";
                     query.query(q,
                             {success: function(json) {
                                     //var resultTitle = json.results.bindings[0].title;
@@ -50,7 +50,7 @@
                                     $('#query').val(json.results.bindings[0].query.value);
                                     $('#order').val(json.results.bindings[0].order.value);
                                     $('#extends option:contains(' + splitURIPrefix(json.results.bindings[0].extends.value).value + ')').prop({selected: true});
-                                    if(json.results.bindings[0].built.value==="true") $('#built').prop('checked', true);
+                                    if(json.results.bindings[0].built!==undefined && json.results.bindings[0].built.value==="true") $('#built').prop('checked', true);
                                     else $('#built').prop('checked', false);
                                     //$('#extends').val(json.results.bindings[0].extends.value);
                                     //PUT OLD VALUES IN THE STATIC FIELD

@@ -51,7 +51,7 @@
                             +'Extensions '
                             +'<b class="caret"></b>'
                             +'</button>'
-                            +'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdown" id="'+concept+'">'
+                            +'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdown" id="'+splitURIPrefix(result[key].concept.value).value+'">'
                                 //<li><a href="#">Action</a></li>
                             +'</ul>'
                             +'</a>'
@@ -59,18 +59,21 @@
                             + '</td></tr>';
                     $('#concepts').append(a);
                 }
+                //fill Extensions:
                 for(var r in result){
-                    var ext='coeus:'+splitURIPrefix(result[r].concept.value).value;
+                    var id=splitURIPrefix(result[r].concept.value).value;
+                    var ext='coeus:'+id;
                     //FILL THE EXTENSIONS
-                    var extensions="SELECT ?resource {"+ext+" coeus:isExtendedBy ?resource }";console.log(extensions);
-                    queryToResult(extensions,function (res){
-                        console.log(res);
-                        for(var rs in res){
-                            console.log(res[rs].resource.value+' - '+ext);
-                            //$('#'+ext).append('<li><a tabindex="-1" href="../resource/edit/coeus:'+ext+'">coeus:'+ext+'</a></li>');
-                        }
-                    });
+                    var extensions="SELECT ?resource {"+ext+" coeus:isExtendedBy ?resource }";
+                    queryToResult(extensions,fillExtensions.bind(this,id));
                 }
+            }
+            function fillExtensions(id,result){
+                for(var rs in result){
+                   var r=splitURIPrefix(result[rs].resource.value).value;
+                   $('#'+id).append('<li><a tabindex="-1" href="../resource/edit/coeus:'+r+'">coeus:'+r+'</a></li>');
+                }
+                //console.log('fillExtensions:'+ext);console.log(result)
             }
 
             $(document).ready(function() {
