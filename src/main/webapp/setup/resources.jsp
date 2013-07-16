@@ -40,9 +40,9 @@
             }
             function fillListOfResources(result) {
                 for (var key = 0, size = result.length; key < size; key++) {
-                    var built = '<span class="label ">not built</span>';
-                    if (result[key].built.value === "true")
-                        built = '<span class="label label-success">Built</span>';
+                    var built = '<span class="label label-success">Built</span>';
+                    if (result[key].built!==undefined && result[key].built.value !== "true")
+                        built = '<span class="label ">not built</span>';
                     var a = '<tr><td><a href=' + result[key].resource.value + '>'
                             + result[key].resource.value + '</a> '+built+'</td><td>'
                             + result[key].c.value + '</td><td>'

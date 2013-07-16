@@ -72,6 +72,9 @@
             </div>
             <div class=" text-right" >
                 <div class="btn-group">
+                    <!-- <a href="#cleanModal" data-toggle="modal"  class="btn btn-danger">Clean database</a>-->
+               </div>
+                <div class="btn-group">
                     <a href="../seed/add/" class="btn btn-success">Add <i class="icon-plus icon-white"></i></a>
                 </div>
             </div>
@@ -100,6 +103,24 @@
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button class="btn btn-danger" onclick="removeSeed();">Remove</button>
+                    </div>
+                </div>
+                        
+                               <!-- Modal -->
+                <div id="cleanModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button id="closecleanModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 >Clean database</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure do you want to clean all from the COEUS database?</p>
+                        <p class="text-error">Warning: This actions performs a SQL TRUNCATE over all tables that will delete all data.</p>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button class="btn btn-danger" onclick="">Clean</button>
                     </div>
                 </div>
     </s:layout-component>

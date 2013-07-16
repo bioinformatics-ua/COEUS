@@ -67,7 +67,7 @@
                         console.log(res);
                         for(var rs in res){
                             console.log(res[rs].resource.value+' - '+ext);
-                            $('#'+ext).append('<li><a tabindex="-1" href="../resource/edit/coeus:'+ext+'">coeus:'+ext+'</a></li>');
+                            //$('#'+ext).append('<li><a tabindex="-1" href="../resource/edit/coeus:'+ext+'">coeus:'+ext+'</a></li>');
                         }
                     });
                 }
