@@ -115,15 +115,16 @@
                         {success: function(json) {
                                 // fill Concepts
                                 for (var k = 0, s = json.results.bindings.length; k < s; k++) {
-                                    $('#seeds').append('<option>' + json.results.bindings[k].s.value + '</option>');
+                                    $('#seeds').append('<option>' + splitURIPrefix(json.results.bindings[k].seed.value).value + '</option>');
                                 }
+                                $('#seeds option:contains(' + lastPath().split('coeus:')[1] + ')').prop({selected: true});
                             }}
                 );
             });
 
             function changeSeed() {
                 var title = $('#seeds').val();
-                redirect("../seed/" + "coeus:seed_" + title.split(' ').join('_'));
+                redirect("../seed/" + "coeus:" + title);
             }
 
         </script>

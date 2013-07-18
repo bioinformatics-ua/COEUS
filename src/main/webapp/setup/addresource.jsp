@@ -28,8 +28,7 @@
                     $('#type').html("Edit Resource");
                     $('#submit').html('Edit <i class="icon-edit icon-white"></i>');
 
-                    var qselectors = "SELECT * {" + path + " coeus:loadsFrom ?selector . ?selector dc:title ?title . ?selector rdfs:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . OPTIONAL { ?selector coeus:isKeyOf ?key } . OPTIONAL { ?selector coeus:regex ?regex }}";
-                    queryToResult(qselectors, fillSelectors);
+
 
                     var query = initSparqlerQuery();
                     var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?built {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . " + path + " coeus:method ?method . " + path + " dc:publisher ?publisher . " + path + " coeus:endpoint ?endpoint . " + path + " coeus:query ?query . " + path + " coeus:order ?order . " + path + " coeus:extends ?extends . OPTIONAL{" + path + " coeus:built ?built } }";
@@ -50,8 +49,10 @@
                                     $('#query').val(json.results.bindings[0].query.value);
                                     $('#order').val(json.results.bindings[0].order.value);
                                     $('#extends option:contains(' + splitURIPrefix(json.results.bindings[0].extends.value).value + ')').prop({selected: true});
-                                    if(json.results.bindings[0].built!==undefined && json.results.bindings[0].built.value==="true") $('#built').prop('checked', true);
-                                    else $('#built').prop('checked', false);
+                                    if (json.results.bindings[0].built !== undefined && json.results.bindings[0].built.value === "true")
+                                        $('#built').prop('checked', true);
+                                    else
+                                        $('#built').prop('checked', false);
                                     //$('#extends').val(json.results.bindings[0].extends.value);
                                     //PUT OLD VALUES IN THE STATIC FIELD
                                     //$('#titleForm').append('<input type="hidden" id="'+'oldTitle'+'" value="'+$('#title').val()+'"/>');
@@ -64,19 +65,34 @@
                                     $('#orderForm').append('<input type="hidden" id="' + 'oldOrder' + '" value="' + $('#order').val() + '"/>');
                                     $('#extendsForm').append('<input type="hidden" id="' + 'oldExtends' + '" value="' + splitURIPrefix(json.results.bindings[0].extends.value).value + '"/>');
                                     $('#builtForm').append('<input type="hidden" id="' + 'oldBuilt' + '" value="' + $('#built').is(':checked') + '"/>');
-                                    
+
                                 }}
                     );
+                        
+                var qselectors = "SELECT * {" + path + " coeus:loadsFrom ?selector . ?selector dc:title ?title . ?selector rdfs:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . OPTIONAL { ?selector coeus:isKeyOf ?key } . OPTIONAL { ?selector coeus:regex ?regex }}";
+                queryToResult(qselectors, fillSelectors);
+                
+               
                     //end of EDIT
                 } else {
                     //not showing selectores and built option if one resource is been add 
                     $('#selectorsForm').addClass('hide');
                     $('#builtForm').addClass('hide');
                 }
-
-
+                
+               
                 //activate tooltip (bootstrap-tooltip.js is need)
                 $('.icon-question-sign').tooltip();
+            });
+            
+            $('#existingSelector').click(function() {
+                //clean all existing selectores
+                $('#existingSelectors').html("");
+                var selectorsType='coeus:'+$('#publisher').val().toUpperCase();
+                console.log(selectorsType);
+                var existingSelectores="SELECT DISTINCT ?selector (MIN(?resource) AS ?resource) (MIN(?title) AS ?title) (MIN(?label) AS ?label) (MIN(?property) AS ?property) (MIN(?query) AS ?query) MIN(?regex) (MIN(?key) AS ?key) {?selector coeus:loadsFor ?resource . ?selector a "+selectorsType+" . ?selector dc:title ?title . ?selector rdfs:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . OPTIONAL { ?selector coeus:regex ?regex } . FILTER NOT EXISTS { ?selector coeus:isKeyOf ?key }} GROUP BY ?selector";
+                queryToResult(existingSelectores,fillExitingSelectors);
+                
             });
 
             $('#submit').click(function() {
@@ -90,6 +106,40 @@
                 }
 
             });
+
+            function fillExitingSelectors(result){console.log(result);
+                
+                for (var r in result) {
+                    var key = '';
+                    if (result[r].key !== undefined)
+                        key = '<span class="label label-success">Key</span>';
+                    var regex = '-';
+                    if (result[r].regex !== undefined)
+                        regex = result[r].regex.value;
+                    var sel=splitURIPrefix(result[r].selector.value).value;
+                    var a = '<tr><td>'
+                            + result[r].title.value + ' ' + key
+                            + '</td><td>'
+                            + result[r].query.value + '</td><td>'
+                            + result[r].property.value + '</td><td>'
+                            + regex + '</td><td>'
+                            + '<div class="btn-group" id="btn'+sel+'">'
+                            + '<button class="btn btn-success" onclick="addExistingSelector(\'' + sel + '\')">Add</button>'
+                            + '</div>'+'<div id="result'+sel+'"></div>'
+                            + '</td></tr>';
+
+                    $('#existingSelectors').append(a);
+                }
+            }
+            function addExistingSelector(selector){
+                var urlWrite = "../../../api/" + getApiKey() + "/write/";
+                callAPI(urlWrite + lastPath() + "/" + "coeus:loadsFrom" + "/coeus:" + selector, '#result'+ selector);
+                callAPI(urlWrite + "coeus:" + selector + "/" + "coeus:loadsFor/" + lastPath(), '#result'+ selector);
+                if (document.getElementById('result'+ selector).className === 'alert alert-success') {
+                    $('#btn'+selector).addClass('hide');
+                    $('#result'+selector).html("Added");
+                }   
+            }
             function fillConceptsExtension(result) {
                 for (var r in result) {
                     var concept = splitURIPrefix(result[r].concept.value);
@@ -122,50 +172,70 @@
             }
             function selectSelector(selector) {
                 $('#removeModalLabel').html('coeus:' + selector);
+                var qTotal="SELECT (COUNT(?resource) AS ?total) {coeus:" + selector+" coeus:loadsFor ?resource }";
+                $('#rmBodySelectors').html('');
+                $('#btnDetach').remove();
+                        
+                queryToResult(qTotal,function (result){
+                    var total=result[0].total.value;
+                    if(total>1) {
+                        //console.log(selector);
+                        var text='Info: This selector is associated with more that one resource. You can opt to only detach the selector. ';
+                        $('#rmBodySelectors').html(text);
+                        $('#rmbtns').append('<a class="btn btn-warning" id="btnDetach" onclick="detachSelector(\''+selector+'\');">Detach</a>');
+                    }
+                });
+                
+            }
+            function detachSelector(selector){
+                var urlDelete = "../../../api/" + getApiKey() + "/delete/";
+                callAPI(urlDelete + lastPath() + "/" + "coeus:loadsFrom" + "/coeus:" + selector, '#res');
+                if (document.getElementById('res').className === 'alert alert-success') {
+                    window.location = document.referrer;
+                }
             }
             function editSelector(selector) {
                 //document.getElementById('myModalLabel').value="Edit Selector";
                 $('#selectorsModalLabel').html("Edit Selector");
                 $('#addSelectorButton').html("Edit");
                 console.log($('#selectorsModalLabel').html());
-                $('#selectorUri').html("coeus:"+selector);
-                var q="SELECT * {coeus:"+selector+" dc:title ?title . coeus:"+selector+" rdfs:label ?label . coeus:"+selector+" coeus:property ?property . coeus:"+selector+" coeus:query ?query . OPTIONAL { coeus:"+selector+" coeus:isKeyOf ?key } . OPTIONAL { coeus:"+selector+" coeus:regex ?regex }}";
-                queryToResult(q,function (result){
+                $('#selectorUri').html("coeus:" + selector);
+                var q = "SELECT * {coeus:" + selector + " dc:title ?title . coeus:" + selector + " rdfs:label ?label . coeus:" + selector + " coeus:property ?property . coeus:" + selector + " coeus:query ?query . OPTIONAL { coeus:" + selector + " coeus:isKeyOf ?key } . OPTIONAL { coeus:" + selector + " coeus:regex ?regex }}";
+                queryToResult(q, function(result) {
                     //FILL THE VALUES
                     $('#titleSelectors').val(result[0].title.value);
                     document.getElementById('titleSelectors').setAttribute("disabled");
                     $('#labelSelectors').val(result[0].label.value);
                     $('#propertySelectors').val(result[0].property.value);
                     $('#querySelectors').val(result[0].query.value);
-                    if(result[0].regex!==undefined){
+                    if (result[0].regex !== undefined) {
                         $('#regexSelectors').val(result[0].regex.value);
-                    }else{
+                    } else {
                         $('#regexSelectors').val('');
                     }
-                    if(result[0].key!==undefined) $('#keySelectorsForm').prop('checked', true);
-                    else $('#keySelectorsForm').prop('checked', false);
+                    if (result[0].key !== undefined)
+                        $('#keySelectorsForm').prop('checked', true);
+                    else
+                        $('#keySelectorsForm').prop('checked', false);
                     //SAVE OLD VALUES IN A STATIC FIELD
                     $('#titleSelectorsForm').append('<input type="hidden" id="' + 'oldTitleSelectors' + '" value="' + $('#titleSelectors').val() + '"/>');
                     $('#labelSelectorsForm').append('<input type="hidden" id="' + 'oldLabelSelectors' + '" value="' + $('#labelSelectors').val() + '"/>');
                     $('#propertySelectorsForm').append('<input type="hidden" id="' + 'oldPropertySelectors' + '" value="' + $('#propertySelectors').val() + '"/>');
                     $('#querySelectorsForm').append('<input type="hidden" id="' + 'oldQuerySelectors' + '" value="' + $('#querySelectors').val() + '"/>');
                     $('#regexSelectorsForm').append('<input type="hidden" id="' + 'oldRegexSelectors' + '" value="' + $('#regexSelectors').val() + '"/>');
-                    $('#titleSelectorsForm').append('<input type="hidden" id="oldKeySelectors'+ '" value="' + $('#keySelectorsForm').is(':checked') + '"/>');
-  
+                    $('#titleSelectorsForm').append('<input type="hidden" id="oldKeySelectors' + '" value="' + $('#keySelectorsForm').is(':checked') + '"/>');
+
                 });
-                
+
                 //$('#callSelectorsModal').click();
             }
             function removeSelector() {
                 var selector = $('#removeModalLabel').html();
                 //var query = initSparqlerQuery();
                 console.log('Remove: ' + selector);
-
                 var urlPrefix = "../../../api/" + getApiKey();
-                var urlDelete = "../../../api/" + getApiKey() + "/delete/";
-                //remove all subjects and predicates associated.
-                //removeAllTriplesFromObject(urlPrefix, selector);
-                callAPI(urlDelete + lastPath() + "/" + "coeus:loadsFrom" + "/" + selector, '#res');
+                //remove all subjects associated.
+                removeAllTriplesFromPredicateAndObject(urlPrefix,"coeus:loadsFrom", selector);
                 //remove all predicates and objects associated.            
                 removeAllTriplesFromSubject(urlPrefix, selector);
 
@@ -186,7 +256,7 @@
                     }
                 });
             }
-            function addSelector(){
+            function addSelector() {
                 var urlWrite = "../../../api/" + getApiKey() + "/write/";
 
                 var type = $('#publisher').val().toUpperCase();
@@ -242,13 +312,19 @@
                     }
                     if (regex !== '')
                         callAPI(urlWrite + individual + "/" + "coeus:regex" + "/xsd:string:" + regex, '#res');
-                    // /api/coeus/write/coeus:uniprot_Q13428/dc:title/Q13428
-                    //window.location = "../entity/";
+                    //Update Selectors table
+                    if (document.getElementById('res').className === 'alert alert-success') {
+                        window.location.reload();
+                    }
+                    
+                    
                 }
             }
             function submitSelector() {
-                if($('#selectorsModalLabel').html()==="Edit Selector") updateSelector();
-                else addSelector();
+                if ($('#selectorsModalLabel').html() === "Edit Selector")
+                    updateSelector();
+                else
+                    addSelector();
             }
             function submit() {
 
@@ -354,8 +430,8 @@
                     updatePublisherOnSelectores(urlUpdate, lastPath(), $('#oldPublisher').val(), $('#publisher').val());
                 }
                 if ($('#oldBuilt').val().toString() !== $('#built').is(':checked').toString())
-                    callAPI(urlUpdate + lastPath() + "/" + "coeus:built" + "/xsd:boolean:" + $('#oldBuilt').val() + ",xsd:boolean:" + $('#built').is(':checked'), '#result'); 
-            
+                    callAPI(urlUpdate + lastPath() + "/" + "coeus:built" + "/xsd:boolean:" + $('#oldBuilt').val() + ",xsd:boolean:" + $('#built').is(':checked'), '#result');
+
                 if (document.getElementById('result').className === 'alert alert-success') {
                     window.location = document.referrer;
                 }
@@ -364,11 +440,11 @@
                     $('#callModal').click();
                 }
             }
-            function updateSelector(){
+            function updateSelector() {
                 var urlUpdate = "../../../api/" + getApiKey() + "/update/";
                 var urlDelete = "../../../api/" + getApiKey() + "/delete/";
                 var urlWrite = "../../../api/" + getApiKey() + "/write/";
-                
+
                 var individual = $('#selectorUri').html();
                 if ($('#oldTitleSelectors').val() !== $('#titleSelectors').val())
                     callAPI(urlUpdate + individual + "/" + "dc:title" + "/xsd:string:" + $('#oldTitleSelectors').val() + ",xsd:string:" + $('#titleSelectors').val(), '#res');
@@ -380,15 +456,15 @@
                     callAPI(urlUpdate + individual + "/" + "coeus:query" + "/xsd:string:" + encodeBars($('#oldQuerySelectors').val()) + ",xsd:string:" + encodeBars($('#querySelectors').val()), '#res');
                 if (($('#oldRegexSelectors').val() !== $('#regexSelectors').val()) && ($('#regexSelectors').val() !== ''))
                     callAPI(urlUpdate + individual + "/" + "coeus:regex" + "/xsd:string:" + $('#oldRegexSelectors').val() + ",xsd:string:" + $('#regexSelectors').val(), '#res');
-                if ($('#oldKeySelectors').val().toString() !== $('#keySelectorsForm').is(':checked').toString()){
+                if ($('#oldKeySelectors').val().toString() !== $('#keySelectorsForm').is(':checked').toString()) {
                     //change: false to true
-                    if($('#keySelectorsForm').is(':checked')){
+                    if ($('#keySelectorsForm').is(':checked')) {
                         callAPI(urlWrite + individual + "/" + "coeus:isKeyOf" + "/" + lastPath(), '#res');
-                        callAPI(urlWrite + lastPath() + "/" + "coeus:hasKey" + "/" +individual , '#res');
+                        callAPI(urlWrite + lastPath() + "/" + "coeus:hasKey" + "/" + individual, '#res');
                     }//change: true to false
-                    else{
+                    else {
                         callAPI(urlDelete + individual + "/" + "coeus:isKeyOf" + "/" + lastPath(), '#res');
-                        callAPI(urlDelete + lastPath() + "/" + "coeus:hasKey" + "/" +individual , '#res');
+                        callAPI(urlDelete + lastPath() + "/" + "coeus:hasKey" + "/" + individual, '#res');
                     }
                 }
                 if (document.getElementById('res').className === 'alert alert-success') {
@@ -434,6 +510,7 @@
                     </table>
                     <div class="text-right">
                         <button  type="button" id="addselector" href="#selectorsModal" role="button" data-toggle="modal" class="btn btn-success">New <i class="icon-plus icon-white"></i> </button>
+                        <button  type="button" id="existingSelector" href="#existingSelectorsModal" role="button" data-toggle="modal" class="btn btn-warning">Existing <i class="icon-plus icon-white"></i> </button>
                         <button type="button" id="done" class="btn btn-info" onclick="window.history.back(-1);">Done</button>
                     </div>
 
@@ -610,20 +687,50 @@
             </div>
             <div class="modal-body">
                 <p>Are you sure do you want to remove the <strong><a class="text-error" id="removeModalLabel"></a></strong> selector?</p>
-                <p class="text-warning">Warning: All dependents triples are removed too.</p>
+                <p class="text-warning">Warning: If you press the remove button all dependents triples are removed too.</p>
+                <div id="rmBodySelectors">
 
+                </div>
                 <div id="resultRemove">
 
                 </div>
 
             </div>
 
-            <div class="modal-footer">
+            <div class="modal-footer" id="rmbtns">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                 <button class="btn btn-danger" onclick="removeSelector();">Remove</button>
             </div>
         </div>
 
+        <!-- Add Existing Selector Modal -->
+        <div id="existingSelectorsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button id="closeExistingSelectorsModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 >Add Existing Selector</h3>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Query</th>
+                            <th>Property</th>
+                            <th>Regex</th>
+                            <th>Choose</th>
+                        </tr>
+                    </thead>
+                    <tbody id="existingSelectors">
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                <button class="btn btn-info" onclick="window.location.reload();">Done</button>
+            </div>
+        </div>
 
 
 
