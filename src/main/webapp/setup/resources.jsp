@@ -26,7 +26,6 @@
                 removeAllTriplesFromObject(urlPrefix, resource);
                 //remove all predicates and objects associated.            
                 removeAllTriplesFromSubject(urlPrefix, resource);
-
             }
             function fillBreadcumb(result) {
                 console.log(result);
@@ -71,6 +70,9 @@
                 //header name
                 var path = lastPath();
                 $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
+                
+                var urlPrefix = "../../api/" + getApiKey();
+                cleanUnlikedTriples(urlPrefix);
 
             });
         </script>

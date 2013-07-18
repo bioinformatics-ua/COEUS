@@ -89,6 +89,9 @@
                 //header name
                 var path = lastPath();
                 $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
+                
+                var urlPrefix = "../../api/" + getApiKey();
+                cleanUnlikedTriples(urlPrefix);
 
             });
         </script>

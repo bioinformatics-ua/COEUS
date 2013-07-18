@@ -62,6 +62,9 @@
                 var path = lastPath();
                 $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
                 $('#breadSeed').html('<a href="../seed/'+path+'">Seed</a> <span class="divider">/</span>');
+                
+                var urlPrefix = "../../api/" + getApiKey();
+                cleanUnlikedTriples(urlPrefix);
             });
         </script>
     </s:layout-component>

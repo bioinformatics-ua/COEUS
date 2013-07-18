@@ -141,7 +141,7 @@ function splitURIPrefix(uri) {
  * @returns {undefined}
  */
 function callAPI(url, html) {
-    url=encodeURI(url);
+    url = encodeURI(url);
     $.ajax({url: url, async: false, dataType: 'json'}).done(function(data) {
         console.log(url + ' ' + data.status);
         if (data.status === 100) {
@@ -186,7 +186,7 @@ function redirect(location) {
 }
 /**
  * 
- * remove all subjects and predicates associated. The objects are recursively removed too.
+ * remove all subjects and predicates associated. 
  * 
  * example urlPrefix = "../../api/" + getApiKey() ;
  * 
@@ -195,97 +195,115 @@ function redirect(location) {
  * @returns {undefined}
  */
 function removeAllTriplesFromObject(urlPrefix, object) {
-    var query = initSparqlerQuery();
+
     var qObject = "SELECT ?subject ?predicate {?subject ?predicate " + object + " . }";
-    query.query(qObject,
-            {success: function(json) {
-                    var result = json.results.bindings;
-                    console.log(result);
-                    for (r in result) {
-                        var splitedPredicate = splitURIPrefix(result[r].predicate.value);
-                        var splitedSubject = splitURIPrefix(result[r].subject.value);
+    queryToResult(qObject, function(result) {
+        console.log(result);
+        for (var r in result) {
+            var subject = resultToObject(result[r].subject);
+            var predicate = resultToPredicate(result[r].predicate);
 
-                        var predicatePrefix = getPrefix(splitedPredicate.namespace);
-                        if (predicatePrefix !== '')
-                            predicatePrefix = predicatePrefix + ':';
-                        var objectPrefix = getPrefix(splitedSubject.namespace);
-                        if (objectPrefix !== '')
-                            objectPrefix = objectPrefix + ':';
-                        else
-                            objectPrefix = 'xsd:string:' + objectPrefix;
+            var url = "/delete/" + subject.prefix + subject.value + '/' + predicate.prefix + predicate.value + '/' + object;
 
-                        var url = "/delete/"+ objectPrefix + splitedSubject.value + '/' + predicatePrefix + splitedPredicate.value + '/' + object;
-                        
-                        console.log("Delete call: "+urlPrefix+url);
-                        callAPI(urlPrefix + url, "#result");
-                        if((splitedPredicate.value!== "includes") & (splitedPredicate.value!== "isEntityOf") & (splitedPredicate.value!== "isConceptOf") & (splitedPredicate.value!== "isResourceOf")) 
-                            removeRecursive(urlPrefix,objectPrefix + splitedSubject.value);
-                        
-                       
-                    }
-                    
+            //console.log("Delete call: " + urlPrefix + url);
+            callAPI(urlPrefix + url, "#result");
+            // if ((predicate.value !== "includes") & (predicate.value !== "isEntityOf") & (predicate.value !== "isConceptOf") & (predicate.value !== "isResourceOf"))
+            //removeRecursive(urlPrefix, subject.prefix + subject.value);
+        }
 
-                }}
+
+    }
     );
 
 }
 
-function isModel(key){
-    var b=false;
-    
-    if(key.indexOf("coeus:seed_") !== -1 | key.indexOf("coeus:entity_") !== -1 | key.indexOf("coeus:concept_") !== -1 | key.indexOf("coeus:resource_") !== -1) b=true;
-
-    console.log(key+' '+b);
-    return b;
-                        
+function cleanUnlikedTriples(urlPrefix){
+    //Clean unlinked entities
+    var qEntities="SELECT * {{ ?entity a coeus:Entity . FILTER NOT EXISTS{ ?entity coeus:isIncludedIn ?seed }}UNION {?entity a coeus:Entity . FILTER NOT EXISTS { ?seed coeus:includes ?entity }} }";
+    queryToResult(qEntities,function (result){
+        for(var r in result){
+            var entity=splitURIPrefix(result[r].entity.value);
+            var prefix=getPrefix(entity.namespace)+":";
+            removeAllTriplesFromSubject(urlPrefix, prefix+entity.value);
+        }
+    });
+    //Clean unlinked concepts
+    var qConcepts="SELECT * {{ ?concept a coeus:Concept . FILTER NOT EXISTS{ ?concept coeus:hasEntity ?entity }}UNION {?concept a coeus:Concept . FILTER NOT EXISTS { ?entity coeus:isEntityOf ?concept }} }";
+    queryToResult(qConcepts,function (result){
+        for(var r in result){
+            var concept=splitURIPrefix(result[r].concept.value);
+            var prefix=getPrefix(concept.namespace)+":";
+            removeAllTriplesFromSubject(urlPrefix, prefix+concept.value);
+        }
+    });
+    //Clean unlinked resources
+    var qResources="SELECT * {{ ?resource a coeus:Resource . FILTER NOT EXISTS{ ?resource coeus:isResourceOf ?concept} }UNION {?resource a coeus:Resource . FILTER NOT EXISTS { ?concept coeus:hasResource ?resource}} }";
+    queryToResult(qResources,function (result){
+        for(var r in result){
+            var resource=splitURIPrefix(result[r].resource.value);
+            var prefix=getPrefix(resource.namespace)+":";
+            removeAllTriplesFromSubject(urlPrefix, prefix+resource.value);
+        }
+    });
+    //Clean unlinked selectores
+    var qSelectores="SELECT * {{ ?selector coeus:property ?property . FILTER NOT EXISTS { ?selector coeus:loadsFor ?resource } }UNION {?selector coeus:property ?property . FILTER NOT EXISTS { ?resource coeus:loadsFrom ?selector}}}";
+    queryToResult(qSelectores,function (result){
+        for(var r in result){
+            var selector=splitURIPrefix(result[r].selector.value);
+            var prefix=getPrefix(selector.namespace)+":";
+            removeAllTriplesFromSubject(urlPrefix, prefix+selector.value);
+        }
+    });
 }
 
-function removeRecursive(urlPrefix,subject){
-    var query=initSparqlerQuery();
-    var qObject = "SELECT ?predicate ?object {"+subject+" ?predicate ?object . }";
-    console.log("Recursive call: "+qObject);
-    query.query(qObject,
-            {success: function(json) {
-                    var result = json.results.bindings;
-                    
-                    for (r in result) {
-                      var splitedPredicate = splitURIPrefix(result[r].predicate.value);
-                        var splitedObject = splitURIPrefix(result[r].object.value);
-
-                        var predicatePrefix = getPrefix(splitedPredicate.namespace);
-                        if (predicatePrefix !== '')
-                            predicatePrefix = predicatePrefix + ':';
-                        var objectPrefix = getPrefix(splitedObject.namespace);
-                        if (objectPrefix !== '')
-                            objectPrefix = objectPrefix + ':';
-                        else
-                            objectPrefix = 'xsd:string:' + objectPrefix;
-
-                        var url = "/delete/"+ subject + '/' + predicatePrefix + splitedPredicate.value + '/' + objectPrefix + splitedObject.value;
-                        console.log("Recursive Delete call: "+urlPrefix+url);
-                        callAPI(urlPrefix + url, "#result");
-                        if(isModel(objectPrefix + splitedObject.value)) {
-                           // console.log("Another recursive call: "+url);
-                            removeRecursive(urlPrefix,objectPrefix + splitedObject.value);
-                        }
-                          
-                    }
-
-
-                }}
-    );
-}
+//function isModel(key) {
+//    var b = false;
+//
+//    if (key.indexOf("coeus:seed_") !== -1 | key.indexOf("coeus:entity_") !== -1 | key.indexOf("coeus:concept_") !== -1 | key.indexOf("coeus:resource_") !== -1)
+//        b = true;
+//
+//    console.log(key + ' ' + b);
+//    return b;
+//
+//}
+//
+//function removeRecursive(urlPrefix, subject) {
+//    var query = initSparqlerQuery();
+//    var qObject = "SELECT ?predicate ?object {" + subject + " ?predicate ?object . }";
+//    console.log("Recursive call: " + qObject);
+//    query.query(qObject,
+//            {success: function(json) {
+//                    var result = json.results.bindings;
+//
+//                    for (var r in result) {
+//                        var object = resultToObject(result[r].object);
+//                        var predicate = resultToPredicate(result[r].predicate);
+//
+//                        var url = "/delete/" + subject + '/' + predicate.prefix + predicate.value + '/' + object.prefix + object.value;
+//                        console.log("Recursive Delete call: " + urlPrefix + url);
+//                        //callAPI(urlPrefix + url, "#result");
+//                        if (isModel(object.prefix + object.value)) {
+//                            // console.log("Another recursive call: "+url);
+//                            //removeRecursive(urlPrefix, object.prefix + object.value);
+//                        }
+//
+//                    }
+//
+//
+//                }}
+//    );
+//}
 
 function removeAllTriplesFromSubject(urlPrefix, subject) {
     var qSubject = "SELECT ?predicate ?object {" + subject + " ?predicate ?object . }";
     queryToResult(qSubject, function(result) {
         console.log(result);
         for (var r in result) {
-            var object=resultToObject(result[r].object);
-            var predicate=resultToPredicate(result[r].predicate);
+            var object = resultToObject(result[r].object);
+            var predicate = resultToPredicate(result[r].predicate);
 
-            var url = "/delete/"+ subject + '/' + predicate.prefix + predicate.value + '/' + object.prefix + object.value;
-            console.log(url);
+            var url = "/delete/" + subject + '/' + predicate.prefix + predicate.value + '/' + object.prefix + object.value;
+            //console.log(url);
             callAPI(urlPrefix + url, "#result");
         }
 
@@ -295,18 +313,19 @@ function removeAllTriplesFromSubject(urlPrefix, subject) {
             console.log("REDIRECTING...");
             //window.location.reload(true);
         }
-        }
+    }
     );
 }
 
 function removeAllTriplesFromSubjectAndPredicate(urlPrefix, subject, predicate) {
-    var qSubject = "SELECT ?object {" + subject + " "+predicate+" ?object . }";console.log(qSubject);
+    var qSubject = "SELECT ?object {" + subject + " " + predicate + " ?object . }";
+    console.log(qSubject);
     queryToResult(qSubject, function(result) {
         console.log(result);
         for (var r in result) {
-            var object=resultToObject(result[r].object);
+            var object = resultToObject(result[r].object);
 
-            var url = "/delete/"+ subject + '/' + predicate + '/' + object.prefix + object.value;
+            var url = "/delete/" + subject + '/' + predicate + '/' + object.prefix + object.value;
             console.log(url);
             callAPI(urlPrefix + url, "#result");
         }
@@ -317,20 +336,22 @@ function removeAllTriplesFromSubjectAndPredicate(urlPrefix, subject, predicate) 
             console.log("REDIRECTING...");
             //window.location.reload(true);
         }
-        }
+    }
     );
 }
 function removeAllTriplesFromPredicateAndObject(urlPrefix, predicate, object) {
-    var qSubject = "SELECT ?subject {?subject " +predicate+" "+object+" . }";console.log(qSubject);
+    var qSubject = "SELECT ?subject {?subject " + predicate + " " + object + " . }";
+    console.log(qSubject);
     queryToResult(qSubject, function(result) {
-            console.log(result);
-            for (var r in result) {
-                var subject=resultToPredicate(result[r].subject);
-                var url = "/delete/"+ subject.prefix+subject.value + '/' + predicate + '/' + object;
-                //console.log(url);
-                callAPI(urlPrefix + url, "#result");
-            }
+        console.log(result);
+        for (var r in result) {
+            var subject = resultToPredicate(result[r].subject);
+
+            var url = "/delete/" + subject.prefix + subject.value + '/' + predicate + '/' + object;
+            //console.log(url);
+            callAPI(urlPrefix + url, "#result");
         }
+    }
     );
 }
 
@@ -339,18 +360,20 @@ function removeAllTriplesFromPredicateAndObject(urlPrefix, predicate, object) {
  * @param {type} object
  * @returns {resultToObject.mapping}
  */
-function resultToObject(object){
-    var val=object.value;
-    var objectPrefix='';
-    
-    if(object.type==="uri"){ 
-        var splitedObject=splitURIPrefix(val);
+function resultToObject(object) {
+    var val = object.value;
+    var objectPrefix = '';
+
+    if (object.type === "uri") {
+        var splitedObject = splitURIPrefix(val);
         val = splitedObject.value;
         objectPrefix = getPrefix(splitedObject.namespace);
     }
 
-    if (objectPrefix !== '') objectPrefix = objectPrefix + ':';
-    else objectPrefix = 'xsd:'+splitURIPrefix(object.datatype).value+':' + objectPrefix;
+    if (objectPrefix !== '')
+        objectPrefix = objectPrefix + ':';
+    else
+        objectPrefix = 'xsd:' + splitURIPrefix(object.datatype).value + ':' + objectPrefix;
     //TO ALLOW '/' in the string call encodeBars(string);
     var mapping = {
         "prefix": objectPrefix,
@@ -363,10 +386,11 @@ function resultToObject(object){
  * @param {type} pred
  * @returns {resultToPredicate.mapping}
  */
-function resultToPredicate(pred){
+function resultToPredicate(pred) {
     var splitedPredicate = splitURIPrefix(pred.value);
     var predicatePrefix = getPrefix(splitedPredicate.namespace);
-    if (predicatePrefix !== '') predicatePrefix = predicatePrefix + ':';
+    if (predicatePrefix !== '')
+        predicatePrefix = predicatePrefix + ':';
 
     var mapping = {
         "prefix": predicatePrefix,
@@ -374,7 +398,7 @@ function resultToPredicate(pred){
     };
 
     return mapping;
-    
+
 }
 /**
  * Do a query to retrive the result in a callback way 
@@ -385,7 +409,7 @@ function resultToPredicate(pred){
  * @param {type} callback
  * @returns {undefined}
  */
-function queryToResult(selectQuery, callback){
+function queryToResult(selectQuery, callback) {
     var query = initSparqlerQuery();
     query.query(selectQuery,
             {success: function(json) {
@@ -393,9 +417,9 @@ function queryToResult(selectQuery, callback){
                     //console.log(result);
                     callback(result);
                 }}
-        );
+    );
 }
 
-function encodeBars(value){
+function encodeBars(value) {
     return value.split('/').join('%2F');
 }

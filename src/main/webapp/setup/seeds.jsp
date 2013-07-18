@@ -41,7 +41,8 @@
                             }}
                 );
 
-
+                var urlPrefix = "../../api/" + getApiKey();
+                cleanUnlikedTriples(urlPrefix);
             });
             
             
@@ -58,6 +59,7 @@
                 removeAllTriplesFromObject(urlPrefix,seed);
                 //remove all predicates and objects associated.            
                 removeAllTriplesFromSubject(urlPrefix,seed);
+               
 
             }
         </script>

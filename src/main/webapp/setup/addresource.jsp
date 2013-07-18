@@ -189,6 +189,7 @@
             }
             function detachSelector(selector){
                 var urlDelete = "../../../api/" + getApiKey() + "/delete/";
+                //callAPI(urlDelete + lastPath() + "/" + "coeus:isKeyOf" + "/coeus:" + selector, '#res');
                 callAPI(urlDelete + lastPath() + "/" + "coeus:loadsFrom" + "/coeus:" + selector, '#res');
                 if (document.getElementById('res').className === 'alert alert-success') {
                     window.location = document.referrer;
@@ -236,6 +237,7 @@
                 var urlPrefix = "../../../api/" + getApiKey();
                 //remove all subjects associated.
                 removeAllTriplesFromPredicateAndObject(urlPrefix,"coeus:loadsFrom", selector);
+                removeAllTriplesFromPredicateAndObject(urlPrefix,"coeus:isKeyOf", selector);
                 //remove all predicates and objects associated.            
                 removeAllTriplesFromSubject(urlPrefix, selector);
 
