@@ -108,7 +108,7 @@ public class UpdateActionBean implements ActionBean {
                 if (sub.indexOf(":") > 1) {
                     try {
                         if (pred.indexOf(":") > 1) {
-
+                            System.err.println(old_obj+","+new_obj);
                             // test old_obj
                             String xsd = "http://www.w3.org/2001/XMLSchema#";
                             Statement statToRemove = null;

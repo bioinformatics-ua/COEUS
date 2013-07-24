@@ -42,7 +42,7 @@
                 );
 
                 var urlPrefix = "../../api/" + getApiKey();
-                cleanUnlikedTriples(urlPrefix);
+                cleanUnlikedTriples(urlPrefix);                             
             });
             
             

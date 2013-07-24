@@ -37,6 +37,7 @@ public class ManagerActionBean implements ActionBean {
     private static final String RESOURCE_ADD_VIEW = "/setup/addresource.jsp";
     private static final String RESOURCES_VIEW = "/setup/resources.jsp";
     private static final String NOTFOUND_VIEW = "/setup/404.jsp";
+    private static final String GRAPH_VIEW = "/setup/graph.jsp";
     private String method;
     private String model;
     private ActionBeanContext context;
@@ -45,6 +46,10 @@ public class ManagerActionBean implements ActionBean {
     public Resolution handle() {
         return new ForwardResolution(NOTFOUND_VIEW);
 
+    }
+    
+    public Resolution graph() {
+        return new ForwardResolution(GRAPH_VIEW);
     }
 
     public Resolution export() throws FileNotFoundException {
