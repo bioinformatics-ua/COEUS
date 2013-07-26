@@ -7,10 +7,13 @@ package pt.ua.bioinformatics.coeus.actions;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.DefaultHandler;
@@ -18,6 +21,7 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import org.json.simple.JSONObject;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
 
@@ -25,8 +29,8 @@ import pt.ua.bioinformatics.coeus.common.Config;
  *
  * @author sernadela
  */
-@UrlBinding("/manager/{$model}/{method}")
-public class ManagerActionBean implements ActionBean {
+@UrlBinding("/config/{$model}/{method}")
+public class ConfigActionBean implements ActionBean {
 
     private static final String INDEX_VIEW = "/setup/index.jsp";
     private static final String SEEDS_VIEW = "/setup/seeds.jsp";
@@ -48,18 +52,18 @@ public class ManagerActionBean implements ActionBean {
         return new ForwardResolution(NOTFOUND_VIEW);
 
     }
-    public Resolution config() {
-        return new ForwardResolution("/setup/config.jsp");
 
-    }
-    
     public Resolution getconfig() {
         Boot.start();
         return new StreamingResolution("application/json", Config.getFile().toJSONString());
     }
-    
-    public Resolution graph() {
-        return new ForwardResolution(GRAPH_VIEW);
+
+    public Resolution putconfig() {
+
+        JSONObject result = updateConfigFile(method);
+        Config.setLoaded(false);
+        Config.load();
+        return new StreamingResolution("text/javascript", result.toString());
     }
 
     public Resolution export() throws FileNotFoundException {
@@ -131,5 +135,26 @@ public class ManagerActionBean implements ActionBean {
     @Override
     public ActionBeanContext getContext() {
         return context;
+    }
+
+    private JSONObject updateConfigFile(String value) {
+        JSONObject result = new JSONObject();
+
+        //System.out.println(value);
+
+        try {
+            FileWriter writer = new FileWriter(Config.getPath() + "config.js");
+            writer.write(value);
+            writer.flush();
+            writer.close();
+            result.put("status", 100);
+            result.put("message", "[COEUS][API][Config] config.js updated.");
+        } catch (IOException ex) {
+            result.put("status", 200);
+            result.put("message", "[COEUS][API][Config] ERROR: config.js not updated, check exception.");
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
 }

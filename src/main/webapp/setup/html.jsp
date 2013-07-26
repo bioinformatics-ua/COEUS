@@ -40,7 +40,7 @@
                                     </ul>
                                 </li>
 
-                                <li><a href="<c:url value="/manager/management/" />">Management</a></li>
+                                <li><a href="<c:url value="/manager/config/" />">Management</a></li>
 
                                 <li><a href="<c:url value="/documentation/" />">Documentation</a></li>
 

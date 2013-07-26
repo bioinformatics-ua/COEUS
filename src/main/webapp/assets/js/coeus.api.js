@@ -423,5 +423,6 @@ function queryToResult(selectQuery, callback) {
 function encodeBars(value) {
     value=value.split(';').join('%3B');
     value=value.split('/').join('%2F');
+    value=value.split('#').join('%23');
     return value;
 }
