@@ -27,7 +27,9 @@
             }
 
             function fillConfig(result) {
-                //fill the fields
+                console.log(result);
+
+                //fill the config fields
                 $('#Name').val(result.config.name);
                 $('#Description').val(result.config.description);
                 $('#KeyPrefix').val(result.config.keyprefix);
@@ -37,15 +39,6 @@
                 $('#ApiKey').val(result.config.apikey);
                 $('#Ontology').val(result.config.ontology);
                 $('#Setup').val(result.config.setup);
-                var json = JSON.parse(JSON.stringify(result.prefixes));
-                console.log(json.length);
-                var i = 0;
-                for (var r in json) {
-                    var val = json[r];
-                    i++;
-                    $('#tablePrefixes').append('<tr><td>' + i + '</td><td>' + r + '</td><td><a href="' + val + '">' + val + '</a></td><td><button onclick="" class="btn btn" type="button">Remove</button></td></tr>');
-                }
-
 
                 if (result.config.built.toString() === "true")
                     $('#Built').prop('checked', true);
@@ -56,14 +49,40 @@
                     $('#Debug').prop('checked', true);
                 else
                     $('#Debug').prop('checked', false);
+
+
+                //fill the prefixes table
+                var json = (result.prefixes);
+                var i = 0;
+                for (var r in json) {
+                    var val = json[r];console.log(r);
+                    i++;
+                    $('#tablePrefixes').append('<tr id="prefix_' + r + '"><td>' + i + '</td><td>' + r + '</td><td><a href="' + val + '">' + val + '</a></td><td><button onclick="removeById(\'prefix_' + r + '\',\'tablePrefixes\');" class="btn btn" type="button">Remove</button></td></tr>');
+                }
+
+                //progress bar exit
                 document.getElementById('bar').style.width = "100%";
                 $('#progress').addClass('hide');
                 document.getElementById('bar').class = "hide";
-                console.log(result);
+
             }
             function save() {
                 var url = "../../config/";
 
+                //Get all prefixes from table
+                var tableArray = [];
+                $("#tablePrefixes tr").each(function() {
+                    var arrayOfThisRow = [];
+                    var tableData = $(this).find('td');
+                    if (tableData.length > 0) {
+                        tableData.each(function() {
+                            arrayOfThisRow.push($(this).text());
+                        });
+                        tableArray.push(arrayOfThisRow);
+                    }
+                });
+
+                // fill the config field
                 var json = {
                     "config":
                             {"name": $('#Name').val(),
@@ -78,25 +97,36 @@
                                 "debug": $('#Debug').is(':checked'),
                                 "apikey": $('#ApiKey').val(),
                                 "environment": $('#Environment').val()
-                            },
-                    "prefixes": {
-                        "coeus": "http://bioinformatics.ua.pt/coeus/resource/",
-                        "owl2xml": "http://www.w3.org/2006/12/owl2-xml#",
-                        "xsd": "http://www.w3.org/2001/XMLSchema#",
-                        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-                        "owl": "http://www.w3.org/2002/07/owl#",
-                        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                        "dc": "http://purl.org/dc/elements/1.1/",
-                    }
+                            }
                 };
 
+                //fill the prefixes field
+                var jsonObj = JSON.parse(JSON.stringify(json));
+                jsonObj.prefixes = {};
 
-                var send = url + "putconfig/" + encodeBars(JSON.stringify(json));
+                for (var i in tableArray) {
+                    jsonObj.prefixes[tableArray[i][1]] = tableArray[i][2];
+                }
+
+                //send to server
+                var send = url + "putconfig/" + encodeBars(JSON.stringify(jsonObj));
                 console.log(send);
                 callAPI(send, "#result");
 
                 if (document.getElementById('result').className === 'alert alert-success') {
                     window.location.reload();
+                }
+            }
+
+            function addPrefix() {
+                $('#res').html('');
+                var num = $("#tablePrefixes tr").length+1;
+                var key = $('#keyPrefixes').val();
+                var value = $('#valuePrefixes').val();
+                if ($("#prefix_" + key).html() === undefined) {
+                    $('#tablePrefixes').append('<tr id="prefix_' + key + '"><td>' + num + '</td><td>' + key + '</td><td><a href="' + value + '">' + value + '</a></td><td><button onclick="removeById(\'prefix_' + key + '\',\'tablePrefixes\');" class="btn btn" type="button">Remove</button></td></tr>');
+                } else {
+                    $('#res').append('<p class="text-warning">This Key already exists.</p>');
                 }
             }
 
@@ -120,7 +150,7 @@
                     <li><a href="#tab3" data-toggle="tab">Predicates</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane" id="tab1">
+                    <div class="tab-pane active" id="tab1">
                         <form class="form-horizontal">
                             <fieldset>
 
@@ -165,7 +195,7 @@
                                 <div class="control-group">
                                     <label class="control-label" for="Version">Version</label>
                                     <div class="controls">
-                                        <input id="Version" name="Version" type="text" placeholder="1.0" class="input-large">
+                                        <input id="Version" name="Version" type="text" placeholder="1.0" class="input-mini">
                                         <p class="help-block">Ontology Version</p>
                                     </div>
                                 </div>
@@ -227,7 +257,7 @@
                         </form>
 
                     </div>
-                    <div class="tab-pane active" id="tab2">
+                    <div class="tab-pane" id="tab2">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
@@ -250,7 +280,7 @@
                             </tbody>
                         </table>
                         <div class="text-right">
-                            <button onclick="" class="btn btn-success" type="button">Add</button>
+                            <button onclick="" class="btn btn-success" href="#prefixesModal" role="button" data-toggle="modal" type="button">Add</button>
                         </div>
 
                     </div> 
@@ -267,6 +297,38 @@
                 </div>
 
             </div>
+
+
+            <!-- Modal -->
+            <div id="prefixesModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="prefixesModal" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h3 id="prefixesModalLabel">Add Prefix</h3>
+                </div>
+                <div class="modal-body">
+
+                    <div id="keyPrefixesForm" >
+                        <label class="control-label" for="title">Key</label>
+                        <input class="input-mini" id="keyPrefixes" type="text" placeholder="dc" > <i class="icon-question-sign" data-toggle="tooltip" title="The Key of the prefix" ></i>
+                    </div>
+                    <div id="valuePrefixesForm"> 
+                        <label class="control-label" for="label">Value</label>
+                        <input class="input-xlarge" id="valuePrefixes" type="text" placeholder="http://purl.org/dc/elements/1.1/"> <i class="icon-question-sign" data-toggle="tooltip" title="The prefix URL" ></i>
+                    </div>
+
+
+                    <div id="res">
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button class="btn btn-success" id="addPrefixButton" onclick="addPrefix();">Add</button>
+                </div>
+            </div>
+
+
 
 
         </s:layout-component>

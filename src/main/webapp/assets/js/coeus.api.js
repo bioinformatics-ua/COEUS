@@ -217,41 +217,41 @@ function removeAllTriplesFromObject(urlPrefix, object) {
 
 }
 
-function cleanUnlikedTriples(urlPrefix){
+function cleanUnlikedTriples(urlPrefix) {
     //Clean unlinked entities
-    var qEntities="SELECT * {{ ?entity a coeus:Entity . FILTER NOT EXISTS{ ?entity coeus:isIncludedIn ?seed }}UNION {?entity a coeus:Entity . FILTER NOT EXISTS { ?seed coeus:includes ?entity }} }";
-    queryToResult(qEntities,function (result){
-        for(var r in result){
-            var entity=splitURIPrefix(result[r].entity.value);
-            var prefix=getPrefix(entity.namespace)+":";
-            removeAllTriplesFromSubject(urlPrefix, prefix+entity.value);
+    var qEntities = "SELECT * {{ ?entity a coeus:Entity . FILTER NOT EXISTS{ ?entity coeus:isIncludedIn ?seed }}UNION {?entity a coeus:Entity . FILTER NOT EXISTS { ?seed coeus:includes ?entity }} }";
+    queryToResult(qEntities, function(result) {
+        for (var r in result) {
+            var entity = splitURIPrefix(result[r].entity.value);
+            var prefix = getPrefix(entity.namespace) + ":";
+            removeAllTriplesFromSubject(urlPrefix, prefix + entity.value);
         }
     });
     //Clean unlinked concepts
-    var qConcepts="SELECT * {{ ?concept a coeus:Concept . FILTER NOT EXISTS{ ?concept coeus:hasEntity ?entity }}UNION {?concept a coeus:Concept . FILTER NOT EXISTS { ?entity coeus:isEntityOf ?concept }} }";
-    queryToResult(qConcepts,function (result){
-        for(var r in result){
-            var concept=splitURIPrefix(result[r].concept.value);
-            var prefix=getPrefix(concept.namespace)+":";
-            removeAllTriplesFromSubject(urlPrefix, prefix+concept.value);
+    var qConcepts = "SELECT * {{ ?concept a coeus:Concept . FILTER NOT EXISTS{ ?concept coeus:hasEntity ?entity }}UNION {?concept a coeus:Concept . FILTER NOT EXISTS { ?entity coeus:isEntityOf ?concept }} }";
+    queryToResult(qConcepts, function(result) {
+        for (var r in result) {
+            var concept = splitURIPrefix(result[r].concept.value);
+            var prefix = getPrefix(concept.namespace) + ":";
+            removeAllTriplesFromSubject(urlPrefix, prefix + concept.value);
         }
     });
     //Clean unlinked resources
-    var qResources="SELECT * {{ ?resource a coeus:Resource . FILTER NOT EXISTS{ ?resource coeus:isResourceOf ?concept} }UNION {?resource a coeus:Resource . FILTER NOT EXISTS { ?concept coeus:hasResource ?resource}} }";
-    queryToResult(qResources,function (result){
-        for(var r in result){
-            var resource=splitURIPrefix(result[r].resource.value);
-            var prefix=getPrefix(resource.namespace)+":";
-            removeAllTriplesFromSubject(urlPrefix, prefix+resource.value);
+    var qResources = "SELECT * {{ ?resource a coeus:Resource . FILTER NOT EXISTS{ ?resource coeus:isResourceOf ?concept} }UNION {?resource a coeus:Resource . FILTER NOT EXISTS { ?concept coeus:hasResource ?resource}} }";
+    queryToResult(qResources, function(result) {
+        for (var r in result) {
+            var resource = splitURIPrefix(result[r].resource.value);
+            var prefix = getPrefix(resource.namespace) + ":";
+            removeAllTriplesFromSubject(urlPrefix, prefix + resource.value);
         }
     });
     //Clean unlinked selectores
-    var qSelectores="SELECT * {{ ?selector coeus:property ?property . FILTER NOT EXISTS { ?selector coeus:loadsFor ?resource } }UNION {?selector coeus:property ?property . FILTER NOT EXISTS { ?resource coeus:loadsFrom ?selector}}}";
-    queryToResult(qSelectores,function (result){
-        for(var r in result){
-            var selector=splitURIPrefix(result[r].selector.value);
-            var prefix=getPrefix(selector.namespace)+":";
-            removeAllTriplesFromSubject(urlPrefix, prefix+selector.value);
+    var qSelectores = "SELECT * {{ ?selector coeus:property ?property . FILTER NOT EXISTS { ?selector coeus:loadsFor ?resource } }UNION {?selector coeus:property ?property . FILTER NOT EXISTS { ?resource coeus:loadsFrom ?selector}}}";
+    queryToResult(qSelectores, function(result) {
+        for (var r in result) {
+            var selector = splitURIPrefix(result[r].selector.value);
+            var prefix = getPrefix(selector.namespace) + ":";
+            removeAllTriplesFromSubject(urlPrefix, prefix + selector.value);
         }
     });
 }
@@ -421,8 +421,23 @@ function queryToResult(selectQuery, callback) {
 }
 
 function encodeBars(value) {
-    value=value.split(';').join('%3B');
-    value=value.split('/').join('%2F');
-    value=value.split('#').join('%23');
+    value = value.split(';').join('%3B');
+    value = value.split('/').join('%2F');
+    value = value.split('#').join('%23');
     return value;
+}
+function removeById(childDiv, parentDiv)
+{
+    console.log(childDiv+' '+ parentDiv);
+    if (childDiv == parentDiv) {
+        alert("The parent div cannot be removed.");
+    }
+    else if (document.getElementById(childDiv)) {
+        var child = document.getElementById(childDiv);
+        var parent = document.getElementById(parentDiv);
+        parent.removeChild(child);
+    }
+    else {
+        alert("Child div has already been removed or does not exist.");
+    }
 }
