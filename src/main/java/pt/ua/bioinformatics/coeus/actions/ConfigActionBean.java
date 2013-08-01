@@ -4,14 +4,24 @@
  */
 package pt.ua.bioinformatics.coeus.actions;
 
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntProperty;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sourceforge.stripes.action.ActionBean;
@@ -32,17 +42,7 @@ import pt.ua.bioinformatics.coeus.common.Config;
 @UrlBinding("/config/{$model}/{method}")
 public class ConfigActionBean implements ActionBean {
 
-    private static final String INDEX_VIEW = "/setup/index.jsp";
-    private static final String SEEDS_VIEW = "/setup/seeds.jsp";
-    private static final String SEEDS_ADD_VIEW = "/setup/addseed.jsp";
-    private static final String ENTITY_ADD_VIEW = "/setup/addentity.jsp";
-    private static final String ENTITIES_VIEW = "/setup/entities.jsp";
-    private static final String CONCEPT_ADD_VIEW = "/setup/addconcept.jsp";
-    private static final String CONCEPTS_VIEW = "/setup/concepts.jsp";
-    private static final String RESOURCE_ADD_VIEW = "/setup/addresource.jsp";
-    private static final String RESOURCES_VIEW = "/setup/resources.jsp";
     private static final String NOTFOUND_VIEW = "/setup/404.jsp";
-    private static final String GRAPH_VIEW = "/setup/graph.jsp";
     private String method;
     private String model;
     private ActionBeanContext context;
@@ -50,7 +50,6 @@ public class ConfigActionBean implements ActionBean {
     @DefaultHandler
     public Resolution handle() {
         return new ForwardResolution(NOTFOUND_VIEW);
-
     }
 
     public Resolution getconfig() {
@@ -58,11 +57,82 @@ public class ConfigActionBean implements ActionBean {
         return new StreamingResolution("application/json", Config.getFile().toJSONString());
     }
 
+    public Resolution readrdf() throws MalformedURLException, IOException {
+        String location = "http://localhost:8080/coeus/resource/";
+        //String location ="http://purl.org/dc/elements/1.1/";
+        URL url = new URL(location);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        //set linked data content to rdf
+        conn.setRequestProperty("Accept", " application/rdf+xml");
+        //conn.setRequestProperty("User-Agent", "");
+        conn.setInstanceFollowRedirects(true);HttpURLConnection.setFollowRedirects(true);
+        //conn.setRequestProperty("Content-Type", "application/rdf+xml");
+        //HttpURLConnection conn=conn.getInputStream();
+
+
+        StringBuilder sb = new StringBuilder();
+        String line;
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close();
+
+        Map<String, List<String>> map = conn.getHeaderFields();
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+
+        System.out.println(context.getRequest().getServletPath());
+        System.out.println(context.getRequest().getServerName());
+        return new StreamingResolution("text/javascript", sb.toString());
+    }
+
+    public Resolution getprop() {
+
+        Config.load();
+        Set<String> set = new TreeSet<String>();
+        StringBuilder sb = new StringBuilder();
+        //get all proprieties for each prefix
+        JSONObject prefixes = (JSONObject) Config.getFile().get("prefixes");
+        for (Object o : prefixes.values()) {
+            System.err.println("Reading: " + o);
+            set.addAll(getOntologyProperties(o.toString()));
+        }
+
+        for (String s : set) {
+            sb.append(s);
+        }
+
+        return new StreamingResolution("text/javascript", sb.toString());
+    }
+
     public Resolution putconfig() {
 
-        JSONObject result = updateConfigFile(method);
+        //update config.js
+        String jsonString = method;
+        JSONObject result = updateFile(jsonString, "config.js");
         Config.setLoaded(false);
         Config.load();
+
+        //update predicates.csv
+        Set<String> set = new TreeSet<String>();
+        JSONObject prefixes = (JSONObject) Config.getFile().get("prefixes");
+        for (Object o : prefixes.values()) {
+            System.err.println("[COEUS][API][ConfigActionBean] Reading: " + o);
+            set.addAll(getOntologyProperties(o.toString()));
+        }
+        //read local ontology TODO: FIX THAT
+        String localOntology=context.getRequest().getScheme()+"://"+context.getRequest().getServerName()+":"+context.getRequest().getServerPort()+context.getRequest().getContextPath()+"/ontology/";
+        set.addAll(getOntologyProperties(localOntology));
+        
+        StringBuilder sb = new StringBuilder();
+        for (String s : set) {
+            sb.append(s);
+        }
+        
+        updateFile(sb.toString(), "predicates.csv");
+
         return new StreamingResolution("text/javascript", result.toString());
     }
 
@@ -75,40 +145,6 @@ public class ConfigActionBean implements ActionBean {
             Boot.getAPI().getModel().write(outs, "RDF/XML");
         }
         return new StreamingResolution("application/rdf+xml", outs.toString());
-    }
-
-    public Resolution seed() {
-        if (method == null) {
-            return new ForwardResolution(SEEDS_VIEW);
-        } else if (method.equals("add") | method.startsWith("edit")) {
-            return new ForwardResolution(SEEDS_ADD_VIEW);
-        } else {
-            return new ForwardResolution(INDEX_VIEW);
-        }
-    }
-
-    public Resolution entity() {
-        if (method.startsWith("add") | method.startsWith("edit")) {
-            return new ForwardResolution(ENTITY_ADD_VIEW);
-        } else {
-            return new ForwardResolution(ENTITIES_VIEW);
-        }
-    }
-
-    public Resolution concept() {
-        if (method.startsWith("add") | method.startsWith("edit")) {
-            return new ForwardResolution(CONCEPT_ADD_VIEW);
-        } else {
-            return new ForwardResolution(CONCEPTS_VIEW);
-        }
-    }
-
-    public Resolution resource() {
-        if (method.startsWith("add") | method.startsWith("edit")) {
-            return new ForwardResolution(RESOURCE_ADD_VIEW);
-        } else {
-            return new ForwardResolution(RESOURCES_VIEW);
-        }
     }
 
     public String getModel() {
@@ -137,24 +173,44 @@ public class ConfigActionBean implements ActionBean {
         return context;
     }
 
-    private JSONObject updateConfigFile(String value) {
+    private JSONObject updateFile(String value, String filename) {
         JSONObject result = new JSONObject();
 
-        //System.out.println(value);
+        System.out.println("[COEUS][API][ConfigActionBean] Saving.. " + filename);
 
         try {
-            FileWriter writer = new FileWriter(Config.getPath() + "config.js");
+            FileWriter writer = new FileWriter(Config.getPath() + filename);
             writer.write(value);
             writer.flush();
             writer.close();
             result.put("status", 100);
-            result.put("message", "[COEUS][API][Config] config.js updated.");
+            result.put("message", "[COEUS][API][ConfigActionBean] " + filename + " updated.");
         } catch (IOException ex) {
             result.put("status", 200);
-            result.put("message", "[COEUS][API][Config] ERROR: config.js not updated, check exception.");
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: " + filename + " not updated, check exception.");
             Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return result;
+    }
+
+    public Set<String> getOntologyProperties(String location) {
+        Set<String> set = new HashSet<String>();
+        try {
+            //auxiliar model
+            OntModel auxModel = ModelFactory.createOntologyModel();
+            auxModel.read(location);
+            ExtendedIterator<OntProperty> op = auxModel.listOntProperties();
+
+            while (op.hasNext()) {
+                OntProperty prop = op.next();
+                //if (prop.toString().startsWith(location)) {
+                    set.add(prop.toString() + "\n");
+                //}
+            }
+        } catch (Exception e) {
+            System.err.println("[COEUS][API][ConfigActionBean] ERROR in read model at: " + location);
+        }
+        return set;
     }
 }

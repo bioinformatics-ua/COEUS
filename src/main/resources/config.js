@@ -1,19 +1,19 @@
 {
 "config": {
-"name": "Model Test",
+        "name": "Model Test",
         "description": "COEUS Model Test",
         "keyprefix":"coeus",
         "version": "1.0a",
         "ontology": "http://bioinformatics.ua.pt/coeus/ontology/",
-        "setup": "",
+        "setup": "newsaggregator/setup.rdf",
         "sdb":"newsaggregator/sdb.ttl",
-        "predicates":"newsaggregator/predicates.csv",
+        "predicates":"predicates.csv",
         "built": false,
         "debug": true,
         "apikey":"coeus|uavr",
         "environment": "production"
 },
-        "prefixes" : {
+"prefixes" : {
         "coeus": "http://bioinformatics.ua.pt/coeus/resource/",
         "owl2xml":"http://www.w3.org/2006/12/owl2-xml#",
         "xsd": "http://www.w3.org/2001/XMLSchema#",

@@ -55,7 +55,7 @@
                 var json = (result.prefixes);
                 var i = 0;
                 for (var r in json) {
-                    var val = json[r];console.log(r);
+                    var val = json[r];
                     i++;
                     $('#tablePrefixes').append('<tr id="prefix_' + r + '"><td>' + i + '</td><td>' + r + '</td><td><a href="' + val + '">' + val + '</a></td><td><button onclick="removeById(\'prefix_' + r + '\',\'tablePrefixes\');" class="btn btn" type="button">Remove</button></td></tr>');
                 }
@@ -92,7 +92,7 @@
                                 "ontology": $('#Ontology').val(),
                                 "setup": $('#Setup').val(),
                                 "sdb": "newsaggregator/sdb.ttl",
-                                "predicates": "newsaggregator/predicates.csv",
+                                "predicates": "predicates.csv",
                                 "built": $('#Built').is(':checked'),
                                 "debug": $('#Debug').is(':checked'),
                                 "apikey": $('#ApiKey').val(),
@@ -111,16 +111,32 @@
                 //send to server
                 var send = url + "putconfig/" + encodeBars(JSON.stringify(jsonObj));
                 console.log(send);
-                callAPI(send, "#result");
+                //callAPI(send, "#result");
 
-                if (document.getElementById('result').className === 'alert alert-success') {
-                    window.location.reload();
-                }
+                //progress bar init
+                document.getElementById('bar').style.width = "10%";
+                $('#progress').removeClass('hide');
+                $('#btnSave').html("Saving...");
+                $('#btnSave').addClass('disabled');
+
+                callURL(send, saveSuccess, saveError);
             }
+            function saveSuccess(data) {
+                console.log(data);
+                $('#btnSave').removeClass('disabled');
+                $('#btnSave').html("Save it!");
 
+                //progress bar exit
+                document.getElementById('bar').style.width = "100%";
+                $('#progress').addClass('hide');
+                document.getElementById('bar').class = "hide";
+            }
+            function saveError(jqXHR, textStatus) {
+                console.log(textStatus);
+            }
             function addPrefix() {
                 $('#res').html('');
-                var num = $("#tablePrefixes tr").length+1;
+                var num = $("#tablePrefixes tr").length + 1;
                 var key = $('#keyPrefixes').val();
                 var value = $('#valuePrefixes').val();
                 if ($("#prefix_" + key).html() === undefined) {
@@ -128,6 +144,10 @@
                 } else {
                     $('#res').append('<p class="text-warning">This Key already exists.</p>');
                 }
+            }
+            function changeTab(old_tab, new_tab) {
+                $(old_tab).removeClass('active');
+                $(new_tab).addClass('active');
             }
 
 
@@ -138,19 +158,28 @@
         <div class="container">
 
             <div id="header" class="page-header">
-                <h1>Configuration Page</h1>
+                <h1>COEUS Setup</h1>
             </div>
             <div id="progress" class="progress progress-striped active" >
                 <div id="bar" class="bar" style="width: 10%;"></div>
             </div>
             <div class="tabbable"> <!-- Only required for left/right tabs -->
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab1" data-toggle="tab">Configuration</a></li>
-                    <li><a href="#tab2" data-toggle="tab">Prefixes</a></li>
-                    <li><a href="#tab3" data-toggle="tab">Predicates</a></li>
+                    <li id="litab0" class="active"><a href="#tab0" data-toggle="tab">Start</a></li>
+                    <li id="litab1" ><a href="#tab1" data-toggle="tab">Configuration</a></li>
+                    <li id="litab2"><a href="#tab2" data-toggle="tab">Prefixes</a></li>
+                    <li id="litab3"><a href="#tab3" data-toggle="tab">Finish</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tab1">
+                    <div class="tab-pane active" id="tab0">
+                        <div class="text-center" style="height: 400px">
+                            <p>In this section you will give some information to complete some setup files for COEUS.</p>
+                            <p>To begin press the Start Wizard button.</p>
+                            <a onclick="changeTab('#litab0', '#litab1');" href="#tab1" data-toggle="tab" class="btn btn-large btn-warning" type="button">Start Wizard</a>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane" id="tab1">
                         <form class="form-horizontal">
                             <fieldset>
 
@@ -250,7 +279,9 @@
                                         <p class="help-block">RDF File Location to Import to the DB</p>
                                     </div>
                                 </div>
-
+                                <div class="text-left">
+                                    <a onclick="changeTab('#litab1', '#litab2');" href="#tab2" data-toggle="tab" class="btn btn-warning" type="button">Next ></a>
+                                </div>
 
 
                             </fieldset>
@@ -282,15 +313,25 @@
                         <div class="text-right">
                             <button onclick="" class="btn btn-success" href="#prefixesModal" role="button" data-toggle="modal" type="button">Add</button>
                         </div>
+                        <div class="text-left">
+                            <a onclick="changeTab('#litab2', '#litab3');" href="#tab3" data-toggle="tab" class="btn btn-warning" type="button">Next ></a>
+                        </div>
+
 
                     </div> 
                     <div class="tab-pane" id="tab3">
-                        <p>Predicates..</p>
+                        <div class="text-center" style="height: 200px">
+                            <p>In order to save your progress press the Save button, please.</p>
+                            <p class="text-warning">Warning: If you leaves this wizard without save it, all of configurations will be lost.</p>
+                            <button id="btnSave" onclick="save();" class="btn btn-large btn-danger" type="button">Save it!</button>
+                        </div>
+                        <div class="text-center" style="height: 200px">
+                            <p>After saving the configurations you can start build the model for your application:</p>
+                            <a id="btnStartBuild" href="../seed/" class="btn btn-warning" type="button">Build Model</a>
+
+                        </div>
                     </div>
-                    <div class="text-left">
-                        <button onclick="save();" class="btn btn-primary" type="button">Save</button></div>
-                    <div id="result">
-                    </div>
+
                 </div>
 
                 <div id="result">

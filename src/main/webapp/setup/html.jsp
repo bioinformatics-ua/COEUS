@@ -28,9 +28,9 @@
                                 <li class="active"><a href="<c:url value="/manager/seed/" />">Home</a></li>
 
                                 <li><a href="<c:url value="/manager/seed/" />">Seeds</a></li>
-
+<!--
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Setup <b class="caret"></b></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Manager <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a id="entity" href="#">Entities</a></li>
                                         <li><a href="#">Concepts</a></li>
@@ -39,8 +39,8 @@
                                         <li><a href="#">View All</a></li>
                                     </ul>
                                 </li>
-
-                                <li><a href="<c:url value="/manager/config/" />">Management</a></li>
+-->
+                                <li><a href="<c:url value="/manager/config/" />">Setup</a></li>
 
                                 <li><a href="<c:url value="/documentation/" />">Documentation</a></li>
 

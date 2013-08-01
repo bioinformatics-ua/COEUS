@@ -429,7 +429,7 @@ function encodeBars(value) {
 function removeById(childDiv, parentDiv)
 {
     console.log(childDiv+' '+ parentDiv);
-    if (childDiv == parentDiv) {
+    if (childDiv === parentDiv) {
         alert("The parent div cannot be removed.");
     }
     else if (document.getElementById(childDiv)) {
@@ -440,4 +440,9 @@ function removeById(childDiv, parentDiv)
     else {
         alert("Child div has already been removed or does not exist.");
     }
+}
+
+function callURL(url, success, error) {
+    url = encodeURI(url);
+    $.ajax({url: url, dataType: 'json'}).done(success).fail(error);
 }
