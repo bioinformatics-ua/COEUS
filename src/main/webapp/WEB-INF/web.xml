@@ -131,7 +131,7 @@
             <web-resource-name>
                 Secured Setup
             </web-resource-name>
-            <url-pattern>/config/*</url-pattern>
+            <!-- <url-pattern>/config/*</url-pattern>-->
             <url-pattern>/setup/*</url-pattern>
             <url-pattern>/manager/*</url-pattern>
             <http-method>GET</http-method>

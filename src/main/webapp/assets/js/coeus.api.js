@@ -428,7 +428,7 @@ function encodeBars(value) {
 }
 function removeById(childDiv, parentDiv)
 {
-    console.log(childDiv+' '+ parentDiv);
+    console.log(childDiv + ' ' + parentDiv);
     if (childDiv === parentDiv) {
         alert("The parent div cannot be removed.");
     }
@@ -445,4 +445,18 @@ function removeById(childDiv, parentDiv)
 function callURL(url, success, error) {
     url = encodeURI(url);
     $.ajax({url: url, dataType: 'json'}).done(success).fail(error);
+}
+
+/**
+ * Generate a html code message 
+ * Ex: var htmlMessage=generateHtmlMessage("Error!", "It already exists!","alert-error");
+ * 
+ * @param {type} strong
+ * @param {type} message
+ * @param {type} type
+ * @returns {String}
+ */
+function generateHtmlMessage(strong, message, type) {
+    var error = '<div class="alert ' + type + '"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>' + strong + '</strong> ' + message + '</div>';
+    return error;
 }

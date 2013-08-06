@@ -5,13 +5,13 @@
         "keyprefix":"coeus",
         "version": "1.0a",
         "ontology": "http://bioinformatics.ua.pt/coeus/ontology/",
-        "setup": "newsaggregator/setup.rdf",
-        "sdb":"newsaggregator/sdb.ttl",
+        "setup": "setup.rdf",
+        "sdb":"sdb.ttl",
         "predicates":"predicates.csv",
         "built": false,
         "debug": true,
         "apikey":"coeus|uavr",
-        "environment": "production"
+        "environment":""
 },
 "prefixes" : {
         "coeus": "http://bioinformatics.ua.pt/coeus/resource/",
