@@ -5,12 +5,7 @@
 package pt.ua.bioinformatics.coeus.actions;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.io.StringWriter;
-import java.io.Writer;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.DefaultHandler;
@@ -37,6 +32,8 @@ public class ManagerActionBean implements ActionBean {
     private static final String CONCEPTS_VIEW = "/setup/concepts.jsp";
     private static final String RESOURCE_ADD_VIEW = "/setup/addresource.jsp";
     private static final String RESOURCES_VIEW = "/setup/resources.jsp";
+    private static final String ENVIRONMENTS_VIEW = "/setup/environments.jsp";
+    private static final String ENVIRONMENTS_EDIT_VIEW = "/setup/editenvironment.jsp";
     private static final String NOTFOUND_VIEW = "/setup/404.jsp";
     private static final String GRAPH_VIEW = "/setup/graph.jsp";
     private String method;
@@ -71,6 +68,14 @@ public class ManagerActionBean implements ActionBean {
             Boot.getAPI().getModel().write(outs, "RDF/XML");
         }
         return new StreamingResolution("application/rdf+xml", outs.toString());
+    }
+    
+    public Resolution environments() {
+        if (method!=null && method.startsWith("edit")) {
+            return new ForwardResolution(ENVIRONMENTS_EDIT_VIEW);
+        } else {
+            return new ForwardResolution(ENVIRONMENTS_VIEW);
+        }
     }
 
     public Resolution seed() {

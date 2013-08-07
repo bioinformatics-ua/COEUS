@@ -73,10 +73,23 @@
                 window.location = "../entity/" + path;
             }
 
+            function fillHeader(result) {
+                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+            }
+            function fillEnvironments(result) {
+                console.log(result);
+                var array = result.environments;
+                for (var r in array) {
+                    var value = array[r].replace('env_', '');
+                    $('#environments').append('<option>' + value + '</option>');
+                }
+            }
+
             $(document).ready(function() {
                 //get seed from url
                 var seed = lastPath();
-                $('#header').append('<h1>' + seed + '<small> enviroment</small></h1>');
+                callURL("../../config/getconfig/", fillHeader);
+                callURL("../../config/listenv/", fillEnvironments);
 
                 var query = initSparqlerQuery();
                 // passes standard JSON results object to success callback
@@ -127,6 +140,20 @@
                 redirect("../seed/" + "coeus:" + title);
             }
 
+            function changeEnv() {
+                var env = $('#environments').val();
+                callURL("../../config/upenv/" + env, changeEnvResult, changeEnvResult, changeEnvError);
+            }
+            function changeEnvResult(result) {
+                if (result.status === 100)
+                    callURL("../../config/getconfig/", fillHeader);
+                else
+                    $('#info').html(generateHtmlMessage("Warning!", result.message));
+            }
+            function changeEnvError(result, text) {
+                $('#info').html(generateHtmlMessage("ERROR!", text, "alert-error"));
+            }
+
         </script>
     </s:layout-component>
     <s:layout-component name="body">
@@ -136,7 +163,7 @@
             <div id="header" class="page-header">
 
             </div>
-
+            <div id="info"></div>
             <div class="row-fluid">
                 <div id="concepts"class="span6">
                     <h4>Knowledge Base <small>(Entity-Concept)</small></h4>
@@ -174,15 +201,12 @@
                             Environments
                         </div>
                         <div class="span4">
-                            <select class="span10">
-                                <option>Production</option>
-                                <option>Testing</option>
-                                <option>Development</option>
+                            <select class="span10" id="environments">
                             </select>
                         </div>
                         <div class="span4">
                             <div class="btn-group">
-                                <a href="#" class="btn btn-danger">Change environment</a>
+                                <a onclick="changeEnv();" class="btn btn-danger">Change environment</a>
                             </div>
                         </div>
                     </div>

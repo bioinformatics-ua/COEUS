@@ -215,7 +215,7 @@ public class ConfigActionBean implements ActionBean {
             Entry<String, String> e = (Entry<String, String>) it.next();
             m.put(e.getKey(), e.getValue());
         }
-        m.put("environment", environment);
+        m.put("environment", environment.split("env_", 2)[1]);
         f.put("config", m);
 
         updateFile(f.toJSONString(), Config.getPath() + "config.js");
