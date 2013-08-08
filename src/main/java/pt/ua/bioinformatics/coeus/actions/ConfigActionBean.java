@@ -139,8 +139,8 @@ public class ConfigActionBean implements ActionBean {
         JSONParser parser = new JSONParser();
         JSONObject map = (JSONObject) parser.parse(readToString(path + "map.js"));
 
-        //ensures that files are clean
-        copyFolder(new File(Config.getPath() + "init"), new File(path));
+        //ensures that files (pubby, sdb and joseki) are clean
+        copyFolder(new File(Config.getPath() + "init"), new File(path),new File(path + "map.js"));
 
         File src = new File(path);
         //list all the directory contents
@@ -205,7 +205,7 @@ public class ConfigActionBean implements ActionBean {
      */
     public void changeEnvironment(String src, String dest, String environment) throws IOException {
         //copy all files from enviroment to root dir
-        copyFolder(new File(src), new File(dest));
+        copyFolder(new File(src), new File(dest),null);
         // update environment in config.js
         JSONObject f = Config.getFile();
         JSONObject config = (JSONObject) f.get("config");
@@ -242,7 +242,7 @@ public class ConfigActionBean implements ActionBean {
             }
             File init = new File(initStr);
 
-            copyFolder(init, env);
+            copyFolder(init, env,null);
             result.put("status", 100);
             result.put("message", "[COEUS][API][ConfigActionBean] Environment created: " + method);
         } catch (IOException ex) {
@@ -252,6 +252,27 @@ public class ConfigActionBean implements ActionBean {
         }
 
         //Boot.start();
+        return new StreamingResolution("application/json", result.toJSONString());
+    }
+
+    /**
+     * Returns a map.js file in the environment (method)
+     *
+     * @return
+     */
+    public Resolution getmap() {
+        JSONObject result = new JSONObject();
+        try {
+            Config.load();
+            String environment = "env_" + method;
+            String path = Config.getPath() + environment + "/";
+            String map = path + "map.js";
+            JSONParser parser = new JSONParser();
+            String json = readToString(map);
+            result = (JSONObject) parser.parse(json);
+        } catch (Exception ex) {
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return new StreamingResolution("application/json", result.toJSONString());
     }
 
@@ -437,8 +458,6 @@ public class ConfigActionBean implements ActionBean {
     private JSONObject updateFile(String value, String filename) {
         JSONObject result = new JSONObject();
 
-        System.out.println("[COEUS][API][ConfigActionBean] Saving.. " + filename);
-
         try {
             FileWriter writer = new FileWriter(filename);
             writer.write(value);
@@ -446,6 +465,8 @@ public class ConfigActionBean implements ActionBean {
             writer.close();
             result.put("status", 100);
             result.put("message", "[COEUS][API][ConfigActionBean] " + filename + " updated.");
+
+            System.out.println("[COEUS][API][ConfigActionBean] Saved: " + filename);
         } catch (Exception ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: " + filename + " not updated, check exception.");
@@ -488,7 +509,7 @@ public class ConfigActionBean implements ActionBean {
      * @param dest
      * @throws IOException
      */
-    public static void copyFolder(File src, File dest)
+    public static void copyFolder(File src, File dest, File skipFile)
             throws IOException {
 
         if (src.isDirectory()) {
@@ -508,26 +529,28 @@ public class ConfigActionBean implements ActionBean {
                 File srcFile = new File(src, file);
                 File destFile = new File(dest, file);
                 //recursive copy
-                copyFolder(srcFile, destFile);
+                copyFolder(srcFile, destFile, skipFile);
             }
 
         } else {
-            //if file, then copy it
-            //Use bytes stream to support all file types
-            InputStream in = new FileInputStream(src);
-            OutputStream out = new FileOutputStream(dest);
+            if (skipFile==null || !(skipFile.getName().equals(src.getName()))) {
+                //if file, then copy it
+                //Use bytes stream to support all file types
+                InputStream in = new FileInputStream(src);
+                OutputStream out = new FileOutputStream(dest);
 
-            byte[] buffer = new byte[1024];
+                byte[] buffer = new byte[1024];
 
-            int length;
-            //copy the file content in bytes 
-            while ((length = in.read(buffer)) > 0) {
-                out.write(buffer, 0, length);
+                int length;
+                //copy the file content in bytes 
+                while ((length = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                }
+
+                in.close();
+                out.close();
+                System.out.println("[COEUS][API][ConfigActionBean] File copied from " + src + " to " + dest);
             }
-
-            in.close();
-            out.close();
-            //System.out.println("File copied from " + src + " to " + dest);
         }
     }
 
@@ -583,21 +606,18 @@ public class ConfigActionBean implements ActionBean {
      * @param filename
      * @return
      */
-    public String readToString(String filename) {
+    public String readToString(String filename) throws IOException {
         StringBuilder sb = new StringBuilder();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(filename));
-            String line = br.readLine();
 
-            while (line != null) {
-                sb.append(line);
-                sb.append('\n');
-                line = br.readLine();
-            }
-            br.close();
-        } catch (IOException ex) {
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        String line = br.readLine();
+
+        while (line != null) {
+            sb.append(line);
+            sb.append('\n');
+            line = br.readLine();
         }
+        br.close();
         return sb.toString();
     }
 }
