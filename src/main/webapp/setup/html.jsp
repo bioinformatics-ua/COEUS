@@ -25,7 +25,7 @@
 
                         <div class="nav-collapse collapse">
                             <ul class="nav">
-                                <li class="active"><a href="<c:url value="/manager/seed/" />">Home</a></li>
+                                <li class="active"><a href="<c:url value="/" />">Home</a></li>
 
                                 <li><a href="<c:url value="/manager/seed/" />">Seeds</a></li>
 

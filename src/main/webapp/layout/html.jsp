@@ -32,6 +32,8 @@
                                 <li><a href="<c:url value="/science/" />">Science</a></li>
 
                                 <li><a href="<c:url value="/sparqler/" />">SPARQL</a></li>
+                                
+                                <li><a href="<c:url value="/manager/config/" />">Setup</a></li>
 
                                 <li><a data-toggle="modal" data-target="#contact" href="#contact">Contact</a></li>
                             </ul>
