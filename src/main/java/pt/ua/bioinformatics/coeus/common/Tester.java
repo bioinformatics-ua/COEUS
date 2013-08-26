@@ -40,7 +40,7 @@ public class Tester {
 
         try {
             // clean sdb
-            cleanSDB("localhost","coeus", "demo", "demo");
+            cleanSDB("localhost","3306","coeus", "demo", "demo");
             // Start import process            
             Boot.start();
 
@@ -81,9 +81,10 @@ public class Tester {
      * @param dbUserName
      * @param dbPassword
      */
-    public static void cleanSDB(String host, String dbname, String dbUserName, String dbPassword) {
+    public static boolean cleanSDB(String host,String port, String dbname, String dbUserName, String dbPassword) {
 
-        DB db = new DB(dbname, "jdbc:mysql://"+host+":3306/" + dbname + "?autoReconnect=true&user=" + dbUserName + "&password=" + dbPassword);
+        boolean result=false;
+        DB db = new DB(dbname, "jdbc:mysql://"+host+":"+port+"/" + dbname + "?autoReconnect=true&user=" + dbUserName + "&password=" + dbPassword);
         // test db connection
         boolean success = db.connectX();
 
@@ -94,9 +95,11 @@ public class Tester {
             db.update("Truncate table Quads", "TRUNCATE TABLE Quads;");
             db.update("Truncate table Triples", "TRUNCATE TABLE Triples;");
             System.out.println("Sdb clean OK\n");
+            result=true;
         } else {
             System.err.println("FAIL: Sdb not clean!!");
         }
+        return result;
     }
 
     /**

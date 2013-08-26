@@ -46,8 +46,10 @@ import net.sourceforge.stripes.action.UrlBinding;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import pt.ua.bioinformatics.coeus.api.DB;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
+import pt.ua.bioinformatics.coeus.common.Tester;
 
 /**
  *
@@ -103,6 +105,52 @@ public class ConfigActionBean implements ActionBean {
     }
 
     /**
+     * Cleans the DB of one environment (method)
+     *
+     * @return
+     */
+    public Resolution cleandb() {
+        JSONObject result = new JSONObject();
+        try {
+            //get map.js file
+            String environment = "env_" + method;
+            String path = Config.getPath() + environment + "/";
+            String map = path + "map.js";
+            JSONParser parser = new JSONParser();
+            String json = readToString(map);
+            result = (JSONObject) parser.parse(json);
+            int index=result.get("$sdb:jdbcURL").toString().lastIndexOf("/");
+            String dbName=result.get("$sdb:jdbcURL").toString().substring(index);
+            DB db = new DB(dbName, result.get("$sdb:jdbcURL") + "&user=" + result.get("$sdb:sdbUser").toString() + "&password=" + result.get("$sdb:sdbPassword").toString());
+            // test db connection
+            boolean success = db.connectX();
+
+            if (success) {
+                db.update("Truncate table Node", "TRUNCATE TABLE Nodes;");
+                db.update("Truncate table Prefixes", "TRUNCATE TABLE Prefixes;");
+                db.update("Truncate table Quads", "TRUNCATE TABLE Quads;");
+                db.update("Truncate table Triples", "TRUNCATE TABLE Triples;");
+                System.out.println("[COEUS][API][ConfigActionBean] Sdb clean OK\n");
+                result.put("status", 100);
+                result.put("message", "[COEUS][API][ConfigActionBean] DB Cleaned in environment:  " + method);
+            } else {
+                result.put("status", 200);
+                result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Clean DB, check exception.");
+            }
+
+        } catch (IOException ex) {
+            result.put("status", 200);
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Clean DB, check exception.");
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            result.put("status", 200);
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Clean DB, check parse exception.");
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new StreamingResolution("application/json", result.toJSONString());
+    }
+
+    /**
      * List all environments (i.e., all folders started by 'env_' string)
      *
      * @return
@@ -140,7 +188,7 @@ public class ConfigActionBean implements ActionBean {
         JSONObject map = (JSONObject) parser.parse(readToString(path + "map.js"));
 
         //ensures that files (pubby, sdb and joseki) are clean
-        copyFolder(new File(Config.getPath() + "init"), new File(path),new File(path + "map.js"));
+        copyFolder(new File(Config.getPath() + "init"), new File(path), new File(path + "map.js"));
 
         File src = new File(path);
         //list all the directory contents
@@ -205,7 +253,7 @@ public class ConfigActionBean implements ActionBean {
      */
     public void changeEnvironment(String src, String dest, String environment) throws IOException {
         //copy all files from enviroment to root dir
-        copyFolder(new File(src), new File(dest),null);
+        copyFolder(new File(src), new File(dest), null);
         // update environment in config.js
         JSONObject f = Config.getFile();
         JSONObject config = (JSONObject) f.get("config");
@@ -242,7 +290,7 @@ public class ConfigActionBean implements ActionBean {
             }
             File init = new File(initStr);
 
-            copyFolder(init, env,null);
+            copyFolder(init, env, null);
             result.put("status", 100);
             result.put("message", "[COEUS][API][ConfigActionBean] Environment created: " + method);
         } catch (IOException ex) {
@@ -533,7 +581,7 @@ public class ConfigActionBean implements ActionBean {
             }
 
         } else {
-            if (skipFile==null || !(skipFile.getName().equals(src.getName()))) {
+            if (skipFile == null || !(skipFile.getName().equals(src.getName()))) {
                 //if file, then copy it
                 //Use bytes stream to support all file types
                 InputStream in = new FileInputStream(src);

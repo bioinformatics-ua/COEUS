@@ -290,6 +290,9 @@
                             <p>In this section you will give some information to complete some setup files for COEUS.</p>
                             <p>To begin press the Start Wizard button.</p>
                             <a onclick="changeTab('#litab0', '#litab1');" href="#tab1" data-toggle="tab" class="btn btn-large btn-warning" type="button">Start Wizard</a>
+                            <p></p>
+                            <p>If you do not want to change the configurations files, please skip this wizard.</p>
+                            <a href="../seed/" class="btn btn-large" type="button">Skip</a>
                         </div>
 
                     </div>
