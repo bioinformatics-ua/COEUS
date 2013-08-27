@@ -27,10 +27,11 @@
                     var n = parseInt(r) + 1;
                     $('#environments').append('<tr><td>' + (n) + '</td><td>' + value + '</td><td id="' + value + '"><span class="label label-important">DISABLED</span></td><td>'
                             + '<div class="btn-group">'
-                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectEnv(\'' + value + '\')">Remove</button>'
+                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectEnv(\'' + value + '\')">Remove <i class="icon-trash"></i></button>'
                             + '</div> '
-                            + '<a class="btn btn-warning" href="../environments/edit/' + value + '">Configuration</a> '
-                            + '<a id="btn' + value + '" class="btn btn-success" onclick="changeEnv(\'' + value + '\')">Enable</a>'
+                            + '<a class="btn btn-warning" href="../environments/edit/' + value + '">Configuration <i class="icon-wrench icon-white"></i></a> '
+                            + '<a class="btn btn-danger" href="#cleanModal" data-toggle="modal" onclick="selectEnv(\'' + value + '\')">Clean DB <i class="icon-file icon-white"></i></a> '
+                            + '<a id="btn' + value + '" class="btn btn-success" onclick="changeEnv(\'' + value + '\')">Enable <i class="icon-ok-circle icon-white"></i></a>'
                             + '</td></tr>');
                 }
                 callURL("../../config/getconfig/", changeStatus);
@@ -78,15 +79,24 @@
             }
 
             function selectEnv(env) {
-
+                $('#cleanModalLabel').html(env);
                 $('#removeModalLabel').html(env);
-                console.log($('#removeModalLabel').html());
             }
             function removeEnv() {
                 callURL("../../config/delenv/" + $('#removeModalLabel').html(), removeEnvResult);
             }
             function removeEnvResult(result) {
                 callURL("../../config/listenv/", fillEnvironments);
+            }
+            function cleanDB() {
+                callURL("../../config/cleandb/" + $('#cleanModalLabel').html(), cleanDBResult);
+            }
+            function cleanDBResult(result) {
+                 if (result.status === 100) {
+                    $('#info').html(generateHtmlMessage("Success!", result.message, "alert-success"));
+                } else {
+                    $('#info').html(generateHtmlMessage("Warning!", result.message));
+                }
             }
 
 
@@ -105,16 +115,17 @@
 
             <div class="row-fluid">
 
-
+                
 
                 <div class="span6">
+                    <p class="text-error">ATTENTION: Every change in this page needs a server restart.</p>
                     <h3>List of Environments</h3>
                 </div>
 
 
                 <div class="span6 text-right" >
                     <div class="btn-group">
-                        <a data-toggle="modal" href="#createEnvironmentModal" class="btn btn-success">Create Environment</a>
+                        <a data-toggle="modal" href="#createEnvironmentModal" class="btn btn-success">Create Environment <i class="icon-plus icon-white"></i></a>
                     </div>
                 </div>
 
@@ -158,6 +169,28 @@
                         <button class="btn btn-danger" data-dismiss="modal" onclick="removeEnv();">Remove</button>
                     </div>
                 </div>
+                
+                <!-- Modal -->
+                <div id="cleanModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button id="closeCleanModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3>Clean Database</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure do you want to clean all content of <strong><a class="text-error" id="cleanModalLabel"></a></strong> environment database?</p>
+                        <p class="text-warning">Warning: All content will be removed from this database.</p>
+
+                        <div id="result">
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button class="btn btn-danger" data-dismiss="modal" onclick="cleanDB();">Clean <i class="icon-warning-sign icon-white"></i></button>
+                    </div>
+                </div>
 
                 <!-- Modal -->
                 <div id="createEnvironmentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -183,7 +216,7 @@
                                 <div class="control-group">
                                     <label class="control-label" for="btnCreateEnv"></label>
                                     <div class="controls">
-                                        <a onclick="createEnv();" id="btnCreateEnv" name="btnCreateEnv" class="btn btn-success">Create</a>
+                                        <a onclick="createEnv();" id="btnCreateEnv" name="btnCreateEnv" class="btn btn-success">Create <i class="icon-plus icon-white"></i></a>
                                     </div>
                                 </div>
 

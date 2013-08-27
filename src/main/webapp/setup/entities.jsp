@@ -44,10 +44,10 @@
                                             + json.results.bindings[key].entity.value + '</a></td><td>'
                                             + json.results.bindings[key].e.value + '</td><td>'
                                             + '<div class="btn-group">'
-                                            + '<a class="btn btn" href="../entity/edit/coeus:' + splitURIPrefix(json.results.bindings[key].entity.value).value + '">Edit</a>'
-                                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</button>'
+                                            + '<a class="btn btn" href="../entity/edit/coeus:' + splitURIPrefix(json.results.bindings[key].entity.value).value + '">Edit <i class="icon-edit"></i></a>'
+                                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove <i class="icon-trash"></i></button>'
                                             + '</div>'
-                                            + ' <a class="btn btn-info" href="../concept/coeus:' + splitURIPrefix(json.results.bindings[key].entity.value).value + '">View Concepts</a>'
+                                            + ' <a class="btn btn-info" href="../concept/coeus:' + splitURIPrefix(json.results.bindings[key].entity.value).value + '">Show Concepts <i class="icon-forward icon-white"></i></a>'
                                             //+ '<a href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</a>'
                                             + '</td></tr>';
                                     $('#entities').append(a);
@@ -77,6 +77,8 @@
             </div>
 
             <ul class="breadcrumb">
+                <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
+                <li id="breadSeeds"><a href="../seed/">Seeds</a> <span class="divider">/</span> </li>
                 <li id="breadSeed"></li>
                 <li class="active">Entities</li>
             </ul>
@@ -89,7 +91,7 @@
 
                 <div class="span6 text-right" >
                     <div class="btn-group">
-                        <a onclick="redirect('../entity/add/' + lastPath())" class="btn btn-success">Add Entity</a>
+                        <a onclick="redirect('../entity/add/' + lastPath())" class="btn btn-success">Add Entity <i class="icon-plus icon-white"></i></a>
                     </div>
                 </div>
 
@@ -129,7 +131,7 @@
 
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-danger" onclick="removeEntity();">Remove</button>
+                        <button class="btn btn-danger" onclick="removeEntity();">Remove <i class="icon-trash icon-white"></i></button>
                     </div>
                 </div>
 

@@ -18,6 +18,7 @@
                 //header name
                 var path = lastPath();
                 $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
+                
 
                 //fill the concepts extensions
                 var q = "SELECT ?concept ?c {?concept a coeus:Concept . ?concept dc:title ?c}";
@@ -26,9 +27,7 @@
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
                     $('#type').html("Edit Resource");
-                    $('#submit').html('Edit <i class="icon-edit icon-white"></i>');
-
-
+                    $('#submit').html('Save <i class="icon-briefcase icon-white"></i>');
 
                     var query = initSparqlerQuery();
                     var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?built {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . " + path + " coeus:method ?method . " + path + " dc:publisher ?publisher . " + path + " coeus:endpoint ?endpoint . " + path + " coeus:query ?query . " + path + " coeus:order ?order . " + path + " coeus:extends ?extends . OPTIONAL{" + path + " coeus:built ?built } }";
@@ -72,12 +71,19 @@
                 var qselectors = "SELECT * {" + path + " coeus:loadsFrom ?selector . ?selector dc:title ?title . ?selector rdfs:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . OPTIONAL { ?selector coeus:isKeyOf ?key } . OPTIONAL { ?selector coeus:regex ?regex }}";
                 queryToResult(qselectors, fillSelectors);
                 
-               
+                //path is a resource
+                var qresourceEdit = "SELECT DISTINCT ?seed ?entity ?concept {" + path + " coeus:isResourceOf ?concept . ?concept coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
+                console.log(qresourceEdit);
+                queryToResult(qresourceEdit, fillBreadcumbEdit);
                     //end of EDIT
                 } else {
                     //not showing selectores and built option if one resource is been add 
                     $('#selectorsForm').addClass('hide');
                     $('#builtForm').addClass('hide');
+                    
+                    //path is a concept
+                    var qresourceAdd = "SELECT DISTINCT ?seed ?entity {" + path + " coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
+                    queryToResult(qresourceAdd, fillBreadcumbAdd);
                 }
                 
                
@@ -162,8 +168,8 @@
                             + result[r].property.value + '</td><td>'
                             + regex + '</td><td>'
                             + '<div class="btn-group">'
-                            + '<button class="btn btn" href="#selectorsModal" role="button" data-toggle="modal" onclick="editSelector(\'' + splitURIPrefix(result[r].selector.value).value + '\')">Edit</button>'
-                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectSelector(\'' + splitURIPrefix(result[r].selector.value).value + '\')">Remove</button>'
+                            + '<button class="btn btn" href="#selectorsModal" role="button" data-toggle="modal" onclick="editSelector(\'' + splitURIPrefix(result[r].selector.value).value + '\')">Edit <i class="icon-edit"></i></button>'
+                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectSelector(\'' + splitURIPrefix(result[r].selector.value).value + '\')">Remove <i class="icon-trash"></i></button>'
                             + '</div>'
                             + '</td></tr>';
 
@@ -198,7 +204,7 @@
             function editSelector(selector) {
                 //document.getElementById('myModalLabel').value="Edit Selector";
                 $('#selectorsModalLabel').html("Edit Selector");
-                $('#addSelectorButton').html("Edit");
+                $('#addSelectorButton').html('Save <i class="icon-briefcase icon-white"></i>');
                 console.log($('#selectorsModalLabel').html());
                 $('#selectorUri').html("coeus:" + selector);
                 var q = "SELECT * {coeus:" + selector + " dc:title ?title . coeus:" + selector + " rdfs:label ?label . coeus:" + selector + " coeus:property ?property . coeus:" + selector + " coeus:query ?query . OPTIONAL { coeus:" + selector + " coeus:isKeyOf ?key } . OPTIONAL { coeus:" + selector + " coeus:regex ?regex }}";
@@ -235,12 +241,13 @@
                 //var query = initSparqlerQuery();
                 console.log('Remove: ' + selector);
                 var urlPrefix = "../../../api/" + getApiKey();
+                
                 //remove all subjects associated.
                 removeAllTriplesFromPredicateAndObject(urlPrefix,"coeus:loadsFrom", selector);
                 removeAllTriplesFromPredicateAndObject(urlPrefix,"coeus:isKeyOf", selector);
                 //remove all predicates and objects associated.            
                 removeAllTriplesFromSubject(urlPrefix, selector);
-
+                
             }
             function updatePublisherOnSelectores(urlUpdate, res, oldPublisher, newPublisher) {
                 var q = "SELECT * {" + res + " coeus:loadsFrom ?selector}";
@@ -482,6 +489,31 @@
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
                 document.getElementById('selectorUri').innerHTML = 'coeus:selector_' + value.split(' ').join('_');
             }
+            function fillBreadcumbAdd(result) {
+                console.log(result);
+                var seed = result[0].seed.value;
+                var entity = result[0].entity.value;
+                seed = "coeus:" + splitURIPrefix(seed).value;
+                entity = "coeus:" + splitURIPrefix(entity).value;
+                $('#breadSeed').html('<a href="../../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
+                $('#breadEntities').html('<a href="../../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
+                $('#breadConcepts').html('<a href="../../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
+                $('#breadResources').html('<a href="../../resource/' + lastPath() + '">Resources</a> <span class="divider">/</span>');
+            }
+            function fillBreadcumbEdit(result) {
+                console.log("ERROR:");
+                console.log(result);
+                var seed = result[0].seed.value;
+                var entity = result[0].entity.value;
+                var concept = result[0].concept.value;
+                seed = "coeus:" + splitURIPrefix(seed).value;
+                entity = "coeus:" + splitURIPrefix(entity).value;
+                concept = "coeus:" + splitURIPrefix(concept).value;
+                $('#breadSeed').html('<a href="../../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
+                $('#breadEntities').html('<a href="../../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
+                $('#breadConcepts').html('<a href="../../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
+                $('#breadResources').html('<a href="../../resource/' + concept + '">Resources</a> <span class="divider">/</span>');
+            }
         </script>
     </s:layout-component>
     <s:layout-component name="body">
@@ -491,6 +523,15 @@
             <div id="header" class="page-header">
 
             </div>
+            <ul class="breadcrumb">
+                <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
+                <li id="breadSeeds"><a href="../../seed/">Seeds</a> <span class="divider">/</span> </li>
+                <li id="breadSeed"></li>
+                <li id="breadEntities"></li>
+                <li id="breadConcepts"></li>
+                <li id="breadResources"></li>
+                <li class="active">Resource</li>
+            </ul>
             <p class="lead" >Resource URI - <a class="lead" id="uri">coeus: </a></p>
 
             <div class="row">
@@ -513,7 +554,7 @@
                     <div class="text-right">
                         <button  type="button" id="addselector" href="#selectorsModal" role="button" data-toggle="modal" class="btn btn-success">New <i class="icon-plus icon-white"></i> </button>
                         <button  type="button" id="existingSelector" href="#existingSelectorsModal" role="button" data-toggle="modal" class="btn btn-warning">Existing <i class="icon-plus icon-white"></i> </button>
-                        <button type="button" id="done" class="btn btn-info" onclick="window.history.back(-1);">Done</button>
+                        <!--<button type="button" id="done" class="btn btn-info" onclick="window.history.back(-1);">Done</button>-->
                     </div>
 
                 </div>
@@ -573,7 +614,7 @@
                         <button  type="button" id="submit" class="btn btn-success">Add <i class="icon-plus icon-white"></i> </button>
                     </div>
                     <div class="span4">
-                        <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel</button>
+                        <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel <i class="icon-backward icon-white"></i></button>
                     </div>
                     <br/><br/><br/>
                 </div>
@@ -677,7 +718,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                <button class="btn btn-success" id="addSelectorButton" onclick="submitSelector();">Add</button>
+                <button class="btn btn-success" id="addSelectorButton" onclick="submitSelector();">Add <i class="icon-plus icon-white"></i></button>
             </div>
         </div>
 
@@ -701,7 +742,7 @@
 
             <div class="modal-footer" id="rmbtns">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                <button class="btn btn-danger" onclick="removeSelector();">Remove</button>
+                <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" onclick="removeSelector();">Remove <i class="icon-trash icon-white"></i></button>
             </div>
         </div>
 

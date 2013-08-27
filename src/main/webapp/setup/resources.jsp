@@ -34,8 +34,8 @@
                 seed = "coeus:" + splitURIPrefix(seed).value;
                 entity = "coeus:" + splitURIPrefix(entity).value;
                 $('#breadSeed').html('<a href="../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
-                $('#breadEntity').html('<a href="../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
-                $('#breadConcept').html('<a href="../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
+                $('#breadEntities').html('<a href="../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
+                $('#breadConcepts').html('<a href="../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
             }
             function fillListOfResources(result) {
                 for (var key = 0, size = result.length; key < size; key++) {
@@ -47,8 +47,8 @@
                             + result[key].c.value + '</td><td>'
                             + result[key].order.value + '</td><td>'
                             //+ '<div class="btn-group">'
-                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectResource(\'' + result[key].c.value + '\')">Remove</button> '       
-                            + '<a class="btn btn-warning" href="../resource/edit/coeus:' + splitURIPrefix(result[key].resource.value).value + '">Configuration</a> '
+                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectResource(\'' + result[key].c.value + '\')">Remove <i class="icon-trash"></i></button> '       
+                            + '<a class="btn btn-warning" href="../resource/edit/coeus:' + splitURIPrefix(result[key].resource.value).value + '">Configuration  <i class="icon-wrench icon-white"></i></a> '
                             //+ '</div>'
                             //+ ' <a class="btn btn-info">Selectors</a>'
                             //+ '<a href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</a>'
@@ -85,9 +85,11 @@
 
             </div>
             <ul class="breadcrumb">
+                 <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
+                <li id="breadSeeds"><a href="../seed/">Seeds</a> <span class="divider">/</span> </li>
                 <li id="breadSeed"></li>
-                <li id="breadEntity"></li>
-                <li id="breadConcept"></li>
+                <li id="breadEntities"></li>
+                <li id="breadConcepts"></li>
                 <li class="active">Resources</li>
             </ul>
             <div class="row-fluid">
@@ -96,7 +98,7 @@
                 </div>
                 <div class="span6 text-right" >
                     <div class="btn-group">
-                        <a onclick="redirect('../resource/add/' + lastPath())" class="btn btn-success">Add Resource</a>
+                        <a onclick="redirect('../resource/add/' + lastPath())" class="btn btn-success">Add Resource <i class="icon-plus icon-white"></i></a>
                     </div>
                 </div>
 
@@ -137,7 +139,7 @@
 
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-danger" onclick="removeResource();">Remove</button>
+                        <button class="btn btn-danger" onclick="removeResource();">Remove <i class="icon-trash icon-white"></i></button>
                     </div>
                 </div>
                 

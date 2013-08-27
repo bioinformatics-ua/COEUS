@@ -32,8 +32,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sourceforge.stripes.action.ActionBean;
@@ -50,6 +52,7 @@ import pt.ua.bioinformatics.coeus.api.DB;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
 import pt.ua.bioinformatics.coeus.common.Tester;
+import pt.ua.bioinformatics.coeus.data.Storage;
 
 /**
  *
@@ -227,7 +230,11 @@ public class ConfigActionBean implements ActionBean {
 
             //Load new settings
             Config.setLoaded(false);
+            Boot.setStarted(false);
             Config.load();
+            //TODO: FIX THAT - NEEDS SERVERS RESTART TO APPLY NEW CONFIGS 
+            Storage.connect();
+            Boot.start();
 
             result.put("status", 100);
             result.put("message", "[COEUS][API][ConfigActionBean] Environment updated: " + method);
@@ -454,7 +461,7 @@ public class ConfigActionBean implements ActionBean {
 
         //update config.js
         String jsonString = method;
-        JSONObject result = updateFile(jsonString, "config.js");
+        JSONObject result = updateFile(jsonString, Config.getPath()+"config.js");
         Config.setLoaded(false);
         Config.load();
 

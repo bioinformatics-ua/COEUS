@@ -19,11 +19,13 @@
                 //header name
                 var path = lastPath();
                 $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
+                var qconcept = "SELECT DISTINCT ?seed {" + path + " coeus:isIncludedIn ?seed }";
+                queryToResult(qconcept, fillBreadcumb);
 
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
                     $('#type').html("Edit Concept");
-                    $('#submit').html('Edit <i class="icon-edit icon-white"></i>');
+                    $('#submit').html('Save <i class="icon-briefcase icon-white"></i>');
 
                     var query = initSparqlerQuery();
                     var q = "SELECT ?title ?label {" + path + " dc:title ?title . " + path + " rdfs:label ?label . }";
@@ -122,6 +124,13 @@
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
                 document.getElementById('uri').innerHTML = 'coeus:concept_' + value.split(' ').join('_');
             }
+            function fillBreadcumb(result) {
+                var seed = result[0].seed.value;
+                seed = "coeus:" + splitURIPrefix(seed).value;
+                $('#breadSeed').html('<a href="../../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
+                $('#breadEntities').html('<a href="../../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
+                $('#breadConcepts').html('<a href="../../concept/' + lastPath() + '">Concepts</a> <span class="divider">/</span>');
+            }
         </script>
     </s:layout-component>
     <s:layout-component name="body">
@@ -131,6 +140,14 @@
             <div id="header" class="page-header">
 
             </div>
+            <ul class="breadcrumb">
+                <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
+                <li id="breadSeeds"><a href="../../seed/">Seeds</a> <span class="divider">/</span> </li>
+                <li id="breadSeed"></li>
+                <li id="breadEntities"></li>
+                <li id="breadConcepts"></li>
+                <li class="active">Concept</li>
+            </ul>
             <p class="lead" >Concept URI - <a class="lead" id="uri">coeus: </a></p>
 
             <div class="row-fluid">
@@ -152,7 +169,7 @@
                         <button  type="button" id="submit" class="btn btn-success">Add <i class="icon-plus icon-white"></i> </button>
                     </div>
                     <div class="span4">
-                        <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel</button>
+                        <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel <i class="icon-backward icon-white"></i></button>
                     </div>
                 </div>
                 <div class="span8"></div>

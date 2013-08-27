@@ -147,7 +147,7 @@
                                 "version": $('#Version').val(),
                                 "ontology": $('#Ontology').val(),
                                 "setup": $('#Setup').val(),
-                                "sdb": "newsaggregator/sdb.ttl",
+                                "sdb": "sdb.ttl",
                                 "predicates": "predicates.csv",
                                 "built": $('#Built').is(':checked'),
                                 "debug": $('#Debug').is(':checked'),
@@ -289,10 +289,10 @@
                         <div class="text-center" style="height: 400px">
                             <p>In this section you will give some information to complete some setup files for COEUS.</p>
                             <p>To begin press the Start Wizard button.</p>
-                            <a onclick="changeTab('#litab0', '#litab1');" href="#tab1" data-toggle="tab" class="btn btn-large btn-warning" type="button">Start Wizard</a>
+                            <a onclick="changeTab('#litab0', '#litab1');" href="#tab1" data-toggle="tab" class="btn btn-large btn-warning" type="button">Start Wizard <i class="icon-play icon-white"></i></a>
                             <p></p>
                             <p>If you do not want to change the configurations files, please skip this wizard.</p>
-                            <a href="../seed/" class="btn btn-large" type="button">Skip</a>
+                            <a href="../seed/" class="btn btn-large" type="button">Skip <i class="icon-fast-forward"></i></a>
                         </div>
 
                     </div>
@@ -314,7 +314,7 @@
                                 <div class="control-group">
                                     <label class="control-label" for="btnCreateEnv"></label>
                                     <div class="controls">
-                                        <a onclick="createEnv();" id="btnCreateEnv" name="btnCreateEnv" class="btn btn-success">Create</a>
+                                        <a onclick="createEnv();" id="btnCreateEnv" name="btnCreateEnv" class="btn btn-success">Create <i class="icon-plus icon-white"></i></a>
                                     </div>
                                 </div>
                                 
@@ -431,7 +431,7 @@
                         </form>
 
                         <div class="text-left">
-                            <a onclick="changeTab('#litab1', '#litab2');" href="#tab2" data-toggle="tab" class="btn btn-warning" type="button">Next ></a>
+                            <a onclick="changeTab('#litab1', '#litab2');" href="#tab2" data-toggle="tab" class="btn btn-warning" type="button">Next <i class="icon-forward icon-white"></i></a>
                         </div>
                     </div>
                     <div class="tab-pane" id="tab2">
@@ -525,7 +525,7 @@
                                     </div>
                                 </div>
                                 <div class="text-left">
-                                    <a onclick="changeTab('#litab2', '#litab3');" href="#tab3" data-toggle="tab" class="btn btn-warning" type="button">Next ></a>
+                                    <a onclick="changeTab('#litab2', '#litab3');" href="#tab3" data-toggle="tab" class="btn btn-warning" type="button">Next <i class="icon-forward icon-white"></i></a>
                                 </div>
 
 
@@ -557,10 +557,10 @@
                             </tbody>
                         </table>
                         <div class="text-right">
-                            <button onclick="" class="btn btn-success" href="#prefixesModal" role="button" data-toggle="modal" type="button">Add</button>
+                            <button onclick="" class="btn btn-success" href="#prefixesModal" role="button" data-toggle="modal" type="button">Add <i class="icon-plus icon-white"></i></button>
                         </div>
                         <div class="text-left">
-                            <a onclick="changeTab('#litab3', '#litab4');" href="#tab4" data-toggle="tab" class="btn btn-warning" type="button">Next ></a>
+                            <a onclick="changeTab('#litab3', '#litab4');" href="#tab4" data-toggle="tab" class="btn btn-warning" type="button">Next <i class="icon-forward icon-white"></i></a>
                         </div>
 
 
@@ -569,14 +569,14 @@
                         <div class="text-center" style="height: 200px">
                             <p>In order to save your progress press the Save button, please.</p>
                             <p class="text-warning">Warning: If you leaves this wizard without save it, some configurations will be lost.</p>
-                            <button id="btnSave" onclick="save();" class="btn btn-large btn-danger" type="button">Save it!</button>
+                            <button id="btnSave" onclick="save();" class="btn btn-large btn-danger" type="button">Save it! <i class="icon-briefcase icon-white"></i></button>
                             <br/><br/>
                             <div id="resultSave" class="text-left" style="width: 50%; margin-left: auto;margin-right: auto">
                             </div>
                         </div>
                         <div class="text-center" style="height: 200px">
                             <p>After saving the configurations you can start build the model for your application:</p>
-                            <a id="btnStartBuild" href="../seed/" class="btn btn-warning" type="button">Build Model</a>
+                            <a id="btnStartBuild" href="../seed/" class="btn btn-warning" type="button">Build Model <i class="icon-home icon-white"></i></a>
 
                         </div>
                     </div>
@@ -608,7 +608,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                    <button class="btn btn-success" id="addPrefixButton" onclick="addPrefix();">Add</button>
+                    <button class="btn btn-success" id="addPrefixButton" onclick="addPrefix();">Add <i class="icon-plus icon-white"></i></button>
                 </div>
             </div>
 

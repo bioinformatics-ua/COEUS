@@ -32,7 +32,8 @@
                 var seed = result[0].seed.value;
                 seed = "coeus:" + splitURIPrefix(seed).value;
                 $('#breadSeed').html('<a href="../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
-                $('#breadEntity').html('<a href="../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
+                $('#breadEntities').html('<a href="../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
+                
             }
             function fillListOfConcepts(result) {
                 for (var key in result) {
@@ -41,10 +42,10 @@
                             + result[key].concept.value + '</a></td><td>'
                             + result[key].c.value + '</td><td>'
                             + '<div class="btn-group">'
-                            + '<a class="btn btn" href="../concept/edit/' +concept + '">Edit</a>'
-                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectConcept(\'' + result[key].c.value + '\')">Remove</button>'
+                            + '<a class="btn btn" href="../concept/edit/' +concept + '">Edit <i class="icon-edit"></i></a>'
+                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectConcept(\'' + result[key].c.value + '\')">Remove <i class="icon-trash"></i></button>'
                             + '</div>'
-                            + ' <a class="btn btn-info" href="../resource/' + concept + '">Resources</a>'
+                            + ' <a class="btn btn-info" href="../resource/' + concept + '">Show Resources <i class="icon-forward icon-white"></i></a>'
                             
                             +' <a class="dropdown">'
                             +'<button class="dropdown-toggle btn btn-warning" role="button" data-toggle="dropdown" data-target="#">'
@@ -104,8 +105,10 @@
 
             </div>
             <ul class="breadcrumb">
+                <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
+                <li id="breadSeeds"><a href="../seed/">Seeds</a> <span class="divider">/</span> </li>
                 <li id="breadSeed"></li>
-                <li id="breadEntity"></li>
+                <li id="breadEntities"></li>
                 <li class="active">Concepts</li>
             </ul>
             <div class="row-fluid">
@@ -114,7 +117,7 @@
                 </div>
                 <div class="span6 text-right" >
                     <div class="btn-group">
-                        <a onclick="redirect('../concept/add/' + lastPath())" class="btn btn-success">Add Concept</a>
+                        <a onclick="redirect('../concept/add/' + lastPath())" class="btn btn-success">Add Concept <i class="icon-plus icon-white"></i></a>
                     </div>
                 </div>
 
@@ -154,7 +157,7 @@
 
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-danger" onclick="removeConcept();">Remove</button>
+                        <button class="btn btn-danger" onclick="removeConcept();">Remove <i class="icon-trash icon-white"></i></button>
                     </div>
                 </div>
 

@@ -23,7 +23,7 @@
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
                     $('#type').html("Edit Seed");
-                    $('#submit').html('Edit <i class="icon-edit icon-white"></i>');
+                    $('#submit').html('Save <i class="icon-briefcase icon-white"></i>');
 
                     var query = initSparqlerQuery();
                     var q = "SELECT ?label ?title {" + path + " dc:title ?title . " + path + " rdfs:label ?label . }";
@@ -126,6 +126,11 @@
             <div id="header" class="page-header">
 
             </div>
+            <ul class="breadcrumb">
+                <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
+                <li id="breadSeed"><a href="../">Seeds</a> <span class="divider">/</span></li>
+                <li class="active">Seed</li>
+            </ul>
             <p class="lead" >Seed URI - <a class="lead" id="uri">coeus: </a></p>
 
             <div class="row-fluid">
@@ -147,7 +152,7 @@
                         <button  type="button" id="submit" class="btn btn-success">Add <i class="icon-plus icon-white"></i> </button>
                     </div>
                     <div class="span4">
-                        <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel</button>
+                        <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel <i class="icon-backward icon-white"></i></button>
                     </div>
                 </div>
                 <div class="span8"></div>

@@ -28,7 +28,7 @@
                                     var seed=getPrefix(splitedURI.namespace)+':'+splitedURI.value;
          
                                     var a = '<li class="span5 clearfix"><div class="thumbnail clearfix"><div class="caption" class="pull-left">'
-                                        +'<a href="./'+seed+'" class="btn btn-primary icon  pull-right">Select</a>'
+                                        +'<a href="./'+seed+'" class="btn btn-primary icon  pull-right">Choose <i class="icon-forward icon-white"></i></a>'
                                         +'<h4>'+result[key].s.value+'</h4>'
                                         +'<small><b>URI: </b><a href="'+result[key].seed.value+'">'+seed+'</a></small>'
                                         +'<a href="#removeModal" class="pull-right" data-toggle="modal" onclick="selectSeed(\''+seed+'\');"><i class="icon-remove"></i></a>'
@@ -72,12 +72,16 @@
                 <h1>Please, choose the seed:</h1>
 
             </div>
+            <ul class="breadcrumb">
+                <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
+                <li class="active">Seeds</li>
+            </ul>
             <div class=" text-right" >
                 <div class="btn-group">
                     <!-- <a href="#cleanModal" data-toggle="modal"  class="btn btn-danger">Clean database</a>-->
                </div>
                 <div class="btn-group">
-                    <a href="../seed/add/" class="btn btn-success">Add <i class="icon-plus icon-white"></i></a>
+                    <a href="../seed/add/" class="btn btn-success">Add Seed <i class="icon-plus icon-white"></i></a>
                 </div>
             </div>
             <ul id="seeds" class="thumbnails">
@@ -104,7 +108,7 @@
 
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-danger" onclick="removeSeed();">Remove</button>
+                        <button class="btn btn-danger" onclick="removeSeed();">Remove <i class="icon-trash icon-white"></i></button>
                     </div>
                 </div>
                         

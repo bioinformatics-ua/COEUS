@@ -19,11 +19,14 @@
                 //header name
                 var path = lastPath();
                 $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
+                $('#breadSeed').html('<a href="../../seed/'+path+'">Seed</a> <span class="divider">/</span> ');
+                $('#breadEntities').html('<a href="../../entity/'+path+'">Entities</a> <span class="divider">/</span> ');
+                
 
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
                     $('#type').html("Edit Entity:");
-                    $('#submit').html('Edit <i class="icon-edit icon-white"></i>');
+                    $('#submit').html('Save <i class="icon-briefcase icon-white"></i>');
 
                     var query = initSparqlerQuery();
                     var q = "SELECT ?seed ?title ?label ?comment {" + path + " coeus:isIncludedIn ?seed . " + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . }";
@@ -139,6 +142,13 @@
             <div id="header" class="page-header">
 
             </div>
+             <ul class="breadcrumb">
+                <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
+                <li id="breadSeeds"><a href="../../seed/">Seeds</a> <span class="divider">/</span> </li>
+                <li id="breadSeed"></li>
+                <li id="breadEntities"></li>
+                <li class="active">Entity</li>
+            </ul>
             <p class="lead" >Entity URI - <a class="lead" id="uri">coeus: </a></p>
 
             <div class="row-fluid">
@@ -160,7 +170,7 @@
                         <button  type="button" id="submit" class="btn btn-success">Add <i class="icon-plus icon-white"></i> </button>
                     </div>
                     <div class="span4">
-                        <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel</button>
+                        <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel <i class="icon-backward icon-white"></i></button>
                     </div>
                 </div>
                 <div class="span8"></div>

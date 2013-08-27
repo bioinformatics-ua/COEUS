@@ -163,6 +163,10 @@
             <div id="header" class="page-header">
 
             </div>
+            <ul class="breadcrumb">
+                <li id="breadSeed"><i class="icon-home"></i> <span class="divider">/</span> <a href="../seed/">Seeds</a> <span class="divider">/</span></li>
+                <li class="active">Seed</li>
+            </ul>
             <div id="info"></div>
             <div class="row-fluid">
                 <div id="concepts"class="span6">
@@ -191,7 +195,7 @@
                         </div>
                         <div class="span4">
                             <div class="btn-group">
-                                <a onclick="changeSeed();" class="btn btn-danger">Change seed</a>
+                                <a onclick="changeSeed();" class="btn btn-danger">Change seed <i class="icon-refresh icon-white"></i></a>
                             </div>
                         </div>
                     </div>
@@ -206,7 +210,7 @@
                         </div>
                         <div class="span4">
                             <div class="btn-group">
-                                <a onclick="changeEnv();" class="btn btn-danger">Change environment</a>
+                                <a onclick="changeEnv();" class="btn btn-danger">Change environment <i class="icon-refresh icon-white"></i></a>
                             </div>
                         </div>
                     </div>
@@ -220,7 +224,7 @@
                         </div>
                         <div class="span4">
                             <div class="btn-group">
-                                <a onclick="selectEntity();" class="btn btn-large btn-primary">Manage Entities</a>
+                                <a onclick="selectEntity();" class="btn btn-large btn-primary">Show Entities <i class="icon-forward icon-white"></i></a>
 
                             </div>
                         </div>
