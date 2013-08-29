@@ -73,9 +73,7 @@
                 window.location = "../entity/" + path;
             }
 
-            function fillHeader(result) {
-                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
-            }
+
             function fillEnvironments(result) {
                 console.log(result);
                 var array = result.environments;
@@ -83,6 +81,11 @@
                     var value = array[r].replace('env_', '');
                     $('#environments').append('<option>' + value + '</option>');
                 }
+            }
+
+            // Callback to generate the pages header 
+            function fillHeader(result) {
+                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
             }
 
             $(document).ready(function() {
@@ -165,7 +168,7 @@
             </div>
             <ul class="breadcrumb">
                 <li id="breadSeed"><i class="icon-home"></i> <span class="divider">/</span> <a href="../seed/">Seeds</a> <span class="divider">/</span></li>
-                <li class="active">Seed</li>
+                <li class="active">Dashboard</li>
             </ul>
             <div id="info"></div>
             <div class="row-fluid">

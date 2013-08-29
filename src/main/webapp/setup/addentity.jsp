@@ -18,10 +18,12 @@
 
                 //header name
                 var path = lastPath();
-                $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
-                $('#breadSeed').html('<a href="../../seed/'+path+'">Seed</a> <span class="divider">/</span> ');
-                $('#breadEntities').html('<a href="../../entity/'+path+'">Entities</a> <span class="divider">/</span> ');
-                
+                callURL("../../../config/getconfig/", fillHeader);
+                $('#breadSeed').html('<a href="../../seed/' + path + '">Dashboard</a> <span class="divider">/</span> ');
+                $('#breadEntities').html('<a href="../../entity/' + path + '">Entities</a> <span class="divider">/</span> ');
+
+                //Associate Enter key:
+                document.onkeypress = keyboard;
 
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
@@ -34,7 +36,6 @@
                             {success: function(json) {
                                     //var resultTitle = json.results.bindings[0].title;
                                     console.log(json);
-                                    $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
                                     //PUT VALUES IN THE INPUT FIELD
                                     $('#title').val(json.results.bindings[0].title.value);
                                     changeURI(json.results.bindings[0].title.value);
@@ -54,7 +55,13 @@
                 $('.icon-question-sign').tooltip();
             });
 
-            $('#submit').click(function() {
+            // Callback to generate the pages header 
+            function fillHeader(result) {
+                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+            }
+
+            $('#submit').click(testMode);
+            function testMode() {
                 //EDIT
                 if (penulPath() === 'edit') {
                     update();
@@ -70,8 +77,7 @@
                     window.location = document.referrer;
                 }
 
-            });
-
+            }
             function submit() {
 
                 var type = 'Entity';
@@ -133,6 +139,11 @@
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
                 document.getElementById('uri').innerHTML = 'coeus:entity_' + value.split(' ').join('_');
             }
+            function keyboard(event) {
+                //Enter key pressed
+                if (event.charCode === 13)
+                    testMode();
+            }
         </script>
     </s:layout-component>
     <s:layout-component name="body">
@@ -142,14 +153,14 @@
             <div id="header" class="page-header">
 
             </div>
-             <ul class="breadcrumb">
+            <ul class="breadcrumb">
                 <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
                 <li id="breadSeeds"><a href="../../seed/">Seeds</a> <span class="divider">/</span> </li>
                 <li id="breadSeed"></li>
                 <li id="breadEntities"></li>
                 <li class="active">Entity</li>
             </ul>
-            <p class="lead" >Entity URI - <a class="lead" id="uri">coeus: </a></p>
+            <p class="lead" >Entity URI - <span class="lead text-info" id="uri">coeus: </span></p>
 
             <div class="row-fluid">
                 <h4 id="type" >New Entity: </h4>

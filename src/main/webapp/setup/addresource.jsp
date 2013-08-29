@@ -17,16 +17,13 @@
 
                 //header name
                 var path = lastPath();
-                $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
-                
-
-                //fill the concepts extensions
-                var q = "SELECT ?concept ?c {?concept a coeus:Concept . ?concept dc:title ?c}";
-                queryToResult(q, fillConceptsExtension);
+                callURL("../../../config/getconfig/", fillHeader);
+                //Associate Enter key:
+                document.onkeypress = keyboard;
 
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
-                    $('#type').html("Edit Resource");
+                    $('#type').html("Resource");
                     $('#submit').html('Save <i class="icon-briefcase icon-white"></i>');
 
                     var query = initSparqlerQuery();
@@ -35,7 +32,6 @@
                             {success: function(json) {
                                     //var resultTitle = json.results.bindings[0].title;
                                     console.log(json);
-                                    $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
                                     //PUT VALUES IN THE INPUT FIELD
                                     $('#title').val(json.results.bindings[0].title.value);
                                     changeURI(json.results.bindings[0].title.value);
@@ -71,6 +67,9 @@
                 var qselectors = "SELECT * {" + path + " coeus:loadsFrom ?selector . ?selector dc:title ?title . ?selector rdfs:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . OPTIONAL { ?selector coeus:isKeyOf ?key } . OPTIONAL { ?selector coeus:regex ?regex }}";
                 queryToResult(qselectors, fillSelectors);
                 
+                var q="SELECT ?concept ?c {?concept_aux coeus:hasResource "+path+" . ?entity coeus:isEntityOf ?concept_aux . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
+                queryToResult(q, fillConceptsExtension);
+                
                 //path is a resource
                 var qresourceEdit = "SELECT DISTINCT ?seed ?entity ?concept {" + path + " coeus:isResourceOf ?concept . ?concept coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
                 console.log(qresourceEdit);
@@ -81,9 +80,13 @@
                     $('#selectorsForm').addClass('hide');
                     $('#builtForm').addClass('hide');
                     
+                    
                     //path is a concept
                     var qresourceAdd = "SELECT DISTINCT ?seed ?entity {" + path + " coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
                     queryToResult(qresourceAdd, fillBreadcumbAdd);
+                    
+                    var q="SELECT ?concept ?c {?entity coeus:isEntityOf "+path+" . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
+                    queryToResult(q, fillConceptsExtension);
                 }
                 
                
@@ -101,7 +104,9 @@
                 
             });
 
-            $('#submit').click(function() {
+            $('#submit').click(testMode);
+            
+            function testMode() {
                 //EDIT
                 if (penulPath() === 'edit') {
                     update();
@@ -111,7 +116,7 @@
 
                 }
 
-            });
+            }
 
             function fillExitingSelectors(result){console.log(result);
                 
@@ -490,7 +495,6 @@
                 document.getElementById('selectorUri').innerHTML = 'coeus:selector_' + value.split(' ').join('_');
             }
             function fillBreadcumbAdd(result) {
-                console.log(result);
                 var seed = result[0].seed.value;
                 var entity = result[0].entity.value;
                 seed = "coeus:" + splitURIPrefix(seed).value;
@@ -501,18 +505,29 @@
                 $('#breadResources').html('<a href="../../resource/' + lastPath() + '">Resources</a> <span class="divider">/</span>');
             }
             function fillBreadcumbEdit(result) {
-                console.log("ERROR:");
-                console.log(result);
                 var seed = result[0].seed.value;
                 var entity = result[0].entity.value;
                 var concept = result[0].concept.value;
                 seed = "coeus:" + splitURIPrefix(seed).value;
                 entity = "coeus:" + splitURIPrefix(entity).value;
                 concept = "coeus:" + splitURIPrefix(concept).value;
-                $('#breadSeed').html('<a href="../../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
+                $('#breadSeed').html('<a href="../../seed/' + seed + '">Dashboard</a> <span class="divider">/</span>');
                 $('#breadEntities').html('<a href="../../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
                 $('#breadConcepts').html('<a href="../../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
                 $('#breadResources').html('<a href="../../resource/' + concept + '">Resources</a> <span class="divider">/</span>');
+            }
+            function keyboard(event) {
+                //Enter key pressed
+                if (event.charCode === 13)
+                    testMode();
+            }
+            
+            function publisherChange(){
+                console.log($('#publisher').val());
+            }
+            // Callback to generate the pages header 
+            function fillHeader(result) {
+                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
             }
         </script>
     </s:layout-component>
@@ -532,7 +547,7 @@
                 <li id="breadResources"></li>
                 <li class="active">Resource</li>
             </ul>
-            <p class="lead" >Resource URI - <a class="lead" id="uri">coeus: </a></p>
+            <p class="lead" >Resource URI - <span class="lead text-info" id="uri">coeus: </span></p>
 
             <div class="row">
                 <div id="selectorsForm" class="span10">
@@ -600,12 +615,12 @@
                     </div>
                     <div id="publisherForm"> 
                         <label class="control-label" for="label">Publisher</label>
-                        <select id="publisher" class="span10">
-                            <option>sql</option>
-                            <option>csv</option>
+                        <select id="publisher" class="span10" onchange="publisherChange();">
                             <option>xml</option>
-                            <option>sparql</option>
+                            <option>csv</option>
                             <option>json</option>
+                            <option>sql</option>
+                            <option>sparql</option>
                             <option>rdf</option>
                         </select> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:publisher property" ></i>
                     </div>

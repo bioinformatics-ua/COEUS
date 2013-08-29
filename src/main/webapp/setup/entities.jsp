@@ -29,8 +29,14 @@
 
             }
 
+            // Callback to generate the pages header 
+            function fillHeader(result) {
+                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+            }
+
             $(document).ready(function() {
                 var seed = lastPath();
+
                 var query = initSparqlerQuery();
                 // passes standard JSON results object to success callback
                 var qEntities = "SELECT DISTINCT ?entity ?e {" + seed + " coeus:includes ?entity . ?entity dc:title ?e . }";
@@ -40,7 +46,7 @@
                                 // fill Entities
 
                                 for (var key = 0, size = json.results.bindings.length; key < size; key++) {
-                                    var a = '<tr><td><a href=' + json.results.bindings[key].entity.value + '>'
+                                    var a = '<tr><td><a href="../../resource/' + splitURIPrefix(json.results.bindings[key].entity.value).value + '">'
                                             + json.results.bindings[key].entity.value + '</a></td><td>'
                                             + json.results.bindings[key].e.value + '</td><td>'
                                             + '<div class="btn-group">'
@@ -60,9 +66,10 @@
                 );
                 //header name
                 var path = lastPath();
-                $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
-                $('#breadSeed').html('<a href="../seed/'+path+'">Seed</a> <span class="divider">/</span>');
-                
+
+                callURL("../../config/getconfig/", fillHeader);
+                $('#breadSeed').html('<a href="../seed/' + path + '">Dashboard</a> <span class="divider">/</span>');
+
                 var urlPrefix = "../../api/" + getApiKey();
                 cleanUnlikedTriples(urlPrefix);
             });

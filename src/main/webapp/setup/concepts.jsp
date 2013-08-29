@@ -12,7 +12,10 @@
         <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.api.js" />"></script>
         <script type="text/javascript">
-
+            // Callback to generate the pages header 
+            function fillHeader(result) {
+                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+            }
             function selectConcept(concept) {
                 $('#removeModalLabel').html('coeus:concept_' + concept.split(' ').join('_'));
             }
@@ -31,14 +34,14 @@
             function fillBreadcumb(result) {
                 var seed = result[0].seed.value;
                 seed = "coeus:" + splitURIPrefix(seed).value;
-                $('#breadSeed').html('<a href="../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
+                $('#breadSeed').html('<a href="../seed/' + seed + '">Dashboard</a> <span class="divider">/</span>');
                 $('#breadEntities').html('<a href="../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
                 
             }
             function fillListOfConcepts(result) {
                 for (var key in result) {
                     var concept='coeus:'+splitURIPrefix(result[key].concept.value).value;
-                    var a = '<tr><td><a href=' + result[key].concept.value + '>'
+                    var a = '<tr><td><a href="../../resource/' + splitURIPrefix(result[key].concept.value).value + '">'
                             + result[key].concept.value + '</a></td><td>'
                             + result[key].c.value + '</td><td>'
                             + '<div class="btn-group">'
@@ -86,10 +89,8 @@
                 var qconcept = "SELECT DISTINCT ?concept ?c {" + entity + " coeus:isEntityOf ?concept . ?concept dc:title ?c . }";
                 queryToResult(qconcept, fillListOfConcepts);
                 
-                
                 //header name
-                var path = lastPath();
-                $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
+                callURL("../../config/getconfig/", fillHeader);
                 
                 var urlPrefix = "../../api/" + getApiKey();
                 cleanUnlikedTriples(urlPrefix);

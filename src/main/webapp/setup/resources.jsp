@@ -33,7 +33,7 @@
                 var entity = result[0].entity.value;
                 seed = "coeus:" + splitURIPrefix(seed).value;
                 entity = "coeus:" + splitURIPrefix(entity).value;
-                $('#breadSeed').html('<a href="../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
+                $('#breadSeed').html('<a href="../seed/' + seed + '">Dashboard</a> <span class="divider">/</span>');
                 $('#breadEntities').html('<a href="../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
                 $('#breadConcepts').html('<a href="../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
             }
@@ -42,7 +42,7 @@
                     var built = '<span class="label label-success">Built</span>';
                     if (result[key].built===undefined || result[key].built.value === "false")
                         built = '<span class="label ">not built</span>';
-                    var a = '<tr><td><a href=' + result[key].resource.value + '>'
+                    var a = '<tr><td><a href="../../resource/' + splitURIPrefix(result[key].resource.value).value + '">'
                             + result[key].resource.value + '</a> '+built+'</td><td>'
                             + result[key].c.value + '</td><td>'
                             + result[key].order.value + '</td><td>'
@@ -56,6 +56,11 @@
                     $('#resources').append(a);
                 }
             }
+            
+            // Callback to generate the pages header 
+            function fillHeader(result) {
+                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+            }
 
             $(document).ready(function() {
                 var concept = lastPath();
@@ -68,8 +73,7 @@
                 
                 
                 //header name
-                var path = lastPath();
-                $('#header').append('<h1>' + path + '<small> env.. </small></h1>');
+                callURL("../../config/getconfig/", fillHeader);
                 
                 var urlPrefix = "../../api/" + getApiKey();
                 cleanUnlikedTriples(urlPrefix);

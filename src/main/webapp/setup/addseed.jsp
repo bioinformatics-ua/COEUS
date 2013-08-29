@@ -16,6 +16,9 @@
 
             $(document).ready(function() {
 
+                //Associate Enter key:
+                document.onkeypress = keyboard;
+
                 //header name
                 var path = lastPath();
                 $('#header').html('<h1>COEUS<small> env.. </small></h1>');
@@ -51,7 +54,9 @@
                 $('.icon-question-sign').tooltip();
             });
 
-            $('#submit').click(function() {
+            $('#submit').click(testMode);
+            
+            function testMode() {
                 //EDIT
                 if (penulPath() === 'edit') {
                     update();
@@ -67,7 +72,7 @@
                     window.location = document.referrer;
                 }
 
-            });
+            }
 
             function submit() {
 
@@ -110,12 +115,17 @@
                 var urlUpdate = "../../../api/" + getApiKey() + "/update/";
                 if ($('#oldLabel').val() !== $('#label').val())
                     callAPI(urlUpdate + lastPath() + "/" + "rdfs:label" + "/xsd:string:" + $('#oldLabel').val() + ",xsd:string:" + $('#label').val(), '#result');
-                
+
             }
 
             function changeURI(value) {
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
                 document.getElementById('uri').innerHTML = 'coeus:seed_' + value.split(' ').join('_');
+            }
+            function keyboard(event) {
+                //Enter key pressed
+                if (event.charCode === 13)
+                    testMode();
             }
         </script>
     </s:layout-component>
@@ -131,7 +141,7 @@
                 <li id="breadSeed"><a href="../">Seeds</a> <span class="divider">/</span></li>
                 <li class="active">Seed</li>
             </ul>
-            <p class="lead" >Seed URI - <a class="lead" id="uri">coeus: </a></p>
+            <p class="lead" >Seed URI - <span class="lead text-info" id="uri">coeus: </span></p>
 
             <div class="row-fluid">
                 <h4 id="type" >New Seed: </h4>
@@ -156,10 +166,10 @@
                     </div>
                 </div>
                 <div class="span8"></div>
-               <!-- <div id="commentForm">
-                    <label class="control-label" for="comment">Comment</label> 
-                    <textarea rows="4" style="max-width: 500px;width: 400px;" id="comment" type="text" placeholder="Ex: Describes the Uniprot Entity"></textarea> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:comment property" ></i>
-                </div>-->
+                <!-- <div id="commentForm">
+                     <label class="control-label" for="comment">Comment</label> 
+                     <textarea rows="4" style="max-width: 500px;width: 400px;" id="comment" type="text" placeholder="Ex: Describes the Uniprot Entity"></textarea> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:comment property" ></i>
+                 </div>-->
 
             </div>
 

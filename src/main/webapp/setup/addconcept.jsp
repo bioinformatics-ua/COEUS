@@ -18,14 +18,17 @@
 
                 //header name
                 var path = lastPath();
-                $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
-                var qconcept = "SELECT DISTINCT ?seed {" + path + " coeus:isIncludedIn ?seed }";
-                queryToResult(qconcept, fillBreadcumb);
+                callURL("../../../config/getconfig/", fillHeader);
+                //Associate Enter key:
+                document.onkeypress = keyboard;
 
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
                     $('#type').html("Edit Concept");
                     $('#submit').html('Save <i class="icon-briefcase icon-white"></i>');
+                    
+                    var qconcept = "SELECT DISTINCT ?seed ?entity {" + path + " coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
+                    queryToResult(qconcept, fillBreadcumbEdit);
 
                     var query = initSparqlerQuery();
                     var q = "SELECT ?title ?label {" + path + " dc:title ?title . " + path + " rdfs:label ?label . }";
@@ -33,7 +36,6 @@
                             {success: function(json) {
                                     //var resultTitle = json.results.bindings[0].title;
                                     console.log(json);
-                                    $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
                                     //PUT VALUES IN THE INPUT FIELD
                                     $('#title').val(json.results.bindings[0].title.value);
                                     changeURI(json.results.bindings[0].title.value);
@@ -46,14 +48,23 @@
                                     //$('#commentForm').append('<input type="hidden" id="' + 'oldComment' + '" value="' + $('#comment').val() + '"/>');
                                 }}
                     );
+                }else{
+                    var qconcept = "SELECT DISTINCT ?seed {" + path + " coeus:isIncludedIn ?seed }";
+                    queryToResult(qconcept, fillBreadcumbAdd);
                 }
                 //end of EDIT
 
                 //activate tooltip (bootstrap-tooltip.js is need)
                 $('.icon-question-sign').tooltip();
             });
+            
+            // Callback to generate the pages header 
+            function fillHeader(result) {
+                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+            }
 
-            $('#submit').click(function() {
+            $('#submit').click(testMode);
+            function testMode() {
                 //EDIT
                 if (penulPath() === 'edit') {
                     update();
@@ -69,7 +80,7 @@
                     window.location = document.referrer;
                 }
 
-            });
+            }
 
             function submit() {
 
@@ -124,12 +135,26 @@
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
                 document.getElementById('uri').innerHTML = 'coeus:concept_' + value.split(' ').join('_');
             }
-            function fillBreadcumb(result) {
+            function fillBreadcumbAdd(result) {
                 var seed = result[0].seed.value;
                 seed = "coeus:" + splitURIPrefix(seed).value;
                 $('#breadSeed').html('<a href="../../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
                 $('#breadEntities').html('<a href="../../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
                 $('#breadConcepts').html('<a href="../../concept/' + lastPath() + '">Concepts</a> <span class="divider">/</span>');
+            }
+            function fillBreadcumbEdit(result) {
+                var seed = result[0].seed.value;
+                seed = "coeus:" + splitURIPrefix(seed).value;
+                var entity = result[0].entity.value;
+                entity = "coeus:" + splitURIPrefix(entity).value;
+                $('#breadSeed').html('<a href="../../seed/' + seed + '">Dashboard</a> <span class="divider">/</span>');
+                $('#breadEntities').html('<a href="../../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
+                $('#breadConcepts').html('<a href="../../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
+            }
+            function keyboard(event) {
+                //Enter key pressed
+                if (event.charCode === 13)
+                    testMode();
             }
         </script>
     </s:layout-component>
@@ -148,7 +173,7 @@
                 <li id="breadConcepts"></li>
                 <li class="active">Concept</li>
             </ul>
-            <p class="lead" >Concept URI - <a class="lead" id="uri">coeus: </a></p>
+            <p class="lead" >Concept URI - <span class="lead text-info" id="uri">coeus: </span></p>
 
             <div class="row-fluid">
                 <h4 id="type" >New Concept </h4>
