@@ -39,7 +39,7 @@
                                     $('#label').val(json.results.bindings[0].label.value);
                                     $('#comment').val(json.results.bindings[0].comment.value);
                                     $('#method').val(json.results.bindings[0].method.value);
-                                    $('#publisher').val(json.results.bindings[0].publisher.value);
+                                    $('#publisher option:contains(' + json.results.bindings[0].publisher.value + ')').prop({selected: true});
                                     $('#endpoint').val(json.results.bindings[0].endpoint.value);
                                     $('#query').val(json.results.bindings[0].query.value);
                                     $('#order').val(json.results.bindings[0].order.value);
@@ -56,56 +56,57 @@
                                     $('#methodForm').append('<input type="hidden" id="' + 'oldMethod' + '" value="' + $('#method').val() + '"/>');
                                     $('#publisherForm').append('<input type="hidden" id="' + 'oldPublisher' + '" value="' + $('#publisher').val() + '"/>');
                                     $('#endpointForm').append('<input type="hidden" id="' + 'oldEndpoint' + '" value="' + $('#endpoint').val() + '"/>');
-                                    $('#queryForm').append('<input type="hidden" id="' + 'oldQuery' + '" value="' + $('#query').val() + '"/>');
+                                    $('#queryForm').append('<input type="hidden" id="' + 'oldQuery' + '" value=' + $('#query').val() + ' />');
                                     $('#orderForm').append('<input type="hidden" id="' + 'oldOrder' + '" value="' + $('#order').val() + '"/>');
                                     $('#extendsForm').append('<input type="hidden" id="' + 'oldExtends' + '" value="' + splitURIPrefix(json.results.bindings[0].extends.value).value + '"/>');
                                     $('#builtForm').append('<input type="hidden" id="' + 'oldBuilt' + '" value="' + $('#built').is(':checked') + '"/>');
-
+                                    //change publisher according to the result
+                                    publisherChange();
                                 }}
                     );
-                        
-                var qselectors = "SELECT * {" + path + " coeus:loadsFrom ?selector . ?selector dc:title ?title . ?selector rdfs:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . OPTIONAL { ?selector coeus:isKeyOf ?key } . OPTIONAL { ?selector coeus:regex ?regex }}";
-                queryToResult(qselectors, fillSelectors);
-                
-                var q="SELECT ?concept ?c {?concept_aux coeus:hasResource "+path+" . ?entity coeus:isEntityOf ?concept_aux . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
-                queryToResult(q, fillConceptsExtension);
-                
-                //path is a resource
-                var qresourceEdit = "SELECT DISTINCT ?seed ?entity ?concept {" + path + " coeus:isResourceOf ?concept . ?concept coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
-                console.log(qresourceEdit);
-                queryToResult(qresourceEdit, fillBreadcumbEdit);
+
+                    var qselectors = "SELECT * {" + path + " coeus:loadsFrom ?selector . ?selector dc:title ?title . ?selector rdfs:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . OPTIONAL { ?selector coeus:isKeyOf ?key } . OPTIONAL { ?selector coeus:regex ?regex }}";
+                    queryToResult(qselectors, fillSelectors);
+
+                    var q = "SELECT ?concept ?c {?concept_aux coeus:hasResource " + path + " . ?entity coeus:isEntityOf ?concept_aux . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
+                    queryToResult(q, fillConceptsExtension);
+
+                    //path is a resource
+                    var qresourceEdit = "SELECT DISTINCT ?seed ?entity ?concept {" + path + " coeus:isResourceOf ?concept . ?concept coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
+                    console.log(qresourceEdit);
+                    queryToResult(qresourceEdit, fillBreadcumbEdit);
                     //end of EDIT
                 } else {
                     //not showing selectores and built option if one resource is been add 
                     $('#selectorsForm').addClass('hide');
                     $('#builtForm').addClass('hide');
-                    
-                    
+
+
                     //path is a concept
                     var qresourceAdd = "SELECT DISTINCT ?seed ?entity {" + path + " coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
                     queryToResult(qresourceAdd, fillBreadcumbAdd);
-                    
-                    var q="SELECT ?concept ?c {?entity coeus:isEntityOf "+path+" . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
+
+                    var q = "SELECT ?concept ?c {?entity coeus:isEntityOf " + path + " . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
                     queryToResult(q, fillConceptsExtension);
                 }
-                
-               
+
+
                 //activate tooltip (bootstrap-tooltip.js is need)
                 $('.icon-question-sign').tooltip();
             });
-            
+
             $('#existingSelector').click(function() {
                 //clean all existing selectores
                 $('#existingSelectors').html("");
-                var selectorsType='coeus:'+$('#publisher').val().toUpperCase();
+                var selectorsType = 'coeus:' + $('#publisher').val().toUpperCase();
                 console.log(selectorsType);
-                var existingSelectores="SELECT DISTINCT ?selector (MIN(?resource) AS ?resource) (MIN(?title) AS ?title) (MIN(?label) AS ?label) (MIN(?property) AS ?property) (MIN(?query) AS ?query) MIN(?regex) (MIN(?key) AS ?key) {?selector coeus:loadsFor ?resource . ?selector a "+selectorsType+" . ?selector dc:title ?title . ?selector rdfs:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . OPTIONAL { ?selector coeus:regex ?regex } . FILTER NOT EXISTS { ?selector coeus:isKeyOf ?key }} GROUP BY ?selector";
-                queryToResult(existingSelectores,fillExitingSelectors);
-                
+                var existingSelectores = "SELECT DISTINCT ?selector (MIN(?resource) AS ?resource) (MIN(?title) AS ?title) (MIN(?label) AS ?label) (MIN(?property) AS ?property) (MIN(?query) AS ?query) MIN(?regex) (MIN(?key) AS ?key) {?selector coeus:loadsFor ?resource . ?selector a " + selectorsType + " . ?selector dc:title ?title . ?selector rdfs:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . OPTIONAL { ?selector coeus:regex ?regex } . FILTER NOT EXISTS { ?selector coeus:isKeyOf ?key }} GROUP BY ?selector";
+                queryToResult(existingSelectores, fillExitingSelectors);
+
             });
 
             $('#submit').click(testMode);
-            
+
             function testMode() {
                 //EDIT
                 if (penulPath() === 'edit') {
@@ -118,8 +119,9 @@
 
             }
 
-            function fillExitingSelectors(result){console.log(result);
-                
+            function fillExitingSelectors(result) {
+                console.log(result);
+
                 for (var r in result) {
                     var key = '';
                     if (result[r].key !== undefined)
@@ -127,29 +129,29 @@
                     var regex = '-';
                     if (result[r].regex !== undefined)
                         regex = result[r].regex.value;
-                    var sel=splitURIPrefix(result[r].selector.value).value;
+                    var sel = splitURIPrefix(result[r].selector.value).value;
                     var a = '<tr><td>'
                             + result[r].title.value + ' ' + key
                             + '</td><td>'
                             + result[r].query.value + '</td><td>'
                             + result[r].property.value + '</td><td>'
                             + regex + '</td><td>'
-                            + '<div class="btn-group" id="btn'+sel+'">'
+                            + '<div class="btn-group" id="btn' + sel + '">'
                             + '<button class="btn btn-success" onclick="addExistingSelector(\'' + sel + '\')">Add</button>'
-                            + '</div>'+'<div id="result'+sel+'"></div>'
+                            + '</div>' + '<div id="result' + sel + '"></div>'
                             + '</td></tr>';
 
                     $('#existingSelectors').append(a);
                 }
             }
-            function addExistingSelector(selector){
+            function addExistingSelector(selector) {
                 var urlWrite = "../../../api/" + getApiKey() + "/write/";
-                callAPI(urlWrite + lastPath() + "/" + "coeus:loadsFrom" + "/coeus:" + selector, '#result'+ selector);
-                callAPI(urlWrite + "coeus:" + selector + "/" + "coeus:loadsFor/" + lastPath(), '#result'+ selector);
-                if (document.getElementById('result'+ selector).className === 'alert alert-success') {
-                    $('#btn'+selector).addClass('hide');
-                    $('#result'+selector).html("Added");
-                }   
+                callAPI(urlWrite + lastPath() + "/" + "coeus:loadsFrom" + "/coeus:" + selector, '#result' + selector);
+                callAPI(urlWrite + "coeus:" + selector + "/" + "coeus:loadsFor/" + lastPath(), '#result' + selector);
+                if (document.getElementById('result' + selector).className === 'alert alert-success') {
+                    $('#btn' + selector).addClass('hide');
+                    $('#result' + selector).html("Added");
+                }
             }
             function fillConceptsExtension(result) {
                 for (var r in result) {
@@ -183,22 +185,22 @@
             }
             function selectSelector(selector) {
                 $('#removeModalLabel').html('coeus:' + selector);
-                var qTotal="SELECT (COUNT(?resource) AS ?total) {coeus:" + selector+" coeus:loadsFor ?resource }";
+                var qTotal = "SELECT (COUNT(?resource) AS ?total) {coeus:" + selector + " coeus:loadsFor ?resource }";
                 $('#rmBodySelectors').html('');
                 $('#btnDetach').remove();
-                        
-                queryToResult(qTotal,function (result){
-                    var total=result[0].total.value;
-                    if(total>1) {
+
+                queryToResult(qTotal, function(result) {
+                    var total = result[0].total.value;
+                    if (total > 1) {
                         //console.log(selector);
-                        var text='Info: This selector is associated with more that one resource. You can opt to only detach the selector. ';
+                        var text = 'Info: This selector is associated with more that one resource. You can opt to only detach the selector. ';
                         $('#rmBodySelectors').html(text);
-                        $('#rmbtns').append('<a class="btn btn-warning" id="btnDetach" onclick="detachSelector(\''+selector+'\');">Detach</a>');
+                        $('#rmbtns').append('<a class="btn btn-warning" id="btnDetach" onclick="detachSelector(\'' + selector + '\');">Detach</a>');
                     }
                 });
-                
+
             }
-            function detachSelector(selector){
+            function detachSelector(selector) {
                 var urlDelete = "../../../api/" + getApiKey() + "/delete/";
                 //callAPI(urlDelete + lastPath() + "/" + "coeus:isKeyOf" + "/coeus:" + selector, '#res');
                 callAPI(urlDelete + lastPath() + "/" + "coeus:loadsFrom" + "/coeus:" + selector, '#res');
@@ -246,13 +248,13 @@
                 //var query = initSparqlerQuery();
                 console.log('Remove: ' + selector);
                 var urlPrefix = "../../../api/" + getApiKey();
-                
+
                 //remove all subjects associated.
-                removeAllTriplesFromPredicateAndObject(urlPrefix,"coeus:loadsFrom", selector);
-                removeAllTriplesFromPredicateAndObject(urlPrefix,"coeus:isKeyOf", selector);
+                removeAllTriplesFromPredicateAndObject(urlPrefix, "coeus:loadsFrom", selector);
+                removeAllTriplesFromPredicateAndObject(urlPrefix, "coeus:isKeyOf", selector);
                 //remove all predicates and objects associated.            
                 removeAllTriplesFromSubject(urlPrefix, selector);
-                
+
             }
             function updatePublisherOnSelectores(urlUpdate, res, oldPublisher, newPublisher) {
                 var q = "SELECT * {" + res + " coeus:loadsFrom ?selector}";
@@ -330,8 +332,8 @@
                     if (document.getElementById('res').className === 'alert alert-success') {
                         window.location.reload();
                     }
-                    
-                    
+
+
                 }
             }
             function submitSelector() {
@@ -379,7 +381,7 @@
                     $('#endpointForm').addClass('controls control-group error');
                     empty = true;
                 }
-                if (query === '') {
+                if (query === '' && publisher!== ("csv")) {
                     $('#queryForm').addClass('controls control-group error');
                     empty = true;
                 }
@@ -521,10 +523,80 @@
                 if (event.charCode === 13)
                     testMode();
             }
-            
-            function publisherChange(){
-                console.log($('#publisher').val());
+
+            function publisherChange() {
+                var publisher = $('#publisher').val();
+                if (publisher === "sql") {
+                    $('#sqlEndpointForm').removeClass('hide');
+                    $('#endpointForm').addClass('hide');
+                    var endpoint = $('#endpoint').val();
+                    //Endpoint example: jdbc:mysql://host:3306;database=name;user=user;password=pass
+
+                    if (endpoint !== "") {
+                        var url = endpoint.split("://");
+                        var driver = url[0].split("jdbc:")[1];
+                        var cut = url[1].split(":");
+                        var host = cut[0];
+                        var cut2 = cut[1].split(";");
+                        var port = cut2[0];
+                        var db = cut2[1].split("database=")[1];
+                        var user = cut2[2].split("user=")[1];
+                        var password = cut2[3].split("password=")[1];
+
+                        $('#driverEndpoint').val(driver);
+                        $('#hostEndpoint').val(host);
+                        $('#dbEndpoint').val(db);
+                        $('#portEndpoint').val(port);
+                        $('#userEndpoint').val(user);
+                        $('#passwordEndpoint').val(password);
+                    }
+
+                } else {
+                    $('#sqlEndpointForm').addClass('hide');
+                    $('#endpointForm').removeClass('hide');
+                }
+                
+                if(publisher === "csv"){
+                    $('#queryForm').addClass('hide');
+                    $('#csvQueryForm').removeClass('hide');
+                    var query = $('#query').val();
+                    
+                     if (query !== "") {
+                        var q=query.split("|");
+
+                        $('#csvQueryColumn').val(q[0]);
+                        $('#csvQueryDelimiter').val(q[1]);
+                        $('#csvQueryHeaderSkip').val(q[2]);
+                    }
+                    
+                }
+                else {
+                    $('#csvQueryForm').addClass('hide');
+                    $('#queryForm').removeClass('hide');
+                }
             }
+
+            function refreshEnpoint() {
+                var port = $('#portEndpoint').val();
+                if (port !== "")
+                    port = ":" + port;
+                var user = $('#userEndpoint').val();
+                if (user !== "")
+                    user = ";user=" + user;
+                var password = $('#passwordEndpoint').val();
+                if (password !== "")
+                    password = ";password=" + password;
+                var endpoint = "jdbc:" + $('#driverEndpoint').val() + "://" + $('#hostEndpoint').val() + port + ";database=" + $('#dbEndpoint').val() + user + password;
+                $('#endpoint').val(endpoint);
+            }
+            
+            function refreshQuery(){
+                var tab=$('#csvQueryColumn').val().slice(-1);
+                var delimiter=$('#csvQueryDelimiter').val().slice(-1);
+                var header=$('#csvQueryHeaderSkip').val().slice(-1);
+                $('#query').val(tab+"|"+delimiter+"|"+header);
+            }
+
             // Callback to generate the pages header 
             function fillHeader(result) {
                 $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
@@ -639,12 +711,46 @@
                     <textarea rows="4" style="max-width: 500px;width: 400px;" id="comment" type="text" placeholder="Ex: Describes the Uniprot Resource"></textarea> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:comment property" ></i>
                 </div>
                 <div id="endpointForm"> 
-                    <label class="control-label" for="label">Endpoint</label>
+                    <label class="control-label" for="label">Endpoint</label> 
                     <input id="endpoint" type="text" placeholder="Ex: http://someurl.com"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:endpoint property" ></i>
+                </div>
+                <div id="sqlEndpointForm" class="hide"> 
+                    <label class="control-label" >Endpoint (DB Connection)</label> 
+
+                    Driver: 
+                    <select id="driverEndpoint" type="text" placeholder="Ex: mysql" class="input-small" onchange="refreshEnpoint();">
+                        <option>mysql</option>
+                        <option>sqlserver</option>
+                    </select>
+                    <br/>
+                    Host:
+                    <input id="hostEndpoint" type="text" placeholder="Ex: someurl.com" onkeyup="refreshEnpoint();">
+                    <br/>
+                    DB Name:
+                    <input id="dbEndpoint" type="text" placeholder="Ex: coeus" class="input-small" onkeyup="refreshEnpoint();"> 
+                    Port:
+                    <input id="portEndpoint" type="text" placeholder="Ex: 3306" class="input-mini" onkeyup="refreshEnpoint();"> 
+                    <br/>
+                    Login:
+                    <input id="userEndpoint" type="text" placeholder="Ex: user" class="input-medium" onkeyup="refreshEnpoint();"> 
+                    <input id="passwordEndpoint" type="password" placeholder="Ex: password" class="input-medium" onkeyup="refreshEnpoint();"> 
+
                 </div>
                 <div id="queryForm"> 
                     <label class="control-label" for="label">Query</label>
                     <input id="query" type="text" placeholder="Ex: //item"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:query property" ></i>
+                </div>
+                <div id="csvQueryForm" class="hide"> 
+                    <label class="control-label" for="label">Query</label>
+                    <select class="input-mini" id="csvQueryColumn" onchange="refreshQuery();" type="text" maxlength="1" placeholder="Ex:  t">
+                        <option>\t</option>
+                        <option>\n</option>
+                    </select> <i class="icon-question-sign" data-toggle="tooltip" title="Column delimiter" ></i>
+                    <select class="input-mini" id="csvQueryDelimiter" onchange="refreshQuery();" type="text" maxlength="1" placeholder="Ex:  '">
+                        <option>"</option>
+                        <option>'</option>
+                    </select> <i class="icon-question-sign" data-toggle="tooltip" title="Quotes delimiter" ></i>
+                    <input class="input-mini" id="csvQueryHeaderSkip" onchange="refreshQuery();" type="number" placeholder="Ex:  1"> <i class="icon-question-sign" data-toggle="tooltip" title="Headers skip number "></i>
                 </div>
                 <div id="orderForm"> 
                     <label class="control-label" for="label">Order</label>
