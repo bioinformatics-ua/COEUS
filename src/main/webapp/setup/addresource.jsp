@@ -381,7 +381,7 @@
                     $('#endpointForm').addClass('controls control-group error');
                     empty = true;
                 }
-                if (query === '' && publisher!== ("csv")) {
+                if (query === '' && publisher !== ("csv")) {
                     $('#queryForm').addClass('controls control-group error');
                     empty = true;
                 }
@@ -533,15 +533,19 @@
                     //Endpoint example: jdbc:mysql://host:3306;database=name;user=user;password=pass
 
                     if (endpoint !== "") {
-                        var url = endpoint.split("://");
-                        var driver = url[0].split("jdbc:")[1];
-                        var cut = url[1].split(":");
-                        var host = cut[0];
-                        var cut2 = cut[1].split(";");
-                        var port = cut2[0];
-                        var db = cut2[1].split("database=")[1];
-                        var user = cut2[2].split("user=")[1];
-                        var password = cut2[3].split("password=")[1];
+                        try {
+                            var url = endpoint.split("://");
+                            var driver = url[0].split("jdbc:")[1];
+                            var cut = url[1].split(":");
+                            var host = cut[0];
+                            var cut2 = cut[1].split(";");
+                            var port = cut2[0];
+                            var db = cut2[1].split("database=")[1];
+                            var user = cut2[2].split("user=")[1];
+                            var password = cut2[3].split("password=")[1];
+                        } catch (e) {
+                            //ignore errors
+                        }
 
                         $('#driverEndpoint').val(driver);
                         $('#hostEndpoint').val(host);
@@ -555,20 +559,20 @@
                     $('#sqlEndpointForm').addClass('hide');
                     $('#endpointForm').removeClass('hide');
                 }
-                
-                if(publisher === "csv"){
+
+                if (publisher === "csv") {
                     $('#queryForm').addClass('hide');
                     $('#csvQueryForm').removeClass('hide');
                     var query = $('#query').val();
-                    
-                     if (query !== "") {
-                        var q=query.split("|");
+
+                    if (query !== "") {
+                        var q = query.split("|");
 
                         $('#csvQueryColumn').val(q[0]);
                         $('#csvQueryDelimiter').val(q[1]);
                         $('#csvQueryHeaderSkip').val(q[2]);
                     }
-                    
+
                 }
                 else {
                     $('#csvQueryForm').addClass('hide');
@@ -589,12 +593,12 @@
                 var endpoint = "jdbc:" + $('#driverEndpoint').val() + "://" + $('#hostEndpoint').val() + port + ";database=" + $('#dbEndpoint').val() + user + password;
                 $('#endpoint').val(endpoint);
             }
-            
-            function refreshQuery(){
-                var tab=$('#csvQueryColumn').val().slice(-1);
-                var delimiter=$('#csvQueryDelimiter').val().slice(-1);
-                var header=$('#csvQueryHeaderSkip').val().slice(-1);
-                $('#query').val(tab+"|"+delimiter+"|"+header);
+
+            function refreshQuery() {
+                var tab = $('#csvQueryColumn').val().slice(-1);
+                var delimiter = $('#csvQueryDelimiter').val().slice(-1);
+                var header = $('#csvQueryHeaderSkip').val().slice(-1);
+                $('#query').val(tab + "|" + delimiter + "|" + header);
             }
 
             // Callback to generate the pages header 
@@ -729,7 +733,7 @@
                     DB Name:
                     <input id="dbEndpoint" type="text" placeholder="Ex: coeus" class="input-small" onkeyup="refreshEnpoint();"> 
                     Port:
-                    <input id="portEndpoint" type="text" placeholder="Ex: 3306" class="input-mini" onkeyup="refreshEnpoint();"> 
+                    <input id="portEndpoint" type="number" placeholder="3306" class="input-mini" onchange="refreshEnpoint();"> 
                     <br/>
                     Login:
                     <input id="userEndpoint" type="text" placeholder="Ex: user" class="input-medium" onkeyup="refreshEnpoint();"> 
