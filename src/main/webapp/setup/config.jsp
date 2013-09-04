@@ -284,9 +284,9 @@
                     <li id="litab3"><a href="#tab3" data-toggle="tab">Prefixes</a></li>
                     <li id="litab4"><a href="#tab4" data-toggle="tab">Finish</a></li>
                 </ul>
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab0">
-                        <div class="text-center" style="height: 400px">
+                <div class="tab-content" style="min-height: 400px">
+                    <div class="tab-pane active" id="tab0" >
+                        <div class="text-center" >
                             <p>In this section you will give some information to complete some setup files for COEUS.</p>
                             <p>To begin press the Start Wizard button.</p>
                             <a onclick="changeTab('#litab0', '#litab1');" href="#tab1" data-toggle="tab" class="btn btn-large btn-warning" type="button">Start Wizard <i class="icon-play icon-white"></i></a>

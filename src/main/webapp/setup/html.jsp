@@ -83,7 +83,7 @@
         <s:layout-component name="custom_scripts">
         </s:layout-component>
         <footer class="footer">
-            <div >
+            <div class="container">
                 <span class="span2 pull-right"><a href="#">Back to top</a></span>
                 <p>&nbsp;</p>
                 <p><a target="_blank" title="UA.PT Bioinformatics COEUS" href="http://bioinformatics.ua.pt/coeus">COEUS</a> Setup <sup>Beta</sup>
