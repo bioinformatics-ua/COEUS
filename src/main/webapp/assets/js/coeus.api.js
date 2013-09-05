@@ -158,8 +158,12 @@ function callAPI(url, html) {
         // Server communication error function handler.
     });
 }
+/**
+* Return the first apikey
+* 
+ * @returns {unresolved} */
 function getApiKey() {
-    return "coeus";
+    return document.getElementById('apikey').innerHTML.split('|')[0];
 }
 /**
  * Return last element divided by / of url
@@ -443,7 +447,7 @@ function removeById(childDiv, parentDiv)
 }
 
 function callURL(url, success, error) {
-    url = encodeURI(url);
+    url = encodeURI(url);console.log(url);
     $.ajax({url: url, dataType: 'json'}).done(success).fail(error);
 }
 

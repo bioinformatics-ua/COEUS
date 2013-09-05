@@ -1,5 +1,6 @@
 package pt.ua.bioinformatics.coeus.data.connect;
 
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -277,6 +278,8 @@ public class XMLFactory implements ResourceFactory {
         try {
             API api = Boot.getAPI();
             com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
+            Statement statementToRemove=api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
+            api.removeStatement(statementToRemove);
             api.addStatement(resource, Predicate.get("coeus:built"), true);
             success = true;
             if (Config.isDebug()) {

@@ -14,11 +14,16 @@
         <script type="text/javascript">
 
             $(document).ready(function() {
+                callURL("../../config/getconfig/", fillHeader);
                 refreshSeeds();
                 
                 var urlPrefix = "../../api/" + getApiKey();
                 cleanUnlikedTriples(urlPrefix);
             });
+            function fillHeader(result){
+                $('#header').html('<h1>Please, choose the seed:<small id="env"> ' + result.config.environment + '</small></h1>');
+                $('#apikey').html(result.config.apikey);
+            }
             function refreshSeeds() {
                 var qSeeds = "SELECT DISTINCT ?seed ?s {?seed a coeus:Seed . ?seed dc:title ?s . }";
                 console.log(qSeeds);
@@ -70,8 +75,8 @@
             <br><br>
             <div id="header" class="page-header">
                 <h1>Please, choose the seed:</h1>
-
             </div>
+             <div id="apikey" class="hide"></div>
             <ul class="breadcrumb">
                 <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
                 <li class="active">Seeds</li>

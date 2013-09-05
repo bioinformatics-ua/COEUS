@@ -494,7 +494,7 @@
             }
             function changeSelectorURI(value) {
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
-                document.getElementById('selectorUri').innerHTML = 'coeus:selector_' + value.split(' ').join('_');
+                document.getElementById('selectorUri').innerHTML = 'coeus:selector_' + $('#concept').html().replace('coeus:concept_','')+'_' + value.split(' ').join('_');
             }
             function fillBreadcumbAdd(result) {
                 var seed = result[0].seed.value;
@@ -517,6 +517,7 @@
                 $('#breadEntities').html('<a href="../../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
                 $('#breadConcepts').html('<a href="../../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
                 $('#breadResources').html('<a href="../../resource/' + concept + '">Resources</a> <span class="divider">/</span>');
+                $('#concept').html(splitURIPrefix(concept).value);
             }
             function keyboard(event) {
                 //Enter key pressed
@@ -568,9 +569,11 @@
                     if (query !== "") {
                         var q = query.split("|");
 
-                        $('#csvQueryColumn').val(q[0]);
                         $('#csvQueryDelimiter').val(q[1]);
-                        $('#csvQueryHeaderSkip').val(q[2]);
+                        $('#csvQueryHeaderSkip').val(q[0]);
+                    } else {
+                        $('#csvQueryHeaderSkip').val("1");
+                        refreshQuery();
                     }
 
                 }
@@ -595,15 +598,16 @@
             }
 
             function refreshQuery() {
-                var tab = $('#csvQueryColumn').val().slice(-1);
-                var delimiter = $('#csvQueryDelimiter').val().slice(-1);
-                var header = $('#csvQueryHeaderSkip').val().slice(-1);
-                $('#query').val(tab + "|" + delimiter + "|" + header);
+
+                var delimiter = $('#csvQueryDelimiter').val();
+                var header = $('#csvQueryHeaderSkip').val();
+                $('#query').val(header + "|" + delimiter);
             }
 
             // Callback to generate the pages header 
             function fillHeader(result) {
                 $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+                $('#apikey').html(result.config.apikey);  
             }
         </script>
     </s:layout-component>
@@ -614,6 +618,8 @@
             <div id="header" class="page-header">
 
             </div>
+            <div id="apikey" class="hide"></div>
+            <div id="concept" class="hide"></div>
             <ul class="breadcrumb">
                 <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
                 <li id="breadSeeds"><a href="../../seed/">Seeds</a> <span class="divider">/</span> </li>
@@ -721,22 +727,21 @@
                 <div id="sqlEndpointForm" class="hide"> 
                     <label class="control-label" >Endpoint (DB Connection)</label> 
 
-                    Driver: 
+                    jdbc: 
                     <select id="driverEndpoint" type="text" placeholder="Ex: mysql" class="input-small" onchange="refreshEnpoint();">
                         <option>mysql</option>
                         <option>sqlserver</option>
                     </select>
-                    <br/>
-                    Host:
+                    ://
                     <input id="hostEndpoint" type="text" placeholder="Ex: someurl.com" onkeyup="refreshEnpoint();">
-                    <br/>
-                    DB Name:
-                    <input id="dbEndpoint" type="text" placeholder="Ex: coeus" class="input-small" onkeyup="refreshEnpoint();"> 
-                    Port:
+                    :
                     <input id="portEndpoint" type="number" placeholder="3306" class="input-mini" onchange="refreshEnpoint();"> 
+                    /
+                    <input id="dbEndpoint" type="text" placeholder="Ex: coeus" class="input-small" onkeyup="refreshEnpoint();"> 
+
                     <br/>
                     Login:
-                    <input id="userEndpoint" type="text" placeholder="Ex: user" class="input-medium" onkeyup="refreshEnpoint();"> 
+                    <input id="userEndpoint" type="text" placeholder="Ex: user" class="input-medium" onkeyup="refreshEnpoint();">   
                     <input id="passwordEndpoint" type="password" placeholder="Ex: password" class="input-medium" onkeyup="refreshEnpoint();"> 
 
                 </div>
@@ -745,15 +750,12 @@
                     <input id="query" type="text" placeholder="Ex: //item"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:query property" ></i>
                 </div>
                 <div id="csvQueryForm" class="hide"> 
-                    <label class="control-label" for="label">Query</label>
-                    <select class="input-mini" id="csvQueryColumn" onchange="refreshQuery();" type="text" maxlength="1" placeholder="Ex:  t">
-                        <option>\t</option>
-                        <option>\n</option>
-                    </select> <i class="icon-question-sign" data-toggle="tooltip" title="Column delimiter" ></i>
+                    <label class="control-label" for="label">Csv Quotes</label>
                     <select class="input-mini" id="csvQueryDelimiter" onchange="refreshQuery();" type="text" maxlength="1" placeholder="Ex:  '">
                         <option>"</option>
                         <option>'</option>
                     </select> <i class="icon-question-sign" data-toggle="tooltip" title="Quotes delimiter" ></i>
+                    <label class="control-label" for="label">Csv Starting line</label>
                     <input class="input-mini" id="csvQueryHeaderSkip" onchange="refreshQuery();" type="number" placeholder="Ex:  1"> <i class="icon-question-sign" data-toggle="tooltip" title="Headers skip number "></i>
                 </div>
                 <div id="orderForm"> 
@@ -811,7 +813,7 @@
                 <h3 id="selectorsModalLabel">Add Selector</h3>
             </div>
             <div class="modal-body">
-                <p class="lead" >Selector URI - <a class="lead" id="selectorUri">coeus: </a></p>
+                <p class="lead" >Selector URI - <span class="lead  text-info" id="selectorUri">coeus: </span></p>
                 <label class="checkbox" >
                     <input type="checkbox" id="keySelectorsForm"><span class="label label-success">Key</span>
                 </label>

@@ -1,6 +1,7 @@
 package pt.ua.bioinformatics.coeus.data.connect;
 
 import au.com.bytecode.opencsv.CSVReader;
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -91,17 +92,9 @@ public class CSVFactory implements ResourceFactory {
                         reader = new CSVReader(in, csvDelimiter, defaultCsvQuotes, defaultCsvHeader);
                     } else {
                         String[] csvKeys = res.getQuery().split("\\|");
-                        char querySeparator = csvKeys[0].charAt(0);
                         char queryQuotes = csvKeys[1].charAt(0);
-                        char queryLinesSkip = csvKeys[2].charAt(0);
-
-                        //Fix that
-                        if (querySeparator == 't') {
-                            querySeparator = '\t';
-                        }
-                        if (querySeparator == 'n') {
-                            querySeparator = '\n';
-                        }
+                        char queryLinesSkip = csvKeys[0].charAt(0);
+                        char querySeparator = guessDelimiter(u, queryQuotes, queryLinesSkip);
 
                         //System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
                         reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
@@ -147,17 +140,9 @@ public class CSVFactory implements ResourceFactory {
                         reader = new CSVReader(in, csvDelimiter, defaultCsvQuotes, defaultCsvHeader);
                     } else {
                         String[] csvKeys = res.getQuery().split("\\|");
-                        char querySeparator = csvKeys[0].charAt(0);
                         char queryQuotes = csvKeys[1].charAt(0);
-                        char queryLinesSkip = csvKeys[2].charAt(0);
-
-                        //Fix that
-                        if (querySeparator == 't') {
-                            querySeparator = '\t';
-                        }
-                        if (querySeparator == 'n') {
-                            querySeparator = '\n';
-                        }
+                        char queryLinesSkip = csvKeys[0].charAt(0);
+                        char querySeparator = guessDelimiter(u, queryQuotes, queryLinesSkip);
 
                         //System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
                         reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
@@ -195,17 +180,9 @@ public class CSVFactory implements ResourceFactory {
                         reader = new CSVReader(in, csvDelimiter, defaultCsvQuotes, defaultCsvHeader);
                     } else {
                         String[] csvKeys = res.getQuery().split("\\|");
-                        char querySeparator = csvKeys[0].charAt(0);
                         char queryQuotes = csvKeys[1].charAt(0);
-                        char queryLinesSkip = csvKeys[2].charAt(0);
-
-                        //Fix that
-                        if (querySeparator == 't') {
-                            querySeparator = '\t';
-                        }
-                        if (querySeparator == 'n') {
-                            querySeparator = '\n';
-                        }
+                        char queryLinesSkip = csvKeys[0].charAt(0);
+                        char querySeparator = guessDelimiter(u, queryQuotes, queryLinesSkip);
 
                         //System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
                         reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
@@ -258,17 +235,9 @@ public class CSVFactory implements ResourceFactory {
                             reader = new CSVReader(in, csvDelimiter, defaultCsvQuotes, defaultCsvHeader);
                         } else {
                             String[] csvKeys = res.getQuery().split("\\|");
-                            char querySeparator = csvKeys[0].charAt(0);
                             char queryQuotes = csvKeys[1].charAt(0);
-                            char queryLinesSkip = csvKeys[2].charAt(0);
-
-                            //Fix that
-                            if (querySeparator == 't') {
-                                querySeparator = '\t';
-                            }
-                            if (querySeparator == 'n') {
-                                querySeparator = '\n';
-                            }
+                            char queryLinesSkip = csvKeys[0].charAt(0);
+                            char querySeparator = guessDelimiter(u, queryQuotes, queryLinesSkip);
 
                             //System.out.println(res.getQuery() + " - " + querySeparator + queryQuotes + queryLinesSkip);
                             reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
@@ -325,6 +294,8 @@ public class CSVFactory implements ResourceFactory {
         try {
             API api = Boot.getAPI();
             com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
+            Statement statementToRemove=api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
+            api.removeStatement(statementToRemove);
             api.addStatement(resource, Predicate.get("coeus:built"), true);
             success = true;
             if (Config.isDebug()) {

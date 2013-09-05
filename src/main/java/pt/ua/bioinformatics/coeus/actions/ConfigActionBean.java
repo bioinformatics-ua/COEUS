@@ -103,8 +103,26 @@ public class ConfigActionBean implements ActionBean {
      * @return
      */
     public Resolution getconfig() {
-        Boot.start();
+        Config.load();
         return new StreamingResolution("application/json", Config.getFile().toJSONString());
+    }
+    
+     /**
+     * Build (Boot.start() call)
+     *
+     * @return
+     */
+    public Resolution build() {
+        JSONObject result = new JSONObject();
+        try {
+            Boot.start();
+            result.put("status", 100);
+            result.put("message", "[COEUS][API][ConfigActionBean] Build done. ");
+        } catch (Exception e) {
+            result.put("status", 201);
+            result.put("message", "[COEUS][API][ConfigActionBean] Exception: "+e);
+        }
+        return new StreamingResolution("application/json", result.toJSONString());
     }
 
     /**

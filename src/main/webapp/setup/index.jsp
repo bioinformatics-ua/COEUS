@@ -86,6 +86,7 @@
             // Callback to generate the pages header 
             function fillHeader(result) {
                 $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+                $('#apikey').html(result.config.apikey);
             }
 
             $(document).ready(function() {
@@ -156,6 +157,32 @@
             function changeEnvError(result, text) {
                 $('#info').html(generateHtmlMessage("ERROR!", text, "alert-error"));
             }
+            function build(){
+                callURL("../../config/build/", buildResult);
+            }
+            function buildResult(result){
+                console.log(result);
+            }
+            function unbuild(){
+                var qresource = "SELECT DISTINCT ?resource {" + lastPath() + " coeus:includes ?entity . ?entity coeus:isEntityOf ?concept . ?concept coeus:hasResource ?resource }";
+                queryToResult(qresource, unbuildResult);
+            }
+            function unbuildResult(result){
+                var urlPrefix = "../../api/" + getApiKey();
+                console.log(result);
+                for(var r in result){
+                    var res=splitURIPrefix(result[r].resource.value);
+                    var resource=getPrefix(res.namespace)+":"+res.value;
+                    callURL(urlPrefix+"/update/"+resource+"/coeus:built/xsd:boolean:true,xsd:boolean:false",unbuiltResource.bind(this,resource));
+                }
+                
+            }
+            function unbuiltResource(resource,result){
+                if(result.status===100)
+                    console.log("The "+resource+" has been changed. ");
+                else console.log("The "+resource+" has already unbuild. ");
+            }        
+    
 
         </script>
     </s:layout-component>
@@ -166,6 +193,7 @@
             <div id="header" class="page-header">
 
             </div>
+             <div id="apikey" class="hide"></div>
             <ul class="breadcrumb">
                 <li id="breadSeed"><i class="icon-home"></i> <span class="divider">/</span> <a href="../seed/">Seeds</a> <span class="divider">/</span></li>
                 <li class="active">Dashboard</li>
@@ -220,16 +248,19 @@
 
                     <div class="row-fluid">
                         <div class="span4">
-
-                        </div>
+                            <div class="btn-group">
+                            <a onclick="build();" class="btn btn-large btn-success">Rebuild <i class="icon-hdd icon-white"></i></a>
+                            <a onclick="unbuild();" class="btn btn-large btn-inverse">Unbuild <i class="icon-pencil icon-white"></i></a>
+                        </div></div>
                         <div class="span4">
 
                         </div>
                         <div class="span4">
                             <div class="btn-group">
                                 <a onclick="selectEntity();" class="btn btn-large btn-primary">Show Entities <i class="icon-forward icon-white"></i></a>
-
+                                
                             </div>
+                            
                         </div>
                     </div>
 

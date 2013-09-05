@@ -21,7 +21,7 @@
 
                 //header name
                 var path = lastPath();
-                $('#header').html('<h1>COEUS<small> env.. </small></h1>');
+                callURL("../../../config/getconfig/", fillHeader);
 
                 //if the type mode is EDIT
                 if (penulPath() === 'edit') {
@@ -34,7 +34,6 @@
                             {success: function(json) {
                                     //var resultTitle = json.results.bindings[0].title;
                                     console.log(json);
-                                    $('#header').html('<h1>' + path + '<small> env.. </small></h1>');
                                     //PUT VALUES IN THE INPUT FIELD
                                     $('#title').val(json.results.bindings[0].title.value);
                                     changeURI(json.results.bindings[0].title.value);
@@ -53,6 +52,11 @@
                 //activate tooltip (bootstrap-tooltip.js is need)
                 $('.icon-question-sign').tooltip();
             });
+            
+            function fillHeader(result){
+                $('#header').html('<h1>Seed<small id="env"> ' + result.config.environment + '</small></h1>');
+                $('#apikey').html(result.config.apikey);
+            }
 
             $('#submit').click(testMode);
             
@@ -136,6 +140,7 @@
             <div id="header" class="page-header">
 
             </div>
+            <div id="apikey" class="hide"></div>
             <ul class="breadcrumb">
                 <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
                 <li id="breadSeed"><a href="../">Seeds</a> <span class="divider">/</span></li>

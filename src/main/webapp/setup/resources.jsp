@@ -60,6 +60,7 @@
             // Callback to generate the pages header 
             function fillHeader(result) {
                 $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+                $('#apikey').html(result.config.apikey);             
             }
 
             $(document).ready(function() {
@@ -88,6 +89,7 @@
             <div id="header" class="page-header">
 
             </div>
+            <div id="apikey" class="hide"></div>
             <ul class="breadcrumb">
                  <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
                 <li id="breadSeeds"><a href="../seed/">Seeds</a> <span class="divider">/</span> </li>
