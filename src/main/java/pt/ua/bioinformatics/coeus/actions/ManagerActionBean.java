@@ -4,17 +4,12 @@
  */
 package pt.ua.bioinformatics.coeus.actions;
 
-import java.io.FileNotFoundException;
-import java.io.StringWriter;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.DefaultHandler;
 import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.Resolution;
-import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.UrlBinding;
-import pt.ua.bioinformatics.coeus.common.Boot;
-import pt.ua.bioinformatics.coeus.common.Config;
 
 /**
  *
@@ -50,24 +45,8 @@ public class ManagerActionBean implements ActionBean {
 
     }
     
-    public Resolution getconfig() {
-        Boot.start();
-        return new StreamingResolution("application/json", Config.getFile().toJSONString());
-    }
-    
     public Resolution graph() {
         return new ForwardResolution(GRAPH_VIEW);
-    }
-
-    public Resolution export() throws FileNotFoundException {
-        StringWriter outs = new StringWriter();
-        Boot.start();
-        if (method.equals("setup.ttl")) {
-            Boot.getAPI().getModel().write(outs, "TURTLE");
-        } else {
-            Boot.getAPI().getModel().write(outs, "RDF/XML");
-        }
-        return new StreamingResolution("application/rdf+xml", outs.toString());
     }
     
     public Resolution environments() {

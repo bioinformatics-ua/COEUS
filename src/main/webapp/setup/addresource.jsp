@@ -12,6 +12,7 @@
         <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.api.js" />"></script>
         <script src="<c:url value="/assets/js/bootstrap-tooltip.js" />"></script>
+        <script src="<c:url value="/assets/js/typeahead.js" />"></script>
         <script type="text/javascript">
             $(document).ready(function() {
 
@@ -93,6 +94,16 @@
 
                 //activate tooltip (bootstrap-tooltip.js is need)
                 $('.icon-question-sign').tooltip();
+
+
+
+            });
+
+            $('#typeahead').typeahead({
+                name: 'properties',
+                prefetch: '../../../config/properties/',
+                remote: '../../../config/properties/%QUERY',
+                limit: 15
             });
 
             $('#existingSelector').click(function() {
@@ -494,7 +505,7 @@
             }
             function changeSelectorURI(value) {
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
-                document.getElementById('selectorUri').innerHTML = 'coeus:selector_' + $('#concept').html().replace('coeus:concept_','')+'_' + value.split(' ').join('_');
+                document.getElementById('selectorUri').innerHTML = 'coeus:selector_' + $('#concept').html().replace('coeus:concept_', '') + '_' + value.split(' ').join('_');
             }
             function fillBreadcumbAdd(result) {
                 var seed = result[0].seed.value;
@@ -607,7 +618,26 @@
             // Callback to generate the pages header 
             function fillHeader(result) {
                 $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
-                $('#apikey').html(result.config.apikey);  
+                $('#apikey').html(result.config.apikey);
+            }
+            function updateSelectorProperties() {
+                var typeahead = $('#typeahead').val();
+                var prop = $('#propertySelectors').val();
+                if (typeahead !== "") {
+                    if (prop !== "")
+                        prop = prop + "|";
+                    $('#propertySelectors').val(prop + typeahead);
+                    $('#typeahead').val("");
+
+                    var array = $('#propertySelectors').val().split("|");
+                    console.log(array);
+                    $('#dropdownprop').html('<li><a>Properties Added</a></li><li class="divider"></li>');
+                    for (var i in array) {
+                        $('#dropdownprop').append('<li><a>' + array[i] + '</a></li>');
+                    }
+                }
+
+
             }
         </script>
     </s:layout-component>
@@ -825,9 +855,19 @@
                     <label class="control-label" for="label">Label</label>
                     <input id="labelSelectors" type="text" placeholder="Ex: Uniprot Resource"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:label property" ></i>
                 </div>
-                <div id="propertySelectorsForm"> 
+                <div id="propertySelectorsForm" > 
                     <label class="control-label" for="label">Property</label>
-                    <input id="propertySelectors" type="text" placeholder="Ex: dc:identifier"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:property property" ></i>
+                    <input class="twitter-typeahead" id="typeahead" type="text" > <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:property property" ></i>
+                    <div class="btn-group">
+                        <button class="btn btn-small btn-success" onclick="updateSelectorProperties();">+</button>
+                        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul id="dropdownprop" class="dropdown-menu">
+                            
+                        </ul>
+                    </div>
+                    <input id="propertySelectors" type="hidden" >
                 </div>
                 <div id="querySelectorsForm"> 
                     <label class="control-label" for="label">Query</label>

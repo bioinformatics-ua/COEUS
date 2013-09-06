@@ -7,6 +7,7 @@ package pt.ua.bioinformatics.coeus.actions;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,13 +46,16 @@ import net.sourceforge.stripes.action.ForwardResolution;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.StreamingResolution;
 import net.sourceforge.stripes.action.UrlBinding;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pt.ua.bioinformatics.coeus.api.DB;
+import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
 import pt.ua.bioinformatics.coeus.common.Tester;
+import pt.ua.bioinformatics.coeus.data.Predicate;
 import pt.ua.bioinformatics.coeus.data.Storage;
 
 /**
@@ -105,6 +109,46 @@ public class ConfigActionBean implements ActionBean {
     public Resolution getconfig() {
         Config.load();
         return new StreamingResolution("application/json", Config.getFile().toJSONString());
+    }
+    
+     /**
+     * return existent properties that matches with $method
+     *
+     * @return
+     */
+    public Resolution properties() {
+        JSONArray array=new JSONArray();
+        String matchingStr=method;
+        //HashMap<String,String> map= PrefixFactory.getPrefixes();
+        HashMap<String,Property> map= Predicate.getPredicates();
+   
+        for (Entry<String, Property> e : map.entrySet()) {
+            String key=e.getKey();
+            if(matchingStr!=null){
+                if(key.contains(matchingStr)) array.add(key);
+            }else{
+                array.add(key);
+            }
+        }
+        //System.out.println(matchingStr);
+        //System.out.println(array.toJSONString());
+        return new StreamingResolution("application/json", array.toJSONString());
+    }
+    
+    /**
+     * Export the database content 
+     * @return
+     * @throws FileNotFoundException 
+     */
+    public Resolution export() throws FileNotFoundException {
+        StringWriter outs = new StringWriter();
+        Boot.start();
+        if (method.endsWith(".ttl")) {
+            Boot.getAPI().getModel().write(outs, "TURTLE");
+        } else {
+            Boot.getAPI().getModel().write(outs, "RDF/XML");
+        }
+        return new StreamingResolution("application/rdf+xml", outs.toString());
     }
     
      /**
@@ -502,23 +546,6 @@ public class ConfigActionBean implements ActionBean {
         updateFile(sb.toString(), Config.getPath() + "predicates.csv");
 
         return new StreamingResolution("text/javascript", result.toString());
-    }
-
-    /**
-     * Export model in rdf or ttl.
-     *
-     * @return
-     * @throws FileNotFoundException
-     */
-    public Resolution export() throws FileNotFoundException {
-        StringWriter outs = new StringWriter();
-        Boot.start();
-        if (method.equals("setup.ttl")) {
-            Boot.getAPI().getModel().write(outs, "TURTLE");
-        } else {
-            Boot.getAPI().getModel().write(outs, "RDF/XML");
-        }
-        return new StreamingResolution("application/rdf+xml", outs.toString());
     }
 
     /**
