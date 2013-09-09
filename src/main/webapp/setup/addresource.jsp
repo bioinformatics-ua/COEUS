@@ -249,7 +249,8 @@
                     $('#querySelectorsForm').append('<input type="hidden" id="' + 'oldQuerySelectors' + '" value="' + $('#querySelectors').val() + '"/>');
                     $('#regexSelectorsForm').append('<input type="hidden" id="' + 'oldRegexSelectors' + '" value="' + $('#regexSelectors').val() + '"/>');
                     $('#titleSelectorsForm').append('<input type="hidden" id="oldKeySelectors' + '" value="' + $('#keySelectorsForm').is(':checked') + '"/>');
-
+                    //fill the properties
+                    buildSelectoresProperties();
                 });
 
                 //$('#callSelectorsModal').click();
@@ -623,20 +624,32 @@
             function updateSelectorProperties() {
                 var typeahead = $('#typeahead').val();
                 var prop = $('#propertySelectors').val();
-                if (typeahead !== "") {
+
+                if (typeahead !== "" && prop.indexOf(typeahead) === -1) {
                     if (prop !== "")
                         prop = prop + "|";
                     $('#propertySelectors').val(prop + typeahead);
                     $('#typeahead').val("");
 
-                    var array = $('#propertySelectors').val().split("|");
-                    console.log(array);
-                    $('#dropdownprop').html('<li><a>Properties Added</a></li><li class="divider"></li>');
-                    for (var i in array) {
-                        $('#dropdownprop').append('<li><a>' + array[i] + '</a></li>');
-                    }
-                }
+                    buildSelectoresProperties();
 
+                }
+            }
+            function buildSelectoresProperties() {
+                var array = $('#propertySelectors').val().split("|");
+                console.log(array);
+                $('#dropdownprop').html('<li><a>Properties Added</a></li><li class="divider"></li>');
+                for (var i in array) {
+                    $('#dropdownprop').append('<li id="' + array[i] + '"><a onclick="removeSelectorProperty(\'' + array[i] + '\');">' + array[i] + ' <i class="icon-minus-sign"></i></a></li>');
+                }
+            }
+            function removeSelectorProperty(value) {
+                removeById(value, "dropdownprop");
+                var q = $('#propertySelectors').val();
+                q = q.replace("|" + value, "");
+                q = q.replace(value + "|", "");
+                q = q.replace(value, "");
+                $('#propertySelectors').val(q);
 
             }
         </script>
@@ -864,7 +877,7 @@
                             <span class="caret"></span>
                         </button>
                         <ul id="dropdownprop" class="dropdown-menu">
-                            
+
                         </ul>
                     </div>
                     <input id="propertySelectors" type="hidden" >
