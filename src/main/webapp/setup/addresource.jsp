@@ -255,6 +255,19 @@
 
                 //$('#callSelectorsModal').click();
             }
+            function resetSelectorModal(){
+                $('#selectorUri').html("coeus:" );
+                $('#selectorsModalLabel').html("Add Selector");
+                $('#addSelectorButton').html('Add <i class="icon-plus icon-white"></i>');
+                $('#titleSelectors').val("");
+                document.getElementById('titleSelectors').removeAttribute("disabled");
+                $('#labelSelectors').val("");
+                $('#propertySelectors').val("");
+                $('#querySelectors').val("");
+                $('#regexSelectors').val("");
+                $('#keySelectorsForm').prop('checked', false);
+                buildSelectoresProperties();
+            }
             function removeSelector() {
                 var selector = $('#removeModalLabel').html();
                 //var query = initSparqlerQuery();
@@ -692,7 +705,7 @@
                         </tbody>
                     </table>
                     <div class="text-right">
-                        <button  type="button" id="addselector" href="#selectorsModal" role="button" data-toggle="modal" class="btn btn-success">New <i class="icon-plus icon-white"></i> </button>
+                        <button onclick="resetSelectorModal();" type="button" id="addselector" href="#selectorsModal" role="button" data-toggle="modal" class="btn btn-success">New <i class="icon-plus icon-white"></i> </button>
                         <button  type="button" id="existingSelector" href="#existingSelectorsModal" role="button" data-toggle="modal" class="btn btn-warning">Existing <i class="icon-plus icon-white"></i> </button>
                         <!--<button type="button" id="done" class="btn btn-info" onclick="window.history.back(-1);">Done</button>-->
                     </div>
