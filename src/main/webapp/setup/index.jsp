@@ -55,17 +55,55 @@
              });
              }*/
 
-            function queryConcepts(entity, query) {
-                var qConcepts = "SELECT DISTINCT ?c ?concept {?concept coeus:hasEntity coeus:entity_" + entity + " . ?concept dc:title ?c  }";
-                var c = '';
-                query.query(qConcepts, {success: function(json) {
-                        for (var i = 0, s = json.results.bindings.length; i < s; i++) {
-                            c += '<p><a href=' + json.results.bindings[i].concept.value + '><i class="icon-search"></i></a> ' + json.results.bindings[i].c.value + '</p>';
+            function queryConcepts(entity) {
+                var qConcepts = "SELECT DISTINCT ?concept {?concept coeus:hasEntity coeus:" + entity + " }";
+                queryToResult(qConcepts, fillConcepts.bind(this, entity));
+            }
+            function queryResources(concept) {
+                var qResources = "SELECT DISTINCT ?resource {?resource coeus:isResourceOf coeus:" + concept + " }";
+                queryToResult(qResources, fillResources.bind(this, concept));
+            }
 
-                        }
-                        $('#entity_' + entity).append(c);
-                        console.log('Append on #' + entity + ': ' + c);
-                    }});
+            function fillResources(concept, result) {
+                var arrayOfConcepts = new Array();
+                var c = '';
+                for (var i in result) {
+                    var auxResource = splitURIPrefix(result[i].resource.value);
+                    var resource = auxResource.value;
+                    var prefix = getPrefix(auxResource.namespace);
+                    arrayOfConcepts[i] = resource;
+                    c += '<p class="text-info"><a href="../../resource/' + resource + '"><i class="icon-search"></i></a> '
+                            + prefix + ":" + resource + ' <a href="../resource/edit/' + prefix + ':' + resource
+                            + '"><i class="icon-wrench"></i></a></p>';
+                }
+                //console.log(entity);
+                $('#' + concept).append(c);
+                //console.log('Append on #' + entity + ': ' + c);
+
+            }
+
+            function fillConcepts(entity, result) {
+                var arrayOfConcepts = new Array();
+                var c = '';
+                for (var i in result) {
+                    var auxConcept = splitURIPrefix(result[i].concept.value);
+                    var concept = auxConcept.value;
+                    var prefix = getPrefix(auxConcept.namespace);
+                    arrayOfConcepts[i] = concept;
+                    c += '<p class="text-warning">'
+                            +'<a href="../../resource/' + concept + '"><i class="icon-search"></i></a> ' 
+                            + prefix + ":" + concept 
+                            + ' <a href="../concept/edit/' + prefix + ':' + concept + '"><i class="icon-edit"></i></a>'
+                            + ' <a href="../resource/add/' + prefix + ':' + concept + '"><i class="icon-plus-sign"></i></a>'
+                          +'</p><ul id="' + concept + '"></ul>';
+                }
+                //console.log(entity);
+                $('#' + entity).append(c);
+                //console.log('Append on #' + entity + ': ' + c);
+
+                for (i in arrayOfConcepts) {
+                    queryResources(arrayOfConcepts[i]);
+                }
             }
 
             function selectEntity() {
@@ -89,54 +127,57 @@
                 $('#apikey').html(result.config.apikey);
             }
 
+            function fillEntities(result) {
+                // fill Entities
+                console.log(result);
+                var arrayOfEntities = new Array();
+                var e = '';
+                for (var key in result) {
+                    var auxEntity = splitURIPrefix(result[key].entity.value);
+                    var entity = auxEntity.value;
+                    var prefix = getPrefix(auxEntity.namespace);
+                    arrayOfEntities[key] = entity;
+
+                    e += '<p class="text-success">'
+                            +'<a href="../../resource/' + entity + '"><i class="icon-search"></i></a> '
+                            + prefix + ":" + entity 
+                            +' <a href="../entity/edit/' + prefix + ":" + entity + '"><i class="icon-edit"></i></a> '
+                            +' <a href="../entity/add/' + lastPath() + '"><i class="icon-plus-sign"></i></a> '
+                          +'<ul id="' + entity + '"></ul></p>';
+
+                }
+                $('#kb').append(e);
+
+                // fill Concepts
+                for (var k = 0, s = arrayOfEntities.length; k < s; k++) {
+                    //$('#addentity').append('<option>' + arrayOfEntities[k] + '</option>');
+                    queryConcepts(arrayOfEntities[k]);
+                }
+            }
+
             $(document).ready(function() {
                 //get seed from url
                 var seed = lastPath();
                 callURL("../../config/getconfig/", fillHeader);
                 callURL("../../config/listenv/", fillEnvironments);
 
-                var query = initSparqlerQuery();
-                // passes standard JSON results object to success callback
-                var qEntities = "SELECT DISTINCT ?entity ?e ?s {" + seed + " coeus:includes ?entity . ?concept coeus:hasEntity ?entity . ?entity dc:title ?e . }";
-
-                query.query(qEntities,
-                        {success: function(json) {
-                                // fill Entities
-                                var arrayOfEntities = new Array();
-                                var e = '';
-                                for (var key = 0, size = json.results.bindings.length; key < size; key++) {
-                                    arrayOfEntities[key] = json.results.bindings[key].e.value;
-
-                                    e += '<p class="text-info"><a href=' + json.results.bindings[key].entity.value + '>'
-                                            + arrayOfEntities[key] + '</a><ul id=entity_' + arrayOfEntities[key] + '></ul></p>';
-
-                                }
-                                $('#concepts').append(e);
-
-                                // fill Concepts
-                                for (var k = 0, s = arrayOfEntities.length; k < s; k++) {
-                                    //$('#addentity').append('<option>' + arrayOfEntities[k] + '</option>');
-                                    queryConcepts(arrayOfEntities[k], query);
-                                }
-                            }}
-                );
-                //header name
-                //$.get('../home/config', function(config, status) {
-                //   console.log(config);        
-
-                // }, 'json'); 
+                var qEntities = "SELECT DISTINCT ?entity {" + seed + " coeus:includes ?entity }";
+                queryToResult(qEntities, fillEntities);
 
                 var qseeds = "SELECT DISTINCT ?seed ?s {?seed a coeus:Seed . ?seed dc:title ?s . }";
-
-                query.query(qseeds,
-                        {success: function(json) {
-                                // fill Concepts
-                                for (var k = 0, s = json.results.bindings.length; k < s; k++) {
-                                    $('#seeds').append('<option>' + splitURIPrefix(json.results.bindings[k].seed.value).value + '</option>');
-                                }
-                                $('#seeds option:contains(' + lastPath().split('coeus:')[1] + ')').prop({selected: true});
-                            }}
+                queryToResult(qseeds, function(result) {
+                    for (var k in result) {
+                        $('#seeds').append('<option>' + splitURIPrefix(result[k].seed.value).value + '</option>');
+                    }
+                    $('#seeds option:contains(' + lastPath().split('coeus:')[1] + ')').prop({selected: true});
+                }
                 );
+
+                var qEntities = "SELECT (COUNT(*) AS ?triples) {?s ?p ?o}";
+                queryToResult(qEntities, function(result) {
+                    $('#triples').html(result[0].triples.value);
+                });
+                
             });
 
             function changeSeed() {
@@ -201,8 +242,8 @@
             </ul>
             <div id="info"></div>
             <div class="row-fluid">
-                <div id="concepts"class="span6">
-                    <h4>Knowledge Base <small>(Entity-Concept)</small></h4>
+                <div id="kb"class="span6">
+                    <h4>Knowledge Base <small>(Entity-Concept)</small> <span class="badge" id="triples">0</span></h4>
                     <!--<p class="text-info">Disease</p>
                     <ul>
                         <li>OMIM <span class="badge">1123</span></li>

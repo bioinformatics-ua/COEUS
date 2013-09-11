@@ -526,7 +526,7 @@
                 var entity = result[0].entity.value;
                 seed = "coeus:" + splitURIPrefix(seed).value;
                 entity = "coeus:" + splitURIPrefix(entity).value;
-                $('#breadSeed').html('<a href="../../seed/' + seed + '">Seed</a> <span class="divider">/</span>');
+                $('#breadSeed').html('<a href="../../seed/' + seed + '">Dashboard</a> <span class="divider">/</span>');
                 $('#breadEntities').html('<a href="../../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
                 $('#breadConcepts').html('<a href="../../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
                 $('#breadResources').html('<a href="../../resource/' + lastPath() + '">Resources</a> <span class="divider">/</span>');
