@@ -243,7 +243,7 @@
             <div id="info"></div>
             <div class="row-fluid">
                 <div id="kb"class="span6">
-                    <h4>Knowledge Base <small>(Entity-Concept)</small> <span class="badge" id="triples">0</span></h4>
+                    <h4>Knowledge Base <small>(Entity-Concept-Resource)</small> <span class="badge" id="triples">0</span></h4>
                     <!--<p class="text-info">Disease</p>
                     <ul>
                         <li>OMIM <span class="badge">1123</span></li>

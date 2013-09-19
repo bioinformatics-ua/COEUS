@@ -27,31 +27,29 @@
                     $('#type').html("Resource");
                     $('#submit').html('Save <i class="icon-briefcase icon-white"></i>');
 
-                    var query = initSparqlerQuery();
                     var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?built {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment . " + path + " coeus:method ?method . " + path + " dc:publisher ?publisher . " + path + " coeus:endpoint ?endpoint . " + path + " coeus:query ?query . " + path + " coeus:order ?order . " + path + " coeus:extends ?extends . OPTIONAL{" + path + " coeus:built ?built } }";
-                    query.query(q,
-                            {success: function(json) {
-                                    //var resultTitle = json.results.bindings[0].title;
-                                    console.log(json);
+                    queryToResult(q, function(result) {
+                                    //var resultTitle = result[0].title;
+                                    console.log(result);
                                     //PUT VALUES IN THE INPUT FIELD
-                                    $('#title').val(json.results.bindings[0].title.value);
-                                    changeURI(json.results.bindings[0].title.value);
-                                    document.getElementById('title').setAttribute("disabled");
-                                    $('#label').val(json.results.bindings[0].label.value);
-                                    $('#comment').val(json.results.bindings[0].comment.value);
-                                    $('#method').val(json.results.bindings[0].method.value);
-                                    $('#publisher option:contains(' + json.results.bindings[0].publisher.value + ')').prop({selected: true});
-                                    $('#endpoint').val(json.results.bindings[0].endpoint.value);
-                                    $('#query').val(json.results.bindings[0].query.value);
-                                    $('#order').val(json.results.bindings[0].order.value);
-                                    $('#extends option:contains(' + splitURIPrefix(json.results.bindings[0].extends.value).value + ')').prop({selected: true});
-                                    if (json.results.bindings[0].built !== undefined && json.results.bindings[0].built.value === "true")
+                                    $('#title').val(result[0].title.value);
+                                    changeURI(result[0].title.value);
+                                    //document.getElementById('title').setAttribute("disabled");
+                                    $('#label').val(result[0].label.value);
+                                    $('#comment').val(result[0].comment.value);
+                                    $('#method').val(result[0].method.value);
+                                    $('#publisher option:contains(' + result[0].publisher.value + ')').prop({selected: true});
+                                    $('#endpoint').val(result[0].endpoint.value);
+                                    $('#query').val(result[0].query.value);
+                                    $('#order').val(result[0].order.value);
+                                    $('#extends option:contains(' + splitURIPrefix(result[0].extends.value).value + ')').prop({selected: true});
+                                    if (result[0].built !== undefined && result[0].built.value === "true")
                                         $('#built').prop('checked', true);
                                     else
                                         $('#built').prop('checked', false);
-                                    //$('#extends').val(json.results.bindings[0].extends.value);
+                                    //$('#extends').val(result[0].extends.value);
                                     //PUT OLD VALUES IN THE STATIC FIELD
-                                    //$('#titleForm').append('<input type="hidden" id="'+'oldTitle'+'" value="'+$('#title').val()+'"/>');
+                                    $('#titleForm').append('<input type="hidden" id="'+'oldTitle'+'" value="'+$('#title').val()+'"/>');
                                     $('#labelForm').append('<input type="hidden" id="' + 'oldLabel' + '" value="' + $('#label').val() + '"/>');
                                     $('#commentForm').append('<input type="hidden" id="' + 'oldComment' + '" value="' + $('#comment').val() + '"/>');
                                     $('#methodForm').append('<input type="hidden" id="' + 'oldMethod' + '" value="' + $('#method').val() + '"/>');
@@ -59,11 +57,11 @@
                                     $('#endpointForm').append('<input type="hidden" id="' + 'oldEndpoint' + '" value="' + $('#endpoint').val() + '"/>');
                                     $('#queryForm').append('<input type="hidden" id="' + 'oldQuery' + '" value=' + $('#query').val() + ' />');
                                     $('#orderForm').append('<input type="hidden" id="' + 'oldOrder' + '" value="' + $('#order').val() + '"/>');
-                                    $('#extendsForm').append('<input type="hidden" id="' + 'oldExtends' + '" value="' + splitURIPrefix(json.results.bindings[0].extends.value).value + '"/>');
+                                    $('#extendsForm').append('<input type="hidden" id="' + 'oldExtends' + '" value="' + splitURIPrefix(result[0].extends.value).value + '"/>');
                                     $('#builtForm').append('<input type="hidden" id="' + 'oldBuilt' + '" value="' + $('#built').is(':checked') + '"/>');
                                     //change publisher according to the result
                                     publisherChange();
-                                }}
+                                }
                     );
 
                     var qselectors = "SELECT * {" + path + " coeus:loadsFrom ?selector . ?selector dc:title ?title . ?selector rdfs:label ?label . ?selector coeus:property ?property . ?selector coeus:query ?query . OPTIONAL { ?selector coeus:isKeyOf ?key } . OPTIONAL { ?selector coeus:regex ?regex }}";
@@ -449,6 +447,8 @@
                 var urlUpdate = "../../../api/" + getApiKey() + "/update/";
                 var urlDelete = "../../../api/" + getApiKey() + "/delete/";
                 var urlWrite = "../../../api/" + getApiKey() + "/write/";
+                if ($('#oldTitle').val() !== $('#title').val())
+                    callAPI(urlUpdate + lastPath() + "/" + "dc:title" + "/xsd:string:" + $('#oldTitle').val() + ",xsd:string:" + $('#title').val(), '#result');
                 if ($('#oldLabel').val() !== $('#label').val())
                     callAPI(urlUpdate + lastPath() + "/" + "rdfs:label" + "/xsd:string:" + $('#oldLabel').val() + ",xsd:string:" + $('#label').val(), '#result');
                 if ($('#oldComment').val() !== $('#comment').val())
@@ -515,7 +515,9 @@
 
             function changeURI(value) {
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
-                document.getElementById('uri').innerHTML = 'coeus:resource_' + value.split(' ').join('_');
+                if(penulPath()==='add')
+                    document.getElementById('uri').innerHTML = 'coeus:resource_' + value.split(' ').join('_');
+                else document.getElementById('uri').innerHTML = lastPath();
             }
             function changeSelectorURI(value) {
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";

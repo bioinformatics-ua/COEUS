@@ -30,23 +30,21 @@
                     var qconcept = "SELECT DISTINCT ?seed ?entity {" + path + " coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
                     queryToResult(qconcept, fillBreadcumbEdit);
 
-                    var query = initSparqlerQuery();
                     var q = "SELECT ?title ?label {" + path + " dc:title ?title . " + path + " rdfs:label ?label . }";
-                    query.query(q,
-                            {success: function(json) {
+                    queryToResult(q,function(result) {
                                     //var resultTitle = json.results.bindings[0].title;
-                                    console.log(json);
+                                    console.log(result);
                                     //PUT VALUES IN THE INPUT FIELD
-                                    $('#title').val(json.results.bindings[0].title.value);
-                                    changeURI(json.results.bindings[0].title.value);
-                                    document.getElementById('title').setAttribute("disabled");
-                                    $('#label').val(json.results.bindings[0].label.value);
+                                    $('#title').val(result[0].title.value);
+                                    changeURI(result[0].title.value);
+                                    //document.getElementById('title').setAttribute("disabled");
+                                    $('#label').val(result[0].label.value);
                                     //$('#comment').val(json.results.bindings[0].comment.value);
                                     //PUT OLD VALUES IN THE STATIC FIELD
-                                    //$('#titleForm').append('<input type="hidden" id="'+'oldTitle'+'" value="'+$('#title').val()+'"/>');
+                                    $('#titleForm').append('<input type="hidden" id="'+'oldTitle'+'" value="'+$('#title').val()+'"/>');
                                     $('#labelForm').append('<input type="hidden" id="' + 'oldLabel' + '" value="' + $('#label').val() + '"/>');
                                     //$('#commentForm').append('<input type="hidden" id="' + 'oldComment' + '" value="' + $('#comment').val() + '"/>');
-                                }}
+                                }
                     );
                 }else{
                     var qconcept = "SELECT DISTINCT ?seed {" + path + " coeus:isIncludedIn ?seed }";
@@ -129,12 +127,16 @@
                 var urlUpdate = "../../../api/" + getApiKey() + "/update/";
                 if ($('#oldLabel').val() !== $('#label').val())
                     callAPI(urlUpdate + lastPath() + "/" + "rdfs:label" + "/xsd:string:" + $('#oldLabel').val() + ",xsd:string:" + $('#label').val(), '#result');
+                if ($('#oldTitle').val() !== $('#title').val())
+                    callAPI(urlUpdate + lastPath() + "/" + "dc:title" + "/xsd:string:" + $('#oldTitle').val() + ",xsd:string:" + $('#title').val(), '#result');
                 
             }
 
             function changeURI(value) {
                 //var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,. ";
-                document.getElementById('uri').innerHTML = 'coeus:concept_' + value.split(' ').join('_');
+                if(penulPath()==='add')
+                    document.getElementById('uri').innerHTML = 'coeus:concept_' + value.split(' ').join('_');
+                else document.getElementById('uri').innerHTML = lastPath();
             }
             function fillBreadcumbAdd(result) {
                 var seed = result[0].seed.value;
