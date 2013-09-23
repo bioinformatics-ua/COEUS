@@ -25,6 +25,7 @@ import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,10 +34,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sourceforge.stripes.action.ActionBean;
@@ -51,10 +50,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pt.ua.bioinformatics.coeus.api.DB;
-import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
-import pt.ua.bioinformatics.coeus.common.Tester;
 import pt.ua.bioinformatics.coeus.data.Predicate;
 import pt.ua.bioinformatics.coeus.data.Storage;
 
@@ -392,7 +389,7 @@ public class ConfigActionBean implements ActionBean {
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
-
+    
     /**
      * Receives a map.js file and update it in according to the environment key
      * in config.js.
@@ -407,6 +404,10 @@ public class ConfigActionBean implements ActionBean {
             JSONParser parser = new JSONParser();
             System.out.println(method);
             JSONObject env = (JSONObject) parser.parse(method);
+            //create the DB if not exists
+            DB creator=new DB();
+            creator.createDB(env.get("$sdb:jdbcURL").toString(), env.get("$sdb:sdbUser").toString(), env.get("$sdb:sdbPassword").toString());
+            
             String environment = "env_" + env.get("$environment").toString();
             String path = Config.getPath() + environment + "/";
             String map = path + "map.js";
@@ -423,6 +424,10 @@ public class ConfigActionBean implements ActionBean {
         } catch (ParseException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On parse map.js, check exception.");
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(SQLException ex){
+            result.put("status", 200);
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On creating database, check exception: "+ex);
             Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             result.put("status", 200);

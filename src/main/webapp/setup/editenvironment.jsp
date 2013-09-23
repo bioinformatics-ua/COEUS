@@ -144,8 +144,7 @@
                         <div class="control-group">
                             <label class="control-label" for="password">Database Password</label>
                             <div class="controls">
-                                <input id="password" name="password" type="text" placeholder="demo" class="input-large">
-
+                                <input id="password" name="password" type="text" class="input-large">
                             </div>
                         </div>
 

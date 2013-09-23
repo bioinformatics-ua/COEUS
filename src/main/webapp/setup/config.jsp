@@ -345,7 +345,7 @@
                                 <div class="control-group">
                                     <label class="control-label" for="username">Database User</label>
                                     <div class="controls">
-                                        <input id="username" name="username" type="text" placeholder="demo" class="input-large">
+                                        <input id="username" name="username" type="text" class="input-large">
 
                                     </div>
 
@@ -355,7 +355,7 @@
                                     <label class="control-label" for="password">Database Password</label>
                                     <div class="controls">
                                         <input id="password" name="password" type="text" placeholder="demo" class="input-large">
-
+                                        <p class="help-block">The user must have privileges to create the DB and the tables structure.</p>
                                     </div>
                                 </div>
 
