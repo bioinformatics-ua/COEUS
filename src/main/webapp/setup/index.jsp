@@ -91,11 +91,11 @@
                     var prefix = getPrefix(auxConcept.namespace);
                     arrayOfConcepts[i] = concept;
                     c += '<p class="text-warning">'
-                            +'<a href="../../resource/' + concept + '"><i class="icon-search"></i></a> ' 
-                            + prefix + ":" + concept 
+                            + '<a href="../../resource/' + concept + '"><i class="icon-search"></i></a> '
+                            + prefix + ":" + concept
                             + ' <a href="../concept/edit/' + prefix + ':' + concept + '"><i class="icon-edit"></i></a>'
                             + ' <a href="../resource/add/' + prefix + ':' + concept + '"><i class="icon-plus-sign"></i></a>'
-                          +'</p><ul id="' + concept + '"></ul>';
+                            + '</p><ul id="' + concept + '"></ul>';
                 }
                 //console.log(entity);
                 $('#' + entity).append(c);
@@ -139,11 +139,11 @@
                     arrayOfEntities[key] = entity;
 
                     e += '<p class="text-success">'
-                            +'<a href="../../resource/' + entity + '"><i class="icon-search"></i></a> '
-                            + prefix + ":" + entity 
-                            +' <a href="../entity/edit/' + prefix + ":" + entity + '"><i class="icon-edit"></i></a> '
-                            +' <a href="../entity/add/' + lastPath() + '"><i class="icon-plus-sign"></i></a> '
-                          +'<ul id="' + entity + '"></ul></p>';
+                            + '<a href="../../resource/' + entity + '"><i class="icon-search"></i></a> '
+                            + prefix + ":" + entity
+                            + ' <a href="../entity/edit/' + prefix + ":" + entity + '"><i class="icon-edit"></i></a> '
+                            + ' <a href="../entity/add/' + lastPath() + '"><i class="icon-plus-sign"></i></a> '
+                            + '<ul id="' + entity + '"></ul></p>';
 
                 }
                 $('#kb').append(e);
@@ -173,11 +173,11 @@
                 }
                 );
 
-                var qEntities = "SELECT (COUNT(*) AS ?triples) {?s ?p ?o}";
+                var qEntities = "SELECT (COUNT(*) AS ?triples) {?s a coeus:Item}";
                 queryToResult(qEntities, function(result) {
                     $('#triples').html(result[0].triples.value);
                 });
-                
+
             });
 
             function changeSeed() {
@@ -254,78 +254,97 @@
                         <li>PharmGKB <span class="badge">22331</span></li>
                     </ul>-->
                 </div>
-                <div class="span6">
+                <div class="span6 ">
                     <h4>Actions</h4>
 
-                    <div class="row-fluid">
-                        <div class="span4">
-                            Seeds
-                        </div>
-                        <div  class="span4">
-                            <select class="span10" id="seeds">
-
-                            </select>
-                        </div>
-                        <div class="span4">
-                            <div class="btn-group">
-                                <a onclick="changeSeed();" class="btn btn-danger">Change seed <i class="icon-refresh icon-white"></i></a>
-                            </div>
+                    <div class="well" style="max-width: 350px; margin: 0 auto 10px;">
+                        <a onclick="redirect('../entity/add/' + lastPath());" class="btn btn-large btn-block btn-success">Add Entity <i class="icon-plus icon-white"></i></a>
+                        <a onclick="selectEntity();" class="btn btn-large btn-block btn-primary">Explorer <i class="icon-eye-open icon-white"></i></a>
+                    </div>
+                    <div class="well" style="max-width: 350px; margin: 0 auto 10px;">
+                        <a onclick="build();" class="btn btn-large btn-block btn-success">Rebuild <i class="icon-hdd icon-white"></i></a>
+                        <a onclick="unbuild();" class="btn btn-large btn-block btn-inverse">Unbuild <i class="icon-pencil icon-white"></i></a>
+                        <div class="btn-group btn-block btn-large ">
+                            <a class="btn btn-block btn-large dropdown-toggle" data-toggle="dropdown" href="#">
+                                Export
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu ">
+                                <li><a href="../../config/export/coeus.rdf">RDF</a></li>
+                                <li><a href="../../config/export/coeus.ttl">TTL</a></li>
+                            </ul>
                         </div>
                     </div>
 
-                    <div class="row-fluid">
-                        <div class="span4">
-                            Environments
-                        </div>
-                        <div class="span4">
-                            <select class="span10" id="environments">
-                            </select>
-                        </div>
-                        <div class="span4">
-                            <div class="btn-group">
-                                <a onclick="changeEnv();" class="btn btn-danger">Change environment <i class="icon-refresh icon-white"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <div class="btn-group">
-                                <a onclick="build();" class="btn btn-large btn-success">Rebuild <i class="icon-hdd icon-white"></i></a>
-                                <a onclick="unbuild();" class="btn btn-large btn-inverse">Unbuild <i class="icon-pencil icon-white"></i></a>
-                            </div></div>
-                        <div class="span4">
-
-                        </div>
-                        <div class="span4">
-                            <div class="btn-group">
-                                <a onclick="selectEntity();" class="btn btn-large btn-primary">Show Entities <i class="icon-forward icon-white"></i></a>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="row-fluid">
-                        <div class="span4">
-                        </div>
-                        <div class="span4">
-
-                        </div>
-                        <div class="span4">
-                            <div class="btn-group">
-                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                    Export
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="../../config/export/coeus.rdf">RDF</a></li>
-                                    <li><a href="../../config/export/coeus.ttl">TTL</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
+                    <!--  <div class="row-fluid">
+                          <div class="span4">
+                              Seeds
+                          </div>
+                          <div  class="span4">
+                              <select class="span10" id="seeds">
+  
+                              </select>
+                          </div>
+                          <div class="span4">
+                              <div class="btn-group">
+                                  <a onclick="changeSeed();" class="btn btn-danger">Change seed <i class="icon-refresh icon-white"></i></a>
+                              </div>
+                          </div>
+                      </div>
+  
+                      <div class="row-fluid">
+                          <div class="span4">
+                              Environments
+                          </div>
+                          <div class="span4">
+                              <select class="span10" id="environments">
+                              </select>
+                          </div>
+                          <div class="span4">
+                              <div class="btn-group">
+                                  <a onclick="changeEnv();" class="btn btn-danger">Change environment <i class="icon-refresh icon-white"></i></a>
+                              </div>
+                          </div>
+                      </div>
+  
+                      <div class="row-fluid">
+                          <div class="span4">
+                              <div class="btn-group">
+                                  <a onclick="build();" class="btn btn-large btn-success">Rebuild <i class="icon-hdd icon-white"></i></a>
+                                  <a onclick="unbuild();" class="btn btn-large btn-inverse">Unbuild <i class="icon-pencil icon-white"></i></a>
+                              </div></div>
+                          <div class="span4">
+  
+                          </div>
+                          <div class="span4">
+                              <div class="btn-group">
+                                  <a onclick="selectEntity();" class="btn btn-large btn-primary">Show Entities <i class="icon-forward icon-white"></i></a>
+  
+                              </div>
+  
+                          </div>
+                      </div>
+  
+                      <div class="row-fluid">
+                          <div class="span4">
+                          </div>
+                          <div class="span4">
+  
+                          </div>
+                          <div class="span4">
+                              <div class="btn-group">
+                                  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                      Export
+                                      <span class="caret"></span>
+                                  </a>
+                                  <ul class="dropdown-menu">
+                                      <li><a href="../../config/export/coeus.rdf">RDF</a></li>
+                                      <li><a href="../../config/export/coeus.ttl">TTL</a></li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                    -->
 
 
 
