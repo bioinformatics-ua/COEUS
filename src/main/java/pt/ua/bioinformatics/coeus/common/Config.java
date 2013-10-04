@@ -3,6 +3,7 @@ package pt.ua.bioinformatics.coeus.common;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import pt.ua.bioinformatics.coeus.actions.ConfigActionBean;
 import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 
 /**
@@ -51,7 +53,6 @@ public class Config {
 //    public static void setEnvironment(String environment) {
 //        Config.environment = environment;
 //    }
-
     public static String getPath() {
         return path;
     }
@@ -237,5 +238,49 @@ public class Config {
             Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new String(buffer);
+    }
+
+    /**
+     * Write new config.js file
+     *
+     * @param file
+     */
+    static void writeFile(JSONObject file) {
+        try {
+            FileWriter writer = new FileWriter(path + "config.js");
+            writer.write(file.toJSONString());
+            writer.flush();
+            writer.close();
+
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Config] config.js file updated.");
+            }
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Config] ERROR: updating config.js.");
+            }
+            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Change built property on config file 
+     *
+     * @param builder
+     */
+    static void setBuiltOnFile(boolean builder) {
+        try {
+            JSONObject f = Config.getFile();
+            JSONObject config = (JSONObject) f.get("config");
+            config.put("built", builder);
+            f.put("config", config);
+            writeFile(f);
+            Config.setBuilt(builder);
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Config] ERROR: setBuiltOnFile.");
+            }
+            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

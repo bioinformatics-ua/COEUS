@@ -11,7 +11,7 @@
         "built": false,
         "debug": true,
         "apikey":"coeus|uavr",
-        "environment":""
+        "environment":"default"
 },
 "prefixes" : {
         "coeus": "http://bioinformatics.ua.pt/coeus/resource/",

@@ -2,6 +2,7 @@ package pt.ua.bioinformatics.coeus.common;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.simple.JSONObject;
 
 /**
  *

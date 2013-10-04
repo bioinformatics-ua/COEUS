@@ -44,6 +44,10 @@
                                     $('#titleForm').append('<input type="hidden" id="'+'oldTitle'+'" value="'+$('#title').val()+'"/>');
                                     $('#labelForm').append('<input type="hidden" id="' + 'oldLabel' + '" value="' + $('#label').val() + '"/>');
                                     $('#commentForm').append('<input type="hidden" id="' + 'oldComment' + '" value="' + $('#comment').val() + '"/>');
+                                    
+                                    $('#breadSeed').html('<a href="../../seed/coeus:' + splitURIPrefix(result[0].seed.value).value + '">Dashboard</a> <span class="divider">/</span> ');
+                                    $('#breadEntities').html('<a href="../../entity/coeus:' + splitURIPrefix(result[0].seed.value).value + '">Entities</a> <span class="divider">/</span> ');
+
                                 }
                     );
                 }

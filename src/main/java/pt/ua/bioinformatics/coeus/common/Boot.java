@@ -32,6 +32,74 @@ public class Boot {
     }
 
     /**
+     * Reset and load COEUS config.js.
+     */
+    public static void resetConfig() {
+        try {
+            Config.setLoaded(false);
+            Config.load();
+        } catch (Exception e) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Boot] Unable to reset COEUS instance");
+            }
+            Logger.getLogger(Boot.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+    }
+
+    /**
+     * Reset and load COEUS Storage information (connect, ontology, setup,
+     * predicates).
+     * <p><ol>
+     * <li>Reset and load </li>
+     * <li>Reset and load config.js</li>
+     * </ol></p>
+     */
+    public static void resetStorage() {
+        try {
+            Storage.setLoaded(false);
+            Storage.load();
+            Storage.loadPredicates();
+        } catch (Exception e) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Boot] Unable to reset COEUS instance");
+            }
+            Logger.getLogger(Boot.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+    }
+
+    /**
+     * Build COEUS instance.
+     * <p><ol>
+     * <li>Load Storage information (connect, ontology, setup, predicates)</li>
+     * <li>Build instance</li>
+     * <li>Save and restart</li>
+     * </ol></p>
+     */
+    public synchronized static void build() {
+        try {
+            Boot.start();
+            if (!Config.isBuilt()) {
+                long i = System.currentTimeMillis();
+                Builder.build();
+                Builder.save();
+                long f = System.currentTimeMillis();
+                System.out.println("\n\t[COEUS] " + Config.getName() + " Integration done in " + ((f - i) / 1000) + " seconds.\n");
+                Config.setBuiltOnFile(true);
+            } else {
+                System.out.println("\n\t[COEUS] " + Config.getName() + " Integration Already done.\n");
+            }
+        } catch (Exception e) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Boot] Unable to build COEUS instance");
+            }
+            Logger.getLogger(Boot.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+    }
+
+    /**
      * Starts the configured COEUS instance.
      * <p><b>Built workflow</b><ol>
      * <li>Connect to COEUS Data SDB</li>
@@ -46,30 +114,11 @@ public class Boot {
     public static void start() {
         if (!started) {
             try {
-                try {
-                    Config.load();
-                } catch (Exception ex) {
-                    if (Config.isDebug()) {
-                        System.out.println("[COEUS][Boot] Unable to load configuration");
-                    }
-                    Logger.getLogger(Boot.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                if (!Config.isBuilt()) {
-                    Storage.load();
-                    api = new API();
-                    Storage.loadPredicates();
-                    Builder.build();
-                    Builder.save();
-                    //remove
-                    Config.setBuilt(true);
-                    start();
-                } else {
-                    Storage.connect();
-                    api = new API();
-                    Storage.loadPredicates();
-                    System.out.println("\n\t[COEUS] " + Config.getName() + " Online\n");
-                }
-
+                Config.load();
+                Storage.load();
+                api = new API();
+                Storage.loadPredicates();
+                System.out.println("\n\t[COEUS] " + Config.getName() + " Online\n");
                 started = true;
             } catch (Exception ex) {
                 if (Config.isDebug()) {

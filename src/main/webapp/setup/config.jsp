@@ -94,7 +94,7 @@
                 //$('#Environment').val(result.config.environment);
                 $('#ApiKey').val(result.config.apikey);
                 $('#Ontology').val(result.config.ontology);
-                $('#Setup').val(result.config.setup);
+                $('#SetupFile').val(result.config.setup);
 
                 if (result.config.built.toString() === "true")
                     $('#Built').prop('checked', true);
@@ -146,7 +146,7 @@
                                 "keyprefix": $('#KeyPrefix').val(),
                                 "version": $('#Version').val(),
                                 "ontology": $('#Ontology').val(),
-                                "setup": $('#Setup').val(),
+                                "setup": $('#SetupFile').val(),
                                 "sdb": "sdb.ttl",
                                 "predicates": "predicates.csv",
                                 "built": $('#Built').is(':checked'),

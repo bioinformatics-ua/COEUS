@@ -294,7 +294,7 @@ public class CSVFactory implements ResourceFactory {
         try {
             API api = Boot.getAPI();
             com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
-            Statement statementToRemove=api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
+            Statement statementToRemove = api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
             api.removeStatement(statementToRemove);
             api.addStatement(resource, Predicate.get("coeus:built"), true);
             success = true;
@@ -327,10 +327,9 @@ public class CSVFactory implements ResourceFactory {
         int minColums = 1;
         int linesToCheck = 4;
 
-        try {
-
-            for (int a = 0; a < delimiters.length; a++) {
-                boolean b = true;
+        for (int a = 0; a < delimiters.length; a++) {
+            boolean b = true;
+            try {
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(urlLocation.openStream()));
                 CSVReader testReader = new CSVReader(br, delimiters[a], quotes, headerSkip);
@@ -352,17 +351,16 @@ public class CSVFactory implements ResourceFactory {
                     }
                 }
 
-                if (b) {
-                    //System.out.println("Find:" + delimiters[a]);
-                    return delimiters[a];
-                }
+            } catch (Exception e) {
+                b = false;
             }
 
-        } catch (IOException ex) {
-            Logger.getLogger(CSVFactory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NullPointerException ex) {
-            Logger.getLogger(CSVFactory.class.getName()).log(Level.SEVERE, null, ex);
+            if (b) {
+                //System.out.println("Find:" + delimiters[a]);
+                return delimiters[a];
+            }
         }
+
         return failReturn;
     }
 }

@@ -125,6 +125,14 @@
             function fillHeader(result) {
                 $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
                 $('#apikey').html(result.config.apikey);
+                var built = result.config.built;
+                if (built == false) {
+                    $('#btnUnbuild').removeClass("active");
+                    $('#btnBuild').addClass("active");
+                } else {
+                    $('#btnUnbuild').addClass("active");
+                    $('#btnBuild').removeClass("active");
+                }
             }
 
             function fillEntities(result) {
@@ -142,7 +150,7 @@
                             + '<a href="../../resource/' + entity + '"><i class="icon-search"></i></a> '
                             + prefix + ":" + entity
                             + ' <a href="../entity/edit/' + prefix + ":" + entity + '"><i class="icon-edit"></i></a> '
-                            + ' <a href="../entity/add/' + lastPath() + '"><i class="icon-plus-sign"></i></a> '
+                            + ' <a href="../concept/add/' + prefix + ":" + entity + '"><i class="icon-plus-sign"></i></a> '
                             + '<ul id="' + entity + '"></ul></p>';
 
                 }
@@ -173,7 +181,7 @@
                 }
                 );
 
-                var qEntities = "SELECT (COUNT(*) AS ?triples) {?s a coeus:Item}";
+                var qEntities = "SELECT (COUNT(*) AS ?triples) {?s a coeus:Item . ?s coeus:hasConcept ?concept . ?concept coeus:hasEntity ?entity . ?entity coeus:isIncludedIn " + seed + "}";
                 queryToResult(qEntities, function(result) {
                     $('#triples').html(result[0].triples.value);
                 });
@@ -187,7 +195,7 @@
 
             function changeEnv() {
                 var env = $('#environments').val();
-                callURL("../../config/upenv/" + env, changeEnvResult, changeEnvResult, changeEnvError);
+                callURL("../../config/upenv/" + env, changeEnvResult, changeEnvResult, showError);
             }
             function changeEnvResult(result) {
                 if (result.status === 100)
@@ -195,7 +203,7 @@
                 else
                     $('#info').html(generateHtmlMessage("Warning!", result.message));
             }
-            function changeEnvError(result, text) {
+            function showError(result, text) {
                 $('#info').html(generateHtmlMessage("ERROR!", text, "alert-error"));
             }
             function build() {
@@ -211,6 +219,7 @@
             function unbuildResult(result) {
                 var urlPrefix = "../../api/" + getApiKey();
                 console.log(result);
+                $('#info').html('');
                 for (var r in result) {
                     var res = splitURIPrefix(result[r].resource.value);
                     var resource = getPrefix(res.namespace) + ":" + res.value;
@@ -219,11 +228,30 @@
 
             }
             function unbuiltResource(resource, result) {
-                if (result.status === 100)
-                    console.log("The " + resource + " has been changed. ");
-                else
-                    console.log("The " + resource + " has already unbuild. ");
+                if (result.status === 100) {
+                    var text = "The " + resource + " has been changed. ";
+                    console.log(text);
+                    $('#info').append(generateHtmlMessage("Success!", text, "alert-success"));
+                }
+                else {
+                    var text = "The " + resource + " has already unbuild. ";
+                    console.log(text);
+                    $('#info').append(generateHtmlMessage("Alert!", text, "alert-warning"));
+                }
             }
+            function changeBuiltResult(bool, result) {
+                if (result.status === 100) {
+                    var text = "The property built has been changed to " + bool + ".";
+                    console.log(text);
+                    $('#info').html(generateHtmlMessage("Success!", text, "alert-success"));
+                }
+                else {
+                    var text = "The property built has not been changed to " + bool + ".";
+                    console.log(text);
+                    $('#info').html(generateHtmlMessage("Alert!", text, "alert-warning"));
+                }
+            }
+
 
 
         </script>
@@ -262,8 +290,14 @@
                         <a onclick="selectEntity();" class="btn btn-large btn-block btn-primary">Explorer <i class="icon-eye-open icon-white"></i></a>
                     </div>
                     <div class="well" style="max-width: 350px; margin: 0 auto 10px;">
-                        <a onclick="build();" class="btn btn-large btn-block btn-success">Rebuild <i class="icon-hdd icon-white"></i></a>
-                        <a onclick="unbuild();" class="btn btn-large btn-block btn-inverse">Unbuild <i class="icon-pencil icon-white"></i></a>
+                        <a  onclick="build();" class="btn btn-large btn-block btn-success"><small>(Re)</small>Build <i class="icon-hdd icon-white"></i></a>
+                        <div class="btn-group btn-block text-center" data-toggle="buttons-radio">
+                            <a type="button" id="btnBuild" onclick="callURL('../../config/changebuilt/false', changeBuiltResult.bind(this, 'false'), changeBuiltResult.bind(this, 'false'), showError);" class="btn btn-large ">KB not Built</a>
+                            <a type="button" id="btnUnbuild" onclick="callURL('../../config/changebuilt/true', changeBuiltResult.bind(this, 'true'), changeBuiltResult.bind(this, 'true'), showError);" class="btn btn-large ">KB is Built</a>
+
+                        </div>
+
+                        <a onclick="unbuild();" class="btn btn-large btn-block btn-inverse">Change all Resources to unbuild<i class="icon-pencil icon-white"></i></a>
                         <div class="btn-group btn-block btn-large ">
                             <a class="btn btn-block btn-large dropdown-toggle" data-toggle="dropdown" href="#">
                                 Export

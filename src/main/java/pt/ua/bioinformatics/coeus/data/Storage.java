@@ -98,6 +98,7 @@ public class Storage {
      */
     public static boolean connect() {
         try {
+            Storage.close();
             store = (Store) SDBFactory.connectStore(Config.getPath() + Config.getSdb());
             model = SDBFactory.connectDefaultModel(store);
             infmodel = ModelFactory.createInfModel(reasoner, model);
@@ -125,6 +126,7 @@ public class Storage {
      */
     public static boolean connectX() {
         try {
+            Storage.close();
             store = (Store) SDBFactory.connectStore(Config.getPath() + Config.getSdb());
             model = SDBFactory.connectDefaultModel(store);
             connected = true;
@@ -189,7 +191,7 @@ public class Storage {
         } catch (Exception ex) {
             if (Config.isDebug()) {
                 System.out.println("[COEUS][Storage] Unable to load " + Config.getName() + " setup");
-                //Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return success;
@@ -383,6 +385,27 @@ public class Storage {
         } catch (Exception ex) {
             if (Config.isDebug()) {
                 System.out.println("[COEUS][Storage] unable to reset COEUS SDB");
+            }
+            Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return success;
+    }
+    
+     /**
+     * Close COEUS Store connection if is not closed:
+     * 
+     * Prevent the launch of new threads if already exists.
+     *
+     * @return
+     */
+    private static boolean close() {
+        boolean success = true;
+        try {
+            if(store!=null && !store.isClosed()) store.close();
+            success = true;
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Storage] unable to close COEUS SDB");
             }
             Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
         }

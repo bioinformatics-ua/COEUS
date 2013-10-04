@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sourceforge.stripes.action.ActionBean;
@@ -52,8 +53,8 @@ import org.json.simple.parser.ParseException;
 import pt.ua.bioinformatics.coeus.api.DB;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
+import pt.ua.bioinformatics.coeus.common.Worker;
 import pt.ua.bioinformatics.coeus.data.Predicate;
-import pt.ua.bioinformatics.coeus.data.Storage;
 
 /**
  *
@@ -104,26 +105,28 @@ public class ConfigActionBean implements ActionBean {
      * @return
      */
     public Resolution getconfig() {
-        Config.load();
+        Boot.start();
         return new StreamingResolution("application/json", Config.getFile().toJSONString());
     }
-    
-     /**
+
+    /**
      * return existent properties that matches with $method
      *
      * @return
      */
     public Resolution properties() {
-        JSONArray array=new JSONArray();
-        String matchingStr=method;
+        JSONArray array = new JSONArray();
+        String matchingStr = method;
         //HashMap<String,String> map= PrefixFactory.getPrefixes();
-        HashMap<String,Property> map= Predicate.getPredicates();
-   
+        HashMap<String, Property> map = Predicate.getPredicates();
+
         for (Entry<String, Property> e : map.entrySet()) {
-            String key=e.getKey();
-            if(matchingStr!=null){
-                if(key.contains(matchingStr)) array.add(key);
-            }else{
+            String key = e.getKey();
+            if (matchingStr != null) {
+                if (key.contains(matchingStr)) {
+                    array.add(key);
+                }
+            } else {
                 array.add(key);
             }
         }
@@ -131,11 +134,12 @@ public class ConfigActionBean implements ActionBean {
         //System.out.println(array.toJSONString());
         return new StreamingResolution("application/json", array.toJSONString());
     }
-    
+
     /**
-     * Export the database content 
+     * Export the database content
+     *
      * @return
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException
      */
     public Resolution export() throws FileNotFoundException {
         StringWriter outs = new StringWriter();
@@ -147,25 +151,65 @@ public class ConfigActionBean implements ActionBean {
         }
         return new StreamingResolution("application/rdf+xml", outs.toString());
     }
-    
-     /**
-     * Build (Boot.start() call)
+
+    /**
+     * Build (Boot.build() call in a different thread)
      *
      * @return
      */
     public Resolution build() {
         JSONObject result = new JSONObject();
+        String value = method;
         try {
-            Boot.start();
+
+            ExecutorService executor = (ExecutorService) context.getServletContext().getAttribute("INTEGRATION_EXECUTOR");
+            Runnable worker = new Worker("worker" + System.currentTimeMillis());
+            executor.execute(worker);
+
             result.put("status", 100);
-            result.put("message", "[COEUS][API][ConfigActionBean] Build done. ");
+            result.put("message", "[COEUS][API][ConfigActionBean] Build done.");
         } catch (Exception e) {
             result.put("status", 201);
-            result.put("message", "[COEUS][API][ConfigActionBean] Exception: "+e);
+            result.put("message", "[COEUS][API][ConfigActionBean] Build fail. Exception: " + e);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
 
+    /**
+     * Change built property in config.js file. The method value only can be true or false.
+     *
+     * @return
+     */
+    public Resolution changebuilt() {
+        JSONObject result = new JSONObject();
+        try {
+            JSONObject f = Config.getFile();
+            JSONObject config = (JSONObject) f.get("config");
+
+            config.put("built", Boolean.parseBoolean(method));
+            f.put("config", config);
+            
+            updateFile(f.toJSONString(), Config.getPath() + "config.js");
+            //apply values
+            Boot.resetConfig();
+
+            result.put("status", 100);
+            result.put("message", "[COEUS][API][ConfigActionBean] Built property changed.");
+        } catch (Exception e) {
+            result.put("status", 201);
+            result.put("message", "[COEUS][API][ConfigActionBean] Built not property changed. Exception: " + e);
+        }
+        return new StreamingResolution("application/json", result.toJSONString());
+    }
+
+//    public Resolution executor(){
+//        JSONObject result = new JSONObject();
+//        ExecutorService executor = (ExecutorService )context.getServletContext().getAttribute("INTEGRATION_EXECUTOR");
+//
+//        result.put("executor.isShutdown()", executor.isShutdown());
+//        result.put("executor.isTerminated()", executor.isTerminated());
+//        return new StreamingResolution("application/json", result.toJSONString());
+//    }
     /**
      * Cleans the DB of one environment (method)
      *
@@ -181,8 +225,8 @@ public class ConfigActionBean implements ActionBean {
             JSONParser parser = new JSONParser();
             String json = readToString(map);
             result = (JSONObject) parser.parse(json);
-            int index=result.get("$sdb:jdbcURL").toString().lastIndexOf("/");
-            String dbName=result.get("$sdb:jdbcURL").toString().substring(index);
+            int index = result.get("$sdb:jdbcURL").toString().lastIndexOf("/");
+            String dbName = result.get("$sdb:jdbcURL").toString().substring(index);
             DB db = new DB(dbName, result.get("$sdb:jdbcURL") + "&user=" + result.get("$sdb:sdbUser").toString() + "&password=" + result.get("$sdb:sdbPassword").toString());
             // test db connection
             boolean success = db.connectX();
@@ -281,19 +325,16 @@ public class ConfigActionBean implements ActionBean {
     public Resolution upenv() {
         JSONObject result = new JSONObject();
         try {
-            Config.load();
+            Boot.start();
             String path = Config.getPath() + "env_" + method + "/";
 
             updateFilesFromMap(path);
             changeEnvironment(path, Config.getPath(), "env_" + method);
 
             //Load new settings
-            Config.setLoaded(false);
-            Boot.setStarted(false);
-            Config.load();
+            Boot.resetConfig();
+            Boot.resetStorage();
             //TODO: FIX THAT - NEEDS SERVERS RESTART TO APPLY NEW CONFIGS 
-            Storage.connect();
-            Boot.start();
 
             result.put("status", 100);
             result.put("message", "[COEUS][API][ConfigActionBean] Environment updated: " + method);
@@ -344,8 +385,8 @@ public class ConfigActionBean implements ActionBean {
     public Resolution newenv() {
         JSONObject result = new JSONObject();
         try {
+            Boot.start();
             String name = "env_" + method;
-            Config.load();
             String envStr = Config.getPath() + name;
             String initStr = Config.getPath() + "init";
             File env = new File(envStr);
@@ -377,7 +418,7 @@ public class ConfigActionBean implements ActionBean {
     public Resolution getmap() {
         JSONObject result = new JSONObject();
         try {
-            Config.load();
+            Boot.start();
             String environment = "env_" + method;
             String path = Config.getPath() + environment + "/";
             String map = path + "map.js";
@@ -389,7 +430,7 @@ public class ConfigActionBean implements ActionBean {
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
-    
+
     /**
      * Receives a map.js file and update it in according to the environment key
      * in config.js.
@@ -399,15 +440,15 @@ public class ConfigActionBean implements ActionBean {
     public Resolution putmap() {
         JSONObject result = new JSONObject();
         try {
-            Config.load();
+            Boot.start();
 
             JSONParser parser = new JSONParser();
             System.out.println(method);
             JSONObject env = (JSONObject) parser.parse(method);
             //create the DB if not exists
-            DB creator=new DB();
+            DB creator = new DB();
             creator.createDB(env.get("$sdb:jdbcURL").toString(), env.get("$sdb:sdbUser").toString(), env.get("$sdb:sdbPassword").toString());
-            
+
             String environment = "env_" + env.get("$environment").toString();
             String path = Config.getPath() + environment + "/";
             String map = path + "map.js";
@@ -416,18 +457,17 @@ public class ConfigActionBean implements ActionBean {
             //update files on the environment
             updateFilesFromMap(path);
             //change it to use
-            changeEnvironment(path, Config.getPath(), environment);
+            //changeEnvironment(path, Config.getPath(), environment);
             //apply values
-            Config.setLoaded(false);
-            Config.load();
+            Boot.resetConfig();
 
         } catch (ParseException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On parse map.js, check exception.");
             Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch(SQLException ex){
+        } catch (SQLException ex) {
             result.put("status", 200);
-            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On creating database, check exception: "+ex);
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On creating database, check exception: " + ex);
             Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             result.put("status", 200);
@@ -445,7 +485,7 @@ public class ConfigActionBean implements ActionBean {
     public Resolution delenv() {
         JSONObject result = new JSONObject();
         try {
-            Config.load();
+            Boot.start();
             String envStr = Config.getPath() + "env_" + method;
             File env = new File(envStr);
             if (env.exists()) {
@@ -501,7 +541,7 @@ public class ConfigActionBean implements ActionBean {
      */
     public Resolution getprop() {
 
-        Config.load();
+        Boot.start();
         Set<String> set = new TreeSet<String>();
         StringBuilder sb = new StringBuilder();
         //get all proprieties for each prefix
@@ -528,9 +568,8 @@ public class ConfigActionBean implements ActionBean {
 
         //update config.js
         String jsonString = method;
-        JSONObject result = updateFile(jsonString, Config.getPath()+"config.js");
-        Config.setLoaded(false);
-        Config.load();
+        JSONObject result = updateFile(jsonString, Config.getPath() + "config.js");
+        Boot.resetConfig();
 
         //update predicates.csv
         Set<String> set = new TreeSet<String>();

@@ -328,7 +328,7 @@
                                 <li>For <strong>resources</strong>, this means the global object query. For each individual answer to this query, new Item individuals will be created.
 
                                     <ul>
-                                        <li>For <strong>CSV</strong> resources, query is the combination of the column delimiter with the quotes delimiter and with the headers skip number (Ex: t|"|1) <a href="#notes">[1]</a>. </li>
+                                        <li>For <strong>CSV</strong> resources, query is the combination of the headers skip number with the quotes delimiter (Ex: 1|") <a href="#notes">[1]</a>. </li>
 
                                         <li>For <strong>XML</strong> resources, query is the global XPath query (//entry).</li>
 
