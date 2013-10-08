@@ -28,7 +28,7 @@
                     $('#type').html("Edit Seed");
                     $('#submit').html('Save <i class="icon-briefcase icon-white"></i>');
 
-                    var q = "SELECT ?label ?title {" + path + " dc:title ?title . " + path + " rdfs:label ?label . }";
+                    var q = "SELECT ?label ?title ?comment {" + path + " dc:title ?title . " + path + " rdfs:label ?label . " + path + " rdfs:comment ?comment }";
                     queryToResult(q,function(result) {
                                     //var resultTitle = json.results.bindings[0].title;
                                     console.log(result);
@@ -37,11 +37,11 @@
                                     changeURI(result[0].title.value);
                                     //document.getElementById('title').setAttribute("disabled");
                                     $('#label').val(result[0].label.value);
-                                    //$('#comment').val(json.results.bindings[0].comment.value);
+                                    $('#comment').val(result[0].comment.value);
                                     //PUT OLD VALUES IN THE STATIC FIELD
                                     $('#titleForm').append('<input type="hidden" id="'+'oldTitle'+'" value="'+$('#title').val()+'"/>');
                                     $('#labelForm').append('<input type="hidden" id="' + 'oldLabel' + '" value="' + $('#label').val() + '"/>');
-                                    //$('#commentForm').append('<input type="hidden" id="' + 'oldComment' + '" value="' + $('#comment').val() + '"/>');
+                                    $('#commentForm').append('<input type="hidden" id="' + 'oldComment' + '" value="' + $('#comment').val() + '"/>');
                                 }
                     );
                 }
@@ -82,10 +82,12 @@
                 var individual = $('#uri').html();
                 var title = $('#title').val();
                 var label = $('#label').val();
+                var comment = $('#comment').val();
 
                 var predType = "rdf:type";
                 var predTitle = "dc:title";
                 var predLabel = "rdfs:label";
+                var predComment = "rdfs:comment";
 
                 var urlWrite = "../../../api/" + getApiKey() + "/write/";
 
@@ -99,6 +101,10 @@
                     $('#labelForm').addClass('controls control-group error');
                     empty = true;
                 }
+                if (comment === '') {
+                    $('#commentForm').addClass('controls control-group error');
+                    empty = true;
+                }
                 if (!empty) {
 
                     callAPI(urlWrite + individual + "/" + predType + "/owl:NamedIndividual", '#result');
@@ -107,7 +113,7 @@
                     //callAPI(urlWrite + individual + "/" + predSeed + "/" + lastPath(), '#result');
                     //callAPI(urlWrite + lastPath() + "/" + seedIncludes + "/" + individual, '#result');
                     callAPI(urlWrite + individual + "/" + predLabel + "/xsd:string:" + label, '#result');
-                    //callAPI(urlWrite + individual + "/" + predComment + "/xsd:string:" + comment, '#result');
+                    callAPI(urlWrite + individual + "/" + predComment + "/xsd:string:" + comment, '#result');
 
                 }
 
@@ -119,6 +125,8 @@
                     callAPI(urlUpdate + lastPath() + "/" + "rdfs:label" + "/xsd:string:" + $('#oldLabel').val() + ",xsd:string:" + $('#label').val(), '#result');
                 if ($('#oldTitle').val() !== $('#title').val())
                     callAPI(urlUpdate + lastPath() + "/" + "dc:title" + "/xsd:string:" + $('#oldTitle').val() + ",xsd:string:" + $('#title').val(), '#result');
+                if ($('#oldComment').val() !== $('#comment').val())
+                    callAPI(urlUpdate + lastPath() + "/" + "rdfs:comment" + "/xsd:string:" + $('#oldComment').val() + ",xsd:string:" + $('#comment').val(), '#result');
 
             }
 
@@ -173,10 +181,10 @@
                     </div>
                 </div>
                 <div class="span8"></div>
-                <!-- <div id="commentForm">
+                <div id="commentForm">
                      <label class="control-label" for="comment">Comment</label> 
                      <textarea rows="4" style="max-width: 500px;width: 400px;" id="comment" type="text" placeholder="Ex: Describes the Uniprot Entity"></textarea> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:comment property" ></i>
-                 </div>-->
+                 </div>
 
             </div>
 
@@ -197,21 +205,7 @@
                 <div id="result">
 
                 </div>
-                <!-- <div id="titleResult">
- 
-                 </div>
-                 <div id="labelResult">
- 
-                 </div>
-                 <div id="commentResult">
- 
-                 </div>
-                 <div id="seedResult">
- 
-                 </div>
-                 <div id="typeResult">
- 
-                 </div>-->
+                
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

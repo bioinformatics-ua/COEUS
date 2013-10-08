@@ -23,7 +23,12 @@
                 </ul>                
             </div>
         </div>
-
+        <div class="text-center hero-unit">
+            <p><h1>SWAT4LS Workshop <sup><span class="label label-warning">New!! <i class="icon-star icon-white"></i></span></sup></h1></p>
+        <p class="lead">A COEUS Workshop/Tutorial will be presented in the next edition of <a href="http://www.swat4ls.org/workshops/edinburgh2013/">SWAT4LS</a>.</p>
+            <p class="lead">This workshop will be helded in Edinburgh, UK, December 9-12, 2013. </p>
+            <p><a href="./science/#tutorial2013" class="btn btn-primary btn-large">View more »</a></p> 
+        </div>
         <div class="container">
             <div class="marketing">
                 <h1>Hello, Semantic Web!</h1>

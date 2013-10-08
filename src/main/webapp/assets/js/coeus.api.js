@@ -159,8 +159,8 @@ function callAPI(url, html) {
     });
 }
 /**
-* Return the first apikey
-* 
+ * Return the first apikey
+ * 
  * @returns {unresolved} */
 function getApiKey() {
     return document.getElementById('apikey').innerHTML.split('|')[0];
@@ -198,37 +198,34 @@ function redirect(location) {
  * @param {type} object
  * @returns {undefined}
  */
-function removeAllTriplesFromObject(urlPrefix, object) {
+function removeAllTriplesFromObject(urlPrefix, object, showResult, showError) {
 
     var qObject = "SELECT ?subject ?predicate {?subject ?predicate " + object + " . }";
-    queryToResult(qObject, function(result) {
-        console.log(result);
-        for (var r in result) {
-            var subject = resultToObject(result[r].subject);
-            var predicate = resultToPredicate(result[r].predicate);
+    queryToResult(qObject, foreachRemoveObjects.bind(this, urlPrefix, object, showResult, showError));
+}
+function foreachRemoveObjects(urlPrefix, object, showResult, showError, result) {
+    console.log(result);
+    for (var r in result) {
+        var subject = resultToObject(result[r].subject);
+        var predicate = resultToPredicate(result[r].predicate);
 
-            var url = "/delete/" + subject.prefix + subject.value + '/' + predicate.prefix + predicate.value + '/' + object;
+        var url = "/delete/" + subject.prefix + subject.value + '/' + predicate.prefix + predicate.value + '/' + object;
 
-            //console.log("Delete call: " + urlPrefix + url);
-            callAPI(urlPrefix + url, "#result");
-            // if ((predicate.value !== "includes") & (predicate.value !== "isEntityOf") & (predicate.value !== "isConceptOf") & (predicate.value !== "isResourceOf"))
-            //removeRecursive(urlPrefix, subject.prefix + subject.value);
-        }
-
-
+        console.log("Delete call: " + urlPrefix + url);
+        callURL(urlPrefix + url, showResult, showError);
     }
-    );
-
 }
 
-function cleanUnlikedTriples(urlPrefix) {
+
+function cleanUnlikedTriples(urlPrefix, showResult, showError) {
+    console.log("cleanUnlikedTriples call");
     //Clean unlinked entities
     var qEntities = "SELECT * {{ ?entity a coeus:Entity . FILTER NOT EXISTS{ ?entity coeus:isIncludedIn ?seed }}UNION {?entity a coeus:Entity . FILTER NOT EXISTS { ?seed coeus:includes ?entity }} }";
     queryToResult(qEntities, function(result) {
         for (var r in result) {
             var entity = splitURIPrefix(result[r].entity.value);
             var prefix = getPrefix(entity.namespace) + ":";
-            removeAllTriplesFromSubject(urlPrefix, prefix + entity.value);
+            removeAllTriplesFromSubject(urlPrefix, prefix + entity.value, showResult, showError);
         }
     });
     //Clean unlinked concepts
@@ -237,7 +234,7 @@ function cleanUnlikedTriples(urlPrefix) {
         for (var r in result) {
             var concept = splitURIPrefix(result[r].concept.value);
             var prefix = getPrefix(concept.namespace) + ":";
-            removeAllTriplesFromSubject(urlPrefix, prefix + concept.value);
+            removeAllTriplesFromSubject(urlPrefix, prefix + concept.value, showResult, showError);
         }
     });
     //Clean unlinked resources
@@ -246,7 +243,7 @@ function cleanUnlikedTriples(urlPrefix) {
         for (var r in result) {
             var resource = splitURIPrefix(result[r].resource.value);
             var prefix = getPrefix(resource.namespace) + ":";
-            removeAllTriplesFromSubject(urlPrefix, prefix + resource.value);
+            removeAllTriplesFromSubject(urlPrefix, prefix + resource.value, showResult, showError);
         }
     });
     //Clean unlinked selectores
@@ -255,7 +252,7 @@ function cleanUnlikedTriples(urlPrefix) {
         for (var r in result) {
             var selector = splitURIPrefix(result[r].selector.value);
             var prefix = getPrefix(selector.namespace) + ":";
-            removeAllTriplesFromSubject(urlPrefix, prefix + selector.value);
+            removeAllTriplesFromSubject(urlPrefix, prefix + selector.value, showResult, showError);
         }
     });
 }
@@ -298,27 +295,30 @@ function cleanUnlikedTriples(urlPrefix) {
 //    );
 //}
 
-function removeAllTriplesFromSubject(urlPrefix, subject) {
+/**
+ * Remove all triples associated with the subject 
+ * 
+ * @param {type} urlPrefix
+ * @param {type} subject
+ * @param {type} showResult
+ * @param {type} showError
+ * @returns {undefined}
+ */
+function removeAllTriplesFromSubject(urlPrefix, subject, showResult, showError) {
     var qSubject = "SELECT ?predicate ?object {" + subject + " ?predicate ?object . }";
-    queryToResult(qSubject, function(result) {
-        console.log(result);
-        for (var r in result) {
-            var object = resultToObject(result[r].object);
-            var predicate = resultToPredicate(result[r].predicate);
+    queryToResult(qSubject, foreachRemoveSubjects.bind(this, urlPrefix, subject, showResult, showError)
+            );
+}
+function foreachRemoveSubjects(urlPrefix, subject, showResult, showError, result) {
+    console.log(result);
+    for (var r in result) {
+        var object = resultToObject(result[r].object);
+        var predicate = resultToPredicate(result[r].predicate);
 
-            var url = "/delete/" + subject + '/' + predicate.prefix + predicate.value + '/' + object.prefix + object.value;
-            //console.log(url);
-            callAPI(urlPrefix + url, "#result");
-        }
-
-        //if success refresh page
-        if (document.getElementById('result').className !== 'alert alert-error') {
-            // window.location="../entity/"+lastPath();
-            console.log("REDIRECTING...");
-            //window.location.reload(true);
-        }
+        var url = "/delete/" + subject + '/' + predicate.prefix + predicate.value + '/' + object.prefix + object.value;
+        console.log("Deleting: " + url);
+        callURL(urlPrefix + url, showResult, showError);
     }
-    );
 }
 
 function removeAllTriplesFromSubjectAndPredicate(urlPrefix, subject, predicate) {
@@ -447,8 +447,17 @@ function removeById(childDiv, parentDiv)
     }
 }
 
+/**
+ * Call a url with 2 callbacks functions (success or error)
+ * 
+ * @param {type} url
+ * @param {type} success
+ * @param {type} error
+ * @returns {undefined}
+ */
 function callURL(url, success, error) {
-    url = encodeURI(url);console.log(url);
+    url = encodeURI(url);
+    console.log(url);
     $.ajax({url: url, dataType: 'json'}).done(success).fail(error);
 }
 
