@@ -715,121 +715,7 @@
                 </div>
 
             </div>
-            <!--EDIT RESOURCE-->
-            <div class="row-fluid">
-                <h4 id="type" >New Resource </h4>
-                <div class="span4" >
-
-                    <div id="builtForm"> 
-                        <label class="checkbox" >
-                            <input type="checkbox" id="built"><span class="label label-success">Built</span>
-                        </label>
-                    </div>
-                    <div id="titleForm" >
-                        <label class="control-label" for="title">Title</label>
-                        <input id="title" type="text" placeholder="Ex: Uniprot" onkeyup="changeURI(this.value);" > <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the dc:title property" ></i>
-                    </div>
-                    <div id="labelForm"> 
-                        <label class="control-label" for="label">Label</label>
-                        <input id="label" type="text" placeholder="Ex: Uniprot Resource"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:label property" ></i>
-                    </div>
-                    <!--<div id="conceptForm" > 
-                        <label class="control-label" for="label">Concept (fix to allow change of concept)</label>
-                        <select id="concept" class="span10">
-
-                        </select> <i class="icon-question-sign" data-toggle="tooltip" title="Select the concept associated" ></i>
-                    </div>-->
-                    <div id="extendsForm" > 
-                        <label class="control-label" for="label">Extends</label>
-                        <select id="extends" class="span10">
-
-                        </select> <i class="icon-question-sign" data-toggle="tooltip" title="Select the concept to extends" ></i>
-                    </div>
-                    <div id="methodForm"> 
-                        <label class="control-label" for="label">Method</label>
-                        <select id="method" class="span10">
-                            <option>cache</option>
-                            <option>complete</option>
-                            <option>map</option>
-                        </select> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:method property" ></i>
-                    </div>
-                    <div id="publisherForm"> 
-                        <label class="control-label" for="label">Publisher</label>
-                        <select id="publisher" class="span10" onchange="publisherChange();">
-                            <option>xml</option>
-                            <option>csv</option>
-                            <option>json</option>
-                            <option>sql</option>
-                            <option>sparql</option>
-                            <option>rdf</option>
-                        </select> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:publisher property" ></i>
-                    </div>
-                    <br/>
-                    <div class="span4">
-                        <button  type="button" id="submit" class="btn btn-success">Add <i class="icon-plus icon-white"></i> </button>
-                    </div>
-                    <div class="span4">
-                        <button type="button" id="done" class="btn btn-danger" onclick="window.history.back(-1);">Cancel <i class="icon-backward icon-white"></i></button>
-                    </div>
-                    <br/><br/><br/>
-                </div>
-
-                <div id="commentForm">
-                    <label class="control-label" for="comment">Comment</label> 
-                    <textarea rows="4" style="max-width: 500px;width: 400px;" id="comment" type="text" placeholder="Ex: Describes the Uniprot Resource"></textarea> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:comment property" ></i>
-                </div>
-                <div id="endpointForm"> 
-                    <label class="control-label" for="label">Endpoint</label> 
-                    <input id="endpoint" type="text" placeholder="Ex: http://someurl.com"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:endpoint property" ></i>
-                </div>
-                <div id="sqlEndpointForm" class="hide"> 
-                    <label class="control-label" >Endpoint (DB Connection)</label> 
-
-                    jdbc: 
-                    <select id="driverEndpoint" type="text" placeholder="Ex: mysql" class="input-small" onchange="refreshEnpoint();">
-                        <option>mysql</option>
-                        <option>sqlserver</option>
-                    </select>
-                    ://
-                    <input id="hostEndpoint" type="text" placeholder="Ex: someurl.com" onkeyup="refreshEnpoint();">
-                    :
-                    <input id="portEndpoint" type="number" placeholder="3306" class="input-mini" onchange="refreshEnpoint();"> 
-                    /
-                    <input id="dbEndpoint" type="text" placeholder="Ex: coeus" class="input-small" onkeyup="refreshEnpoint();"> 
-
-                    <br/>
-                    Login:
-                    <input id="userEndpoint" type="text" placeholder="Ex: user" class="input-medium" onkeyup="refreshEnpoint();">   
-                    <input id="passwordEndpoint" type="password" placeholder="Ex: password" class="input-medium" onkeyup="refreshEnpoint();"> 
-
-                </div>
-                <div id="queryForm"> 
-                    <label class="control-label" for="label">Query</label>
-                    <input id="query" type="text" placeholder="Ex: //item"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:query property" ></i>
-                </div>
-                <div id="csvQueryForm" class="hide"> 
-                    <label class="control-label" for="label">Csv Quotes</label>
-                    <select class="input-mini" id="csvQueryDelimiter" onchange="refreshQuery();" type="text" maxlength="1" placeholder="Ex:  '">
-                        <option>"</option>
-                        <option>'</option>
-                    </select> <i class="icon-question-sign" data-toggle="tooltip" title="Quotes delimiter" ></i>
-                    <label class="control-label" for="label">Csv Starting line</label>
-                    <input class="input-mini" id="csvQueryHeaderSkip" onchange="refreshQuery();" type="number" placeholder="Ex:  1"> <i class="icon-question-sign" data-toggle="tooltip" title="Headers skip number "></i>
-                </div>
-                <div id="orderForm"> 
-                    <label class="control-label" for="label">Order</label>
-                    <input class="input-mini" id="order" type="text" placeholder="Ex: 1"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:order property" ></i>
-                </div>
-
-            </div>
-
-
-            <!-- Aux button to call modal -->
-            <button class="hide" type="button"  id="callModal" href="#errorModal" role="button" data-toggle="modal">modal</button>
-            <button class="hide" type="button"  id="callSelectorsModal" href="#selectorsModal" role="button" data-toggle="modal">selectors</button>
-
-        </div>
-
+          
 
 
         <!-- Modal -->
@@ -917,29 +803,7 @@
             </div>
         </div>
 
-        <!-- Remove Modal -->
-        <div id="removeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-header">
-                <button id="closeRemoveModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                <h3 >Remove Selector</h3>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure do you want to remove the <strong><a class="text-error" id="removeModalLabel"></a></strong> selector?</p>
-                <p class="text-warning">Warning: If you press the remove button all dependents triples are removed too.</p>
-                <div id="rmBodySelectors">
-
-                </div>
-                <div id="resultRemove">
-
-                </div>
-
-            </div>
-
-            <div class="modal-footer" id="rmbtns">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" onclick="removeSelector();">Remove <i class="icon-trash icon-white"></i></button>
-            </div>
-        </div>
+        
 
         <!-- Add Existing Selector Modal -->
         <div id="existingSelectorsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

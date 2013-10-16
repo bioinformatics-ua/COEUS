@@ -10,7 +10,7 @@
     <s:layout-component name="custom_scripts">
         <script src="<c:url value="/assets/js/jquery.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
-        <script src="<c:url value="/assets/js/coeus.api.js" />"></script>
+        <script src="<c:url value="/assets/js/coeus.setup.js" />"></script>
         <script src="<c:url value="/assets/js/bootstrap-tooltip.js" />"></script>
         <script type="text/javascript">
 

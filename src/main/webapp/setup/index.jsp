@@ -10,7 +10,7 @@
     <s:layout-component name="custom_scripts">
         <script src="<c:url value="/assets/js/jquery.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
-        <script src="<c:url value="/assets/js/coeus.api.js" />"></script>
+        <script src="<c:url value="/assets/js/coeus.setup.js" />"></script>
         <script type="text/javascript">
             /*function appendConcept(data, query, key) {
              $.get(query, function(dataconcepts, status) {
@@ -54,6 +54,35 @@
              // Server communication error function handler.
              });
              }*/
+            $(document).ready(function() {
+                //get seed from url
+                
+                callURL("../../config/getconfig/", fillHeader);
+                callURL("../../config/listenv/", fillEnvironments);
+
+                refresh();
+
+                var qseeds = "SELECT DISTINCT ?seed ?s {?seed a coeus:Seed . ?seed dc:title ?s . }";
+                queryToResult(qseeds, function(result) {
+                    for (var k in result) {
+                        $('#seeds').append('<option>' + splitURIPrefix(result[k].seed.value).value + '</option>');
+                    }
+                    $('#seeds option:contains(' + lastPath().split('coeus:')[1] + ')').prop({selected: true});
+                }
+                );
+                var seed = lastPath();
+                var qEntities = "SELECT (COUNT(*) AS ?triples) {?s a coeus:Item . ?s coeus:hasConcept ?concept . ?concept coeus:hasEntity ?entity . ?entity coeus:isIncludedIn " + seed + "}";
+                queryToResult(qEntities, function(result) {
+                    $('#triples').html(result[0].triples.value);
+                });
+
+            });
+            
+            function refresh(){
+                var seed = lastPath();
+                var qEntities = "SELECT DISTINCT ?entity {" + seed + " coeus:includes ?entity }";
+                queryToResult(qEntities, fillEntities);
+            }
 
             function queryConcepts(entity) {
                 var qConcepts = "SELECT DISTINCT ?concept {?concept coeus:hasEntity coeus:" + entity + " }";
@@ -73,8 +102,11 @@
                     var prefix = getPrefix(auxResource.namespace);
                     arrayOfConcepts[i] = resource;
                     c += '<p class="text-info"><a href="../../resource/' + resource + '"><i class="icon-search"></i></a> '
-                            + prefix + ":" + resource + ' <a href="../resource/edit/' + prefix + ':' + resource
-                            + '"><i class="icon-wrench"></i></a></p>';
+                            + resource 
+                            + ' <a href="#editResourceModal" data-toggle="modal" onclick="prepareResourceEdit(\'' + prefix + ':' + resource + '\');"><i class="icon-edit"></i></a>'                            
+                            + ' <a href="../resource/edit/' + prefix + ':' + resource + '"><i class="icon-wrench"></i></a>'
+                            + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + prefix + ':' + resource + '\')"><i class="icon-trash"></i></a>'
+                            +'</p>';
                 }
                 //console.log(entity);
                 $('#' + concept).append(c);
@@ -89,12 +121,16 @@
                     var auxConcept = splitURIPrefix(result[i].concept.value);
                     var concept = auxConcept.value;
                     var prefix = getPrefix(auxConcept.namespace);
+                    var all=prefix + ':'+concept;
                     arrayOfConcepts[i] = concept;
                     c += '<p class="text-warning">'
                             + '<a href="../../resource/' + concept + '"><i class="icon-search"></i></a> '
-                            + prefix + ":" + concept
-                            + ' <a href="../concept/edit/' + prefix + ':' + concept + '"><i class="icon-edit"></i></a>'
-                            + ' <a href="../resource/add/' + prefix + ':' + concept + '"><i class="icon-plus-sign"></i></a>'
+                            + concept
+                            //+ ' <a href="../concept/edit/' + prefix + ':' + concept + '"><i class="icon-edit"></i></a>'
+                            + ' <a href="#editModal" data-toggle="modal" onclick="prepareEdit(\''+all+'\');"><i class="icon-edit"></i></a>'
+                            //+ ' <a href="../resource/add/' + all + '"><i class="icon-plus-sign"></i></a>'
+                            +' <a href="#addResourceModal" data-toggle="modal" onclick="prepareAddResourceModal(\''+all+'\');"><i class="icon-plus-sign"></i></a>'
+                            + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + all + '\')"><i class="icon-trash"></i></a>'
                             + '</p><ul id="' + concept + '"></ul>';
                 }
                 //console.log(entity);
@@ -138,6 +174,7 @@
             function fillEntities(result) {
                 // fill Entities
                 console.log(result);
+                $('#kb').html("");
                 var arrayOfEntities = new Array();
                 var e = '';
                 for (var key in result) {
@@ -148,9 +185,13 @@
 
                     e += '<p class="text-success">'
                             + '<a href="../../resource/' + entity + '"><i class="icon-search"></i></a> '
-                            + prefix + ":" + entity
-                            + ' <a href="../entity/edit/' + prefix + ":" + entity + '"><i class="icon-edit"></i></a> '
-                            + ' <a href="../concept/add/' + prefix + ":" + entity + '"><i class="icon-plus-sign"></i></a> '
+                            + entity
+                            + ' <a href="#editModal" data-toggle="modal" onclick="prepareEdit(\'' + prefix + ":" + entity + '\');"><i class="icon-edit"></i></a>'
+                           // + ' <a href="../entity/edit/' + prefix + ":" + entity + '"><i class="icon-edit"></i></a> '
+                           // + ' <a href="../concept/add/' + prefix + ":" + entity + '"><i class="icon-plus-sign"></i></a> '
+                            + ' <a href="#addModal" data-toggle="modal" onclick="prepareAdd(\'Concept\',\'' + prefix + ":" + entity + '\');"><i class="icon-plus-sign"></i></a>'
+                           
+                            + ' <a href="#removeModal" data-toggle="modal" onclick="selectToRemove(\'' +  prefix + ":" + entity + '\')"><i class="icon-trash"></i></a>' 
                             + '<ul id="' + entity + '"></ul></p>';
 
                 }
@@ -163,31 +204,6 @@
                 }
             }
 
-            $(document).ready(function() {
-                //get seed from url
-                var seed = lastPath();
-                callURL("../../config/getconfig/", fillHeader);
-                callURL("../../config/listenv/", fillEnvironments);
-
-                var qEntities = "SELECT DISTINCT ?entity {" + seed + " coeus:includes ?entity }";
-                queryToResult(qEntities, fillEntities);
-
-                var qseeds = "SELECT DISTINCT ?seed ?s {?seed a coeus:Seed . ?seed dc:title ?s . }";
-                queryToResult(qseeds, function(result) {
-                    for (var k in result) {
-                        $('#seeds').append('<option>' + splitURIPrefix(result[k].seed.value).value + '</option>');
-                    }
-                    $('#seeds option:contains(' + lastPath().split('coeus:')[1] + ')').prop({selected: true});
-                }
-                );
-
-                var qEntities = "SELECT (COUNT(*) AS ?triples) {?s a coeus:Item . ?s coeus:hasConcept ?concept . ?concept coeus:hasEntity ?entity . ?entity coeus:isIncludedIn " + seed + "}";
-                queryToResult(qEntities, function(result) {
-                    $('#triples').html(result[0].triples.value);
-                });
-
-            });
-
             function changeSeed() {
                 var title = $('#seeds').val();
                 redirect("../seed/" + "coeus:" + title);
@@ -195,7 +211,7 @@
 
             function changeEnv() {
                 var env = $('#environments').val();
-                callURL("../../config/upenv/" + env, changeEnvResult, changeEnvResult, showError);
+                callURL("../../config/upenv/" + env, changeEnvResult, changeEnvResult, showInfoError);
             }
             function changeEnvResult(result) {
                 if (result.status === 100)
@@ -203,7 +219,7 @@
                 else
                     $('#info').html(generateHtmlMessage("Warning!", result.message));
             }
-            function showError(result, text) {
+            function showInfoError(result, text) {
                 $('#info').html(generateHtmlMessage("ERROR!", text, "alert-error"));
             }
             function build() {
@@ -270,8 +286,10 @@
             </ul>
             <div id="info"></div>
             <div class="row-fluid">
-                <div id="kb"class="span6">
+                <div class="span6">
                     <h4>Knowledge Base <small>(Entity-Concept-Resource)</small> <span class="badge" id="triples">0</span></h4>
+                    <br/>
+                    <div id="kb" >
                     <!--<p class="text-info">Disease</p>
                     <ul>
                         <li>OMIM <span class="badge">1123</span></li>
@@ -281,19 +299,21 @@
                     <ul>
                         <li>PharmGKB <span class="badge">22331</span></li>
                     </ul>-->
+                    </div>
                 </div>
                 <div class="span6 ">
                     <h4>Actions</h4>
 
                     <div class="well" style="max-width: 350px; margin: 0 auto 10px;">
-                        <a onclick="redirect('../entity/add/' + lastPath());" class="btn btn-large btn-block btn-success">Add Entity <i class="icon-plus icon-white"></i></a>
+                        <a href="#addModal" data-toggle="modal" class="btn btn-large btn-block btn-success" onclick="prepareAdd('Entity',lastPath());">Add Entity <i class="icon-plus icon-white"></i></a>
+                        <!--<a onclick="redirect('../entity/add/' + lastPath());" class="btn btn-large btn-block btn-success">Add Entity <i class="icon-plus icon-white"></i></a>-->
                         <a onclick="selectEntity();" class="btn btn-large btn-block btn-primary">Explorer <i class="icon-eye-open icon-white"></i></a>
                     </div>
                     <div class="well" style="max-width: 350px; margin: 0 auto 10px;">
                         <a  onclick="build();" class="btn btn-large btn-block btn-success"><small>(Re)</small>Build <i class="icon-hdd icon-white"></i></a>
                         <div class="btn-group btn-block text-center" data-toggle="buttons-radio">
-                            <a type="button" id="btnBuild" onclick="callURL('../../config/changebuilt/false', changeBuiltResult.bind(this, 'false'), changeBuiltResult.bind(this, 'false'), showError);" class="btn btn-large ">KB not Built</a>
-                            <a type="button" id="btnUnbuild" onclick="callURL('../../config/changebuilt/true', changeBuiltResult.bind(this, 'true'), changeBuiltResult.bind(this, 'true'), showError);" class="btn btn-large ">KB is Built</a>
+                            <a type="button" id="btnBuild" onclick="callURL('../../config/changebuilt/false', changeBuiltResult.bind(this, 'false'), changeBuiltResult.bind(this, 'false'), showInfoError);" class="btn btn-large ">KB not Built</a>
+                            <a type="button" id="btnUnbuild" onclick="callURL('../../config/changebuilt/true', changeBuiltResult.bind(this, 'true'), changeBuiltResult.bind(this, 'true'), showInfoError);" class="btn btn-large ">KB is Built</a>
 
                         </div>
 
@@ -309,85 +329,17 @@
                             </ul>
                         </div>
                     </div>
-
-                    <!--  <div class="row-fluid">
-                          <div class="span4">
-                              Seeds
-                          </div>
-                          <div  class="span4">
-                              <select class="span10" id="seeds">
-  
-                              </select>
-                          </div>
-                          <div class="span4">
-                              <div class="btn-group">
-                                  <a onclick="changeSeed();" class="btn btn-danger">Change seed <i class="icon-refresh icon-white"></i></a>
-                              </div>
-                          </div>
-                      </div>
-  
-                      <div class="row-fluid">
-                          <div class="span4">
-                              Environments
-                          </div>
-                          <div class="span4">
-                              <select class="span10" id="environments">
-                              </select>
-                          </div>
-                          <div class="span4">
-                              <div class="btn-group">
-                                  <a onclick="changeEnv();" class="btn btn-danger">Change environment <i class="icon-refresh icon-white"></i></a>
-                              </div>
-                          </div>
-                      </div>
-  
-                      <div class="row-fluid">
-                          <div class="span4">
-                              <div class="btn-group">
-                                  <a onclick="build();" class="btn btn-large btn-success">Rebuild <i class="icon-hdd icon-white"></i></a>
-                                  <a onclick="unbuild();" class="btn btn-large btn-inverse">Unbuild <i class="icon-pencil icon-white"></i></a>
-                              </div></div>
-                          <div class="span4">
-  
-                          </div>
-                          <div class="span4">
-                              <div class="btn-group">
-                                  <a onclick="selectEntity();" class="btn btn-large btn-primary">Show Entities <i class="icon-forward icon-white"></i></a>
-  
-                              </div>
-  
-                          </div>
-                      </div>
-  
-                      <div class="row-fluid">
-                          <div class="span4">
-                          </div>
-                          <div class="span4">
-  
-                          </div>
-                          <div class="span4">
-                              <div class="btn-group">
-                                  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                      Export
-                                      <span class="caret"></span>
-                                  </a>
-                                  <ul class="dropdown-menu">
-                                      <li><a href="../../config/export/coeus.rdf">RDF</a></li>
-                                      <li><a href="../../config/export/coeus.ttl">TTL</a></li>
-                                  </ul>
-                              </div>
-                          </div>
-                      </div>
-                    -->
-
-
-
                 </div>
             </div>
 
 
 
         </div>
-
+        <!-- Finally include modals -->
+        <%@include file="/setup/modals/add.jsp" %>
+        <%@include file="/setup/modals/addResource.jsp" %>
+        <%@include file="/setup/modals/edit.jsp" %>
+        <%@include file="/setup/modals/editResource.jsp" %>
+        <%@include file="/setup/modals/remove.jsp" %>
     </s:layout-component>
 </s:layout-render>
