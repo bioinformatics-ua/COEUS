@@ -41,7 +41,7 @@
             function refresh() {
                 var seed = lastPath();
 
-                var qEntities = "SELECT DISTINCT ?entity ?e {" + seed + " coeus:includes ?entity . ?entity dc:title ?e . }";
+                var qEntities = "SELECT DISTINCT ?entity ?e ?label {" + seed + " coeus:includes ?entity . ?entity dc:title ?e . ?entity rdfs:label ?label}";
 
                 queryToResult(qEntities, fillEntities);
             }
@@ -50,8 +50,9 @@
                 $('#entities').html("");
                 for (var key in result) {
                     var a = '<tr><td><a href="../../resource/' + splitURIPrefix(result[key].entity.value).value + '">'
-                            + result[key].entity.value + '</a></td><td>'
+                            + splitURIPrefix(result[key].entity.value).value + '</a></td><td>'
                             + result[key].e.value + '</td><td>'
+                    + result[key].label.value + '</td><td>'
                             + '<div class="btn-group">'
                             + '<a class="btn btn" href="#editModal" data-toggle="modal" onclick="prepareEdit(\'coeus:' + splitURIPrefix(result[key].entity.value).value + '\');">Edit <i class="icon-edit"></i></a>'
                             + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'coeus:' + splitURIPrefix(result[key].entity.value).value + '\')">Remove <i class="icon-trash"></i></button>'
@@ -111,6 +112,7 @@
                         <tr>
                             <th>Entity</th>
                             <th>Title</th>
+                            <th>Label</th>
                             <th>Actions</th>
                         </tr>
                     </thead>

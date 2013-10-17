@@ -104,7 +104,7 @@
                     c += '<p class="text-info"><a href="../../resource/' + resource + '"><i class="icon-search"></i></a> '
                             + resource 
                             + ' <a href="#editResourceModal" data-toggle="modal" onclick="prepareResourceEdit(\'' + prefix + ':' + resource + '\');"><i class="icon-edit"></i></a>'                            
-                            + ' <a href="../resource/edit/' + prefix + ':' + resource + '"><i class="icon-wrench"></i></a>'
+                            + ' <a href="../selector/' + prefix + ':' + resource + '"><i class="icon-wrench"></i></a>'
                             + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + prefix + ':' + resource + '\')"><i class="icon-trash"></i></a>'
                             +'</p>';
                 }

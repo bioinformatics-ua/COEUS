@@ -1,7 +1,7 @@
 <!-- Remove Modal 
 This modal is used to remove Seeds, Entities and Concepts because all of them share the same properties. 
 -->
-<div id="removeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div id="removeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button id="closeRemoveModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
         <h3 >Remove <span id="removeType">no type</span></h3>
@@ -14,7 +14,7 @@ This modal is used to remove Seeds, Entities and Concepts because all of them sh
 
     </div>
 
-    <div class="modal-footer">
+    <div class="modal-footer" id="rmbtns">
         <button id="btnCloseModal" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button id="remove" class="btn btn-danger loading" onclick="remove();">Remove <i class="icon-trash icon-white"></i></button>
     </div>

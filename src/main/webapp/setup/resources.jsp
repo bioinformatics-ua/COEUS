@@ -51,7 +51,7 @@
             }
             
             function refresh() {
-                var qresource = "SELECT DISTINCT ?resource ?c ?order ?built {" + lastPath() + " coeus:hasResource ?resource . ?resource dc:title ?c . ?resource coeus:order ?order . OPTIONAL{ ?resource coeus:built ?built }}";
+                var qresource = "SELECT DISTINCT ?resource ?c ?order ?built ?label{" + lastPath() + " coeus:hasResource ?resource . ?resource dc:title ?c . ?resource coeus:order ?order . ?resource rdfs:label ?label . OPTIONAL{ ?resource coeus:built ?built }}";
                 queryToResult(qresource, fillListOfResources);
 
             }
@@ -64,14 +64,15 @@
                     if (result[key].built === undefined || result[key].built.value === "false")
                         built = '<span class="label ">not built</span>';
                     var a = '<tr><td><a href="../../resource/' + splitURIPrefix(result[key].resource.value).value + '">'
-                            + result[key].resource.value + '</a> ' + built + '</td><td>'
+                            + splitURIPrefix(result[key].resource.value).value + '</a> ' + built + '</td><td>'
                             + result[key].c.value + '</td><td>'
+                    + result[key].label.value + '</td><td>'
                             + result[key].order.value + '</td><td>'
                             + '<div class="btn-group">'
                             + '<a class="btn btn" href="#editResourceModal" data-toggle="modal" onclick="prepareResourceEdit(\'coeus:' + splitURIPrefix(result[key].resource.value).value + '\');">Edit <i class="icon-edit"></i></a>'
                             + '<a class="btn btn" href="#removeModal" data-toggle="modal" onclick="selectToRemove(\'coeus:' + splitURIPrefix(result[key].resource.value).value + '\');">Remove <i class="icon-trash"></i></a> '
                             + '</div>'
-                            + ' <a class="btn btn-warning" href="../resource/edit/coeus:' + splitURIPrefix(result[key].resource.value).value + '">Configuration  <i class="icon-wrench icon-white"></i></a> '
+                            + ' <a class="btn btn-warning" href="../selector/coeus:' + splitURIPrefix(result[key].resource.value).value + '">Configuration  <i class="icon-wrench icon-white"></i></a> '
                             //+ ' <a class="btn btn-info">Selectors</a>'
                             //+ '<a href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</a>'
                             + '</td></tr>';
@@ -125,6 +126,7 @@
                         <tr>
                             <th>Resource</th>
                             <th>Title</th>
+                            <th>Label</th>
                             <th>Order</th>
                             <th>Actions</th>
                         </tr>
