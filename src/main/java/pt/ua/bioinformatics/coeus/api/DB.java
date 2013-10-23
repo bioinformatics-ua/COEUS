@@ -260,8 +260,12 @@ public class DB {
             url=url.replace("?autoReconnect=true","");
             String[] urlSplited=url.split("/");
             String db=urlSplited[urlSplited.length-1];
-            connection = DriverManager.getConnection(url.replace(db, "") + "?allowMultiQueries=true&user=" + user + "&password=" + pass);
-            pStatement = connection.prepareStatement(readScript().replaceAll("coeusdb", db));
+            //System.out.println(db);
+            String jdbc=url.replace("/"+db, "") + "?allowMultiQueries=true&user=" + user + "&password=" + pass;
+            System.out.println(jdbc);
+            connection = DriverManager.getConnection(jdbc);
+            String script=readScript().replaceAll("coeusdb", db);
+            pStatement = connection.prepareStatement(script);
             pStatement.execute();
             pStatement.close();
             connection.close();

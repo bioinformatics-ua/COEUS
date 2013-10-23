@@ -21,8 +21,8 @@
                 $('#host').val("localhost");
                 $('#port').val("3306");
                 $('#path').val("coeus");
-                $('#username').val("demo");
-                $('#password').val("demo");
+                $('#username').val("root");
+                //$('#password').val("demo");
 
                 $('#projectName').val("coeus.demo");
                 $('#projectHomepage').val("http://bioinformatics.ua.pt/coeus/");
@@ -30,14 +30,12 @@
                 $('#Endpoint').val("http://localhost:8080/coeus/sparql");
                 $('#DatasetBase').val("http://bioinformatics.ua.pt/coeus/resource/");
                 $('#WebResourcePrefix').val("resource/");
-                
+
                 //console.log(JSON.parse(generateMap()));
 
             });
 
             function generateMap() {
-
-                var environment = $('#createEnvironment').val();
 
                 var host = $('#host').val();
                 var port = $('#port').val();
@@ -63,8 +61,7 @@
                     "$conf:webBase": webBase,
                     "$conf:sparqlEndpoint": endpoint,
                     "$conf:datasetBase": datasetBase,
-                    "$conf:webResourcePrefix": webResourcePrefix,
-                    "$environment": environment
+                    "$conf:webResourcePrefix": webResourcePrefix
                 };
 
                 return JSON.stringify(json);
@@ -117,9 +114,9 @@
                 }
 
                 //progress bar exit
-                document.getElementById('bar').style.width = "100%";
-                $('#progress').addClass('hide');
-                document.getElementById('bar').class = "hide";
+                //document.getElementById('bar').style.width = "100%";
+                //$('#progress').addClass('hide');
+                //document.getElementById('bar').class = "hide";
 
             }
             function save() {
@@ -151,8 +148,7 @@
                                 "predicates": "predicates.csv",
                                 "built": $('#Built').is(':checked'),
                                 "debug": $('#Debug').is(':checked'),
-                                "apikey": $('#ApiKey').val(),
-                                "environment": $('#environment').val()
+                                "apikey": $('#ApiKey').val()
                             }
                 };
 
@@ -179,13 +175,13 @@
             }
             function saveSuccess(data) {
                 console.log(data);
-                
+
                 if (data.status === 100) {
                     $('#resultSave').html(generateHtmlMessage("Success!", "All Saved. Now you can start build the COEUS Model.", "alert-success"));
                 } else {
                     $('#resultSave').html(generateHtmlMessage("Warning!", data.message));
                 }
-                
+
                 $('#btnSave').removeClass('disabled');
                 $('#btnSave').html("Save it!");
 
@@ -209,46 +205,74 @@
                     $('#res').append('<p class="text-warning">This Key already exists.</p>');
                 }
             }
-            function changeTab(old_tab, new_tab) {
+            function changeTab(old_tab, new_tab, percentage) {
                 $(old_tab).removeClass('active');
                 $(new_tab).addClass('active');
+                document.getElementById('bar').style.width = percentage;
             }
 
             function createEnv() {
                 var env = $('#createEnvironment').val();
-                if (env !== "")
-                    callURL("../../config/newenv/" + env, createEnvResult, createEnvFail);
-                    
-            }
-
-            function createEnvResult(result) {
-                console.log(result);
-                var env = $('#createEnvironment').val();
-                if (result.status === 100) {
-                    $('#environment').val(env);
-                    $('#resultCreateEnv').html(generateHtmlMessage("Success!", "Environment <strong>"+env+"</strong> created. Please, configure it now.", "alert-success"));
-                    $('#connections').removeClass('hide');
+                if (env !== "") {
+                    var url = "../../config/newenv/" + env;
+                    $('#envForm').removeClass('error');
+                    callURL(url, createResult.bind(this, "#resultCreateEnv", '#nextBtnEnv'), showError.bind(this, "#resultCreateEnv", url));
                 } else {
-                    $('#resultCreateEnv').html(generateHtmlMessage("Warning!", result.message));
+                    $('#envForm').addClass('controls control-group error');
+                }
+            }
+            function createDB() {
+
+                // verify all fields:
+                var empty = false;
+                if ($('#url') === '') {
+                    $('#urlForm').addClass('controls control-group error');
+                    empty = true;
+                } else
+                    $('#urlForm').removeClass('error');
+
+                if (!empty) {
+                    var url = "../../config/db/" + encodeBars(generateMap());
+                    callURL(url, createResult.bind(this, "#resultCreateDb", '#nextBtnDb'), showError.bind(this, "#resultCreateDb", url));
+
+                }
+
+            }
+            
+            function createPubby() {
+
+                // verify all fields:
+                var empty = false;
+                if ($('#url') === '') {
+                    $('#pubbyForm').addClass('controls control-group error');
+                    empty = true;
+                } else
+                    $('#pubbyForm').removeClass('error');
+
+                if (!empty) {
+                    var url = "../../config/pubby/" + encodeBars(generateMap());
+                    callURL(url, createResult.bind(this, "#resultPubby", '#nextBtnPubby'), showError.bind(this, "#resultPubby", url));
+
                 }
 
             }
 
-            function createEnvFail(jqXHR, textStatus) {
-                $('#resultCreateEnv').html(generateHtmlMessage("Error!", textStatus, "alert-error"));
+            function createResult(id, btnNext, result) {
+                console.log(result);
+                if (result.status === 100) {
+                    $(id).html(generateHtmlMessage("Success!", "Please, press next.", "alert-success"));
+                    $(btnNext).removeClass('hide');
+                } else {
+                    $(id).html(generateHtmlMessage("Warning!", result.message));
+                }
+
             }
-            
-            function updateFilesOnEnv(){
-                var env = $('#environment').val();
-                if (env !== "")
-                    callURL("../../config/putmap/" + encodeBars(generateMap()), upEnvResult, upEnvFail);
-            }
-            
+
             function upEnvResult(result) {
                 console.log(result);
                 var env = $('#environment').val();
                 if (result.status === 100) {
-                    $('#resultUpEnv').html(generateHtmlMessage("Success!", "Configurations saved on environment <strong>"+env+"</strong>. Please, press the next button.", "alert-success"));
+                    $('#resultUpEnv').html(generateHtmlMessage("Success!", "Configurations saved on environment <strong>" + env + "</strong>. Please, press the next button.", "alert-success"));
                 } else {
                     $('#resultUpEnv').html(generateHtmlMessage("Warning!", result.message));
                 }
@@ -259,8 +283,6 @@
                 $('#resultUpEnv').html(generateHtmlMessage("Error!", textStatus, "alert-error"));
             }
 
-
-
         </script>
     </s:layout-component>
     <s:layout-component name="body">
@@ -268,45 +290,48 @@
         <div class="container">
 
             <div id="header" class="page-header">
-                <h1>COEUS Setup</h1>
+                <h1>COEUS Setup Wizard</h1>
             </div>
 
             <div id="progress" class="progress progress-striped active" >
-                <div id="bar" class="bar" style="width: 10%;"></div>
+                <div id="bar" class="bar" style="width: 0%;"></div>
             </div>
             <div id="result">
             </div>
             <div class="tabbable"> <!-- Only required for left/right tabs -->
                 <ul class="nav nav-tabs">
-                    <li id="litab0" class="active"><a href="#tab0" data-toggle="tab">Start</a></li>
-                    <li id="litab1" ><a href="#tab1" data-toggle="tab">Environment</a></li>
-                    <li id="litab2" ><a href="#tab2" data-toggle="tab">Model</a></li>
-                    <li id="litab3"><a href="#tab3" data-toggle="tab">Prefixes</a></li>
-                    <li id="litab4"><a href="#tab4" data-toggle="tab">Finish</a></li>
+                    <li id="litab1" class="active"><a href="#tab1" data-toggle="tab">1. Start <i class="icon-chevron-right"></i></a></li>
+                    <li id="litab2" ><a >2. Environment <i class="icon-chevron-right"></i></a></li>
+                    <li id="litab3" ><a >3. Database <i class="icon-chevron-right"></i></a></li>
+                    <li id="litab4" ><a >4. Pubby <i class="icon-chevron-right"></i></a></li>
+                    <li id="litab5" ><a >5. Model <i class="icon-chevron-right"></i></a></li>
+                    <li id="litab6"><a >6. Prefixes <i class="icon-chevron-right"></i></a></li>
+                    <li id="litab7"><a >7. Finish</a></li>
                 </ul>
-                <div class="tab-content" style="min-height: 400px">
-                    <div class="tab-pane active" id="tab0" >
+                <div class="tab-content" style="min-height: 300px">
+                    <div class="tab-pane active" id="tab1" >
                         <div class="text-center" >
                             <p>In this section you will give some information to complete some setup files for COEUS.</p>
                             <p>To begin press the Start Wizard button.</p>
-                            <a onclick="changeTab('#litab0', '#litab1');" href="#tab1" data-toggle="tab" class="btn btn-large btn-warning" type="button">Start Wizard <i class="icon-play icon-white"></i></a>
+                            <a onclick="changeTab('#litab1', '#litab2', '15%');" href="#tab2" data-toggle="tab" class="btn btn-large btn-warning" type="button">1.Start Wizard <i class="icon-play icon-white"></i></a>
                             <p></p>
                             <p>If you do not want to change the configurations files, please skip this wizard.</p>
                             <a href="../seed/" class="btn btn-large" type="button">Skip <i class="icon-fast-forward"></i></a>
                         </div>
 
                     </div>
-                    <div class="tab-pane" id="tab1">
-                        <form class="form-horizontal" id="formCreateEnv">
+                    <div class="tab-pane" id="tab2">
+
+                        <form class="form-horizontal">
                             <fieldset>
-                                <legend>1.Environment</legend>
+                                <legend>2.Environment</legend>
 
                                 <!-- Text input-->
                                 <div class="control-group">
                                     <label class="control-label" for="Environment">Create Environment</label>
-                                    <div class="controls">
+                                    <div class="controls" id="envForm">
                                         <input id="createEnvironment" name="Environment" type="text" placeholder="Production" class="input-large"> <input id="environment" class="hide"></input>
-                                        <p class="help-block">Name of the Environment</p>
+                                        <p class="help-block">Name of the Environment used to store application settings.</p>
                                     </div>
                                 </div>
 
@@ -317,21 +342,32 @@
                                         <a onclick="createEnv();" id="btnCreateEnv" name="btnCreateEnv" class="btn btn-success">Create <i class="icon-plus icon-white"></i></a>
                                     </div>
                                 </div>
-                                
-                                <div id="resultCreateEnv">
-                                    
-                                </div>
 
                             </fieldset>
                         </form>
-                        <form id="connections" class="form-horizontal hide">
+
+                        <div id="resultCreateEnv">
+
+                        </div>
+                        <ul class="pager" id="nextBtnEnv">
+                            <li class="previous  hide" >
+                                <a onclick="changeTab('#litab2', '#litab1');" href="#tab1" data-toggle="tab">&larr; Previous</a>
+                            </li>
+                            <li class="next">
+                                <a onclick="changeTab('#litab2', '#litab3', '30%');" href="#tab3" data-toggle="tab" >Next &rarr;</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="tab3">
+
+                        <form class="form-horizontal">
                             <fieldset>
-                                <legend>2.Database</legend>
+                                <legend>3.Database</legend>
 
                                 <!-- Text input-->
                                 <div class="control-group">
                                     <label class="control-label" for="jdbcURL">JDBC URL</label>
-                                    <div class="controls">
+                                    <div class="controls" id="urlForm">
                                         jdbc:mysql://
                                         <input id="host" name="host" type="text" placeholder="localhost" class="input-large">
                                         : <input id="port" name="jdbcURL" type="text" placeholder="3306" class="input-mini">
@@ -344,7 +380,7 @@
                                 <!-- Text input-->
                                 <div class="control-group">
                                     <label class="control-label" for="username">Database User</label>
-                                    <div class="controls">
+                                    <div class="controls" id="usernameForm">
                                         <input id="username" name="username" type="text" class="input-large">
 
                                     </div>
@@ -353,13 +389,36 @@
                                 <!-- Text input-->
                                 <div class="control-group">
                                     <label class="control-label" for="password">Database Password</label>
-                                    <div class="controls">
+                                    <div class="controls" id="passwordForm">
                                         <input id="password" name="password" type="text" placeholder="demo" class="input-large">
                                         <p class="help-block">The user must have privileges to create the DB and the tables structure.</p>
                                     </div>
                                 </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="btnCreateDb"></label>
+                                    <div class="controls">
+                                        <a onclick="createDB();" id="btnCreateDB" name="btnCreateDb" class="btn btn-success">Create <i class="icon-plus icon-white"></i></a>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                         <div id="resultCreateDb">
 
-                                <legend>3.Pubby</legend>
+                        </div>
+                        <ul class="pager">
+                            <li class="previous">
+                                <a onclick="changeTab('#litab3', '#litab2');" href="#tab2" data-toggle="tab">&larr; Previous</a>
+                            </li>
+                            <li class="next">
+                                <a onclick="changeTab('#litab3', '#litab4', '45%');" href="#tab4" data-toggle="tab" >Next &rarr;</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="tab4">
+
+                        <form id="pubbyForm" class="form-horizontal">
+                            <fieldset>
+                                <legend>4.Pubby</legend>
 
                                 <!-- Text input-->
                                 <div class="control-group">
@@ -413,31 +472,35 @@
 
                                     </div>
                                 </div>
-                                
+
                                 <!-- Button -->
                                 <div class="control-group">
-                                    <label class="control-label" for="btnUpEnv"></label>
+                                    <label class="control-label" for="nextBtnPubby"></label>
                                     <div class="controls">
-                                        <a onclick="updateFilesOnEnv();" id="btnUpEnv" name="btnUpEnv" class="btn btn-danger">Save Configuration</a>
+                                        <a onclick="createPubby();" id="nextBtnPubby" class="btn btn-danger">Save Changes</a>
                                     </div>
                                 </div>
-                                
-                                <div id="resultUpEnv">
-                                    
-                                </div>
+
+                                <div id="resultPubby"></div>
 
 
                             </fieldset>
                         </form>
+                        <ul class="pager">
+                            <li class="previous">
+                                <a onclick="changeTab('#litab4', '#litab3');" href="#tab3" data-toggle="tab">&larr; Previous</a>
+                            </li>
+                            <li class="next">
+                                <a onclick="changeTab('#litab4', '#litab5', '60%');" href="#tab5" data-toggle="tab" >Next &rarr;</a>
+                            </li>
+                        </ul>
 
-                        <div class="text-left">
-                            <a onclick="changeTab('#litab1', '#litab2');" href="#tab2" data-toggle="tab" class="btn btn-warning" type="button">Next <i class="icon-forward icon-white"></i></a>
-                        </div>
                     </div>
-                    <div class="tab-pane" id="tab2">
+                    <div class="tab-pane" id="tab5">
+
                         <form class="form-horizontal">
                             <fieldset>
-                                <legend>4.Model Configurations</legend>
+                                <legend>5.Model Configurations</legend>
                                 <!-- Text input-->
                                 <div class="control-group">
                                     <label class="control-label" for="Name">Name</label>
@@ -524,17 +587,22 @@
                                         <p class="help-block">RDF File Location to Import to the DB</p>
                                     </div>
                                 </div>
-                                <div class="text-left">
-                                    <a onclick="changeTab('#litab2', '#litab3');" href="#tab3" data-toggle="tab" class="btn btn-warning" type="button">Next <i class="icon-forward icon-white"></i></a>
-                                </div>
-
 
                             </fieldset>
                         </form>
+                        <ul class="pager">
+                            <li class="previous">
+                                <a onclick="changeTab('#litab5', '#litab4');" href="#tab4" data-toggle="tab">&larr; Previous</a>
+                            </li>
+                            <li class="next">
+                                <a onclick="changeTab('#litab5', '#litab6', '75%');" href="#tab6" data-toggle="tab" >Next &rarr;</a>
+                            </li>
+                        </ul>
 
                     </div>
-                    <div class="tab-pane" id="tab3">
-                        <legend>5.Prefix Configurations</legend>
+                    <div class="tab-pane" id="tab6">
+
+                        <legend>6.Prefix Configurations</legend>
                         <table class="table table-hover">
                             <thead>
                                 <tr>
@@ -562,10 +630,17 @@
                         <div class="text-left">
                             <a onclick="changeTab('#litab3', '#litab4');" href="#tab4" data-toggle="tab" class="btn btn-warning" type="button">Next <i class="icon-forward icon-white"></i></a>
                         </div>
-
+                        <ul class="pager">
+                            <li class="previous">
+                                <a onclick="changeTab('#litab6', '#litab5');" href="#tab5" data-toggle="tab">&larr; Previous</a>
+                            </li>
+                            <li class="next">
+                                <a onclick="changeTab('#litab6', '#litab7', '100%');" href="#tab7" data-toggle="tab" >Next &rarr;</a>
+                            </li>
+                        </ul>
 
                     </div> 
-                    <div class="tab-pane" id="tab4">
+                    <div class="tab-pane" id="tab7">
                         <div class="text-center" style="height: 200px">
                             <p>In order to save your progress press the Save button, please.</p>
                             <p class="text-warning">Warning: If you leaves this wizard without save it, some configurations will be lost.</p>
@@ -579,6 +654,14 @@
                             <a id="btnStartBuild" href="../seed/" class="btn btn-warning" type="button">Build Model <i class="icon-home icon-white"></i></a>
 
                         </div>
+                        <ul class="pager">
+                            <li class="previous">
+                                <a onclick="changeTab('#litab7', '#litab6');" href="#tab6" data-toggle="tab">&larr; Previous</a>
+                            </li>
+                            <li class="next disabled">
+                                <a onclick="changeTab('#litab7', '#litab7');" href="#tab7" data-toggle="tab" >Next &rarr;</a>
+                            </li>
+                        </ul>
                     </div>
 
                 </div>
@@ -615,5 +698,5 @@
 
         </div>
 
-        </s:layout-component>
-    </s:layout-render>
+    </s:layout-component>
+</s:layout-render>

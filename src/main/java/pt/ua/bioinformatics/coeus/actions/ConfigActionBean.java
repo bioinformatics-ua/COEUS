@@ -176,7 +176,8 @@ public class ConfigActionBean implements ActionBean {
     }
 
     /**
-     * Change built property in config.js file. The method value only can be true or false.
+     * Change built property in config.js file. The method value only can be
+     * true or false.
      *
      * @return
      */
@@ -188,7 +189,7 @@ public class ConfigActionBean implements ActionBean {
 
             config.put("built", Boolean.parseBoolean(method));
             f.put("config", config);
-            
+
             updateFile(f.toJSONString(), Config.getPath() + "config.js");
             //apply values
             Boot.resetConfig();
@@ -350,7 +351,7 @@ public class ConfigActionBean implements ActionBean {
     }
 
     /**
-     * Change the environment: Copy files to the root dir and change the
+     * Change the environment: Copy files to the root dir and update the
      * environment key in config.js
      *
      * @param src
@@ -361,18 +362,8 @@ public class ConfigActionBean implements ActionBean {
     public void changeEnvironment(String src, String dest, String environment) throws IOException {
         //copy all files from enviroment to root dir
         copyFolder(new File(src), new File(dest), null);
-        // update environment in config.js
-        JSONObject f = Config.getFile();
-        JSONObject config = (JSONObject) f.get("config");
-
-        Map<String, String> m = new HashMap<String, String>();
-        for (Iterator it = config.entrySet().iterator(); it.hasNext();) {
-            Entry<String, String> e = (Entry<String, String>) it.next();
-            m.put(e.getKey(), e.getValue());
-        }
-        m.put("environment", environment.split("env_", 2)[1]);
-        f.put("config", m);
-
+        JSONObject f = changeConfigValue("config", "environment", environment.split("env_", 2)[1]);
+        //System.err.println(f.toJSONString());
         updateFile(f.toJSONString(), Config.getPath() + "config.js");
     }
 
@@ -398,6 +389,8 @@ public class ConfigActionBean implements ActionBean {
             File init = new File(initStr);
 
             copyFolder(init, env, null);
+            //change to this env
+            changeEnvironment(envStr, Config.getPath(), name);
             result.put("status", 100);
             result.put("message", "[COEUS][API][ConfigActionBean] Environment created: " + method);
         } catch (IOException ex) {
@@ -432,34 +425,36 @@ public class ConfigActionBean implements ActionBean {
     }
 
     /**
-     * Receives a map.js file and update it in according to the environment key
-     * in config.js.
+     * Receives a map.js file with only db information to create the DB
+     * structure.
      *
      * @return
      */
-    public Resolution putmap() {
+    public Resolution db() {
         JSONObject result = new JSONObject();
         try {
             Boot.start();
 
             JSONParser parser = new JSONParser();
             System.out.println(method);
-            JSONObject env = (JSONObject) parser.parse(method);
+            JSONObject db = (JSONObject) parser.parse(method);
             //create the DB if not exists
             DB creator = new DB();
-            creator.createDB(env.get("$sdb:jdbcURL").toString(), env.get("$sdb:sdbUser").toString(), env.get("$sdb:sdbPassword").toString());
+            creator.createDB(db.get("$sdb:jdbcURL").toString(), db.get("$sdb:sdbUser").toString(), db.get("$sdb:sdbPassword").toString());
 
-            String environment = "env_" + env.get("$environment").toString();
-            String path = Config.getPath() + environment + "/";
-            String map = path + "map.js";
-            //update map.js file
-            result = updateFile(method, map);
-            //update files on the environment
-            updateFilesFromMap(path);
-            //change it to use
-            //changeEnvironment(path, Config.getPath(), environment);
+//            String environment = "env_" + Config.getEnvironment();
+//            String path = Config.getPath() + environment + "/";
+//            String map = path + "map.js";
+//            //update map.js file
+//            result = updateFile(method, map);
+//            //update files on the environment
+//            updateFilesFromMap(path);
+//            //change it to use
+//            changeEnvironment(path, Config.getPath(), environment);
             //apply values
-            Boot.resetConfig();
+//            Boot.resetConfig();
+            result.put("status", 100);
+            result.put("message", "[COEUS][API][ConfigActionBean] DB created.");
 
         } catch (ParseException ex) {
             result.put("status", 200);
@@ -468,6 +463,48 @@ public class ConfigActionBean implements ActionBean {
         } catch (SQLException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On creating database, check exception: " + ex);
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            result.put("status", 200);
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Please, check exception.");
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new StreamingResolution("application/json", result.toJSONString());
+    }
+
+    /**
+     * Receives a map.js file and update it in according to the environment key
+     * in config.js.
+     *
+     * @return
+     */
+    public Resolution pubby() {
+        JSONObject result = new JSONObject();
+        try {
+            Boot.start();
+
+            JSONParser parser = new JSONParser();
+            System.out.println(method);
+            JSONObject db = (JSONObject) parser.parse(method);
+            //create the DB if not exists
+            //DB creator = new DB();
+            //creator.createDB(db.get("$sdb:jdbcURL").toString(), db.get("$sdb:sdbUser").toString(), db.get("$sdb:sdbPassword").toString());
+
+            String environment = "env_" + Config.getEnvironment();
+            String path = Config.getPath() + environment + "/";
+            String map = path + "map.js";
+            //update map.js file
+            result = updateFile(method, map);
+            //update files on the environment
+            updateFilesFromMap(path);
+            //change it to use
+            changeEnvironment(path, Config.getPath(), environment);
+            //apply values
+            Boot.resetConfig();
+
+        } catch (ParseException ex) {
+            result.put("status", 200);
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On parse map.js, check exception.");
             Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             result.put("status", 200);
@@ -590,6 +627,29 @@ public class ConfigActionBean implements ActionBean {
         updateFile(sb.toString(), Config.getPath() + "predicates.csv");
 
         return new StreamingResolution("text/javascript", result.toString());
+    }
+
+    /**
+     * Change the key-value in the top key of the config.js file
+     *
+     * @param domain
+     * @param key
+     * @param value
+     * @return
+     */
+    public JSONObject changeConfigValue(String topKey, String key, String value) {
+
+        JSONObject f = Config.getFile();
+        JSONObject config = (JSONObject) f.get(topKey);
+
+        Map<String, String> m = new HashMap<String, String>();
+        for (Iterator it = config.entrySet().iterator(); it.hasNext();) {
+            Entry<String, String> e = (Entry<String, String>) it.next();
+            m.put(e.getKey(), e.getValue());
+        }
+        m.put(key, value);
+        f.put(topKey, m);
+        return f;
     }
 
     /**

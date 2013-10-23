@@ -9,7 +9,5 @@
     "$conf:sparqlEndpoint" :"http://localhost:8080/coeus/sparql",
     "$conf:datasetBase" :"http://bioinformatics.ua.pt/coeus/resource/",
     "$conf:webResourcePrefix" :"resource/",
-    
-    "$environment" :"",
 
 }

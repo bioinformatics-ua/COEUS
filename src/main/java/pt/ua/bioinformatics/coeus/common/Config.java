@@ -35,7 +35,7 @@ public class Config {
     private static boolean debug = false;
     private static boolean built = false;
     private static String path = "";
-    //private static String environment = "development";
+    private static String environment = "default";
     private static ArrayList<String> apikeys = new ArrayList<String>();
 
     public static ArrayList<String> getApikeys() {
@@ -46,13 +46,13 @@ public class Config {
         Config.apikeys = apikeys;
     }
 
-//    public static String getEnvironment() {
-//        return environment;
-//    }
-//
-//    public static void setEnvironment(String environment) {
-//        Config.environment = environment;
-//    }
+    public static String getEnvironment() {
+        return environment;
+    }
+
+    public static void setEnvironment(String environment) {
+        Config.environment = environment;
+    }
     public static String getPath() {
         return path;
     }
@@ -191,7 +191,7 @@ public class Config {
                 debug = (Boolean) config.get("debug");
                 built = (Boolean) config.get("built");
                 predicates = (String) config.get("predicates");
-//                environment = (String) config.get("environment");
+                environment = (String) config.get("environment");
                 apikeys.addAll(Arrays.asList(((String) config.get("apikey")).split("\\|")));
                 sdb = ((String) config.get("sdb"));//.replace(".ttl", "_" + environment + ".ttl");
                 keyPrefix = (String) config.get("keyprefix");
