@@ -37,8 +37,8 @@
             function fillHeader(result) {
                 $('#header').html('<h1>Please, choose the seed:<small id="env"> ' + result.config.environment + '</small></h1>');
                 $('#apikey').html(result.config.apikey);
-
-                var urlPrefix = "../../api/" + getApiKey();
+                if(result.config.wizard==false) redirect('../config/');
+                var urlPrefix = "../../api/" + getApiKey();                
                 cleanUnlikedTriples(urlPrefix);
             }
             function refresh() {

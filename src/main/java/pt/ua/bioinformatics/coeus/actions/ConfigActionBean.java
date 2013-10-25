@@ -330,7 +330,7 @@ public class ConfigActionBean implements ActionBean {
             String path = Config.getPath() + "env_" + method + "/";
 
             updateFilesFromMap(path);
-            changeEnvironment(path, Config.getPath(), "env_" + method);
+            applyEnvironment(path, Config.getPath(), "env_" + method);
 
             //Load new settings
             Boot.resetConfig();
@@ -359,7 +359,7 @@ public class ConfigActionBean implements ActionBean {
      * @param environment
      * @throws IOException
      */
-    public void changeEnvironment(String src, String dest, String environment) throws IOException {
+    public void applyEnvironment(String src, String dest, String environment) throws IOException {
         //copy all files from enviroment to root dir
         copyFolder(new File(src), new File(dest), null);
         JSONObject f = changeConfigValue("config", "environment", environment.split("env_", 2)[1]);
@@ -390,7 +390,9 @@ public class ConfigActionBean implements ActionBean {
 
             copyFolder(init, env, null);
             //change to this env
-            changeEnvironment(envStr, Config.getPath(), name);
+            //changeEnvironment(envStr, Config.getPath(), name);
+            //apply values
+            Boot.resetConfig();
             result.put("status", 100);
             result.put("message", "[COEUS][API][ConfigActionBean] Environment created: " + method);
         } catch (IOException ex) {
@@ -450,9 +452,9 @@ public class ConfigActionBean implements ActionBean {
 //            //update files on the environment
 //            updateFilesFromMap(path);
 //            //change it to use
-//            changeEnvironment(path, Config.getPath(), environment);
+//            applyEnvironment(path, Config.getPath(), environment);
             //apply values
-//            Boot.resetConfig();
+            //Boot.resetConfig();
             result.put("status", 100);
             result.put("message", "[COEUS][API][ConfigActionBean] DB created.");
 
@@ -483,13 +485,7 @@ public class ConfigActionBean implements ActionBean {
         try {
             Boot.start();
 
-            JSONParser parser = new JSONParser();
             System.out.println(method);
-            JSONObject db = (JSONObject) parser.parse(method);
-            //create the DB if not exists
-            //DB creator = new DB();
-            //creator.createDB(db.get("$sdb:jdbcURL").toString(), db.get("$sdb:sdbUser").toString(), db.get("$sdb:sdbPassword").toString());
-
             String environment = "env_" + Config.getEnvironment();
             String path = Config.getPath() + environment + "/";
             String map = path + "map.js";
@@ -497,10 +493,13 @@ public class ConfigActionBean implements ActionBean {
             result = updateFile(method, map);
             //update files on the environment
             updateFilesFromMap(path);
-            //change it to use
-            changeEnvironment(path, Config.getPath(), environment);
+            
+            //change to this env
+            applyEnvironment(path, Config.getPath(), environment);
+            
             //apply values
             Boot.resetConfig();
+            Boot.resetStorage();
 
         } catch (ParseException ex) {
             result.put("status", 200);
@@ -596,43 +595,107 @@ public class ConfigActionBean implements ActionBean {
     }
 
     /**
-     * Update the config.js file and Load all Object Proprieties to the
-     * predicates.csv file according to the prefixes section on config.js.
+     * Update the config section of the config.js file.
      *
      * @return
      */
-    public Resolution putconfig() {
+    public Resolution config() {
+        JSONObject result = new JSONObject();
+        try {
+            //update config.js
+            String jsonString = method;
+            String configKey = "config";
+            JSONParser parser = new JSONParser();
+            //new file
+            JSONObject n = (JSONObject) parser.parse(jsonString);
+            //old file
+            JSONObject old = Config.getFile();
+            //old config key file
+            JSONObject oldConfig = (JSONObject) old.get(configKey);
+            //update the values
+            HashMap<Object, Object> m = (HashMap<Object, Object>) n.get(configKey);
+            for (Entry<Object, Object> entry : m.entrySet()) {
+                oldConfig.put(entry.getKey(), entry.getValue());
+            }
+            old.put(configKey, oldConfig);
+            //update the file
+            result = updateFile(old.toJSONString(), Config.getPath() + "config.js");
 
-        //update config.js
-        String jsonString = method;
-        JSONObject result = updateFile(jsonString, Config.getPath() + "config.js");
-        Boot.resetConfig();
+            Boot.resetConfig();
 
-        //update predicates.csv
-        Set<String> set = new TreeSet<String>();
-        JSONObject prefixes = (JSONObject) Config.getFile().get("prefixes");
-        for (Object o : prefixes.values()) {
-            System.err.println("[COEUS][API][ConfigActionBean] Reading: " + o);
-            set.addAll(getOntologyProperties(o.toString()));
+        } catch (ParseException ex) {
+            result.put("status", 200);
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: check the ParseException.");
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            result.put("status", 200);
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Please, check exception.");
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //read local ontology TODO: FIX THAT
-        String localOntology = context.getRequest().getScheme() + "://" + context.getRequest().getServerName() + ":" + context.getRequest().getServerPort() + context.getRequest().getContextPath() + "/ontology/";
-        set.addAll(getOntologyProperties(localOntology));
+        return new StreamingResolution("application/json", result.toJSONString());
+    }
 
-        StringBuilder sb = new StringBuilder();
-        for (String s : set) {
-            sb.append(s);
+    /**
+     * Update the prefixes section on config.js file and loads all Object
+     * Proprieties to the predicates.csv file according to the prefixes section
+     * on config.js.
+     *
+     * @return
+     */
+    public Resolution prefixes() {
+        JSONObject result=new JSONObject();
+        try {
+            //update config.js
+            String jsonString = method;
+            String prefixesKey = "prefixes";
+            JSONParser parser = new JSONParser();
+            //new file
+            JSONObject n = (JSONObject) parser.parse(jsonString);
+            //new config key file
+            JSONObject nPrefixes = (JSONObject) n.get(prefixesKey);
+            //old file
+            JSONObject old = Config.getFile();
+            
+            old.put(prefixesKey, nPrefixes);
+            result = updateFile(old.toJSONString(), Config.getPath() + "config.js");
+            //apply values
+            Boot.resetConfig();
+
+            //update predicates.csv
+            Set<String> set = new TreeSet<String>();
+            JSONObject prefixes = (JSONObject) Config.getFile().get("prefixes");
+            for (Object o : prefixes.values()) {
+                System.err.println("[COEUS][API][ConfigActionBean] Reading: " + o);
+                set.addAll(getOntologyProperties(o.toString()));
+            }
+            //read local ontology TODO: FIX THAT
+            String localOntology = context.getRequest().getScheme() + "://" + context.getRequest().getServerName() + ":" + context.getRequest().getServerPort() + context.getRequest().getContextPath() + "/ontology/";
+            set.addAll(getOntologyProperties(localOntology));
+
+            StringBuilder sb = new StringBuilder();
+            for (String s : set) {
+                sb.append(s);
+            }
+
+            updateFile(sb.toString(), Config.getPath() + "predicates.csv");
+
+            
+        } catch (ParseException ex) {
+            result.put("status", 200);
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Please, check the ParseException.");
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (Exception ex) {
+            result.put("status", 200);
+            result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Please, check exception.");
+            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        updateFile(sb.toString(), Config.getPath() + "predicates.csv");
-
-        return new StreamingResolution("text/javascript", result.toString());
+        return new StreamingResolution("application/json", result.toString());
     }
 
     /**
      * Change the key-value in the top key of the config.js file
      *
-     * @param domain
+     * @param topkey
      * @param key
      * @param value
      * @return
@@ -640,13 +703,16 @@ public class ConfigActionBean implements ActionBean {
     public JSONObject changeConfigValue(String topKey, String key, String value) {
 
         JSONObject f = Config.getFile();
-        JSONObject config = (JSONObject) f.get(topKey);
-
-        Map<String, String> m = new HashMap<String, String>();
-        for (Iterator it = config.entrySet().iterator(); it.hasNext();) {
-            Entry<String, String> e = (Entry<String, String>) it.next();
-            m.put(e.getKey(), e.getValue());
-        }
+        System.out.println(f.toJSONString());
+        System.out.println(topKey);
+        //JSONObject config = (JSONObject) f.get(topKey);
+        HashMap<String, String> m = (HashMap<String, String>) f.get(topKey);
+//        Map<String, String> m = new HashMap<String, String>();
+//        for (Iterator it = config.entrySet().iterator(); it.hasNext();) {
+//            Entry<String, String> e = (Entry<String, String>) it.next();
+//            m.put(e.getKey(), e.getValue());
+//        }
+        System.out.println(m);
         m.put(key, value);
         f.put(topKey, m);
         return f;

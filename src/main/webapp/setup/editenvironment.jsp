@@ -59,8 +59,7 @@
                 var endpoint = $('#Endpoint').val();
                 var datasetBase = $('#DatasetBase').val();
                 var webResourcePrefix = $('#WebResourcePrefix').val();
-                
-                var environment=lastPath();
+               
 
                 var json = {
                     "$sdb:jdbcURL": jdbcURL,
@@ -71,8 +70,7 @@
                     "$conf:webBase": webBase,
                     "$conf:sparqlEndpoint": endpoint,
                     "$conf:datasetBase": datasetBase,
-                    "$conf:webResourcePrefix": webResourcePrefix,
-                    "$environment": environment
+                    "$conf:webResourcePrefix": webResourcePrefix
                 };
 
                 return JSON.stringify(json);
@@ -83,7 +81,7 @@
             }
             
             function updateFilesOnEnv(){
-                    callURL("../../../config/putmap/" + encodeBars(generateMap()), upEnvResult, upEnvFail);
+                    callURL("../../../config/pubby/" + encodeBars(generateMap()), upEnvResult, upEnvFail);
             }
             function upEnvResult(result) {
                 console.log(result);
