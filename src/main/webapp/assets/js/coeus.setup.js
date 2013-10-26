@@ -449,9 +449,8 @@ var delay = 1000;
  * Remove the link between the triples and the triples
  * @returns {undefined}
  */
-function remove() {
+function removeTriples() {
     var individual = $('#removeModalLabel').html();
-    //var query = initSparqlerQuery();
     console.log('Remove: ' + individual);
 
     var urlPrefix = "../../api/" + getApiKey();

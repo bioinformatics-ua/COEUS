@@ -105,9 +105,9 @@
                                 + '</td><td>'
                                 + result[r].query.value + '</td><td>'
                                 + result[r].property.value + '</td><td>'
-                                + regex + '</td><td>'
+                               // + regex + '</td><td>'
                                 + '<div class="btn-group" id="btn' + sel + '">'
-                                + '<button class="btn btn-success" onclick="addExistingSelector(\'' + sel + '\')">Add</button>'
+                                + '<button class="btn btn-success btn-small" onclick="addExistingSelector(\'' + sel + '\')">Add</button>'
                                 + '</div>' + '<div id="result' + sel + '"></div>'
                                 + '</td></tr>';
 
@@ -610,7 +610,7 @@
                                 <th>Title</th>
                                 <th>Query</th>
                                 <th>Property</th>
-                                <th>Regex</th>
+                                <!--<th>Regex</th>-->
                                 <th>Choose</th>
                             </tr>
                         </thead>

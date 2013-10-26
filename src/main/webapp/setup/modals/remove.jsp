@@ -16,6 +16,6 @@ This modal is used to remove Seeds, Entities and Concepts because all of them sh
 
     <div class="modal-footer" id="rmbtns">
         <button id="btnCloseModal" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        <button id="remove" class="btn btn-danger loading" onclick="remove();">Remove <i class="icon-trash icon-white"></i></button>
+        <button id="remove" class="btn btn-danger loading" onclick="removeTriples();">Remove <i class="icon-trash icon-white"></i></button>
     </div>
 </div>
