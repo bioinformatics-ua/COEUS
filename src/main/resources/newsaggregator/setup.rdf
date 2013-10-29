@@ -974,6 +974,7 @@
     <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/seed_News_Aggregator">
         <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Seed"/>
         <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">News Aggregator</dc:title>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Seed News</rdfs:comment>
         <includes rdf:resource="http://bioinformatics.ua.pt/coeus/resource/entity_News"/>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">News Aggregator</rdfs:label>
     </owl:NamedIndividual>
