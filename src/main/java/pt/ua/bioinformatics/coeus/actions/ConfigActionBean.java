@@ -330,7 +330,7 @@ public class ConfigActionBean implements ActionBean {
             String path = Config.getPath() + "env_" + method + "/";
 
             updateFilesFromMap(path);
-            applyEnvironment(path, Config.getPath(), "env_" + method);
+            applyEnvironment(path, Config.getPath(), "env_" + method,true);
 
             //Load new settings
             Boot.resetConfig();
@@ -359,9 +359,9 @@ public class ConfigActionBean implements ActionBean {
      * @param environment
      * @throws IOException
      */
-    public void applyEnvironment(String src, String dest, String environment) throws IOException {
+    public void applyEnvironment(String src, String dest, String environment,Boolean copyFiles) throws IOException {
         //copy all files from enviroment to root dir
-        copyFolder(new File(src), new File(dest), null);
+        if(copyFiles) copyFolder(new File(src), new File(dest), null);
         JSONObject f = changeConfigValue("config", "environment", environment.split("env_", 2)[1]);
         //System.err.println(f.toJSONString());
         updateFile(f.toJSONString(), Config.getPath() + "config.js");
@@ -390,7 +390,7 @@ public class ConfigActionBean implements ActionBean {
 
             copyFolder(init, env, null);
             //change to this env
-            //changeEnvironment(envStr, Config.getPath(), name);
+            applyEnvironment(envStr, Config.getPath(), name, true);
             //apply values
             Boot.resetConfig();
             result.put("status", 100);
@@ -495,7 +495,7 @@ public class ConfigActionBean implements ActionBean {
             updateFilesFromMap(path);
             
             //change to this env
-            applyEnvironment(path, Config.getPath(), environment);
+            applyEnvironment(path, Config.getPath(), environment,true);
             
             //apply values
             Boot.resetConfig();
