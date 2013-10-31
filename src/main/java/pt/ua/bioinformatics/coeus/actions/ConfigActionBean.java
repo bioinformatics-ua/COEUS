@@ -769,6 +769,10 @@ public class ConfigActionBean implements ActionBean {
             //read local ontology TODO: FIX THAT
             String localOntology = context.getRequest().getScheme() + "://" + context.getRequest().getServerName() + ":" + context.getRequest().getServerPort() + context.getRequest().getContextPath() + "/ontology/";
             set.addAll(getOntologyProperties(localOntology));
+            
+            //read website ontology 
+            String siteOntology = "http://bioinformatics.ua.pt/coeus/ontology/";
+            set.addAll(getOntologyProperties(siteOntology));
 
             StringBuilder sb = new StringBuilder();
             for (String s : set) {
