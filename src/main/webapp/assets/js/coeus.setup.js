@@ -850,7 +850,7 @@ function publisherChange(mode) {
         var endpoint = '#editEndpoint';
         var driverEndpoint = '#editDriverEndpoint';
         var hostEndpoint = '#editHostEndpoint';
-        var dbEndpoint = '#editBbEndpoint';
+        var dbEndpoint = '#editDbEndpoint';
         var portEndpoint = '#editPortEndpoint';
         var userEndpoint = '#editUserEndpoint';
         var passwordEndpoint = '#editPasswordEndpoint';
@@ -884,19 +884,33 @@ function publisherChange(mode) {
         $(sqlEnpointForm).removeClass('hide');
         $(enpointForm).addClass('hide');
         var endpoint = $(endpoint).val();
-        //Endpoint example: jdbc:mysql://host:3306;database=name;user=user;password=pass
-
+        //Endpoint sqlserver example: jdbc:mysql://host:3306;database=name;user=user;password=pass
+        //Endpoint mysql example: jdbc:mysql://host:3306/coeus?user=user&password=pass
         if (endpoint !== "") {
             try {
-                var url = endpoint.split("://");
+                var url = endpoint.split("://"); //[jdbc:mysql] :// [host:3306/coeus?user=user&password=pass]
                 var driver = url[0].split("jdbc:")[1];
-                var cut = url[1].split(":");
-                var host = cut[0];
-                var cut2 = cut[1].split(";");
-                var port = cut2[0];
-                var db = cut2[1].split("database=")[1];
-                var user = cut2[2].split("user=")[1];
-                var password = cut2[3].split("password=")[1];
+                if (driver === "sqlserver") {
+                    //sqlserver
+                    var cut = url[1].split(":");
+                    var host = cut[0];
+                    var cut2 = cut[1].split(";");
+                    var port = cut2[0];
+                    var db = cut2[1].split("database=")[1];
+                    var user = cut2[2].split("user=")[1];
+                    var password = cut2[3].split("password=")[1];
+                } else {
+                    //mysql
+                    var splitHost = url[1].split(":"); //[host] : [3306/coeus?user=user&password=pass]
+                    var host = splitHost[0];
+                    var splitPort = splitHost[1].split("/"); // [3306] / [coeus?user=user&password=pass]
+                    var port = splitPort[0];
+                    var splitDB = splitPort[1].split("?");// [coeus] ? [user=user&password=pass]
+                    var db = splitDB[0];
+                    var user = splitDB[1].split("&")[0].split("=")[1];
+                    var password = splitDB[1].split("&")[1].split("=")[1];
+                }
+
             } catch (e) {
                 //ignore errors
             }
@@ -962,16 +976,29 @@ function refreshEnpoint(mode) {
         var endpoint = '#endpoint';
     }
 
-    var port = $(portEndpoint).val();
-    if (port !== "")
-        port = ":" + port;
-    var user = $(userEndpoint).val();
-    if (user !== "")
-        user = ";user=" + user;
-    var password = $(passwordEndpoint).val();
-    if (password !== "")
-        password = ";password=" + password;
-    var endpointFinal = "jdbc:" + $(driverEndpoint).val() + "://" + $(hostEndpoint).val() + port + ";database=" + $(dbEndpoint).val() + user + password;
+    if ($(driverEndpoint).val() === "sqlserver") {
+        var port = $(portEndpoint).val();
+        if (port !== "")
+            port = ":" + port;
+        var user = $(userEndpoint).val();
+        if (user !== "")
+            user = ";user=" + user;
+        var password = $(passwordEndpoint).val();
+        if (password !== "")
+            password = ";password=" + password;
+        var endpointFinal = "jdbc:" + $(driverEndpoint).val() + "://" + $(hostEndpoint).val() + port + ";database=" + $(dbEndpoint).val() + user + password;
+    } else {
+        var port = $(portEndpoint).val();
+        if (port !== "")
+            port = ":" + port;
+        var user = $(userEndpoint).val();
+        if (user !== "")
+            user = "user=" + user;
+        var password = $(passwordEndpoint).val();
+        if (password !== "")
+            password = "password=" + password;
+        var endpointFinal = "jdbc:" + $(driverEndpoint).val() + "://" + $(hostEndpoint).val() + port + "/" + $(dbEndpoint).val() + "?" + user + "&" + password;
+    }
     $(endpoint).val(endpointFinal);
 }
 

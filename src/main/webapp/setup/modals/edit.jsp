@@ -1,7 +1,7 @@
 <!-- Edit Modal 
 This modal is used to edit Seeds, Entities and Concepts because all of them share the same properties. 
 -->
-<div id="editModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="editModal" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button id="closeEditModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
         <h3>Edit <span id="editType">no type</span></h3>
@@ -12,7 +12,7 @@ This modal is used to edit Seeds, Entities and Concepts because all of them shar
          <p class="lead" >Entity URI - <span class="lead text-info" id="editURI" data-toggle="tooltip" title="A URI is formed when you fill the title box." >coeus: </span></p>
         <div id="editTitleForm" >
             <label class="control-label" for="title">Title</label>
-            <input id="editTitle" type="text" placeholder="Ex: Uniprot" > <i class="icon-question-sign" data-toggle="tooltip" title="The title (dc:title) property." ></i>
+            <input id="editTitle" type="text" placeholder="Ex: Uniprot" autofocus> <i class="icon-question-sign" data-toggle="tooltip" title="The title (dc:title) property." ></i>
             <input type="hidden" id="oldTitle" value=""/>
         </div>
         <div id="editLabelForm">

@@ -1,7 +1,7 @@
 <!-- Add Modal 
 This modal is used to add Seeds, Entities and Concepts because all of them share the same properties. 
 -->
-<div id="addModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="addModal" class="modal hide fade"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button id="closeAddModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
         <h3>Add <span id="addType">no type</span></h3>
@@ -13,7 +13,7 @@ This modal is used to add Seeds, Entities and Concepts because all of them share
 
         <div id="titleForm" >
             <label class="control-label" for="title">Title</label>
-            <input id="title" type="text" placeholder="Ex: Uniprot" onkeyup="changeURI('uri',$('#addType').html(), this.value);" > <i class="icon-question-sign" data-toggle="tooltip" title="The title (dc:title) property." ></i>
+            <input id="title" type="text" placeholder="Ex: Uniprot" onkeyup="changeURI('uri',$('#addType').html(), this.value);" autofocus> <i class="icon-question-sign" data-toggle="tooltip" title="The title (dc:title) property." ></i>
         </div>
         <div id="labelForm">
             <label class="control-label" for="label">Label</label>

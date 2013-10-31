@@ -70,6 +70,8 @@
             function selectEnv(env) {
                 $('#cleanModalLabel').html(env);
                 $('#removeModalLabel').html(env);
+                $('#resultRemove').html('');
+                $('#resultClean').html('');
             }
             function removeEnv() {
                 timer = setTimeout(function() {

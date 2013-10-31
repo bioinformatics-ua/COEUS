@@ -5,7 +5,7 @@
 --%>
 
 <!-- add Resource Modal -->
-<div id="addResourceModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+<div id="addResourceModal" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
     <div class="modal-header">
         <button id="closeAddResourceModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
         <h3>Add Resource</h3>
@@ -17,7 +17,7 @@
         <div class="row-fluid">
             <div id="resourceTitleForm" class="span6">
                 <label class="control-label" for="title">Title</label>
-                <input id="titleResource" type="text" placeholder="Ex: HGNC" onkeyup="changeURI('resourceURI', 'Resource', this.value);" > <i class="icon-question-sign" data-toggle="tooltip" title="The title (dc:title) of the Resource." ></i>
+                <input id="titleResource" type="text" placeholder="Ex: HGNC" onkeyup="changeURI('resourceURI', 'Resource', this.value);" autofocus> <i class="icon-question-sign" data-toggle="tooltip" title="The title (dc:title) of the Resource." ></i>
             </div>
             <div id="orderForm" class="span6"> 
                 <label class="control-label" for="label">Order</label>
@@ -102,7 +102,7 @@
         </div>
         <div id="queryForm"> 
             <label class="control-label" for="label">Query</label>
-            <input id="query" type="text" placeholder="Ex: //item"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:query property" ></i>
+            <textarea id="query" type="text" placeholder="Ex: //item"></textarea> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:query property" ></i>
         </div>
     </div>
 

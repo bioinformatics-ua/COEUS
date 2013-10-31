@@ -470,7 +470,7 @@
                                 <div class="row-fluid">
                                     <!-- Text input-->
                                     <div class="control-group span6">
-                                        <label class="control-label" for="Endpoint">Sparql Enpoint</label>
+                                        <label class="control-label" for="Endpoint">SPARQL Enpoint</label>
                                         <div class="controls">
                                             <input tabindex="3" id="Endpoint" name="Endpoint" type="text" placeholder="http://bioinformatics.ua.pt/coeus/sparql" class="input-xlarge">
                                             <p class="help-block">The URL of the SPARQL endpoint whose data we want to expose.</p>
@@ -591,10 +591,10 @@
 
                                     <!-- Text input-->
                                     <div class="control-group span6">
-                                        <label class="control-label" for="ApiKey">Api Key</label>
+                                        <label class="control-label" for="ApiKey">API Keys</label>
                                         <div class="controls">
                                             <input tabindex="5" id="ApiKey" name="ApiKey" type="text" placeholder="coeus|uavr" class="input-large">
-                                            <p class="help-block">REST Api Key</p>
+                                            <p class="help-block">REST API Key</p>
                                         </div>
                                     </div>
 

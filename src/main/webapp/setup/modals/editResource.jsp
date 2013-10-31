@@ -4,7 +4,7 @@
     Author     : sernadela
 --%>
 <!-- edit Resource Modal -->
-<div id="editResourceModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="editResourceModal" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button id="closeEditResourceModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
         <h3>Edit Resource</h3>
@@ -16,7 +16,7 @@
         <div class="row-fluid">
             <div id="editResourceTitleForm" class="span6">
                 <label class="control-label" for="title">Title</label>
-                <input id="editResourceTitle" type="text" placeholder="Ex: HGNC" > <i class="icon-question-sign" data-toggle="tooltip" title="The title (dc:title) of the Resource." ></i>
+                <input id="editResourceTitle" type="text" placeholder="Ex: HGNC" autofocus> <i class="icon-question-sign" data-toggle="tooltip" title="The title (dc:title) of the Resource." ></i>
                 <input type="hidden" id="oldResourceTitle" value=""/>
             </div>
 
@@ -118,7 +118,7 @@
         </div>
         <div id="editQueryForm"> 
             <label class="control-label" for="label">Query</label>
-            <input id="editQuery" type="text" placeholder="Ex: //item"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:query property" ></i>
+            <textarea id="editQuery" type="text" placeholder="Ex: //item"></textarea> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:query property" ></i>
             <input type="hidden" id="oldQuery" value=""/>
         </div>
 
