@@ -77,7 +77,7 @@
                 });
 
             });
-
+            
             function refresh() {
                 var seed = lastPath();
                 var qEntities = "SELECT DISTINCT ?entity {" + seed + " coeus:includes ?entity }";
@@ -168,6 +168,13 @@
                 } else {
                     $('#btnUnbuild').addClass("active");
                     $('#btnBuild').removeClass("active");
+                    
+                    clearInterval(interval);
+                    $('#integrationResult').html(generateHtmlMessage("Success!", "Integration is done.", "alert-success"));
+                    $('#integration').removeClass("hide");
+                    $('#integrationState').html("Integration finished.");
+                    $('#integrationProgress').addClass("hide");
+                    
                 }
             }
 
@@ -223,6 +230,7 @@
                 $('#info').html(generateHtmlMessage("ERROR!", text, "alert-error"));
             }
             function build() {
+                runIntegration();
                 callURL("../../config/build/", buildResult);
             }
             function buildResult(result) {
@@ -267,6 +275,15 @@
                     $('#info').html(generateHtmlMessage("Alert!", text, "alert-warning"));
                 }
             }
+            var interval;
+            function runIntegration() {
+                interval=setInterval(checkIntegration, 2000);
+            }
+            
+            function checkIntegration(){
+                console.log('checkIntegration');
+                callURL("../../config/getconfig/", fillHeader);
+            }
 
 
 
@@ -308,7 +325,7 @@
                         <a href="#addModal" data-toggle="modal" class="btn btn-large btn-block btn-success" onclick="prepareAdd('Entity', lastPath());">Add Entity <i class="icon-plus icon-white"></i></a>
                         <!--<a onclick="redirect('../entity/add/' + lastPath());" class="btn btn-large btn-block btn-success">Add Entity <i class="icon-plus icon-white"></i></a>-->
                         <a onclick="selectEntity();" class="btn btn-large btn-block btn-primary">Explorer <i class="icon-eye-open icon-white"></i></a>
-                        <a  onclick="build();" class="btn btn-large btn-block btn-warning"><small>(Re)</small>Build <i class="icon-hdd icon-white"></i></a>
+                        <a  onclick="build();" href="#integrationModal" data-toggle="modal" class="btn btn-large btn-block btn-warning"><small>(Re)</small>Build <i class="icon-hdd icon-white"></i></a>
                     </div>
                     <div class="well" style="max-width: 350px; margin: 0 auto 10px;">
                         <div class="btn-group btn-block text-center" data-toggle="buttons-radio">
@@ -331,10 +348,29 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
+
+        <div id="integrationModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button id="closeIntegrationModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 >Integration Process</h3>
+            </div>
+            <div class="modal-body">
+                <p id="integrationState">Integration is running...</p>
+                <div id="integrationProgress" class="progress progress-striped active">
+                    <div class="bar" style="width: 100%;"></div>
+                </div>
+
+                <div id="integrationResult"></div>
+
+            </div>
+
+            <div class="modal-footer" id="rmbtns">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Hide</button>
+                <button id="integration" class="btn btn-primary hide loading" onclick="window.location.reload();">Refresh <i class="icon-refresh icon-white"></i></button>
+            </div>
+        </div>
+
         <!-- Finally include modals -->
         <%@include file="/setup/modals/add.jsp" %>
         <%@include file="/setup/modals/addResource.jsp" %>
