@@ -560,10 +560,10 @@
                         <div class="span6">
 
                             <div id="propertySelectorsForm" > 
-                                <label class="control-label" for="label">Search Property</label>
-                                
-                                <input class="twitter-typeahead" id="typeahead" type="text" > 
-                                <i class="icon-question-sign" data-toggle="tooltip" title="Search for a property. After press Enter to add it to the list." ></i> 
+                                <label class="control-label" for="label">Search Property (and Press + to add)</label>
+                                <div class="input-append">
+                                <input class="twitter-typeahead" id="typeahead" type="text" ><button id="btnPlus" class="btn btn-success add-more" type="button" onclick="updateSelectorProperties();">+</button>
+                                </div>
                                 <label class="control-label" for="label"></label>
                                 <!--<a class="btn btn-small btn-success" onclick="updateSelectorProperties();" data-toggle="tooltip" title="Press this button or press Enter to add an property to the list.">Add to List <i class="icon-plus-sign icon-white"></i></a>-->
                                 <label class="control-label" for="dropdownprop">Property List</label>
