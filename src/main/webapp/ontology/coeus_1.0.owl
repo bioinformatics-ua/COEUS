@@ -539,6 +539,7 @@
         <dc:description rdf:datatype="&xsd;string">Endpoint for a given Resource.</dc:description>
         <dc:creator rdf:datatype="&xsd;string">Pedro Lopes pedrolopes@ua.pt</dc:creator>
         <dc:title rdf:datatype="&xsd;string">endpoint</dc:title>
+        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 

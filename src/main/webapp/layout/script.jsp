@@ -33,4 +33,4 @@
         document.body.appendChild(e);
     }
 </script>
-<script src="http://bioinformatics.ua.pt/coeus/assets/js/coeus.powered.js" type="text/javascript"></script>
+<script src="<c:url value="/assets/js/coeus.powered.js" />"></script>

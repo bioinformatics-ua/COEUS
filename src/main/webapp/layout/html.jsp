@@ -32,6 +32,8 @@
                                 <li><a href="<c:url value="/science/" />">Science</a></li>
 
                                 <li><a href="<c:url value="/sparqler/" />">SPARQL</a></li>
+                                
+                                <li><a href="<c:url value="/manager/seed/" />">Setup</a></li>
 
                                 <li><a data-toggle="modal" data-target="#contact" href="#contact">Contact</a></li>
                             </ul>
@@ -49,7 +51,7 @@
 
                 <div class="modal-body">
                     <address>
-                        <strong>COEUS, A/C Pedro Lopes</strong><br>
+                        <strong>COEUS, A/C Pedro Lopes & Pedro Sernadela</strong><br>
                         DETI/IEETA, University of Aveiro<br>
                         Campus Universitario de Santiago<br>
                         3810 - 193 Aveiro<br>
@@ -63,7 +65,9 @@
 
             <s:layout-component name="body">
             </s:layout-component>
-            <footer class="footer">
+            
+        </body>
+        <footer class="footer">
                 <div class="container">
                     <span class="span2 pull-right"><a href="#">Back to top</a></span>
                     <p>&nbsp;</p>
@@ -71,13 +75,12 @@
                         <br />
                         Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a>
                         <br />
-                        <small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a> <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback"><i class="icon-envelope"></i></a></small>
+                        <small>Under Development - <a data-toggle="modal" data-target="#contact" href="#contact">Team Contact</a> <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback"><i class="icon-envelope"></i></a></small>
                         <br />
                         <a href="http://getbootstrap.com/" title="Go to Bootstrap" target="_blank"><small>Layout with Bootstrap</small></a>
                     </p>
                 </div>
             </footer>
-        </body>
                 <s:layout-component name="scripts">
             <jsp:include page="script.jsp" />
         </s:layout-component>

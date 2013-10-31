@@ -34,7 +34,8 @@
         <servlet-class>org.joseki.http.Servlet</servlet-class>
         <init-param>
             <param-name>org.joseki.rdfserver.config</param-name>
-            <!-- News Aggregator --><param-value>joseki.ttl</param-value>
+            <!-- News Aggregator -->
+            <param-value>joseki.ttl</param-value>
             <!-- Proteinator <param-value>proteinator/joseki.ttl</param-value>-->
         </init-param>
     </servlet>
@@ -49,7 +50,8 @@
     <!-- pubby -->
     <context-param>
         <param-name>config-file</param-name>
-        <!-- News Aggregator--><param-value>classes/pubby.ttl</param-value>
+        <!-- News Aggregator-->
+        <param-value>classes/pubby.ttl</param-value>
         <!-- Proteinator <param-value>classes/proteinator/pubby.ttl</param-value>-->
     </context-param>
   
@@ -64,13 +66,13 @@
         <servlet-class>de.fuberlin.wiwiss.pubby.servlets.PageURLServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-<servlet>
+    <servlet>
         <servlet-name>WebURLServlet</servlet-name>
         <servlet-class>de.fuberlin.wiwiss.pubby.servlets.PageURLServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-     <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>WebURLServlet</servlet-name>
         <url-pattern>/resource/*</url-pattern>
     </servlet-mapping>
@@ -120,8 +122,42 @@
     </servlet>    
     
     <listener>
-	<listener-class>pt.ua.bioinformatics.coeus.common.HttpListener</listener-class>
+        <listener-class>pt.ua.bioinformatics.coeus.common.HttpListener</listener-class>
     </listener>
+    <listener>
+        <listener-class>pt.ua.bioinformatics.coeus.common.ExecutorContextListener</listener-class>
+    </listener>
+    
+    <!-- Security 
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>
+                Secured Setup
+            </web-resource-name>
+            <url-pattern>/config/*</url-pattern>
+            <url-pattern>/setup/*</url-pattern>
+            <url-pattern>/manager/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <description>
+                Only managers use this app
+            </description>
+            <role-name>manager-gui</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-role>
+        <role-name>manager-gui</role-name>
+    </security-role>
+    <login-config>
+      <auth-method>FORM</auth-method>
+      <form-login-config>
+        <form-login-page>/login.jsp</form-login-page>
+        <form-error-page>/login.jsp?f=error</form-error-page>
+      </form-login-config>
+    </login-config>-->
+    <!-- End Security -->
     
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

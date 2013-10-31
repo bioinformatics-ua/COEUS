@@ -108,7 +108,7 @@ public class UpdateActionBean implements ActionBean {
                 if (sub.indexOf(":") > 1) {
                     try {
                         if (pred.indexOf(":") > 1) {
-
+                            System.err.println(old_obj+" , "+new_obj);
                             // test old_obj
                             String xsd = "http://www.w3.org/2001/XMLSchema#";
                             Statement statToRemove = null;
@@ -142,8 +142,9 @@ public class UpdateActionBean implements ActionBean {
 
                             if (Boot.getAPI().containsStatement(statToRemove)) {
 
-                                Boot.getAPI().addStatement(statToAdd);
                                 Boot.getAPI().removeStatement(statToRemove);
+                                Boot.getAPI().addStatement(statToAdd);
+                                
 
                                 result.put("status", 100);
                                 result.put("message", "[COEUS][API][Update] Triples updated in the knowledge base.");

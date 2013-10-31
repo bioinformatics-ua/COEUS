@@ -3,6 +3,7 @@ package pt.ua.bioinformatics.coeus.common;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import pt.ua.bioinformatics.coeus.actions.ConfigActionBean;
 import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 
 /**
@@ -33,7 +35,7 @@ public class Config {
     private static boolean debug = false;
     private static boolean built = false;
     private static String path = "";
-    private static String environment = "development";
+    private static String environment = "default";
     private static ArrayList<String> apikeys = new ArrayList<String>();
 
     public static ArrayList<String> getApikeys() {
@@ -51,7 +53,6 @@ public class Config {
     public static void setEnvironment(String environment) {
         Config.environment = environment;
     }
-
     public static String getPath() {
         return path;
     }
@@ -192,7 +193,7 @@ public class Config {
                 predicates = (String) config.get("predicates");
                 environment = (String) config.get("environment");
                 apikeys.addAll(Arrays.asList(((String) config.get("apikey")).split("\\|")));
-                sdb = ((String) config.get("sdb")).replace(".ttl", "_" + environment + ".ttl");
+                sdb = ((String) config.get("sdb"));//.replace(".ttl", "_" + environment + ".ttl");
                 keyPrefix = (String) config.get("keyprefix");
                 JSONObject prefixes = (JSONObject) file.get("prefixes");
                 for (Object o : prefixes.keySet()) {
@@ -237,5 +238,49 @@ public class Config {
             Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new String(buffer);
+    }
+
+    /**
+     * Write new config.js file
+     *
+     * @param file
+     */
+    static void writeFile(JSONObject file) {
+        try {
+            FileWriter writer = new FileWriter(path + "config.js");
+            writer.write(file.toJSONString());
+            writer.flush();
+            writer.close();
+
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Config] config.js file updated.");
+            }
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Config] ERROR: updating config.js.");
+            }
+            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Change built property on config file 
+     *
+     * @param builder
+     */
+    static void setBuiltOnFile(boolean builder) {
+        try {
+            JSONObject f = Config.getFile();
+            JSONObject config = (JSONObject) f.get("config");
+            config.put("built", builder);
+            f.put("config", config);
+            writeFile(f);
+            Config.setBuilt(builder);
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][Config] ERROR: setBuiltOnFile.");
+            }
+            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

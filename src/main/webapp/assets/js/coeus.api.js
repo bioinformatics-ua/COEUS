@@ -34,7 +34,7 @@ function writeTriple(subject, predicate, object, key) {
  * @returns {undefined} */
 function updateTriple(subject, predicate, old_object, new_object, key) {
 
-    $.ajax({url: './api/' + key + '/update/' + subject + '/' + predicate + '/' + old_object+ ','+new_object, dataType: 'json'}).done(function(data) {
+    $.ajax({url: './api/' + key + '/update/' + subject + '/' + predicate + '/' + old_object + ',' + new_object, dataType: 'json'}).done(function(data) {
         if (data.status === 100) {
             console.log('[COEUS] data successfully updated in knowledge base.');
             // All OK function handler.
@@ -58,7 +58,7 @@ function updateTriple(subject, predicate, old_object, new_object, key) {
  * @returns {undefined} */
 function deleteTriple(subject, predicate, object, key) {
 
-    $.ajax({url: './api/' + key + '/delete/' + subject + '/' + predicate + '/' +object, dataType: 'json'}).done(function(data) {
+    $.ajax({url: './api/' + key + '/delete/' + subject + '/' + predicate + '/' + object, dataType: 'json'}).done(function(data) {
         if (data.status === 100) {
             console.log('[COEUS] data successfully deleted in knowledge base.');
             // All OK function handler.

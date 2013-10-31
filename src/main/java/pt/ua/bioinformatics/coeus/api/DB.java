@@ -1,5 +1,9 @@
 package pt.ua.bioinformatics.coeus.api;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -238,5 +242,54 @@ public class DB {
             return rs;
         }
 
+    }
+    
+     /**
+     * Create the DB and it table structure if not exists according to the giving parameters
+     * 
+     * @param url
+     * @param user
+     * @param pass
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws IOException 
+     */
+    public void createDB(String url, String user, String pass) throws ClassNotFoundException, SQLException, IOException {
+
+            Class.forName("com.mysql.jdbc.Driver");
+            url=url.replace("?autoReconnect=true","");
+            String[] urlSplited=url.split("/");
+            String db=urlSplited[urlSplited.length-1];
+            //System.out.println(db);
+            String jdbc=url.replace("/"+db, "") + "?allowMultiQueries=true&user=" + user + "&password=" + pass;
+            System.out.println(jdbc);
+            connection = DriverManager.getConnection(jdbc);
+            String script=readScript().replaceAll("coeusdb", db);
+            pStatement = connection.prepareStatement(script);
+            pStatement.execute();
+            pStatement.close();
+            connection.close();
+    }
+
+    /**
+     * Read the coeus.sql file and convert it to String
+     *
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public String readScript() throws FileNotFoundException, IOException {
+        StringBuilder sb = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new FileReader(DB.class.getResource("/").getPath() + "coeus.sql"));
+        String line = br.readLine();
+
+        while (line != null) {
+            sb.append(line);
+            sb.append('\n');
+            line = br.readLine();
+        }
+        br.close();
+        return sb.toString();
     }
 }

@@ -17,7 +17,8 @@
                     <ul class="nav nav-list bs-docs-sidenav affix-top" data-spy="affix">
                         <li><a href="#jbs">J Biomedical Semantics</a></li>
                         <li><a href="#white">White Paper</a></li>
-                        <li><a href="#swat4ls">SWAT4LS</a></li>
+                        <li><a href="#tutorial2013">SWAT4LS 2013</a></li>
+                        <li><a href="#swat4ls">SWAT4LS 2011</a></li>
                         <li><a href="#mixhs">MIX-HS</a></li>
                         <li><a href="#isemantics">I-SEMANTICS'11</a></li>
                     </ul>
@@ -44,6 +45,30 @@
                         </div>
 
                         <p><a class="btn btn-small btn-inverse" href="<c:url value="/assets/files/coeus_whitepaper.pdf" />">Get Whitepaper <i class="icon-file icon-white"></i></a><br></p>
+                    </section>
+
+                    <section id="tutorial2013">
+                        <div class="page-header">
+                            <h1>SWAT4LS 2013 Workshop</h1>
+                        </div>
+                        <p><a href="http://www.swat4ls.org/workshops/edinburgh2013/" target="_blank">Visit website</a><br>
+                            <strong>December 9-12, 2013</strong> Edinburgh, United Kingdom</p>
+                        <p><strong>Intro</strong></p>
+                        <p>Since 2008, the SWAT4LS Workshop (<a href="http://www.swat4ls.org">http://www.swat4ls.org</a>) has provided a platform for the presentation and discussion of the benefits and limits of applying web-based information systems and semantic technologies in the domains of health care and life sciences. The next edition of SWAT4LS will be held in Edinburgh, UK, December 9-12, 2013, preceded by tutorials and followed by hackathon / model-a-thin. All information can be found at <a href="http://www.swat4ls.org/workshops/edinburgh2013/">http://www.swat4ls.org/workshops/edinburgh2013/</a>.</p>
+                        <p><strong>The COEUS Platform</strong></p>
+                        <p>On the tutorial day, the <em><strong>COEUS - Semantic Web Application Framework</strong></em> will be presented. This platform targets the quick creation of new biomedical applications. The framework combines the latest Semantic Web technologies with Rapid Application Development ideals to provide, in a single package, the required tools and algorithms to build a new semantic web information system from scratch.
+                        <p>In this tutorial/hands-on session, we will guide you through the process of creating your own custom COEUS knowledge base. You will learn how to:</p>
+                        <ol>
+                            <li>Create a new COEUS instance</li>
+                            <li>From GitHub download to web deployment</li>
+                            <li>Integrate data from heterogeneous *omics sources into your COEUS knowledge base</li>
+                            <li>Create your mashup merging multiple datasets</li>
+                            <li>Explore COEUS API to access aggregated data</li>
+                            <li>Build new rich web information systems using the API</li>
+                            <li>Access knowledge federation through the SPARQL and LinkedData interfaces
+                            </li>
+                        </ol>
+                        Further information regarding this tutorial is available online at <a href="http://www.swat4ls.org/workshops/edinburgh2013/scientific-programme/">http://www.swat4ls.org/workshops/edinburgh2013/scientific-programme/</a>. </p>
                     </section>
 
                     <section id="swat4ls">

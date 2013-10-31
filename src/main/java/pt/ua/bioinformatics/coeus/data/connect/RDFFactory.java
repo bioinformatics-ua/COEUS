@@ -8,6 +8,7 @@ import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.net.URL;
 import java.net.URLConnection;
@@ -158,6 +159,8 @@ public class RDFFactory implements ResourceFactory {
         boolean success = false;
         try {
             com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
+            Statement statementToRemove=api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
+            api.removeStatement(statementToRemove);
             api.addStatement(resource, Predicate.get("coeus:built"), true);
             success = true;
             if (Config.isDebug()) {

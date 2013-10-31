@@ -92,6 +92,7 @@ public class WriteActionBean implements ActionBean {
                             //verify if is a xsd type
                             if (obj.startsWith("xsd:")) {
                                 String[] old = obj.split(":", 3);
+                                System.err.println(obj);
                                 Literal l = Boot.getAPI().getModel().createTypedLiteral(old[2], xsd + old[1]);
                                 statToAdd = Boot.getAPI().getModel().createLiteralStatement(Boot.getAPI().createResource(PrefixFactory.decode(sub)), Predicate.get(pred), l);
                             } else if (obj.indexOf(":") > 1) {
