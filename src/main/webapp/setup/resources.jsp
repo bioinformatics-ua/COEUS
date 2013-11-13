@@ -5,8 +5,8 @@
 --%>
 
 <%@include file="/layout/taglib.jsp" %>
-<s:layout-render name="/setup/html.jsp">
-    <s:layout-component name="title">COEUS Setup</s:layout-component>
+<s:layout-render name="/layout/html.jsp">
+    <s:layout-component name="title">COEUS</s:layout-component>
     <s:layout-component name="custom_scripts">
         <script src="<c:url value="/assets/js/jquery.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
@@ -16,15 +16,12 @@
             $(document).ready(function() {
                 //header name
                 callURL("../../config/getconfig/", fillHeader);
-                
+
                 var concept = lastPath();
                 refresh();
                 var qresource = "SELECT DISTINCT ?seed ?entity {" + concept + " coeus:hasEntity ?entity . ?entity coeus:isIncludedIn ?seed }";
                 queryToResult(qresource, fillBreadcumb);
 
-
-                //activate tooltip (bootstrap-tooltip.js is need)
-                $('.icon-question-sign').tooltip();
                 //Associate Enter key:
                 document.onkeypress = function(event) {
                     //Enter key pressed
@@ -38,18 +35,18 @@
                     }
                 };
             });
-            
+
             function fillBreadcumb(result) {
                 console.log(result);
                 var seed = result[0].seed.value;
                 var entity = result[0].entity.value;
                 seed = "coeus:" + splitURIPrefix(seed).value;
                 entity = "coeus:" + splitURIPrefix(entity).value;
-                $('#breadSeed').html('<a href="../seed/' + seed + '">Dashboard</a> <span class="divider">/</span>');
-                $('#breadEntities').html('<a href="../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
-                $('#breadConcepts').html('<a href="../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
+                $('#breadSeed').html('<a href="../seed/' + seed + '">Dashboard</a>');
+                $('#breadEntities').html('<a href="../entity/' + seed + '">Entities</a> ');
+                $('#breadConcepts').html('<a href="../concept/' + entity + '">Concepts</a> ');
             }
-            
+
             function refresh() {
                 var qresource = "SELECT DISTINCT ?resource ?c ?order ?built ?label{" + lastPath() + " coeus:hasResource ?resource . ?resource dc:title ?c . ?resource coeus:order ?order . ?resource rdfs:label ?label . OPTIONAL{ ?resource coeus:built ?built }}";
                 queryToResult(qresource, fillListOfResources);
@@ -63,82 +60,80 @@
                     var built = '<span class="label label-success">Built</span>';
                     if (result[key].built === undefined || result[key].built.value === "false")
                         built = '<span class="label ">not built</span>';
-                    var a = '<tr><td><a href="../../resource/' + splitURIPrefix(result[key].resource.value).value + '">'
+                    var a = '<tr><td><a class="tip" data-toggle="tooltip" title="View in browser" href="../../resource/' + splitURIPrefix(result[key].resource.value).value + '">'
                             + splitURIPrefix(result[key].resource.value).value + '</a> ' + built + '</td><td>'
                             + result[key].c.value + '</td><td>'
-                    + result[key].label.value + '</td><td>'
+                            + result[key].label.value + '</td><td>'
                             + result[key].order.value + '</td><td>'
                             + '<div class="btn-group">'
-                            + '<a class="btn btn" href="#editResourceModal" data-toggle="modal" onclick="prepareResourceEdit(\'coeus:' + splitURIPrefix(result[key].resource.value).value + '\');">Edit <i class="icon-edit"></i></a>'
-                            + '<a class="btn btn" href="#removeModal" data-toggle="modal" onclick="selectToRemove(\'coeus:' + splitURIPrefix(result[key].resource.value).value + '\');">Remove <i class="icon-trash"></i></a> '
+                            + '<a class="btn btn-default" href="#editResourceModal" data-toggle="modal" onclick="prepareResourceEdit(\'coeus:' + splitURIPrefix(result[key].resource.value).value + '\');">Edit <i class="fa fa-edit"></i></a>'
+                            + '<a class="btn btn-default" href="#removeModal" data-toggle="modal" onclick="selectToRemove(\'coeus:' + splitURIPrefix(result[key].resource.value).value + '\');">Remove <i class="fa fa-trash-o"></i></a> '
                             + '</div>'
-                            + ' <a class="btn btn-warning" href="../selector/coeus:' + splitURIPrefix(result[key].resource.value).value + '">Configuration  <i class="icon-wrench icon-white"></i></a> '
+                            + ' <a class="btn btn-warning tip" data-toggle="tooltip" title="Resource configuration" href="../selector/coeus:' + splitURIPrefix(result[key].resource.value).value + '">Configuration  <i class="fa fa-wrench icon-white"></i></a> '
                             //+ ' <a class="btn btn-info">Selectors</a>'
                             //+ '<a href="#removeModal" role="button" data-toggle="modal" onclick="selectEntity(\'' + json.results.bindings[key].e.value + '\')">Remove</a>'
                             + '</td></tr>';
                     $('#resources').append(a);
                 }
+                tooltip();
             }
 
             // Callback to generate the pages header 
             function fillHeader(result) {
-                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+                $('#header').html('<h1><span class="tip" data-toggle="tooltip" title="Concept URI">' + lastPath() + '</span><small id="env" class="pull-right tip" data-toggle="tooltip" title="Selected environment">  ' + result.config.environment + '</small></h1>');
                 $('#apikey').html(result.config.apikey);
                 var urlPrefix = "../../api/" + getApiKey();
                 cleanUnlikedTriples(urlPrefix);
             }
             //Edit functions
-            
+
             //End of Edit functions
-            
+
         </script>
     </s:layout-component>
     <s:layout-component name="body">
 
         <div class="container">
-            <br><br>
-            <div id="header" class="page-header">
-
-            </div>
+            <div id="header" class="page-header"></div>
             <div id="apikey" class="hide"></div>
             <ul class="breadcrumb">
-                <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
-                <li id="breadSeeds"><a href="../seed/">Seeds</a> <span class="divider">/</span> </li>
+                <li id="breadHome"><i class="glyphicon glyphicon-home"></i></li>
+                <li id="breadSeeds"><a href="../seed/">Seeds</a> </li>
                 <li id="breadSeed"></li>
                 <li id="breadEntities"></li>
                 <li id="breadConcepts"></li>
                 <li class="active">Resources</li>
             </ul>
-            <div class="row-fluid">
-                <div class="span6">
+            <div class="row">
+                <div class="col-md-6">
                     <h3>List of Resources</h3>
                 </div>
-                <div class="span6 text-right" >
+                <div class="col-md-6 text-right" >
                     <div class="btn-group">
-                        <a href="#addResourceModal" data-toggle="modal" class="btn btn-success" onclick="prepareAddResourceModal(lastPath());">Add Resource <i class="icon-plus icon-white"></i></a>
+                        <a href="#addResourceModal" data-toggle="modal" class="btn btn-success" onclick="prepareAddResourceModal(lastPath());">Add Resource <i class="fa fa-plus-circle"></i></a>
                     </div>
                 </div>
 
-
-                <table class="table table-hover">
-
-                    <thead>
-                        <tr>
-                            <th>Resource</th>
-                            <th>Title</th>
-                            <th>Label</th>
-                            <th>Order</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resources">
-
-                    </tbody>
-                </table>
-
-
-
             </div>
+
+            <table class="table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Resource</th>
+                        <th>Title</th>
+                        <th>Label</th>
+                        <th>Order</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="resources">
+
+                </tbody>
+            </table>
+
+            
+
         </div>
         <%@include file="/setup/modals/addResource.jsp" %>
         <%@include file="/setup/modals/editResource.jsp" %>

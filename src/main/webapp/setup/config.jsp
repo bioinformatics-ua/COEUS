@@ -5,7 +5,7 @@
 --%>
 
 <%@include file="/layout/taglib.jsp" %>
-<s:layout-render name="/setup/html.jsp">
+<s:layout-render name="/layout/html.jsp">
     <s:layout-component name="title">COEUS Setup</s:layout-component>
     <s:layout-component name="custom_scripts"> 
         <script src="<c:url value="/assets/js/jquery.js" />"></script>
@@ -309,11 +309,18 @@
             function upEnvFail(jqXHR, textStatus) {
                 $('#resultUpEnv').html(generateHtmlMessage("Error!", textStatus, "alert-error"));
             }
+            
+            function reload(){
+                var url="../../../manager/text/reload?path=/coeus";
+                callURL(url, function (result){
+                    console.log(result);
+                });
+            }
 
         </script>
     </s:layout-component>
     <s:layout-component name="body">
-        <br/><br/>
+      
         <div class="container">
 
             <div id="header" class="page-header">
@@ -333,7 +340,7 @@
                     <li id="litab4" ><a >4. Pubby <i class="icon-chevron-right"></i></a></li>
                     <li id="litab5" ><a >5. Model <i class="icon-chevron-right"></i></a></li>
                     <li id="litab6"><a >6. Prefixes <i class="icon-chevron-right"></i></a></li>
-                    <li id="litab7" ><a >7. Finish</a></li>
+                    <li id="litab7" href="#tab7" data-toggle="tab"><a >7. Finish</a></li>
                 </ul>
                 <div class="tab-content" style="min-height: 300px">
                     <div class="tab-pane active" id="tab1" >
@@ -711,10 +718,10 @@
                     </div> 
                     <div class="tab-pane" id="tab7">
                         <div class="text-center" style="height: 100px">
-                            <p>You have <span class="text-success">successful finished</span> the Setup Wizard. You can now start build your application model.</p>
-                            <p class="text-error">Warning: It is recommended that you restart your application server to apply the new configurations.</p>
+                            <p>You have <span class="text-success">successfully finished</span> the Setup Wizard. You can now start build your application model.</p>
+                            <p class="text-error">Warning: It is recommended that you reload your application settings to apply the new configurations.</p>
 
-                            <a tabindex="1" id="btnStartBuild" href="../seed/" class="btn btn-info btn-large" type="button">Build Model <i class="icon-home icon-white"></i></a>
+                            <a tabindex="1" id="btnStartBuild" href="../seed/" onclick="reload();" class="btn btn-info btn-large" type="button">Apply and start using COEUS<i class="icon-home icon-white"></i></a>
 
                         </div>
                         <div class="text-center" style="height: 200px">
@@ -760,6 +767,5 @@
             </div>
 
         </div>
-
     </s:layout-component>
 </s:layout-render>

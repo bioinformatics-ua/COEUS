@@ -5,55 +5,15 @@
 --%>
 
 <%@include file="/layout/taglib.jsp" %>
-<s:layout-render name="/setup/html.jsp">
+<s:layout-render name="/layout/html.jsp">
     <s:layout-component name="title">COEUS Setup</s:layout-component>
     <s:layout-component name="custom_scripts">
         <script src="<c:url value="/assets/js/jquery.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.setup.js" />"></script>
+        <script src="<c:url value="/assets/js/bootstrap-tooltip.js" />"></script>
         <script type="text/javascript">
-            /*function appendConcept(data, query, key) {
-             $.get(query, function(dataconcepts, status) {
-             var c = '';
-             for (var k = 0, s = dataconcepts.results.bindings.length; k < s; k++) {
-             c += '<li>' + dataconcepts.results.bindings[k].c.value + '</li>';
-             }
-             $('#' + data[key]).append(c);
-             console.log('Append on #' + data[key] + ': ' + c);
-             }, 'json');
-             }
-             
-             function fillConcepts(data) {
-             console.log('Concepts: ' + data);
-             for (var key = 0, size = data.length; key < size; key++) {
-             var q = "PREFIX+coeus%3A+%3Chttp%3A%2F%2Fbioinformatics.ua.pt%2Fcoeus%2Fresource%2F%3E%0D%0APREFIX+dc%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%3E%0D%0A%0D%0ASELECT+DISTINCT+%3Fc+%3Fconcept+%7B%3Fconcept+coeus%3AhasEntity+coeus%3Aentity_" + data[key] + "+.+%3Fconcept+dc%3Atitle+%3Fc%7D";
-             var query = "../sparql?query=" + q + "&output=json";
-             appendConcept(data, query, key);
-             }
-             }
-             
-             function fillEntities() {
-             var query = "PREFIX+coeus%3A+%3Chttp%3A%2F%2Fbioinformatics.ua.pt%2Fcoeus%2Fresource%2F%3E%0D%0APREFIX+dc%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%3E%0D%0A%0D%0ASELECT+DISTINCT+%3Fe+%3Fentity+%7B%3Fs+coeus%3AhasEntity+%3Fentity+.+%3Fentity+dc%3Atitle+%3Fe%7D";
-             var q = "../sparql?query=" + query + "&output=json";
-             var e = '';
-             $.ajax({url: q, dataType: 'json'}).done(function(data) {
-             var array = new Array();
-             for (var key = 0, size = data.results.bindings.length; key < size; key++) {
-             
-             array[key] = data.results.bindings[key].e.value;
-             
-             e += '<p class="text-info">'
-             + array[key] + '<ul id=' + array[key] + '></ul></p>';
-             
-             }
-             $('#concepts').append(e);
-             fillConcepts(array);
-             
-             }).fail(function(jqXHR, textStatus) {
-             console.log('[COEUS] unable to complete request. ' + textStatus);
-             // Server communication error function handler.
-             });
-             }*/
+
             $(document).ready(function() {
                 //get seed from url
 
@@ -77,7 +37,7 @@
                 });
 
             });
-            
+
             function refresh() {
                 var seed = lastPath();
                 var qEntities = "SELECT DISTINCT ?entity {" + seed + " coeus:includes ?entity }";
@@ -101,16 +61,18 @@
                     var resource = auxResource.value;
                     var prefix = getPrefix(auxResource.namespace);
                     arrayOfConcepts[i] = resource;
-                    c += '<p class="text-info"><a href="../../resource/' + resource + '"><i class="icon-search"></i></a> '
-                            + resource
-                            + ' <a href="#editResourceModal" data-toggle="modal" onclick="prepareResourceEdit(\'' + prefix + ':' + resource + '\');"><i class="icon-edit"></i></a>'
-                            + ' <a href="../selector/' + prefix + ':' + resource + '"><i class="icon-wrench"></i></a>'
-                            + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + prefix + ':' + resource + '\')"><i class="icon-trash"></i></a>'
-                            + '</p>';
+                    c += '<p class="text-info treeitem"><a href="../../resource/' + resource + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
+                            + resource + '<span class="showonhover">'
+                            + ' <a href="#editResourceModal" data-toggle="modal" onclick="prepareResourceEdit(\'' + prefix + ':' + resource + '\');"><sub><i class="black fa fa-edit fa-2x tip" data-toggle="tooltip" title="Edit"></i></sub></a>'
+                            + ' <a href="../selector/' + prefix + ':' + resource + '"><sub><i class="black fa fa-wrench fa-2x tip" data-toggle="tooltip" title="Configuration" ></i></sub></a>'
+                            + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + prefix + ':' + resource + '\')"><sub><i class="black fa fa-trash-o fa-2x tip" data-toggle="tooltip" title="Delete"></i></sub></a>'
+                            + '</span></p>';
                 }
                 //console.log(entity);
                 $('#' + concept).append(c);
                 //console.log('Append on #' + entity + ': ' + c);
+
+                tooltip();
 
             }
 
@@ -123,15 +85,15 @@
                     var prefix = getPrefix(auxConcept.namespace);
                     var all = prefix + ':' + concept;
                     arrayOfConcepts[i] = concept;
-                    c += '<p class="text-warning">'
-                            + '<a href="../../resource/' + concept + '"><i class="icon-search"></i></a> '
-                            + concept
+                    c += '<p class="text-warning treeitem">'
+                            + '<a href="../../resource/' + concept + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
+                            + concept + '<span class="showonhover">'
                             //+ ' <a href="../concept/edit/' + prefix + ':' + concept + '"><i class="icon-edit"></i></a>'
-                            + ' <a href="#editModal" data-toggle="modal" onclick="prepareEdit(\'' + all + '\');"><i class="icon-edit"></i></a>'
+                            + ' <a href="#editModal" data-toggle="modal" onclick="prepareEdit(\'' + all + '\');"><sub><i class="black fa fa-edit fa-2x tip" data-toggle="tooltip" title="Edit"></i></sub></a>'
                             //+ ' <a href="../resource/add/' + all + '"><i class="icon-plus-sign"></i></a>'
-                            + ' <a href="#addResourceModal" data-toggle="modal" onclick="prepareAddResourceModal(\'' + all + '\');"><i class="icon-plus-sign"></i></a>'
-                            + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + all + '\')"><i class="icon-trash"></i></a>'
-                            + '</p><ul id="' + concept + '"></ul>';
+                            + ' <a href="#addResourceModal" data-toggle="modal" onclick="prepareAddResourceModal(\'' + all + '\');"><sub><i class="black fa fa-plus-circle fa-2x tip" data-toggle="tooltip" title="Add Resource" ></i></sub></a>'
+                            + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + all + '\')"><sub><i class="black fa fa-trash-o fa-2x tip" data-toggle="tooltip" title="Delete"></i></sub></a>'
+                            + '</span></p><ul id="' + concept + '"></ul>';
                 }
                 //console.log(entity);
                 $('#' + entity).append(c);
@@ -140,6 +102,7 @@
                 for (i in arrayOfConcepts) {
                     queryResources(arrayOfConcepts[i]);
                 }
+                tooltip();
             }
 
             function selectEntity() {
@@ -159,7 +122,7 @@
 
             // Callback to generate the pages header 
             function fillHeader(result) {
-                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+                $('#header').html('<h1><span class="tip" data-toggle="tooltip" title="Seed URI">' + lastPath() + '</span><small id="env" class="pull-right tip" data-toggle="tooltip" title="Selected environment"> ' + result.config.environment + '</small></h1>');
                 $('#apikey').html(result.config.apikey);
                 var built = result.config.built;
                 if (built == false) {
@@ -168,14 +131,15 @@
                 } else {
                     $('#btnUnbuild').addClass("active");
                     $('#btnBuild').removeClass("active");
-                    
+
                     clearInterval(interval);
                     $('#integrationResult').html(generateHtmlMessage("Success!", "Integration is done.", "alert-success"));
                     $('#integration').removeClass("hide");
                     $('#integrationState').html("Integration finished.");
                     $('#integrationProgress').addClass("hide");
-                    
+
                 }
+                tooltip();
             }
 
             function fillEntities(result) {
@@ -190,16 +154,16 @@
                     var prefix = getPrefix(auxEntity.namespace);
                     arrayOfEntities[key] = entity;
 
-                    e += '<p class="text-success">'
-                            + '<a href="../../resource/' + entity + '"><i class="icon-search"></i></a> '
-                            + entity
-                            + ' <a href="#editModal" data-toggle="modal" onclick="prepareEdit(\'' + prefix + ":" + entity + '\');"><i class="icon-edit"></i></a>'
+                    e += '<p class="text-success treeitem">'
+                            + '<a href="../../resource/' + entity + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
+                            + entity + '<span class="showonhover">'
+                            + ' <a href="#editModal" data-toggle="modal" onclick="prepareEdit(\'' + prefix + ":" + entity + '\');"><sub><i class="black fa fa-edit fa-2x tip" data-toggle="tooltip" title="Edit" ></i></sub></a>'
                             // + ' <a href="../entity/edit/' + prefix + ":" + entity + '"><i class="icon-edit"></i></a> '
                             // + ' <a href="../concept/add/' + prefix + ":" + entity + '"><i class="icon-plus-sign"></i></a> '
-                            + ' <a href="#addModal" data-toggle="modal" onclick="prepareAdd(\'Concept\',\'' + prefix + ":" + entity + '\');"><i class="icon-plus-sign"></i></a>'
+                            + ' <a href="#addModal" data-toggle="modal" onclick="prepareAdd(\'Concept\',\'' + prefix + ":" + entity + '\');"><sub><i class="black fa fa-plus-circle fa-2x tip" data-toggle="tooltip" title="Add Concept" ></i></sub></a>'
 
-                            + ' <a href="#removeModal" data-toggle="modal" onclick="selectToRemove(\'' + prefix + ":" + entity + '\')"><i class="icon-trash"></i></a>'
-                            + '<ul id="' + entity + '"></ul></p>';
+                            + ' <a href="#removeModal" data-toggle="modal" onclick="selectToRemove(\'' + prefix + ":" + entity + '\')"><sub><i class="black fa fa-trash-o fa-2x tip" data-toggle="tooltip" title="Delete"></i></sub></a>'
+                            + '</span><ul id="' + entity + '"></ul></p>';
 
                 }
                 $('#kb').append(e);
@@ -209,6 +173,7 @@
                     //$('#addentity').append('<option>' + arrayOfEntities[k] + '</option>');
                     queryConcepts(arrayOfEntities[k]);
                 }
+                tooltip();
             }
 
             function changeSeed() {
@@ -277,10 +242,10 @@
             }
             var interval;
             function runIntegration() {
-                interval=setInterval(checkIntegration, 2000);
+                interval = setInterval(checkIntegration, 2000);
             }
-            
-            function checkIntegration(){
+
+            function checkIntegration() {
                 console.log('checkIntegration');
                 callURL("../../config/getconfig/", fillHeader);
             }
@@ -292,57 +257,72 @@
     <s:layout-component name="body">
 
         <div class="container">
-            <br><br>
-            <div id="header" class="page-header">
-
-            </div>
+            <div id="header" class="page-header"></div>
             <div id="apikey" class="hide"></div>
-            <ul class="breadcrumb">
-                <li id="breadSeed"><i class="icon-home"></i> <span class="divider">/</span> <a href="../seed/">Seeds</a> <span class="divider">/</span></li>
+            <ol class="breadcrumb">
+                <li><span class="glyphicon glyphicon-home"></span>
+                </li>
+                <li id="breadSeed"> <a href="../seed/">Seeds</a> 
+                </li>
                 <li class="active">Dashboard</li>
-            </ul>
+            </ol>
             <div id="info"></div>
-            <div class="row-fluid">
-                <div class="span6">
-                    <h4>Knowledge Base <small>(Entity-Concept-Resource)</small> <span class="badge" id="triples">0</span></h4>
-                    <br/>
-                    <div id="kb" >
+            <div class="row">
+                <div class="col-md-6">
+                    <h4><span class="tip" data-toggle="tooltip" title="Hover in the tree elements to make changes">Knowledge Base</span> <small class="tip" data-toggle="tooltip" title="Model structure">(Entity-Concept-Resource)</small> <span class="badge tip" id="triples" data-toggle="tooltip" title="Total of Items (triples)">0</span></h4>
+                    <br />
+                    <div id="kb">
                         <!--<p class="text-info">Disease</p>
-                        <ul>
-                            <li>OMIM <span class="badge">1123</span></li>
-                            <li>Orphanet <span class="badge">133</span></li>
-                        </ul>
-                        <p class="text-info">Drug</p>
-                        <ul>
-                            <li>PharmGKB <span class="badge">22331</span></li>
-                        </ul>-->
+        
+                                <ul>
+        
+                                    <li>OMIM <span class="badge">1123</span></li>
+        
+                                    <li>Orphanet <span class="badge">133</span></li>
+        
+                                </ul>
+        
+                                <p class="text-info">Drug</p>
+        
+                                <ul>
+        
+                                    <li>PharmGKB <span class="badge">22331</span></li>
+        
+                                </ul>-->
                     </div>
+                    <a href="#addModal" data-toggle="modal" class="tip btn btn-xs btn-success" onclick="prepareAdd('Entity', lastPath());" data-toggle="tooltip" title="Add entities to build/expand your model"><i class="glyphicon glyphicon-plus icon-white"></i></a>
                 </div>
-                <div class="span6 ">
+                <div class="col-md-6 ">
                     <h4>Actions</h4>
-
-                    <div class="well" style="max-width: 350px; margin: 0 auto 10px;">
-                        <a href="#addModal" data-toggle="modal" class="btn btn-large btn-block btn-success" onclick="prepareAdd('Entity', lastPath());">Add Entity <i class="icon-plus icon-white"></i></a>
-                        <!--<a onclick="redirect('../entity/add/' + lastPath());" class="btn btn-large btn-block btn-success">Add Entity <i class="icon-plus icon-white"></i></a>-->
-                        <a onclick="selectEntity();" class="btn btn-large btn-block btn-primary">Explorer <i class="icon-eye-open icon-white"></i></a>
-                        <a  onclick="build();" href="#integrationModal" data-toggle="modal" class="btn btn-large btn-block btn-warning"><small>(Re)</small>Build <i class="icon-hdd icon-white"></i></a>
+                    <div class="well" style="max-width: 350px; margin: 0 auto 10px;"> <a href="#addModal" data-toggle="modal" class="btn btn-lg btn-block btn-success"
+                                                                                         onclick="prepareAdd('Entity', lastPath());">Add Entity <i class="glyphicon glyphicon-plus icon-white"></i></a>
+                        <!--<a
+                        onclick="redirect('../entity/add/' + lastPath());" class="btn btn-lg btn-block
+                        btn-success">Add Entity <i class="glyphicon glyphicon-plus icon-white"></i></a>--> <a onclick="selectEntity();" class="btn btn-lg btn-block btn-primary">Explorer <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                        <a
+                            onclick="build();" href="#integrationModal" data-toggle="modal" class="btn btn-lg btn-block btn-warning"><small>(Re)</small>Build <i class="glyphicon glyphicon-hdd icon-white"></i>
+                        </a>
                     </div>
                     <div class="well" style="max-width: 350px; margin: 0 auto 10px;">
-                        <div class="btn-group btn-block text-center" data-toggle="buttons-radio">
-                            <a type="button" id="btnBuild" onclick="callURL('../../config/changebuilt/false', changeBuiltResult.bind(this, 'false'), changeBuiltResult.bind(this, 'false'), showInfoError);" class="btn btn-large ">KB not Built</a>
-                            <a type="button" id="btnUnbuild" onclick="callURL('../../config/changebuilt/true', changeBuiltResult.bind(this, 'true'), changeBuiltResult.bind(this, 'true'), showInfoError);" class="btn btn-large ">KB is Built</a>
+                        <div class="btn-group btn-block text-center" data-toggle="buttons-radio"> <a type="button" id="btnBuild" onclick="callURL('../../config/changebuilt/false', changeBuiltResult.bind(this, 'false'), changeBuiltResult.bind(this, 'false'), showInfoError);"
+                                                                                                     class="btn btn-lg ">KB not Built</a>
+                            <a type="button" id="btnUnbuild" onclick="callURL('../../config/changebuilt/true', changeBuiltResult.bind(this, 'true'), changeBuiltResult.bind(this, 'true'), showInfoError);"
+                               class="btn btn-lg ">KB is Built</a>
+                        </div> <a onclick="unbuild();" class="btn btn-lg btn-block btn-inverse">UnBuild Resources <i class="glyphicon glyphicon-pencil icon-white"></i></a>
+                        <div
+                            class="btn-group btn-block btn-lg "> <a class="btn btn-block btn-lg dropdown-toggle" data-toggle="dropdown"
+                                                                href="#">
 
-                        </div>
-
-                        <a onclick="unbuild();" class="btn btn-large btn-block btn-inverse">UnBuild Resources <i class="icon-pencil icon-white"></i></a>
-                        <div class="btn-group btn-block btn-large ">
-                            <a class="btn btn-block btn-large dropdown-toggle" data-toggle="dropdown" href="#">
                                 Export
+
                                 <span class="caret"></span>
+
                             </a>
                             <ul class="dropdown-menu ">
-                                <li><a href="../../config/export/coeus.rdf">RDF</a></li>
-                                <li><a href="../../config/export/coeus.ttl">TTL</a></li>
+                                <li><a href="../../config/export/coeus.rdf">RDF</a>
+                                </li>
+                                <li><a href="../../config/export/coeus.ttl">TTL</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -350,27 +330,30 @@
             </div>
         </div>
 
-        <div id="integrationModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-header">
-                <button id="closeIntegrationModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                <h3 >Integration Process</h3>
-            </div>
-            <div class="modal-body">
-                <p id="integrationState">Integration is running...</p>
-                <div id="integrationProgress" class="progress progress-striped active">
-                    <div class="bar" style="width: 100%;"></div>
+        <div id="integrationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="closeIntegrationModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 class="modal-title">Integration Process</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p id="integrationState">Integration is running...</p>
+                        <div id="integrationProgress" class="progress progress-striped active">
+                            <div class="bar" style="width: 100%;"></div>
+                        </div>
+
+                        <div id="integrationResult"></div>
+
+                    </div>
+
+                    <div class="modal-footer" id="rmbtns">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Hide</button>
+                        <button id="integration" class="btn btn-primary hide loading" onclick="window.location.reload();">Refresh <i class="icon-refresh icon-white"></i></button>
+                    </div>
                 </div>
-
-                <div id="integrationResult"></div>
-
-            </div>
-
-            <div class="modal-footer" id="rmbtns">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Hide</button>
-                <button id="integration" class="btn btn-primary hide loading" onclick="window.location.reload();">Refresh <i class="icon-refresh icon-white"></i></button>
             </div>
         </div>
-
         <!-- Finally include modals -->
         <%@include file="/setup/modals/add.jsp" %>
         <%@include file="/setup/modals/addResource.jsp" %>

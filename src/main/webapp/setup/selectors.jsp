@@ -5,8 +5,8 @@
 --%>
 
 <%@include file="/layout/taglib.jsp" %>
-<s:layout-render name="/setup/html.jsp">
-    <s:layout-component name="title">COEUS Setup</s:layout-component>
+<s:layout-render name="/layout/html.jsp">
+    <s:layout-component name="title">COEUS</s:layout-component>
     <s:layout-component name="custom_scripts">
         <script src="<c:url value="/assets/js/jquery.js" />"></script>
         <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
@@ -98,14 +98,14 @@
                         if (result[r].regex !== undefined)
                             regex = result[r].regex.value;
                         var sel = splitURIPrefix(result[r].selector.value).value;
-                        var a = '<tr><td><a href="../../resource/' + sel + '">'
+                        var a = '<tr><td><a href="../../resource/' + sel + '" class="tip" data-toggle="tooltip" title="View in browser.">'
                                 + sel + ' ' + key
                                 + '</a></td><td>'
                                 + result[r].title.value
                                 + '</td><td>'
                                 + result[r].query.value + '</td><td>'
                                 + result[r].property.value + '</td><td>'
-                               // + regex + '</td><td>'
+                                // + regex + '</td><td>'
                                 + '<div class="btn-group" id="btn' + sel + '">'
                                 + '<button class="btn btn-success btn-small" onclick="addExistingSelector(\'' + sel + '\')">Add</button>'
                                 + '</div>' + '<div id="result' + sel + '"></div>'
@@ -118,6 +118,7 @@
                         //ignore errors
                     }
                 }
+                tooltip();
             }
             function addExistingSelector(selector) {
 
@@ -157,26 +158,27 @@
                 for (var r in result) {
                     var key = '';
                     if (result[r].key !== undefined)
-                        key = '<span class="label label-success">Key</span>';
+                        key = '<span class="label label-success tip" data-toggle="tooltip" title="The key selector will be used to generate unique Item individual identifications (i.e. URIs) from the integrated resources.">Key</span>';
                     var regex = '-';
                     if (result[r].regex !== undefined)
                         regex = result[r].regex.value;
                     var uri = splitURIPrefix(result[r].selector.value).value;
-                    var a = '<tr><td><a href="../../resource/' + uri + '">'
-                            + uri + ' ' + key + '</a></td><td>'
+                    var a = '<tr><td><a href="../../resource/' + uri + '" class="tip" data-toggle="tooltip" title="View in browser">'
+                            + uri + '</a> ' + key + '</td><td>'
                             + result[r].title.value
                             + '</td><td>'
                             + result[r].query.value + '</td><td>'
                             + result[r].property.value + '</td><td>'
                             + regex + '</td><td>'
                             + '<div class="btn-group">'
-                            + '<button class="btn btn" href="#selectorsModal" role="button" data-toggle="modal" onclick="editSelector(\'' + splitURIPrefix(result[r].selector.value).value + '\')">Edit <i class="icon-edit"></i></button>'
-                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectSelector(\'' + splitURIPrefix(result[r].selector.value).value + '\')">Remove <i class="icon-trash"></i></button>'
+                            + '<button class="btn btn-default" href="#selectorsModal" role="button" data-toggle="modal" onclick="editSelector(\'' + splitURIPrefix(result[r].selector.value).value + '\')">Edit <i class="fa fa-edit"></i></button>'
+                            + '<button class="btn btn-default" href="#removeModal" role="button" data-toggle="modal" onclick="selectSelector(\'' + splitURIPrefix(result[r].selector.value).value + '\')">Remove <i class="fa fa-trash-o"></i></button>'
                             + '</div>'
                             + '</td></tr>';
 
                     $('#selectors').append(a);
                 }
+                tooltip();
             }
             function selectSelector(selector) {
                 $('#resultSelectorRemove').html('');
@@ -289,19 +291,19 @@
                 // verify all fields:
                 var empty = false;
                 if (title === '') {
-                    $('#titleSelectorsForm').addClass('controls control-group error');
+                    $('#titleSelectorsForm').addClass('has-error');
                     empty = true;
                 }
                 if (label === '') {
-                    $('#labelSelectorsForm').addClass('controls control-group error');
+                    $('#labelSelectorsForm').addClass('has-error');
                     empty = true;
                 }
                 if (property === '') {
-                    $('#propertySelectorsForm').addClass('controls control-group error');
+                    $('#propertySelectorsForm').addClass('has-error');
                     empty = true;
                 }
                 if (query === '') {
-                    $('#querySelectorsForm').addClass('controls control-group error');
+                    $('#querySelectorsForm').addClass('has-error');
                     empty = true;
                 }
                 if (!empty) {
@@ -418,10 +420,10 @@
                 entity = "coeus:" + splitURIPrefix(entity).value;
                 concept = "coeus:" + splitURIPrefix(concept).value;
                 $('#selectorsSeed').val(seed);
-                $('#breadSeed').html('<a href="../seed/' + seed + '">Dashboard</a> <span class="divider">/</span>');
-                $('#breadEntities').html('<a href="../entity/' + seed + '">Entities</a> <span class="divider">/</span>');
-                $('#breadConcepts').html('<a href="../concept/' + entity + '">Concepts</a> <span class="divider">/</span>');
-                $('#breadResources').html('<a href="../resource/' + concept + '">Resources</a> <span class="divider">/</span>');
+                $('#breadSeed').html('<a href="../seed/' + seed + '">Dashboard</a>');
+                $('#breadEntities').html('<a href="../entity/' + seed + '">Entities</a>');
+                $('#breadConcepts').html('<a href="../concept/' + entity + '">Concepts</a> ');
+                $('#breadResources').html('<a href="../resource/' + concept + '">Resources</a>');
                 $('#concept').html(splitURIPrefix(concept).value);
             }
             function keyboard(event) {
@@ -432,7 +434,7 @@
 
             // Callback to generate the pages header 
             function fillHeader(result) {
-                $('#header').html('<h1>' + lastPath() + '<small id="env"> ' + result.config.environment + '</small></h1>');
+                $('#header').html('<h1><span class="tip" data-toggle="tooltip" title="Resource URI">' + lastPath() + '</span><small id="env" class="pull-right tip" data-toggle="tooltip" title="Selected environment">  ' + result.config.environment + '</small></h1>');
                 $('#apikey').html(result.config.apikey);
             }
             function updateSelectorProperties() {
@@ -476,15 +478,12 @@
     <s:layout-component name="body">
 
         <div class="container">
-            <br><br>
-            <div id="header" class="page-header">
-
-            </div>
+            <div id="header" class="page-header"></div>
             <div id="apikey" class="hide"></div>
             <div id="concept" class="hide"></div>
             <ul class="breadcrumb">
-                <li id="breadHome"><i class="icon-home"></i> <span class="divider">/</span></li>
-                <li id="breadSeeds"><a href="../seed/">Seeds</a> <span class="divider">/</span> </li>
+                <li id="breadHome"><i class="glyphicon glyphicon-home"></i></li>
+                <li id="breadSeeds"><a href="../seed/">Seeds</a> </li>
                 <li id="breadSeed"></li>
                 <li id="breadEntities"></li>
                 <li id="breadConcepts"></li>
@@ -495,9 +494,11 @@
             <p class="lead" >Resource URI - <span class="lead text-info" id="uri">coeus: </span></p>
 
             <div class="row">
-                <div id="selectorsForm" class="span10">
-                    <label class="control-label" for="selectorsForm"><h4>Selectors Configuration - <span class="text-info" id="publisher"></span></h4></label> 
-                    <table class="table table-hover table-bordered span4">
+                <div id="selectorsForm" class="col-md-10">
+                    <label for="selectorsForm">
+                        <h4>Selectors Configuration - <span class="text-info tip" data-toggle="tooltip" title="Publisher type" id="publisher"></span></h4>
+                    </label>
+                    <table class="table table-hover table-bordered col-md-4">
                         <thead>
                             <tr>
                                 <th>URI</th>
@@ -508,125 +509,140 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="selectors">
-
-                        </tbody>
+                        <tbody id="selectors"></tbody>
                     </table>
                     <div class="text-right">
-                        <button onclick="resetSelectorModal();" type="button" id="addselector" href="#selectorsModal" role="button" data-toggle="modal" class="btn btn-success">New <i class="icon-plus icon-white"></i> </button>
-                        <button  type="button" id="existingSelector" href="#existingSelectorsModal" role="button" data-toggle="modal" class="btn btn-warning">Existing <i class="icon-plus icon-white"></i> </button>
+                        <button onclick="resetSelectorModal();" type="button" id="addselector"
+                                href="#selectorsModal" role="button" data-toggle="modal" class="btn btn-success">New <i class="fa fa-plus-circle"></i> 
+                        </button>
+                        <button type="button" id="existingSelector" href="#existingSelectorsModal"
+                                role="button" data-toggle="modal" class="btn btn-warning">Existing <i class="fa fa-plus-circle"></i> 
+                        </button>
                         <!--<button type="button" id="done" class="btn btn-info" onclick="window.history.back(-1);">Done</button>-->
                     </div>
-
                 </div>
-
             </div>
+        </div>
 
-            <!-- Modal -->
-            <div id="selectorsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="selectorsModal" aria-hidden="true">
-                <div class="modal-header">
-                    <button id="closeSelectorsModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                    <h3 id="selectorsModalLabel">Add Selector</h3>
-                </div>
-                <div class="modal-body">
-                    <div id="selectorsResult"></div>
-                    <p class="lead" >Selector URI - <span class="lead  text-info" id="selectorUri">coeus: </span></p>
-
-                    <label class="checkbox" >
-                        <input type="checkbox" id="keySelectorsForm"><span class="label label-success">Key</span>
-                    </label>
-                    <div class="row-fluid">
-
-                        <div class="span6">
-                            <div id="titleSelectorsForm" >
-                                <label class="control-label" for="title">Title</label>
-                                <input id="titleSelectors" type="text" placeholder="Ex: Id" onkeyup="changeSelectorURI(this.value);" > <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the dc:title property" ></i>
-                            </div>
-                            <div id="labelSelectorsForm"> 
-                                <label class="control-label" for="label">Label</label>
-                                <input id="labelSelectors" type="text" placeholder="Ex: Uniprot Resource"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the rdfs:label property" ></i>
-                            </div>
-
-                            <div id="querySelectorsForm"> 
-                                <label class="control-label" for="label">Query</label>
-                                <input id="querySelectors" type="text" placeholder="Ex: /name"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:query property" ></i>
-                            </div>
-                            <div id="regexSelectorsForm"> 
-                                <label class="control-label" for="regexSelectors">Regex</label>
-                                <input id="regexSelectors" type="text" placeholder="Ex: [0-9]"> <i class="icon-question-sign" data-toggle="tooltip" title="Add a triple with the coeus:regex property" ></i>
-                            </div>
-
-                        </div>
-                        <div class="span6">
-
-                            <div id="propertySelectorsForm" > 
-                                <label class="control-label" for="label">Search Property (and Press + to add)</label>
-                                <div class="input-append">
-                                <input class="twitter-typeahead" id="typeahead" type="text" ><button id="btnPlus" class="btn btn-success add-more" type="button" onclick="updateSelectorProperties();">+</button>
+        <!-- Modal -->
+        <div id="selectorsModal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="selectorsModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content"></div>
+            </div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="closeSelectorsModal" type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">x</button>
+                        <h3 id="selectorsModalLabel" class="modal-title">Add Selector</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div id="selectorsResult"></div>
+                        <p class="lead">Selector URI - <span class="lead  text-info" id="selectorUri">coeus: </span>
+                        </p>
+                        <label label-default="label-default" class="checkbox">
+                            <input type="checkbox" id="keySelectorsForm" /><span class="label label-success tip" data-toggle="tooltip" title="The key selector will be used to generate unique Item individual identifications (i.e. URIs) from the integrated resources.">Key</span>
+                        </label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div id="titleSelectorsForm" class="form-group">
+                                    <label for="title">Title</label>
+                                    <input id="titleSelectors" type="text" placeholder="Ex: Id" class="form-control tip" data-toggle="tooltip" title="The title (dc:title) property."
+                                           onkeyup="changeSelectorURI(this.value);" /> 
                                 </div>
-                                <label class="control-label" for="label"></label>
-                                <!--<a class="btn btn-small btn-success" onclick="updateSelectorProperties();" data-toggle="tooltip" title="Press this button or press Enter to add an property to the list.">Add to List <i class="icon-plus-sign icon-white"></i></a>-->
-                                <label class="control-label" for="dropdownprop">Property List</label>
-                                <select id="dropdownprop" multiple="multiple">
-                                </select>
-                                <i class="icon-question-sign" data-toggle="tooltip" title="List of properties added." ></i>
-                                
-                                <a class="btn btn-small btn-danger" onclick="removeSelectorProperty();" data-toggle="tooltip" title="Select one element of list and press this button to remove it.">Remove from List <i class="icon-minus-sign icon-white"></i></a>
-                                <input id="propertySelectors" type="hidden" >
+                                <div id="labelSelectorsForm" class="form-group">
+                                    <label for="label label-default">Label</label>
+                                    <input id="labelSelectors" type="text" placeholder="Ex: Uniprot Resource" class="form-control tip" data-toggle="tooltip" title="Add a triple with the rdfs:label property"/> 
+                                </div>
+                                <div id="querySelectorsForm" class="form-group">
+                                    <label for="label label-default">Query</label>
+                                    <input id="querySelectors" type="text" placeholder="Ex: /name" class="form-control tip" data-toggle="tooltip" title="Individual object query: CSV (column number), XML (XPath query), SQL (column name), etc. For more, see documentation."/>
+                                </div>
+                                <div id="regexSelectorsForm" class="form-group">
+                                    <label for="regexSelectors">Regex</label>
+                                    <input id="regexSelectors" type="text" placeholder="Ex: [0-9]" class="form-control tip" data-toggle="tooltip" title="Regular expression to get Item individual identification token from integrated resources"/>
+                                </div>
                             </div>
-
+                            <div class="col-md-6">
+                                <div id="propertySelectorsForm" >
+                                    <div class="form-group">
+                                        <label >Search Property</label>
+                                        <div class="input-group">
+                                            <input class="twitter-typeahead form-control tip" id="typeahead" type="text" data-toggle="tooltip" title="Search and press the plus button to add it to the list"/>
+                                            <span class="input-group-btn" ><button id="btnPlus" class="btn btn-success tip" data-toggle="tooltip" title="Add a property to the list" type="button" onclick="updateSelectorProperties();"><i class="fa fa-plus-circle"></i></button></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <!--<a class="btn btn-sm btn-success" onclick="updateSelectorProperties();"
+                                        data-toggle="tooltip" title="Press this button or press Enter to add an
+                                        property to the list.">Add to List <i class="glyphicon glyphicon-plus-sign icon-white"></i></a>-->
+                                        <label for="dropdownprop">Property List</label>
+                                        <div class="input-group">
+                                            <select class="form-control tip" id="dropdownprop" multiple="multiple" data-toggle="tooltip" title="Properties define the predicates to where integrated will be loaded to."></select> 
+                                            <span class="input-group-btn" ><a class="btn btn-danger tip"
+                                                                              onclick="removeSelectorProperty();" data-toggle="tooltip" title="Select one element of list and press this button to remove it."><i class="fa fa-trash-o"></i></a>
+                                            </span></div><input id="propertySelectors" type="hidden" />
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="oldTitleSelectors" value="" />
+                            <input type="hidden" id="oldLabelSelectors" value="" />
+                            <input type="hidden" id="oldPropertySelectors" value="" />
+                            <input type="hidden" id="oldQuerySelectors" value="" />
+                            <input type="hidden" id="oldRegexSelectors" value="" />
+                            <input type="hidden" id="oldKeySelectors" value="" />
+                            <input type="hidden" id="selectorsSeed" value="" />
                         </div>
-
-                        <input type="hidden" id="oldTitleSelectors" value=""/>
-                        <input type="hidden" id="oldLabelSelectors" value=""/>
-                        <input type="hidden" id="oldPropertySelectors" value=""/>
-                        <input type="hidden" id="oldQuerySelectors" value=""/>
-                        <input type="hidden" id="oldRegexSelectors" value=""/>
-                        <input type="hidden" id="oldKeySelectors" value=""/>
-                        <input type="hidden" id="selectorsSeed" value=""/>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn btn-primary loading" id="addSelectorButton"
+                                onclick="submitSelector();">Save Changes</button>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                    <button class="btn btn-primary loading" id="addSelectorButton" onclick="submitSelector();">Save Changes</button>
+            </div>
+        </div>
+
+
+
+        <!-- Add Existing Selector Modal -->
+        <div id="existingSelectorsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="closeExistingSelectorsModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 class="modal-title">Add Existing Selector</h3>
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="existingSelectorsResult"></div>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>URI</th>
+                                    <th>Title</th>
+                                    <th>Query</th>
+                                    <th>Property</th>
+                                    <!--<th>Regex</th>-->
+                                    <th>Choose</th>
+                                </tr>
+                            </thead>
+                            <tbody id="existingSelectors">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <!--<button class="btn btn-info" onclick="window.location.reload();">Done</button>-->
+                    </div>
                 </div>
             </div>
+        </div>
 
+        <%@include file="/setup/modals/remove.jsp" %>
 
-
-            <!-- Add Existing Selector Modal -->
-            <div id="existingSelectorsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <button id="closeExistingSelectorsModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                    <h3 >Add Existing Selector</h3>
-                </div>
-
-                <div class="modal-body">
-                    <div id="existingSelectorsResult"></div>
-                    <table class="table table-hover table-bordered">
-                        <thead>
-                            <tr>
-                                <th>URI</th>
-                                <th>Title</th>
-                                <th>Query</th>
-                                <th>Property</th>
-                                <!--<th>Regex</th>-->
-                                <th>Choose</th>
-                            </tr>
-                        </thead>
-                        <tbody id="existingSelectors">
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                    <!--<button class="btn btn-info" onclick="window.location.reload();">Done</button>-->
-                </div>
-            </div>
-
-            <%@include file="/setup/modals/remove.jsp" %>
-
-        </s:layout-component>
-    </s:layout-render>
+    </s:layout-component>
+</s:layout-render>

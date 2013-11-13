@@ -1,7 +1,7 @@
 <%@include file="taglib.jsp" %>
 <script>var path = '${path}';</script>
 <script src="<c:url value="/assets/js/jquery.js" />"></script>
-<script src="<c:url value="/assets/js/bootstrap3.js" />"></script>
+<script src="<c:url value="/assets/js/bootstrap.js" />"></script>
 <script src="<c:url value="/assets/js/prettify.js" />"></script>
 <script src="<c:url value="/assets/js/lang-sql.js" />"></script>
 <script src="<c:url value="/assets/js/lang-css.js" />"></script>

@@ -10,7 +10,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <style type="text/css">
             body {
-                padding-top: 40px;
+                padding-top: 10px;
                 padding-bottom: 40px;
                 background-color: #f5f5f5;
             }
@@ -55,14 +55,17 @@
             </div>
             <form class="form-signin" method="POST" action="j_security_check">
                 <h2 class="form-signin-heading">Please sign in</h2>
-                <input type="text" name="j_username" class="input-block-level" placeholder="Email address">
-                    <input type="password" name="j_password" class="input-block-level" placeholder="Password">
+                <input type="text" name="j_username" class="input-block-level form-control" placeholder="Email address">
+                    <input type="password" name="j_password" class="input-block-level form-control" placeholder="Password">
 
-                        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+                        <button class="btn btn-primary btn-lg" type="submit">Sign in</button>
                         <%
                             if (err != null) {
                         %>
-                        <p class="text-error" >Invalid Login!</p>
+                        <br/><br/>
+                        <div class="alert alert-danger">
+                            <strong>Invalid Login!</strong> Check your <a href="#">credentials</a>.
+                        </div>
                         <%    }
                         %>
                         </form>

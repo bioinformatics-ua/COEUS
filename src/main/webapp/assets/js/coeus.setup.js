@@ -622,20 +622,20 @@ function add() {
     // verify all fields:
     var empty = false;
     if (title === '') {
-        $('#titleForm').addClass('controls control-group error');
+        $('#titleForm').addClass('has-error');
         empty = true;
     } else
-        $('#titleForm').removeClass('controls control-group error');
+        $('#titleForm').removeClass('has-error');
     if (label === '') {
-        $('#labelForm').addClass('controls control-group error');
+        $('#labelForm').addClass('has-error');
         empty = true;
     } else
-        $('#labelForm').removeClass('controls control-group error');
+        $('#labelForm').removeClass('has-error');
     if (comment === '') {
-        $('#commentForm').addClass('controls control-group error');
+        $('#commentForm').addClass('has-error');
         empty = true;
     } else
-        $('#commentForm').removeClass('controls control-group error');
+        $('#commentForm').removeClass('has-error');
     if (!empty) {
         var array = new Array();
         var urlIndividual = urlWrite + individual + "/rdf:type/owl:NamedIndividual";
@@ -784,35 +784,35 @@ function addResource() {
     // verify all fields:
     var empty = false;
     if (title === '') {
-        $('#resourceTitleForm').addClass('controls control-group error');
+        $('#resourceTitleForm').addClass('has-error');
         empty = true;
     } else
-        $('#resourceTitleForm').removeClass('controls control-group error');
+        $('#resourceTitleForm').removeClass('has-error');
     if (label === '') {
-        $('#resourceLabelForm').addClass('controls control-group error');
+        $('#resourceLabelForm').addClass('has-error');
         empty = true;
     } else
-        $('#resourceLabelForm').removeClass('controls control-group error');
+        $('#resourceLabelForm').removeClass('has-error');
     if (comment === '') {
-        $('#resourceCommentForm').addClass('controls control-group error');
+        $('#resourceCommentForm').addClass('has-error');
         empty = true;
     } else
-        $('#resourceCommentForm').removeClass('controls control-group error');
+        $('#resourceCommentForm').removeClass('has-error');
     if (endpoint === '') {
-        $('#endpointForm').addClass('controls control-group error');
+        $('#endpointForm').addClass('has-error');
         empty = true;
     } else
-        $('#endpointForm').removeClass('controls control-group error');
+        $('#endpointForm').removeClass('has-error');
     if (query === '' && publisher !== ("csv")) {
-        $('#queryForm').addClass('controls control-group error');
+        $('#queryForm').addClass('has-error');
         empty = true;
     } else
-        $('#queryForm').removeClass('controls control-group error');
+        $('#queryForm').removeClass('has-error');
     if (order === '') {
-        $('#orderForm').addClass('controls control-group error');
+        $('#orderForm').addClass('has-error');
         empty = true;
     } else
-        $('#orderForm').removeClass('controls control-group error');
+        $('#orderForm').removeClass('has-error');
     if (!empty) {
         var array = new Array();
         var urlIndividual = urlWrite + individual + "/rdf:type/owl:NamedIndividual";
@@ -1186,3 +1186,11 @@ function updatePublisherOnSelectores(urlUpdate, res, oldPublisher, newPublisher)
 /**
  * End of the code used to manage the modals (Resource)
  */
+
+/**
+ * activate tooltip (bootstrap-tooltip.js is need)
+ * @returns {undefined}
+ */
+function tooltip(){
+    $('.tip').tooltip();
+}
