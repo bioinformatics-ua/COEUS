@@ -4,6 +4,7 @@
     <s:layout-component name="custom_scripts">
         <script type="text/javascript">
             $(document).ready(function() {
+                changeSidebar('#sparql');
                 $('#pro_item_info').on('click', function() {
                     $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\nPREFIX dc: <http://purl.org/dc/elements/1.1/>\n\nSELECT * { \n?uniprot coeus:hasConcept coeus:concept_UniProt . \n?uniprot dc:identifier ?id .\n?uniprot dc:title ?name \n}');
                 });

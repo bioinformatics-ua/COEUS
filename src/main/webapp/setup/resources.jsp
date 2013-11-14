@@ -8,12 +8,9 @@
 <s:layout-render name="/layout/html.jsp">
     <s:layout-component name="title">COEUS</s:layout-component>
     <s:layout-component name="custom_scripts">
-        <script src="<c:url value="/assets/js/jquery.js" />"></script>
-        <script src="<c:url value="/assets/js/coeus.sparql.js" />"></script>
-        <script src="<c:url value="/assets/js/coeus.setup.js" />"></script>
-        <script src="<c:url value="/assets/js/bootstrap-tooltip.js" />"></script>
         <script type="text/javascript">
             $(document).ready(function() {
+                changeSidebar('#dashboard');
                 //header name
                 callURL("../../config/getconfig/", fillHeader);
 

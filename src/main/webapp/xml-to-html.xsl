@@ -26,7 +26,7 @@
     <xsl:template name="boolean-result">
         <div>
             <!--      
-             	<h2>Boolean Result</h2>
+                <h2>Boolean Result</h2>
             -->      
             <p>ASK => 
                 <xsl:value-of select="res:boolean"/>
@@ -113,65 +113,140 @@
             <head>
                 <title>SPARQL results - COEUS</title>     
                 <link rel="shortcut icon" href="favicon.ico" />           
-                <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,700italic,300,700' rel='stylesheet' type='text/css' />
-                <link href="assets/css/bootstrap.min.css" rel="stylesheet" />               
-                <link href="assets/css/docs.css" rel="stylesheet" />
+                <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,700italic,300,700' rel='stylesheet' type='text/css' />-->
+                <link href="assets/css/bootstrap3.css" rel="stylesheet" />         
+                <link href="assets/css/setup.css" rel="stylesheet" />
+                <link href="assets/css/font-awesome.min.css" rel="stylesheet" />      
+                <!--<link href="assets/css/docs.css" rel="stylesheet" />-->
             </head>
             <body>
-                <div class="navbar navbar-inverse navbar-fixed-top">
-                    <div class="navbar-inner">
-                        <div class="container">
-                            <a class="brand" href="./">COEUS</a> 
-                            <div class="nav-collapse collapse">
-                                <ul class="nav">
-                                    <li>
-                                        <a href="./">Home</a>
-                                    </li>
-                                    <li>
-                                        <a href="documentation/">Documentation</a>
-                                    </li>
-                                    <li>
-                                        <a href="science/">Science</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="sparqler/">SPARQL</a>
-                                    </li>
-                                </ul>
-                            </div>
+                
+                <div class="wrapper">
+
+                    <!-- Sidebar -->
+                    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="http://bioinformatics.ua.pt/coeus/">COEUS <sub>v2.0</sub></a>
                         </div>
-                    </div>
-                </div>
-                <div class="container space">
-                    <xsl:if test="res:head/res:link">
-                        <xsl:call-template name="header"/>
-                    </xsl:if>
 
-                    <xsl:choose>
-                        <xsl:when test="res:boolean">
-                            <xsl:call-template name="boolean-result" />
-                        </xsl:when>
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse navbar-ex1-collapse">
+                            <ul class="nav navbar-nav side-nav">
+                               <!-- <li >
+                                    <a href="./">
+                                        <i class="fa fa-eye"></i> Overview</a>
+                                </li>
+                                <li>
+                                    <a href="./manager/seed/">
+                                        <i class="fa fa-dashboard"></i> Dashboard</a>
+                                </li>-->
+                                <li class="active">
+                                    <a href="sparqler/">
+                                        <i class="fa fa-arrow-circle-left"></i> Back</a>
+                                </li><!--
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-caret-square-o-down"></i> LinkedData <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="#">Seed Item</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Seed Item</a>
+                                        </li>
+                                    </ul>
+                                </li>-->
+                                <!--<li><a href="charts.html"><i class="fa fa-bar-chart-o"></i> Charts</a></li>
+                                <li><a href="tables.html"><i class="fa fa-table"></i> Tables</a></li>
+                                <li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
+                                <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
+                                <li><a href="bootstrap-elements.html"><i class="fa fa-desktop"></i> Bootstrap Elements</a></li>
+                                <li><a href="bootstrap-grid.html"><i class="fa fa-wrench"></i> Bootstrap Grid</a></li>
+                                <li>
+                                    <a data-toggle="modal" data-target="#contact">
+                                        <i class="fa fa-user"></i> Contacts</a>
+                                </li>-->
 
-                        <xsl:when test="res:results">
-                            <xsl:call-template name="vb-result" />
-                        </xsl:when>
+                            </ul>
 
-                    </xsl:choose>
-                </div>
-                 <footer class="footer">
-                <div class="container">
-                    <span class="span2 pull-right"><a href="#">Back to top</a></span>
-                    <p><br /></p>
-                    <p> <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2013
-                        <br />
-                        Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a>
-                        <br />
-                        <small>Under Development by <a href="http://pedrolopes.net" target="_blank">@pedrolopes</a> <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback"><i class="icon-envelope"></i></a></small>
-                        <br />
-                        <a href="http://twitter.github.com/bootstrap/" target="_blank"><small>Layout with Twitter Bootstrap</small></a>
-                    </p>
-                </div>
-            </footer>
+
+                            <!--<ul class="nav navbar-nav navbar-right navbar-user">
+                                <li class="dropdown messages-dropdown">
+                                    <a href="./manager/seed/" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-user"></i> Admin</a>
+                                </li>
+                                <li class="dropdown alerts-dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-bell"></i> Alerts <span class="badge">3</span> 
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="#">Default <span class="label label-default">Default</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Primary <span class="label label-primary">Primary</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Success <span class="label label-success">Success</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Info <span class="label label-info">Info</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Warning <span class="label label-warning">Warning</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Danger <span class="label label-danger">Danger</span></a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="#">View All</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            </ul>-->
+                        </div><!-- /.navbar-collapse -->
+                    </nav>
+
+                    <div class="page-wrapper">
+
+                        <div class="container">
+                            <div id="header" class="page-header">
+                                <h1>SPARQL Results</h1>
+                            </div>
+                                
+                            <xsl:if test="res:head/res:link">
+                                <xsl:call-template name="header"/>
+                            </xsl:if>
+
+                            <xsl:choose>
+                                <xsl:when test="res:boolean">
+                                    <xsl:call-template name="boolean-result" />
+                                </xsl:when>
+
+                                <xsl:when test="res:results">
+                                    <xsl:call-template name="vb-result" />
+                                </xsl:when>
+
+                            </xsl:choose>
+                        </div>
+                            
+                    </div><!-- /#page-wrapper -->
+
+                </div><!-- /#wrapper --> 
+                 
             </body>
+           
         </html>
     </xsl:template>
 </xsl:stylesheet>

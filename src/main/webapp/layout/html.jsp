@@ -38,12 +38,14 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav side-nav">
-                            <li class="active"><a href="<c:url value="/" />"><i class="fa fa-eye"></i> Overview</a></li>
-                            <li><a href="<c:url value="/manager/seed/" />"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-                            <li><a href="<c:url value="/sparqler/" />"><i class="fa fa-bar-chart-o"></i> SPARQL</a></li>
+                            <li id="index" class="sidebaritem"><a href="<c:url value="/" />"><i class="fa fa-eye"></i> Overview</a></li>
+                            <li id="dashboard" class="sidebaritem"><a href="<c:url value="/manager/seed/" />"><i class="fa fa-dashboard"></i> Setup</a></li>
+                            <li><a href="<c:url value="/manager/config/" />"><i class="fa fa-wrench"></i> Wizard</a></li>
+                            <li><a href="<c:url value="/manager/environments/" />"><i class="fa fa-exchange"></i> Environments</a></li>
+                            <li id="sparql" class="sidebaritem"><a href="<c:url value="/sparqler/" />"><i class="fa fa-bar-chart-o"></i> SPARQL</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> LinkedData <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" id="sidebarseeds">
                                     <li><a href="#">Seed Item</a></li>
                                     <li><a href="#">Seed Item</a></li>
                                 </ul>
@@ -51,9 +53,8 @@
                             <!--<li><a href="charts.html"><i class="fa fa-bar-chart-o"></i> Charts</a></li>
                             <li><a href="tables.html"><i class="fa fa-table"></i> Tables</a></li>
                             <li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
-                            <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
-                            <li><a href="bootstrap-elements.html"><i class="fa fa-desktop"></i> Bootstrap Elements</a></li>
-                            <li><a href="bootstrap-grid.html"><i class="fa fa-wrench"></i> Bootstrap Grid</a></li>-->
+                            <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>-->
+                            <li><a href="http://bioinformatics.ua.pt/coeus/documentation/" target="_blank"><i class="fa fa-book"></i> Documentation</a></li>
                             <li><a data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contacts</a></li>
 
                         </ul>

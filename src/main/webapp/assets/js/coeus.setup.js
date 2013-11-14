@@ -1191,6 +1191,33 @@ function updatePublisherOnSelectores(urlUpdate, res, oldPublisher, newPublisher)
  * activate tooltip (bootstrap-tooltip.js is need)
  * @returns {undefined}
  */
-function tooltip(){
+function tooltip() {
     $('.tip').tooltip();
+}
+
+/**
+ * Loads LinkedData seeds on sidebar
+ * @returns {undefined}
+ */
+function loadSeedsOnSidebar() {
+    var qSeeds = "SELECT DISTINCT ?seed {?seed a coeus:Seed . ?seed dc:title ?s . }";
+    queryToResult(qSeeds, function(result) {
+        $('#sidebarseeds').html('');
+        for (var key in result) {
+            var splitedURI = splitURIPrefix(result[key].seed.value);
+            var a = '<li><a href="/coeus/resource/' + splitedURI.value + '"><i class="fa fa-circle-o"></i> ' + splitedURI.value + '</a></li>';//TODO: FIX THAT LINK
+            $('#sidebarseeds').append(a);
+        }
+        console.log("INFO: All seeds loaded on sidebar.");
+    });
+
+}
+/**
+ * Change sidebar active attribute
+ * @param {type} id
+ * @returns {undefined}
+ */
+function changeSidebar(id) {
+    $('.sidebaritem').removeClass('active');
+    $(id).addClass('active');
 }
