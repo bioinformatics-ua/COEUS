@@ -43,7 +43,8 @@
                 <div class="col-lg-12">
                     <h1>Welcome to COEUS!<small> Overview</small></h1>
                     <ol class="breadcrumb">
-                        <li class="active"><i class="fa fa fa-eye"></i> Overview</li>
+                        <li id="breadHome"><span class="glyphicon glyphicon-home"></span> </li>
+                        <li class="active">Overview</li>
                     </ol>
                     <div class="alert alert-success alert-dismissable">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

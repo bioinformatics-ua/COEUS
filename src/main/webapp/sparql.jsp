@@ -40,6 +40,10 @@
                         <div class="page-header">
                             <h1>SPARQL</h1>
                         </div>
+                        <ol class="breadcrumb">
+                            <li id="breadHome"><span class="glyphicon glyphicon-home"></span> </li>
+                            <li class="active">SPARQL</li>
+                        </ol>
                         <p>You can test (or write) your SPARQL queries in the <span class="label label-info">query</span> box
                             or use one of the samples below.</p>
                         <div class="row">

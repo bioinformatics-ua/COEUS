@@ -5,7 +5,7 @@
 --%>
 
 <%@include file="/layout/taglib.jsp" %>
-<s:layout-render name="/setup/html.jsp">
+<s:layout-render name="/layout/html.jsp">
     <s:layout-component name="title">COEUS Setup</s:layout-component>
     <s:layout-component name="custom_scripts">
         <script type="text/javascript">
@@ -25,9 +25,9 @@
                 for (var r in array) {
                     var value = array[r].replace('env_', '');
                     var n = parseInt(r) + 1;
-                    $('#environments').append('<tr><td>' + (n) + '</td><td>' + value + '</td><td id="' + value + '"><span class="label label-important">DISABLED</span></td><td>'
+                    $('#environments').append('<tr><td>' + (n) + '</td><td>' + value + '</td><td id="' + value + '"><span class="label label-danger">DISABLED</span></td><td>'
                             + '<div class="btn-group">'
-                            + '<button class="btn btn" href="#removeModal" role="button" data-toggle="modal" onclick="selectEnv(\'' + value + '\')">Remove <i class="icon-trash"></i></button>'
+                            + '<button class="btn btn-default" href="#removeModal" role="button" data-toggle="modal" onclick="selectEnv(\'' + value + '\')">Remove <i class="icon-trash"></i></button>'
                             + '</div> '
                             + '<a id="pubby' + value + '" class="btn btn-warning hide" data-toggle="modal" href="#pubbyModal" onclick="prepareChange(\'' + value + '\');">Pubby <i class="icon-wrench icon-white"></i></a> '
                             //+ '<a class="btn btn-warning" href="../environments/edit/' + value + '">Pubby <i class="icon-wrench icon-white"></i></a> '
@@ -50,6 +50,7 @@
                 $('#btn' + env).html('Enable <i class="icon-ok-circle icon-white"></i>');
                 if (result.status === 100) {
                     refresh();
+                    $('#info').html(generateHtmlMessage("The application environment have changed!!", '<p>You must reload the application context to apply new configurations to the server.</p><button class="btn btn-warning reload" onclick="reload();" role="button">Reload</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-warning"));
                 }
                 else {
                     $('#info').html(generateHtmlMessage("ERROR!", result.message, "alert-error"));
@@ -92,14 +93,14 @@
                 }, 2000);
                 var url = "../../config/changedb/" + encodeBars(generateDbMap());
                 callURL(url, showResult.bind(this, '#resultDb', url), showError.bind(this, '#resultDb', url));
-            }
+                $('#info').html(generateHtmlMessage("The application environment have changed!!", '<p>You must reload the application context to apply new configurations to the server.</p><button class="btn btn-warning reload" onclick="reload();" role="button">Reload</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-warning"));            }
             function changePubby() {
                 timer = setTimeout(function() {
                     $('#closePubbyModal').click();
                 }, 2000);
                 var url = "../../config/changepubby/" + encodeBars(generatePubbyMap());
                 callURL(url, showResult.bind(this, '#resultPubby', url), showError.bind(this, '#resultPubby', url));
-            }
+                $('#info').html(generateHtmlMessage("The application environment have changed!!", '<p>You must reload the application context to apply new configurations to the server.</p><button class="btn btn-warning reload" onclick="reload();" role="button">Reload</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-warning"));            }
 
             function generateDbMap() {
 
@@ -167,6 +168,16 @@
                 $('#resultPubby').html('');
                 callURL("../../config/getmap/" + env, getMapSuccess, showError.bind(this, '#resultDb', ""));
             }
+            
+            function reload(){
+                    $('.reload').addClass('disabled');
+                    $('.reload').html('Reloading.. <i class="fa fa-spinner fa-spin"></i>');
+                    reloadContext(function (result){
+                        $('#info').html(generateHtmlMessage(result, '<br/><button class="btn btn-success reload" onclick="window.location.reload(true);" role="button">Refresh page</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-success"));
+                    },function (jqXHR, result){
+                        $('#info').html(generateHtmlMessage(result, '<br/><button class="btn btn-danger reload" onclick="window.location.reload(true);" role="button">Refresh page</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-danger"));                  
+                    });
+            }
 
 
         </script>
@@ -174,11 +185,13 @@
     <s:layout-component name="body">
 
         <div class="container">
-            <br><br>
             <div id="header" class="page-header">
                 <h1>Environments Setup</h1>
             </div>
-
+            <ol class="breadcrumb">
+                <li id="breadHome"><span class="glyphicon glyphicon-home"></span> </li>
+                <li class="active">Environments</li>
+            </ol>
             <div id="info">
             </div>
 
@@ -187,7 +200,6 @@
 
 
                 <div class="span6">
-                    <p class="text-error">ATTENTION: Every change in this page needs a server restart.</p>
                     <h3>List of Environments</h3>
                 </div>
 
@@ -234,153 +246,160 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button class="btn btn-danger loading" onclick="removeEnv();">Remove</button>
                     </div>
                 </div>
 
                 <!-- Modal -->
-                <div id="cleanModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <button id="closeCleanModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                        <h3>Clean Database</h3>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure do you want to clean all content of <strong><a class="text-error" id="cleanModalLabel"></a></strong> environment database?</p>
-                        <p class="text-warning">Warning: All content will be removed from this database.</p>
+                <div id="cleanModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button id="closeCleanModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                <h3 class="modal-title">Clean Database</h3>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure do you want to clean all content of <strong><a class="text-error" id="cleanModalLabel"></a></strong> environment database?</p>
+                                <p class="text-warning">Warning: All content will be removed from this database.</p>
 
-                        <div id="resultClean">
+                                <div id="resultClean">
 
-                        </div>
+                                </div>
 
-                    </div>
+                            </div>
 
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-danger loading" onclick="cleanDB();">Clean <i class="icon-warning-sign icon-white"></i></button>
-                    </div>
-                </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                <button class="btn btn-danger loading" onclick="cleanDB();">Clean <i class="icon-warning-sign icon-white"></i></button>
+                            </div>
+                        </div></div></div>
 
                 <!-- Modal -->
-                <div id="dbModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <button id="closeDbModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                        <h3>Database of <span id="dbEnviroment" class="text-info">none</span></h3>
-                    </div>
-                    <div class="modal-body">
-                        <form id="connectionsDb" class="">
-                            <fieldset>
+                <div id="dbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button id="closeDbModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                <h3 class="modal-title">Database of <span id="dbEnviroment" class="text-info">none</span></h3>
+                            </div>
+                            <div class="modal-body">
+                                <form id="connectionsDb" class="">
+                                    <fieldset class="form-inline">
 
-                                <!-- URL-->
-                                <label class="control-label" for="jdbcURL"><strong>JDBC URL</strong></label>
-                                <div class="controls">
-                                    jdbc:mysql://
-                                    <input id="host" name="host" type="text" placeholder="localhost" class="input-large">
-                                    : <input id="port" name="jdbcURL" type="text" placeholder="3306" class="input-mini">
-                                    / <input id="path" name="path" type="text" placeholder="coeus" class="input-mini">
-                                </div>
+                                        <!-- URL-->
+                                        <label class="control-label" for="jdbcURL"><strong>JDBC URL</strong></label>
+                                        <div class="controls">
+                                            jdbc:mysql://
+                                            <input class="form-control input-mini" id="host" name="host" type="text" placeholder="localhost" class="input-large">
+                                            : <input class="form-control input-mini" id="port" name="jdbcURL" type="text" placeholder="3306" class="input-mini">
+                                            / <input class="form-control input-mini" id="path" name="path" type="text" placeholder="coeus" class="input-mini">
+                                        </div>
 
-                                <label class="control-label" for="username"><strong>Database User</strong></label>
-                                <div class="controls">
-                                    <input id="username" name="username" type="text" placeholder="demo" class="input-large">
+                                        <label class="control-label" for="username"><strong>Database User</strong></label>
+                                        <div class="controls">
+                                            <input class="form-control input-mini" id="username" name="username" type="text" placeholder="demo" class="input-large">
 
-                                </div>
+                                        </div>
 
-                                <label class="control-label" for="password"><strong>Database Password</strong></label>
-                                <div class="controls">
-                                    <input id="password" name="password" type="password" class="input-large">
-                                </div>
+                                        <label class="control-label" for="password"><strong>Database Password</strong></label>
+                                        <div class="controls">
+                                            <input class="form-control input-mini" id="password" name="password" type="password" class="input-large">
+                                        </div>
 
-                            </fieldset>
-                        </form>
+                                    </fieldset>
+                                </form>
 
-                        <div id="resultDb"></div>
+                                <div id="resultDb"></div>
 
-                    </div>
+                            </div>
 
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-primary loading" onclick="changeDB();">Save Changes</button>
-                    </div>
-                </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                <button class="btn btn-primary loading" onclick="changeDB();">Save Changes</button>
+                            </div>
+                        </div></div></div>
 
                 <!-- Modal -->
-                <div id="pubbyModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <button id="closePubbyModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                        <h3>Pubby of <span id="pubbyEnviroment" class="text-info">none</span></h3>
-                    </div>
-                    <div class="modal-body">
-                        <form id="connectionsDb" class="">
-                            <fieldset>
+                <div id="pubbyModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button id="closePubbyModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                <h3 class="modal-title">Pubby of <span id="pubbyEnviroment" class="text-info">none</span></h3>
+                            </div>
+                            <div class="modal-body">
+                                <form id="connectionsDb" class="">
+                                    <fieldset>
 
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="projectName"><strong>Project Name</strong></label>
-                                    <div class="controls">
-                                        <input id="projectName" name="projectName" type="text" placeholder="coeus.demo" class="input-large">
-                                        <p class="help-block">The name of the project, for display in page titles.</p>
-                                    </div>
-                                </div>
+                                        <!-- Text input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="projectName"><strong>Project Name</strong></label>
+                                            <div class="controls">
+                                                <input class="form-control" id="projectName" name="projectName" type="text" placeholder="coeus.demo" class="input-large">
+                                                <p class="help-block">The name of the project, for display in page titles.</p>
+                                            </div>
+                                        </div>
 
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="projectHomepage"><strong>Project Homepage</strong></label>
-                                    <div class="controls">
-                                        <input id="projectHomepage" name="projectHomepage" type="text" placeholder="http://bioinformatics.ua.pt/coeus/" class="input-xlarge">
-                                        <p class="help-block">A project homepage or similar URL, for linking in page titles.</p>
-                                    </div>
-                                </div>
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="WebBase"><strong>Web Base</strong></label>
-                                    <div class="controls">
-                                        <input id="WebBase" name="WebBase" type="text" placeholder="http://bioinformatics.ua.pt/coeus/" class="input-xlarge">
-                                        <p class="help-block">The root URL where the Pubby web application is installed.</p>
-                                    </div>
-                                </div>
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="Endpoint"><strong>SPARQL Enpoint</strong></label>
-                                    <div class="controls">
-                                        <input id="Endpoint" name="Endpoint" type="text" placeholder="http://bioinformatics.ua.pt/coeus/sparql" class="input-xlarge">
-                                        <p class="help-block">The URL of the SPARQL endpoint whose data we want to expose.</p>
-                                    </div>
-                                </div>
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="DatasetBase"><strong>Dataset Base</strong></label>
-                                    <div class="controls">
-                                        <input id="DatasetBase" name="DatasetBase" type="text" placeholder="http://bioinformatics.ua.pt/coeus/resource/" class="input-xlarge">
-                                        <p class="help-block">The common URI prefix of the resource identifiers in the SPARQL dataset. Only resources with this prefix will be mapped and made available by Pubby.</p>
-                                    </div>
-                                </div>
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="WebResourcePrefix"><strong>Web Resource Prefix</strong></label>
-                                    <div class="controls">
-                                        <input id="WebResourcePrefix" name="WebResourcePrefix" type="text" placeholder="resource/" class="input-large">
-                                        <p class="help-block">Prefix to the mapped web URIs.</p>
-                                        <br/>
-                                        <p class="help-block">For more information please visit the <a href="http://wifo5-03.informatik.uni-mannheim.de/pubby/">Pubby Homepage</a>.</p>
+                                        <!-- Text input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="projectHomepage"><strong>Project Homepage</strong></label>
+                                            <div class="controls">
+                                                <input class="form-control" id="projectHomepage" name="projectHomepage" type="text" placeholder="http://bioinformatics.ua.pt/coeus/" class="input-xlarge">
+                                                <p class="help-block">A project homepage or similar URL, for linking in page titles.</p>
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="WebBase"><strong>Web Base</strong></label>
+                                            <div class="controls">
+                                                <input class="form-control" id="WebBase" name="WebBase" type="text" placeholder="http://bioinformatics.ua.pt/coeus/" class="input-xlarge">
+                                                <p class="help-block">The root URL where the Pubby web application is installed.</p>
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="Endpoint"><strong>SPARQL Enpoint</strong></label>
+                                            <div class="controls">
+                                                <input class="form-control" id="Endpoint" name="Endpoint" type="text" placeholder="http://bioinformatics.ua.pt/coeus/sparql" class="input-xlarge">
+                                                <p class="help-block">The URL of the SPARQL endpoint whose data we want to expose.</p>
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="DatasetBase"><strong>Dataset Base</strong></label>
+                                            <div class="controls">
+                                                <input class="form-control" id="DatasetBase" name="DatasetBase" type="text" placeholder="http://bioinformatics.ua.pt/coeus/resource/" class="input-xlarge">
+                                                <p class="help-block">The common URI prefix of the resource identifiers in the SPARQL dataset. Only resources with this prefix will be mapped and made available by Pubby.</p>
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="control-group">
+                                            <label class="control-label" for="WebResourcePrefix"><strong>Web Resource Prefix</strong></label>
+                                            <div class="controls">
+                                                <input class="form-control" id="WebResourcePrefix" name="WebResourcePrefix" type="text" placeholder="resource/" class="input-large">
+                                                <p class="help-block">Prefix to the mapped web URIs.</p>
+                                                <br/>
+                                                <p class="help-block">For more information please visit the <a href="http://wifo5-03.informatik.uni-mannheim.de/pubby/" target="_blank">Pubby Homepage</a>.</p>
 
-                                    </div>
-                                </div>
+                                            </div>
+                                        </div>
 
-                            </fieldset>
-                        </form>
+                                    </fieldset>
+                                </form>
 
-                        <div id="resultPubby"></div>
+                                <div id="resultPubby"></div>
 
-                    </div>
+                            </div>
 
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-primary loading" onclick="changePubby();">Save Changes</button>
-                    </div>
-                </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                <button class="btn btn-primary loading" onclick="changePubby();">Save Changes</button>
+                            </div>
+                        </div></div></div>
 
             </div>
+        </div>
 
-        </s:layout-component>
-    </s:layout-render>
+    </s:layout-component>
+</s:layout-render>

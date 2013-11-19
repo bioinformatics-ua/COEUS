@@ -224,6 +224,12 @@
                             <div id="header" class="page-header">
                                 <h1>SPARQL Results</h1>
                             </div>
+                            <ol class="breadcrumb">
+                            <li id="breadHome"><span class="glyphicon glyphicon-home"></span> </li>
+                            <li>
+                                <a href="sparqler/">SPARQL</a></li>
+                            <li class="active">Results</li>
+                            </ol>
                                 
                             <xsl:if test="res:head/res:link">
                                 <xsl:call-template name="header"/>

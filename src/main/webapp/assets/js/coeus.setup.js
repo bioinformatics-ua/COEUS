@@ -3,6 +3,14 @@
  */
 
 /**
+ * Return the Application path (instance)
+ * @returns {String}
+ */
+function getApplicationPath(){
+    return window.location.protocol + '//' + window.location.host + '/' + window.location.pathname.split('/')[1] + '/';
+}
+
+/**
  * init service prefix
  * @returns {query} */
 function initSparqlerQuery() {
@@ -1220,4 +1228,16 @@ function loadSeedsOnSidebar() {
 function changeSidebar(id) {
     $('.sidebaritem').removeClass('active');
     $(id).addClass('active');
+}
+
+/**
+ * Reload the context of the coeus application
+ * 
+ * @param {type} success
+ * @param {type} error
+ * @returns {undefined}
+ */
+function reloadContext(success,error) {
+    var url = "/manager/text/reload?path=/coeus";
+    $.ajax({url: url, dataType: 'text'}).done(success).fail(error);
 }

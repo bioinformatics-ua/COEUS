@@ -12,20 +12,20 @@
 
             $(document).ready(function() {
                 getConfigData();
-                callURL("../../config/listenv/", envSuccess);
-                $('.pager').addClass('hide');
+                //callURL("../../config/listenv/", envSuccess);
+                $('.next').addClass('hide');
 
-                $('#host').val("localhost");
-                $('#port').val("3306");
-                $('#path').val("coeus");
-                $('#username').val("root");
+                //$('#host').val("localhost");
+                //$('#port').val("3306");
+                //$('#path').val("coeus");
+                //$('#username').val("root");
                 //$('#password').val("demo");
 
                 $('#projectName').val("coeus.demo");
                 $('#projectHomepage').val("http://bioinformatics.ua.pt/coeus/");
-                $('#WebBase').val("http://localhost:8080/coeus/");
-                $('#Endpoint').val("http://localhost:8080/coeus/sparql");
-                $('#DatasetBase').val("http://bioinformatics.ua.pt/coeus/resource/");
+                //$('#WebBase').val("http://localhost:8080/coeus/");
+                //$('#Endpoint').val("http://localhost:8080/coeus/sparql");
+                //$('#DatasetBase').val("http://bioinformatics.ua.pt/coeus/resource/");
                 $('#WebResourcePrefix').val("resource/");
 
                 //console.log(JSON.parse(generateMap()));
@@ -48,6 +48,7 @@
 
                     }
                 };
+                tooltip();
 
             });
 
@@ -83,10 +84,6 @@
                 return JSON.stringify(json);
             }
 
-            function envSuccess(result) {
-                console.log(result);
-            }
-
             function getConfigData() {
                 $.ajax({url: "../../config/getconfig/", dataType: 'json'}).done(fillConfig).fail(
                         function(jqXHR, textStatus) {
@@ -106,6 +103,7 @@
                 $('#Description').val(result.config.description);
                 //$('#Environment').val(result.config.environment);
                 $('#ApiKey').val(result.config.apikey);
+                buildApiKeysList();
                 $('#Ontology').val(result.config.ontology);
                 $('#SetupFile').val(result.config.setup);
 
@@ -126,7 +124,7 @@
                 for (var r in json) {
                     var val = json[r];
                     i++;
-                    $('#tablePrefixes').append('<tr id="prefix_' + r + '"><td>' + i + '</td><td>' + r + '</td><td><a href="' + val + '">' + val + '</a></td><td><button onclick="removeById(\'prefix_' + r + '\',\'tablePrefixes\');" class="btn btn" type="button">Remove</button></td></tr>');
+                    $('#tablePrefixes').append('<tr id="prefix_' + r + '"><td>' + i + '</td><td>' + r + '</td><td><a href="' + val + '">' + val + '</a></td><td><button onclick="removeById(\'prefix_' + r + '\',\'tablePrefixes\');" class="btn btn-default" type="button">Remove</button></td></tr>');
                 }
 
             }
@@ -136,15 +134,15 @@
                 var key = $('#keyPrefixes').val();
                 var value = $('#valuePrefixes').val();
                 if ($("#prefix_" + key).html() === undefined) {
-                    $('#tablePrefixes').append('<tr id="prefix_' + key + '"><td>' + num + '</td><td>' + key + '</td><td><a href="' + value + '">' + value + '</a></td><td><button onclick="removeById(\'prefix_' + key + '\',\'tablePrefixes\');" class="btn btn" type="button">Remove</button></td></tr>');
+                    $('#tablePrefixes').append('<tr id="prefix_' + key + '"><td>' + num + '</td><td>' + key + '</td><td><a href="' + value + '">' + value + '</a></td><td><button onclick="removeById(\'prefix_' + key + '\',\'tablePrefixes\');" class="btn btn-default" type="button">Remove</button></td></tr>');
                     $('#closePrefixesModal').click();
                 } else {
                     $('#res').append('<p class="text-warning">This Key already exists.</p>');
                 }
+                $('#keyPrefixes').val('');
+                $('#valuePrefixes').val('');
             }
-            function changeTab(old_tab, new_tab, percentage) {
-                $(old_tab).removeClass('active');
-                $(new_tab).addClass('active');
+            function changeProgress(percentage) {
                 document.getElementById('bar').style.width = percentage;
             }
 
@@ -306,460 +304,544 @@
             function upEnvFail(jqXHR, textStatus) {
                 $('#resultUpEnv').html(generateHtmlMessage("Error!", textStatus, "alert-error"));
             }
-            
-            function reload(){
-                var url="../../../manager/text/reload?path=/coeus";
-                callURL(url, function (result){
+
+            function reload() {
+                var url = "../../../manager/text/reload?path=/coeus";
+                callURL(url, function(result) {
                     console.log(result);
+                });
+            }
+            function fillURL() {
+                var projectHomepage = $('#projectHomepage').val();
+                $('#DatasetBase').val(projectHomepage + "resource/");
+            }
+            function sparqlFill() {
+                var webBase = $('#WebBase').val();
+                $('#Endpoint').val(webBase + "sparql");
+            }
+            function removeApiKey() {
+                var e = document.getElementById("dropdownkeys");
+                try {
+                    var value = e.options[e.selectedIndex].id;
+                    removeById(value, "dropdownkeys");
+                    value = value.split("key_")[1];
+                    var q = $('#ApiKey').val();
+                    q = q.replace("|" + value, "");
+                    q = q.replace(value + "|", "");
+                    q = q.replace(value, "");
+                    $('#ApiKey').val(q);
+                } catch (e) {
+                }
+
+            }
+            function updateApiKeys() {
+                var typeahead = $('#putApiKey').val();
+                var prop = $('#ApiKey').val();
+
+                if (typeahead !== "" && prop.indexOf(typeahead) === -1) {
+                    if (prop !== "")
+                        prop = prop + "|";
+                    $('#ApiKey').val(prop + typeahead);
+                    $('#putApiKey').val("");
+
+                    buildApiKeysList();
+                }
+            }
+            function buildApiKeysList() {
+                var array = $('#ApiKey').val().split("|");
+                $('#dropdownkeys').html("");
+                console.log(array);
+                for (var i in array) {
+                    $('#dropdownkeys').append('<option id="key_' + array[i] + '">' + array[i] + '</option>');
+                }
+            }
+            function reload() {
+                $('.reload').addClass('disabled');
+                $('.reload').html('Loading.. <i class="fa fa-spinner fa-spin"></i>');
+                reloadContext(function(result) {
+                    $('#resultReload').html(generateHtmlMessage(result, '<div>&nbsp;</div><a tabindex="1" id="btnStartBuild" href="../seed/" class="btn btn-success btn-lg" type="button">Start build with COEUS<i class="icon-home icon-white"></i></a>', "alert-success"));
+                }, function(jqXHR, result) {
+                    $('#resultReload').html(generateHtmlMessage('Error! ', result, "alert-danger"));
                 });
             }
 
         </script>
     </s:layout-component>
     <s:layout-component name="body">
-      
+
         <div class="container">
 
             <div id="header" class="page-header">
                 <h1>COEUS Setup Wizard</h1>
             </div>
 
+            <ol class="breadcrumb">
+                <li id="breadHome"><span class="glyphicon glyphicon-home"></span> </li>
+                <li class="active">Wizard</li>
+            </ol>
+
             <div id="progress" class="progress progress-striped active" >
-                <div id="bar" class="bar" style="width: 0%;"></div>
+                <div id="bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
             </div>
             <div id="result">
             </div>
-            <div class="tabbable"> <!-- Only required for left/right tabs href="#tab1" data-toggle="tab"-->
-                <ul class="nav nav-tabs">
-                    <li id="litab1" class="active"><a >1. Start <i class="icon-chevron-right"></i></a></li>
-                    <li id="litab2" ><a >2. Environment <i class="icon-chevron-right"></i></a></li>
-                    <li id="litab3" ><a >3. Database <i class="icon-chevron-right"></i></a></li>
-                    <li id="litab4" ><a >4. Pubby <i class="icon-chevron-right"></i></a></li>
-                    <li id="litab5" ><a >5. Model <i class="icon-chevron-right"></i></a></li>
-                    <li id="litab6"><a >6. Prefixes <i class="icon-chevron-right"></i></a></li>
-                    <li id="litab7" href="#tab7" data-toggle="tab"><a >7. Finish</a></li>
-                </ul>
-                <div class="tab-content" style="min-height: 300px">
-                    <div class="tab-pane active" id="tab1" >
-                        <div class="text-center" >
-                            <p>In this section you will give some information to complete some setup files for COEUS.</p>
-                            <p>To begin press the Start Wizard button.</p>
-                            <button onclick="changeTab('#litab1', '#litab2', '15%');" href="#tab2" data-toggle="tab" class="btn btn-large btn-warning" type="button">Start Wizard <i class="icon-play icon-white"></i></button>
-                            <p></p>
-                            <p>If you do not want to change the configurations files, please skip this wizard.</p>
-                            <button href="../seed/" class="btn btn-large" type="button">Skip <i class="icon-fast-forward"></i></button>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="panel-title"><i class="fa fa-wrench"></i> Wizard</div>
+                </div>
+                <div class="panel-body">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-justified" id="myTab">
+                        <li><a href="#start" data-toggle="tab">1. Start <i class="glyphicon glyphicon-chevron-right"></i></a>
+                        </li>
+                        <li><a href="#environment" data-toggle="tab">2. Environment <i class="glyphicon glyphicon-chevron-right"></i></a>
+                        </li>
+                        <li><a href="#model" data-toggle="tab">3. Model <i class="glyphicon glyphicon-chevron-right"></i></a>
+                        </li>
+                        <li><a href="#database" data-toggle="tab">4. Database <i class="glyphicon glyphicon-chevron-right"></i></a>
+                        </li>
+                        <li><a href="#pubby" data-toggle="tab">5. Pubby <i class="glyphicon glyphicon-chevron-right"></i></a>
+                        </li>
+
+                        <li><a href="#prefixes" data-toggle="tab">6. Prefixes <i class="glyphicon glyphicon-chevron-right"></i></a>
+                        </li>
+                        <li><a href="#overview" data-toggle="tab">7. Load <i class="fa fa-flag-checkered"></i></a>
+                        </li>
+
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="start">
+                            <div class="text-center" >
+                                <div>&nbsp;</div>
+                                <p>In this section you will give some information to complete some setup files for COEUS.</p>
+                                <p>To begin press the Start Wizard button.</p>
+                                <button onclick="$('#myTab li:eq(1) a').tab('show');
+                changeProgress('15%');" class="btn btn-lg btn-primary" type="button">Start Wizard <i class="glyphicon glyphicon-play"></i></button>                      
+                            </div>
                         </div>
-
-                    </div>
-                    <div class="tab-pane" id="tab2">
-
-                        <form class="form-horizontal" name="envForm">
-                            <fieldset>
-                                <legend>2.Environment</legend>
-
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="Environment">Create Environment</label>
-                                    <div class="controls" id="envForm">
-                                        <input tabindex="1" id="createEnvironment" name="Environment" type="text" placeholder="Production" class="input-large"> <input id="environment" class="hide"></input>
+                        <div class="tab-pane fade" id="environment">
+                            <div>&nbsp;</div>
+                            <p class="container"><span class="label label-info">Info</span> An environment is used to store application settings.</p>
+                            <div>&nbsp;</div>
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label for="Environment" class="col-sm-2 control-label">Create Environment</label>
+                                    <div class="col-sm-10">
+                                        <input tabindex="1" id="createEnvironment" name="Environment" type="text" placeholder="Production" class="form-control input-large" autofocus/>
+                                        <input id="environment" class="hide" />
                                         <p class="help-block">Name of the Environment used to store application settings.</p>
                                     </div>
                                 </div>
-                                <!-- Button -->
-                                <div class="control-group">
-                                    <label class="control-label" for="createBtnEnv"></label>
-                                    <div class="controls">
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
                                         <a tabindex="2" onclick="createEnv();" id="createBtnEnv" name="createBtnEnv" class="btn btn-primary">Save Changes</a>
                                     </div>
                                 </div>
+                            </form>
+                            <div id="resultCreateEnv"></div>
 
-                            </fieldset>
-                        </form>
+                            <ul class="pager" >
+                                <li class="previous"> <a onclick="$('#myTab li:eq(0) a').tab('show');
+                changeProgress('0%');" >&larr; Previous</a>
+                                </li>
+                                <li class="next" id="nextBtnEnv"> <a tabindex="3" onclick="$('#myTab li:eq(2) a').tab('show');
+                changeProgress('30%');" >Next &rarr;</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane fade" id="model">
+                            <div>&nbsp;</div>
+                            <p class="container"><span class="label label-info">Info</span> This section refers to the COEUS ontology model and API access.</p>
+                            <div>&nbsp;</div>
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
 
-
-                        <div id="resultCreateEnv"></div>
-
-                        <ul class="pager " id="nextBtnEnv">
-                            <!-- <li class="previous  hide" >
-                                 <a onclick="changeTab('#litab2', '#litab1');" href="#tab1" data-toggle="tab">&larr; Previous</a>
-                             </li>-->
-                            <li class="next">
-                                <a tabindex="3" onclick="changeTab('#litab2', '#litab3', '30%');" href="#tab3" data-toggle="tab" >Next &rarr;</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-pane" id="tab3">
-
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <legend>3.Database</legend>
-
+                                    <!-- Text input-->
+                                    <div class="form-group col-md-6">
+                                        <label class="col-sm-2 control-label" for="Name">Name</label>
+                                        <div class="col-sm-10 controls">
+                                            <input tabindex="1" id="Name" name="Name" type="text" placeholder="Uniprot" class="form-control" />
+                                            <p class="help-block">Name of the Model</p>
+                                        </div>
+                                    </div>
+                                    <!-- Textarea -->
+                                    <div class="form-group col-md-6">
+                                        <label  class="col-sm-2 control-label" for="Description">Description</label>
+                                        <div class="col-sm-10 controls">
+                                            <!--<textarea tabindex="2" id="Description" name="Description">Uniprot Setup Ontology</textarea>-->
+                                            <input tabindex="2" id="Description" name="Description" type="text" placeholder="Uniprot Setup Ontology" class="form-control"/>
+                                            <p class="help-block">Model Description</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- Text input-->
+                                    <div class="form-group col-md-6">
+                                        <label class="col-sm-2 control-label" for="Ontology">Ontology</label>
+                                        <div class="col-sm-10 controls">
+                                            <input tabindex="3" id="Ontology" name="Ontology" type="text" placeholder="http://bioinformatics.ua.pt/coeus/ontology" class="form-control"  />
+                                            <p class="help-block">Ontology Location (URL)</p>
+                                        </div>
+                                    </div>
+                                    <!-- Text input-->
+                                    <div class="form-group col-md-6">
+                                        <label  class="col-sm-2 control-label" for="KeyPrefix">Prefix</label>
+                                        <div class="col-sm-10 controls">
+                                            <input tabindex="4" id="KeyPrefix" name="KeyPrefix" type="text" placeholder="coeus" class="form-control input-mini" />
+                                            <p class="help-block">The ontology Key Prefix</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- Text input-->
+                                    <div class="form-group col-md-6">
+                                        <label  class="col-sm-2 control-label"
+                                                for="ApiKey">API</label>
+                                        <div class="col-sm-10 controls">
+                                            <div class="input-group">
+                                                <input tabindex="5" id="putApiKey" name="putApiKey" type="text" placeholder="coeus" class="form-control"  />
+                                                <span class="input-group-btn" ><button id="btnPlus" class="btn btn-success tip" data-toggle="tooltip" title="Add a API Key to the list" type="button" onclick="updateApiKeys();"><i class="fa fa-plus-circle"></i></button></span>
+                                            </div>
+                                            <p class="help-block">REST API Key</p>
+                                        </div>
+                                    </div>
+                                    <!-- Text input-->
+                                    <div class="form-group col-md-6">
+                                        <label  class="col-sm-2 control-label"
+                                                for="Version">Version</label>
+                                        <div class="col-sm-10 controls">
+                                            <input tabindex="6" id="Version" name="Version" type="text" placeholder="1.0" class="form-control input-mini" />
+                                            <p class="help-block">Ontology Version</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Text input <div class="control-group">
+                                
+                                                                    <label class="control-label" for="Built">Built</label>
+                                
+                                                                    <div class="controls">
+                                
+                                                                        <label class="checkbox" >
+                                
+                                                                            <input type="checkbox" id="Built" name="Built">
+                                
+                                                                        </label>
+                                
+                                
+                                
+                                                                        <p class="help-block">Import from the Model</p>
+                                
+                                                                    </div>
+                                
+                                                                </div>-->
                                 <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="jdbcURL">JDBC URL</label>
-                                    <div class="controls" id="urlForm">
-                                        jdbc:mysql://
-                                        <input tabindex="1" id="host" name="host" type="text" placeholder="localhost" class="input-large">
-                                        : <input tabindex="2" id="port" name="jdbcURL" type="text" placeholder="3306" class="input-mini">
-                                        / <input tabindex="3" id="path" name="path" type="text" placeholder="coeus" class="input-mini">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="col-sm-2 control-label">Keys</label>
+                                        <div class="col-sm-10 controls">
+                                            <div class="input-group">
+                                                <select class="form-control tip" id="dropdownkeys" multiple="multiple" data-toggle="tooltip" title="API Keys List."></select> 
+                                                <span class="input-group-btn" >
+                                                    <a class="btn btn-danger tip" onclick="removeApiKey();" data-toggle="tooltip" title="Select element to remove."><i class="fa fa-trash-o"></i></a>
+                                                </span>
+                                            </div>
+                                            <p class="help-block">API Keys supported</p>
+                                            <input id="ApiKey" type="hidden"/>
+                                        </div>
 
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label  class="col-sm-2 control-label"
+                                                for="Debug">Debug</label>
+                                        <div class="col-sm-10 controls">
+                                            <label  class="checkbox">
+                                                <input tabindex="7" type="checkbox" id="Debug" name="Debug" />
+                                            </label>
+                                            <p class="help-block">Debug Log</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Text input <div class="control-group">
+                                
+                                                                    <label class="control-label" for="SetupFile">Setup File</label>
+                                
+                                                                    <div class="controls">
+                                
+                                                                        <input id="SetupFile" name="SetupFile" type="text" placeholder="setup.rdf" class="input-xlarge">
+                                
+                                                                        <p class="help-block">RDF File Location to Import to the DB</p>
+                                
+                                                                    </div>
+                                
+                                                                </div>-->
+                                <!-- Button -->
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label  class="col-sm-2 control-label"
+                                                for="nextBtnModel"></label>
+                                        <div class="col-sm-10 controls"> 
+                                            <a tabindex="8" onclick="createModel();" id="createBtnModel" class="btn btn-primary">Save Changes</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="resultModel"></div>
+                                <ul class="pager" >
+                                    <li class="previous">
+                                        <a onclick="$('#myTab li:eq(1) a').tab('show');
+                changeProgress('15%');" >&larr; Previous</a>
+                                    </li>
+                                    <li class="next" id="nextBtnModel"> <a tabindex="9" onclick="$('#myTab li:eq(3) a').tab('show');
+                changeProgress('45%');" >Next &rarr;</a>
+                                    </li>
+                                </ul>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="database">
+                            <div>&nbsp;</div>
+                            <p class="container"><span class="label label-info">Info</span> COEUS needs an mysql database to store data triples.</p>
+                            <div>&nbsp;</div>
+                            <form class="form-horizontal" role="form">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="jdbcURL">JDBC URL</label>
+                                    <div class="form-inline col-sm-10" id="urlForm">jdbc:mysql://
+                                        <input tabindex="1" id="host" name="host" type="text" placeholder="localhost"
+                                               class="input-large form-control" /> :
+                                        <input tabindex="2" id="port" name="jdbcURL" type="text" placeholder="3306"
+                                               class="input-mini form-control" /> /
+                                        <input tabindex="3" id="path" name="path" type="text" placeholder="coeus"
+                                               class="input-mini form-control" />
                                         <p class="help-block">Database connection URL</p>
                                     </div>
                                 </div>
-
                                 <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="username">Database User</label>
-                                    <div class="controls" id="usernameForm">
-                                        <input tabindex="4" id="username" name="username" type="text" class="input-large">
-
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="username">Database User</label>
+                                    <div class="col-sm-10" id="usernameForm">
+                                        <input tabindex="4" id="username" name="username" type="text" class="input-large form-control" />
                                     </div>
-
                                 </div>
                                 <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="password">Database Password</label>
-                                    <div class="controls" id="passwordForm">
-                                        <input tabindex="5" id="password" name="password" type="password" placeholder="demo" class="input-large">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label " for="password">Database Password</label>
+                                    <div class="col-sm-10" id="passwordForm">
+                                        <input tabindex="5" id="password" name="password" type="password" placeholder=""
+                                               class="input-large form-control" />
                                         <p class="help-block">The user must have privileges to create the DB and the tables structure.</p>
                                     </div>
                                 </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="createBtnDb"></label>
-                                    <div class="controls">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"  for="createBtnDb"></label>
+                                    <div class="col-sm-offset-2 col-sm-10"> 
                                         <a tabindex="6" onclick="createDB();" id="createBtnDb" name="createBtnDb" class="btn btn-primary">Save Changes</a>
                                     </div>
                                 </div>
-                            </fieldset>
-                        </form>
-                        <div id="resultCreateDb">
 
+                            </form>
+                            <div id="resultCreateDb"></div>
+                            <ul class="pager" >
+                                <li class="previous">
+                                    <a onclick="$('#myTab li:eq(2) a').tab('show');
+                changeProgress('30%');" >&larr; Previous</a>
+                                </li>
+                                <li class="next" id="nextBtnDb"> 
+                                    <a tabindex="7" onclick="$('#myTab li:eq(4) a').tab('show');
+                changeProgress('60%');" >Next &rarr;</a>
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="pager" id="nextBtnDb">
-                            <!--<li class="previous">
-                                <a onclick="changeTab('#litab3', '#litab2');" href="#tab2" data-toggle="tab">&larr; Previous</a>
-                            </li>-->
-                            <li class="next">
-                                <a tabindex="7" onclick="changeTab('#litab3', '#litab4', '45%');" href="#tab4" data-toggle="tab" >Next &rarr;</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-pane" id="tab4">
-
-                        <form id="pubbyForm" class="form-horizontal">
-                            <fieldset>
-                                <legend>4.Pubby</legend>
-                                <div class="row-fluid">
-
+                        <div class="tab-pane fade" id="pubby">
+                            <div>&nbsp;</div>
+                            <p class="container"><span class="label label-info">Info</span> COEUS make use of <a href="http://wifo5-03.informatik.uni-mannheim.de/pubby/" target="_blank">Pubby</a> capabilities to provide a LinkedData interface.</p>                                        
+                            <div>&nbsp;</div>
+                            <form id="pubbyForm" class="form-horizontal" role="form">
+                                <div class="row">
                                     <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="projectHomepage">Project Homepage</label>
-                                        <div class="controls">
-                                            <input tabindex="1" id="projectHomepage" name="projectHomepage" type="text" placeholder="http://bioinformatics.ua.pt/coeus/" class="input-xlarge">
+                                    <div class="form-group col-md-6">
+                                        <label class="col-sm-2 control-label" for="projectHomepage">URL</label>
+                                        <div class="col-sm-10 controls">
+                                            <input tabindex="1" id="projectHomepage" name="projectHomepage" type="text" placeholder="http://bioinformatics.ua.pt/coeus/" class="form-control" onkeyup="fillURL();"/>
                                             <p class="help-block">A project homepage or similar URL, for linking in page titles.</p>
                                         </div>
                                     </div>
                                     <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="projectName">Project Name</label>
-                                        <div class="controls">
-                                            <input tabindex="2" id="projectName" name="projectName" type="text" placeholder="coeus.demo" class="input-large">
+                                    <div class="form-group col-md-6">
+                                        <label class="col-sm-2 control-label">Name</label>
+                                        <div class="col-sm-10 controls">
+                                            <input tabindex="2" id="projectName" name="projectName" type="text" placeholder="coeus.demo" class="form-control" />
                                             <p class="help-block">The name of the project, for display in page titles.</p>
                                         </div>
                                     </div>
-
-
-
                                 </div>
-                                <div class="row-fluid">
+                                <div class="row">
                                     <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="Endpoint">SPARQL Enpoint</label>
-                                        <div class="controls">
-                                            <input tabindex="3" id="Endpoint" name="Endpoint" type="text" placeholder="http://bioinformatics.ua.pt/coeus/sparql" class="input-xlarge">
-                                            <p class="help-block">The URL of the SPARQL endpoint whose data we want to expose.</p>
+                                    <div class="form-group col-md-6">
+                                        <label class="col-sm-2 control-label" for="DatasetBase">Dataset Base</label>
+                                        <div class="col-sm-10 controls">
+                                            <input tabindex="5" id="DatasetBase" name="DatasetBase" type="text" value="http://bioinformatics.ua.pt/coeus/resource/" class="form-control" disabled/>
+                                            <p class="help-block">The common URI prefix of the resource identifiers in the SPARQL dataset.
+                                                Only resources with this prefix will be mapped and made available by Pubby.</p>
                                         </div>
                                     </div>
                                     <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="WebBase">Web Base</label>
-                                        <div class="controls">
-                                            <input tabindex="4" id="WebBase" name="WebBase" type="text" placeholder="http://bioinformatics.ua.pt/coeus/" class="input-large">
+                                    <div class="form-group col-md-6">
+                                        <label class="col-sm-2 control-label" for="WebResourcePrefix">Web Resource Prefix</label>
+                                        <div class="col-sm-10 controls">
+                                            <input tabindex="6" id="WebResourcePrefix" name="WebResourcePrefix" type="text" placeholder="resource/" class="form-control" disabled/>
+                                            <p class="help-block">Prefix to the mapped web URIs.</p>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- Text input-->
+                                    <div class="form-group col-md-6">
+                                        <label  class="control-label col-sm-2 " for="WebBase">Web Base</label>
+                                        <div class="col-sm-10 controls">
+                                            <div class="input-group">
+                                                <input tabindex="4" id="WebBase" name="WebBase" type="text" placeholder="http://bioinformatics.ua.pt/coeus/" class="form-control" onkeyup="sparqlFill();"/>
+                                                <span class="input-group-btn" ><button id="btnPlus" class="btn btn-info tip" data-toggle="tooltip" title="Auto-detect the application path" type="button" onclick="$('#WebBase').val(getApplicationPath());
+                sparqlFill();">Auto-Detect</button></span>
+                                            </div>
                                             <p class="help-block">The root URL where the Pubby web application is installed.</p>
                                         </div>
                                     </div>
-
-                                </div>
-                                <div class="row-fluid">
                                     <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="DatasetBase">Dataset Base</label>
-                                        <div class="controls">
-                                            <input tabindex="5" id="DatasetBase" name="DatasetBase" type="text" placeholder="http://bioinformatics.ua.pt/coeus/resource/" class="input-xlarge">
-                                            <p class="help-block">The common URI prefix of the resource identifiers in the SPARQL dataset. Only resources with this prefix will be mapped and made available by Pubby.</p>
-                                        </div>
-                                    </div>
-                                    <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="WebResourcePrefix">Web Resource Prefix</label>
-                                        <div class="controls">
-                                            <input tabindex="6" id="WebResourcePrefix" name="WebResourcePrefix" type="text" placeholder="resource/" class="input-medium">
-                                            <p class="help-block">Prefix to the mapped web URIs.</p>
-                                            <br/>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Info    -->
-                                <div class="control-group">
-                                    <label class="control-label"></label>
-                                    <div class="controls">
-                                        <p class="help-block">For more information please visit the <a href="http://wifo5-03.informatik.uni-mannheim.de/pubby/">Pubby Homepage</a>.</p>
-                                    </div>
-                                </div>
-
-                                <!-- Button -->
-                                <div class="control-group">
-                                    <label class="control-label" for="nextBtnPubby"></label>
-                                    <div class="controls">
-                                        <a tabindex="7" onclick="createPubby();" id="createBtnPubby" class="btn btn-primary">Save Changes</a>
-                                    </div>
-                                </div>
-
-                                <div id="resultPubby"></div>
-
-                            </fieldset>
-                        </form>
-                        <ul class="pager" id="nextBtnPubby">
-                            <!--<li class="previous">
-                                <a onclick="changeTab('#litab4', '#litab3');" href="#tab3" data-toggle="tab">&larr; Previous</a>
-                            </li>-->
-                            <li class="next">
-                                <a tabindex="8" onclick="changeTab('#litab4', '#litab5', '60%');" href="#tab5" data-toggle="tab" >Next &rarr;</a>
-                            </li>
-                        </ul>
-
-                    </div>
-                    <div class="tab-pane" id="tab5">
-
-                        <form class="form-horizontal" id="modelForm">
-                            <fieldset>
-                                <legend>5.Model Configurations</legend>
-
-                                <div class="row-fluid">
-
-                                    <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="Name">Name</label>
-                                        <div class="controls">
-                                            <input tabindex="1" id="Name" name="Name" type="text" placeholder="Uniprot" class="input-large">
-                                            <p class="help-block">Name of the Model</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Textarea -->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="Description">Description</label>
-                                        <div class="controls">                     
-                                            <!--<textarea tabindex="2" id="Description" name="Description">Uniprot Setup Ontology</textarea>-->
-                                            <input tabindex="2" id="Description" name="Description" type="text" placeholder="Uniprot Setup Ontology">
-                                            <p class="help-block">Model Description</p>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="row-fluid">
-
-                                    <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="Ontology">Ontology URL</label>
-                                        <div class="controls">
-                                            <input tabindex="3" id="Ontology" name="Ontology" type="text" placeholder="http://bioinformatics.ua.pt/coeus/ontology" class="input-xlarge">
-                                            <p class="help-block">Ontology Location</p>
-                                        </div>
-                                    </div>
-                                    <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="KeyPrefix">Key Prefix</label>
-                                        <div class="controls">
-                                            <input tabindex="4" id="KeyPrefix" name="KeyPrefix" type="text" placeholder="coeus" class="input-mini">
-                                            <p class="help-block">The ontology prefix</p>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                                <div class="row-fluid">
-
-                                    <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="ApiKey">API Keys</label>
-                                        <div class="controls">
-                                            <input tabindex="5" id="ApiKey" name="ApiKey" type="text" placeholder="coeus|uavr" class="input-large">
-                                            <p class="help-block">REST API Key</p>
-                                        </div>
-                                    </div>
-
-
-                                    <!-- Text input-->
-                                    <div class="control-group span6">
-                                        <label class="control-label" for="Version">Version</label>
-                                        <div class="controls">
-                                            <input tabindex="6" id="Version" name="Version" type="text" placeholder="1.0" class="input-mini">
-                                            <p class="help-block">Ontology Version</p>
+                                    <div class="form-group col-md-6">
+                                        <label class="control-label col-sm-2 " for="Endpoint">SPARQL</label>
+                                        <div class=" col-sm-10 controls">
+                                            <input tabindex="3" id="Endpoint" name="Endpoint" type="text" placeholder="http://bioinformatics.ua.pt/coeus/sparql" class="form-control" disabled/>
+                                            <p class="help-block">The URL of the SPARQL endpoint whose data we want to expose.</p>
                                         </div>
                                     </div>
 
                                 </div>
-
-
-                                <!-- Text input
-                                <div class="control-group">
-                                    <label class="control-label" for="Built">Built</label>
-                                    <div class="controls">
-                                        <label class="checkbox" >
-                                            <input type="checkbox" id="Built" name="Built">
-                                        </label>
-
-                                        <p class="help-block">Import from the Model</p>
+                                <div class="row">
+                                    <!-- Button -->
+                                    <div class="form-group col-md-6">
+                                        <label class="control-label col-sm-2 " for="nextBtnPubby"></label>
+                                        <div class="controls col-sm-10"> <a tabindex="7" onclick="createPubby();" id="createBtnPubby" class="btn btn-primary">Save Changes</a>
+                                        </div>
                                     </div>
-                                </div>-->
-
-                                <!-- Text input-->
-                                <div class="control-group">
-                                    <label class="control-label" for="Debug">Debug</label>
-                                    <div class="controls">
-                                        <label class="checkbox" >
-                                            <input tabindex="7" type="checkbox" id="Debug" name="Debug">
-                                        </label>
-                                        <p class="help-block">Debug Log</p>
+                                    <!-- Info -->
+                                    <div class="form-group col-md-6">
+                                        <label class="control-label col-sm-2"></label>
+                                        <div class="col-sm-10 controls">
+                                            </div>
                                     </div>
                                 </div>
+                            </form>
+                            <div id="resultPubby"></div>
 
-                                <!-- Text input
-                                <div class="control-group">
-                                    <label class="control-label" for="SetupFile">Setup File</label>
-                                    <div class="controls">
-                                        <input id="SetupFile" name="SetupFile" type="text" placeholder="setup.rdf" class="input-xlarge">
-                                        <p class="help-block">RDF File Location to Import to the DB</p>
-                                    </div>
-                                </div>-->
-                                <!-- Button -->
-                                <div class="control-group">
-                                    <label class="control-label" for="nextBtnModel"></label>
-                                    <div class="controls">
-                                        <a tabindex="8" onclick="createModel();" id="createBtnModel" class="btn btn-primary">Save Changes</a>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
 
-                        <div id="resultModel"></div>
-                        <ul class="pager" id="nextBtnModel">
-                            <!--<li class="previous">
-                                <a onclick="changeTab('#litab5', '#litab4');" href="#tab4" data-toggle="tab">&larr; Previous</a>
-                            </li>-->
-                            <li class="next">
-                                <a tabindex="9" onclick="changeTab('#litab5', '#litab6', '75%');" href="#tab6" data-toggle="tab" >Next &rarr;</a>
-                            </li>
-                        </ul>
-
-                    </div>
-                    <div class="tab-pane" id="tab6">
-
-                        <legend>6.Prefix Configurations</legend>
-                        <div class="text-right">
-                            <button onclick="" class="btn btn-success" href="#prefixesModal" role="button" data-toggle="modal" type="button">Add <i class="icon-plus icon-white"></i></button>
+                            <ul class="pager" >
+                                <li class="previous">
+                                    <a onclick="$('#myTab li:eq(3) a').tab('show');
+                changeProgress('45%');" >&larr; Previous</a>
+                                </li>
+                                <li class="next" id="nextBtnPubby"> <a tabindex="8" onclick="$('#myTab li:eq(5) a').tab('show');
+                changeProgress('75%');">Next &rarr;</a>
+                                </li>
+                            </ul>
                         </div>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        #
-                                    </th>
-                                    <th>
-                                        Prefix
-                                    </th>
-                                    <th>
-                                        URL
-                                    </th>
-                                    <th>
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablePrefixes">
 
-                            </tbody>
-                        </table>
+                        <div class="tab-pane fade" id="prefixes">
+                            <div>&nbsp;</div>
+                            <p class="container"><span class="label label-info">Info</span> In this section you must add all ontologies that you may use with COEUS. All ontology properties are automatic loaded.</p>                                        
 
-                        <div class="control-group">
-                            <label class="control-label" for="nextBtnPrefixes"></label>
-                            <div class="controls">
-                                <button onclick="createPrefixes();" id="createBtnPrefixes" class="btn btn-primary">Save Changes</button>
+                            <div class="text-right">
+                                <button onclick="" class="btn btn-success" href="#prefixesModal" role="button"
+                                        data-toggle="modal" type="button">Add <i class="glyphicon glyphicon-plus "></i>
+                                </button>
                             </div>
+                            <div class="container">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Prefix</th>
+                                            <th>URL</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablePrefixes"></tbody>
+                                </table>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="nextBtnPrefixes"></label>
+                                    <div class="controls">
+                                        <button onclick="createPrefixes();" id="createBtnPrefixes" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div>&nbsp;</div>
+                            <div id="resultPrefixes"></div>
+                            <ul class="pager" >
+                                <li class="previous">
+                                    <a onclick="$('#myTab li:eq(4) a').tab('show');
+                changeProgress('60%');" >&larr; Previous</a>
+                                </li>
+                                <li class="next" id="nextBtnPrefixes"> <a onclick="$('#myTab li:eq(6) a').tab('show');
+                changeProgress('100%');" >Next &rarr;</a>
+                                </li>
+                            </ul>
                         </div>
-                        <div id="resultPrefixes"></div>
+                        <div class="tab-pane fade " id="overview">
+                            <div>&nbsp;</div>
+                            <p class="text-center">You have successfully finished the Setup Wizard.</p>
+                            <div id="resultReload" class="text-center">
+                                <div class="alert alert-warning ">
+                                    <strong>Now your application server needs to load the new configurations.</strong> 
+                                    <div>&nbsp;</div>
+                                    <button class="btn btn-warning btn-lg reload" onclick="reload();" role="button">Load <i class="fa fa-download"></i></button>
+                                    <a class="btn btn-default btn-lg" href="../config/" role="button">Run Again <i class="fa fa-undo"></i></a>
+                                    <div>&nbsp;</div>
 
-                        <ul class="pager" id="nextBtnPrefixes">
-                            <!--<li class="previous">
-                                <a onclick="changeTab('#litab6', '#litab5');" href="#tab5" data-toggle="tab">&larr; Previous</a>
-                            </li>-->
-                            <li class="next">
-                                <a onclick="changeTab('#litab6', '#litab7', '100%');" href="#tab7" data-toggle="tab" >Next &rarr;</a>
-                            </li>
-                        </ul>
+                                </div>
+                            </div>
+                            
 
-                    </div> 
-                    <div class="tab-pane" id="tab7">
-                        <div class="text-center" style="height: 100px">
-                            <p>You have <span class="text-success">successfully finished</span> the Setup Wizard. You can now start build your application model.</p>
-                            <p class="text-error">Warning: It is recommended that you reload your application settings to apply the new configurations.</p>
-
-                            <a tabindex="1" id="btnStartBuild" href="../seed/" onclick="reload();" class="btn btn-info btn-large" type="button">Apply and start using COEUS<i class="icon-home icon-white"></i></a>
-
+                            <ul class="pager">
+                                <li class="previous">
+                                    <a onclick="$('#myTab li:eq(5) a').tab('show');
+                changeProgress('75%');" >&larr; Previous</a>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="text-center" style="height: 200px">
-                            <p>
-                            <p>If you want to make additional changes please run again this wizard:</p>
-                            <a tabindex="2" id="btnStartWizard" href="../config/" class="btn btn-warning btn-large" type="button">Run Again <i class="icon-refresh icon-white"></i></a>
-
-                            </p>
-
-                        </div>
-
                     </div>
 
                 </div>
-
-
-
             </div>
 
-
             <!-- Modal -->
-            <div id="prefixesModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="prefixesModal" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" id="closePrefixesModal" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                    <h3 id="prefixesModalLabel">Add Prefix</h3>
-                </div>
-                <div class="modal-body">
+            <div id="prefixesModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="prefixesModal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" id="closePrefixesModal" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                            <h3 class="modal-title" id="prefixesModalLabel">Add Prefix</h3>
+                        </div>
+                        <div class="modal-body">
 
-                    <div id="keyPrefixesForm" >
-                        <label class="control-label" for="title">Key</label>
-                        <input class="input-mini" id="keyPrefixes" type="text" placeholder="dc" > <i class="icon-question-sign" data-toggle="tooltip" title="The Key of the prefix" ></i>
-                    </div>
-                    <div id="valuePrefixesForm"> 
-                        <label class="control-label" for="label">Value</label>
-                        <input class="input-xlarge" id="valuePrefixes" type="text" placeholder="http://purl.org/dc/elements/1.1/"> <i class="icon-question-sign" data-toggle="tooltip" title="The prefix URL" ></i>
-                    </div>
+                            <div id="keyPrefixesForm" class="form-group">
+                                <label class="control-label" for="title">Key</label>
+                                <input class="input-mini form-control" id="keyPrefixes" type="text" placeholder="dc" > <i class="icon-question-sign" data-toggle="tooltip" title="The Key of the prefix" ></i>
+                            </div>
+                            <div id="valuePrefixesForm" class="form-group"> 
+                                <label class="control-label" for="label">Value</label>
+                                <input class="form-control" id="valuePrefixes" type="text" placeholder="http://purl.org/dc/elements/1.1/"> <i class="icon-question-sign" data-toggle="tooltip" title="The prefix URL" ></i>
+                            </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                    <button class="btn btn-success" id="addPrefixButton" onclick="addPrefix();">Add <i class="icon-plus icon-white"></i></button>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                            <button class="btn btn-success" id="addPrefixButton" onclick="addPrefix();">Add <i class="icon-plus icon-white"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
