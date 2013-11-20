@@ -58,8 +58,13 @@
                     var resource = auxResource.value;
                     var prefix = getPrefix(auxResource.namespace);
                     arrayOfConcepts[i] = resource;
+                    
+                    var recent_add = $('#resourceURI').html();var recent='';
+                    if(recent_add.toString() === (prefix + ':' + resource).toString()) recent=' <span class="label label-warning tip" data-toggle="tooltip" title="Recently added" >New <i class="fa fa-star" ></i></span> ';
+
+                    
                     c += '<p class="text-info treeitem"><a href="../../resource/' + resource + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
-                            + resource + '<span class="showonhover">'
+                            + resource +recent+ '<span class="showonhover">'
                             + ' <a href="#editResourceModal" data-toggle="modal" onclick="prepareResourceEdit(\'' + prefix + ':' + resource + '\');"><sub><i class="black fa fa-edit fa-2x tip" data-toggle="tooltip" title="Edit"></i></sub></a>'
                             + ' <a href="../selector/' + prefix + ':' + resource + '"><sub><i class="black fa fa-wrench fa-2x tip" data-toggle="tooltip" title="Configuration" ></i></sub></a>'
                             + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + prefix + ':' + resource + '\')"><sub><i class="black fa fa-trash-o fa-2x tip" data-toggle="tooltip" title="Delete"></i></sub></a>'
@@ -82,9 +87,14 @@
                     var prefix = getPrefix(auxConcept.namespace);
                     var all = prefix + ':' + concept;
                     arrayOfConcepts[i] = concept;
+                    
+                    var recent_add = $('#uri').html();var recent='';
+                    if(recent_add.toString() === all.toString()) recent=' <span class="label label-warning tip" data-toggle="tooltip" title="Recently added" >New <i class="fa fa-star" ></i></span> ';
+
+                    
                     c += '<p class="text-warning treeitem">'
                             + '<a href="../../resource/' + concept + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
-                            + concept + '<span class="showonhover">'
+                            + concept + recent+ '<span class="showonhover">'
                             //+ ' <a href="../concept/edit/' + prefix + ':' + concept + '"><i class="icon-edit"></i></a>'
                             + ' <a href="#editModal" data-toggle="modal" onclick="prepareEdit(\'' + all + '\');"><sub><i class="black fa fa-edit fa-2x tip" data-toggle="tooltip" title="Edit"></i></sub></a>'
                             //+ ' <a href="../resource/add/' + all + '"><i class="icon-plus-sign"></i></a>'
@@ -150,10 +160,13 @@
                     var entity = auxEntity.value;
                     var prefix = getPrefix(auxEntity.namespace);
                     arrayOfEntities[key] = entity;
+                    
+                    var recent_add = $('#uri').html();var recent='';
+                    if(recent_add.toString() === entity.toString()) recent=' <span class="label label-warning tip" data-toggle="tooltip" title="Recently added" >New <i class="fa fa-star" ></i></span> ';
 
                     e += '<p class="text-success treeitem">'
                             + '<a href="../../resource/' + entity + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
-                            + entity + '<span class="showonhover">'
+                            + entity + recent+'<span class="showonhover">'
                             + ' <a href="#editModal" data-toggle="modal" onclick="prepareEdit(\'' + prefix + ":" + entity + '\');"><sub><i class="black fa fa-edit fa-2x tip" data-toggle="tooltip" title="Edit" ></i></sub></a>'
                             // + ' <a href="../entity/edit/' + prefix + ":" + entity + '"><i class="icon-edit"></i></a> '
                             // + ' <a href="../concept/add/' + prefix + ":" + entity + '"><i class="icon-plus-sign"></i></a> '

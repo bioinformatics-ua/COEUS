@@ -93,14 +93,16 @@
                 }, 2000);
                 var url = "../../config/changedb/" + encodeBars(generateDbMap());
                 callURL(url, showResult.bind(this, '#resultDb', url), showError.bind(this, '#resultDb', url));
-                $('#info').html(generateHtmlMessage("The application environment have changed!!", '<p>You must reload the application context to apply new configurations to the server.</p><button class="btn btn-warning reload" onclick="reload();" role="button">Reload</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-warning"));            }
+                $('#info').html(generateHtmlMessage("The application environment have changed!!", '<p>You must reload the application context to apply new configurations to the server.</p><button class="btn btn-warning reload" onclick="reload();" role="button">Reload</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-warning"));
+            }
             function changePubby() {
                 timer = setTimeout(function() {
                     $('#closePubbyModal').click();
                 }, 2000);
                 var url = "../../config/changepubby/" + encodeBars(generatePubbyMap());
                 callURL(url, showResult.bind(this, '#resultPubby', url), showError.bind(this, '#resultPubby', url));
-                $('#info').html(generateHtmlMessage("The application environment have changed!!", '<p>You must reload the application context to apply new configurations to the server.</p><button class="btn btn-warning reload" onclick="reload();" role="button">Reload</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-warning"));            }
+                $('#info').html(generateHtmlMessage("The application environment have changed!!", '<p>You must reload the application context to apply new configurations to the server.</p><button class="btn btn-warning reload" onclick="reload();" role="button">Reload</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-warning"));
+            }
 
             function generateDbMap() {
 
@@ -168,15 +170,15 @@
                 $('#resultPubby').html('');
                 callURL("../../config/getmap/" + env, getMapSuccess, showError.bind(this, '#resultDb', ""));
             }
-            
-            function reload(){
-                    $('.reload').addClass('disabled');
-                    $('.reload').html('Reloading.. <i class="fa fa-spinner fa-spin"></i>');
-                    reloadContext(function (result){
-                        $('#info').html(generateHtmlMessage(result, '<br/><button class="btn btn-success reload" onclick="window.location.reload(true);" role="button">Refresh page</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-success"));
-                    },function (jqXHR, result){
-                        $('#info').html(generateHtmlMessage(result, '<br/><button class="btn btn-danger reload" onclick="window.location.reload(true);" role="button">Refresh page</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-danger"));                  
-                    });
+
+            function reload() {
+                $('.reload').addClass('disabled');
+                $('.reload').html('Reloading.. <i class="fa fa-spinner fa-spin"></i>');
+                reloadContext(function(result) {
+                    $('#info').html(generateHtmlMessage(result, '<br/><button class="btn btn-success reload" onclick="window.location.reload(true);" role="button">Refresh page</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-success"));
+                }, function(jqXHR, result) {
+                    $('#info').html(generateHtmlMessage(result, '<br/><button class="btn btn-danger reload" onclick="window.location.reload(true);" role="button">Refresh page</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-danger"));
+                });
             }
 
 
@@ -230,24 +232,28 @@
 
 
                 <!-- Modal -->
-                <div id="removeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <button id="closeRemoveModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                        <h3 >Remove Environment</h3>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure do you want to remove the <strong><a class="text-error" id="removeModalLabel"></a></strong> environment?</p>
-                        <p class="text-warning">Warning: All configurations are removed.</p>
+                <div id="removeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button id="closeRemoveModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                <h3 class="modal-title">Remove Environment</h3>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure do you want to remove the <strong><a class="text-error" id="removeModalLabel"></a></strong> environment?</p>
+                                <p class="text-warning">Warning: All configurations are removed.</p>
 
-                        <div id="resultRemove">
+                                <div id="resultRemove">
 
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                <button class="btn btn-danger loading" onclick="removeEnv();">Remove</button>
+                            </div>
                         </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-danger loading" onclick="removeEnv();">Remove</button>
                     </div>
                 </div>
 

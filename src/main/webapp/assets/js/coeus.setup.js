@@ -579,6 +579,14 @@ function edit() {
  */
 function changeURI(id, type, value) {
     document.getElementById(id).innerHTML = 'coeus:' + type.toLowerCase() + '_' + value.split(' ').join('_');
+    //auto-fill label and comment
+    if(type.toLowerCase()==="resource"){
+        document.getElementById('label'+type).value = value+" Label";
+        document.getElementById('comment'+type).value = value+" Description";
+    }else{
+        document.getElementById('label').value = value+" Label";
+        document.getElementById('comment').value = value+" Description";
+    }
 }
 /**
  * Function to be called before add a Seed, Entity or Concept
@@ -757,17 +765,21 @@ function prepareAddResourceModal(link) {
     $('#order').val("");
     $('#extends').val("");
     $('#resourceLink').val(link);
+    publisherChange("Add");
     var q = "SELECT ?concept ?c {?entity coeus:isEntityOf " + link + " . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
-    queryToResult(q, fillConceptsExtension);
+    queryToResult(q, fillConceptsExtension.bind(this,link));
 }
-function fillConceptsExtension(result) {
+function fillConceptsExtension(link,result) {
     $('#extends').html("");
     $('#editExtends').html("");
+    console.log(result);
     for (var r in result) {
         var concept = splitURIPrefix(result[r].concept.value);
         $('#extends').append('<option>' + concept.value + '</option>');
         $('#editExtends').append('<option>' + concept.value + '</option>');
     }
+    //Only on addResource
+    if(link!==null) $('#extends option:contains(' + link.split(":")[1] + ')').prop({selected: true});
 }
 /**
  * Add a Resource
@@ -1061,7 +1073,7 @@ function prepareResourceEdit(individual) {
     $('#oldBuilt').val("false");
 
     var q = "SELECT ?concept ?c {?concep coeus:hasResource " + individual + " . ?entity coeus:isEntityOf ?concep . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
-    queryToResult(q, fillConceptsExtension);
+    queryToResult(q, fillConceptsExtension.bind(this,null));
     var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?built {" + individual + " dc:title ?title . " + individual + " rdfs:label ?label . " + individual + " rdfs:comment ?comment . " + individual + " coeus:method ?method . " + individual + " dc:publisher ?publisher . " + individual + " coeus:endpoint ?endpoint . " + individual + " coeus:query ?query . " + individual + " coeus:order ?order . " + individual + " coeus:extends ?extends . OPTIONAL{" + individual + " coeus:built ?built } }";
     queryToResult(q, fillResourceEdit);
 

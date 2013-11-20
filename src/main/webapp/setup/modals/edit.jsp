@@ -31,7 +31,7 @@ This modal is used to edit Seeds, Entities and Concepts because all of them shar
             </div>
 
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
                 <button id="edit" class="btn btn-primary loading" onclick="edit();">Save Changes</button>
             </div>
         </div>

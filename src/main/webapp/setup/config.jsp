@@ -359,7 +359,7 @@
                 $('.reload').addClass('disabled');
                 $('.reload').html('Loading.. <i class="fa fa-spinner fa-spin"></i>');
                 reloadContext(function(result) {
-                    $('#resultReload').html(generateHtmlMessage(result, '<div>&nbsp;</div><a tabindex="1" id="btnStartBuild" href="../seed/" class="btn btn-success btn-lg" type="button">Start build with COEUS<i class="icon-home icon-white"></i></a>', "alert-success"));
+                    $('#resultReload').html(generateHtmlMessage(result, '<div>&nbsp;</div><a tabindex="1" id="btnStartBuild" href="../seed/" class="btn btn-success btn-lg" type="button">Start with COEUS<i class="icon-home icon-white"></i></a>', "alert-success"));
                 }, function(jqXHR, result) {
                     $('#resultReload').html(generateHtmlMessage('Error! ', result, "alert-danger"));
                 });
