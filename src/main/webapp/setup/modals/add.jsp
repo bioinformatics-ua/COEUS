@@ -15,15 +15,15 @@ This modal is used to add Seeds, Entities and Concepts because all of them share
 
                     <div id="titleForm" class="form-group">
                         <label class="control-label" for="title">Title</label>
-                        <input class="form-control tip" data-toggle="tooltip" title="The title (dc:title) property." id="title" type="text" placeholder="Ex: Publication" onkeyup="changeURI('uri', $('#addType').html(), this.value);" autofocus> 
+                        <input maxlength="50" class="form-control tip" data-toggle="tooltip" title="The title (dc:title) property." id="title" type="text" placeholder="Ex: Publication" onkeyup="changeURI('uri', $('#addType').html(), this.value);" autofocus> 
                     </div>
                     <div id="labelForm" class="form-group">
                         <label class="control-label" for="label">Label</label>
-                        <input class="form-control tip" data-toggle="tooltip" title="The label (rdfs:label) property." id="label" type="text" placeholder="Ex: Publication Label"> 
+                        <input maxlength="50" class="form-control tip" data-toggle="tooltip" title="The label (rdfs:label) property." id="label" type="text" placeholder="Ex: Publication Label"> 
                     </div>
                     <div id="commentForm" class="form-group">
                         <label class="control-label" for="comment">Description</label>
-                        <textarea class="form-control tip" data-toggle="tooltip" title="The description (rdfs:comment) property." rows="4" id="comment" type="text" placeholder="Ex: Semantic Publication"></textarea> 
+                        <textarea maxlength="100" class="form-control tip" data-toggle="tooltip" title="The description (rdfs:comment) property." rows="4" id="comment" type="text" placeholder="Ex: Semantic Publication"></textarea> 
                     </div>
                     <input type="hidden" id="linkedWith" value=""/>
             </div>

@@ -818,8 +818,9 @@ function addResource() {
         empty = true;
     } else
         $('#resourceCommentForm').removeClass('has-error');
-    if (endpoint === '') {
+    if ((endpoint === '') | ((!contains(endpoint,"http://")) && (!contains(endpoint,"https://")) && (!contains(endpoint,"file://")))) {
         $('#endpointForm').addClass('has-error');
+        $('#addResourceResult').html(generateHtmlMessage("Endpoint error:", "It can only start with \"http(s)://\" or \"file://\"." , "alert-danger"));
         empty = true;
     } else
         $('#endpointForm').removeClass('has-error');
@@ -1252,4 +1253,15 @@ function changeSidebar(id) {
 function reloadContext(success,error) {
     var url = "/manager/text/reload?path=/coeus";
     $.ajax({url: url, dataType: 'text'}).done(success).fail(error);
+}
+
+/**
+ * return true if the pattern match the string value
+ * @param {type} value
+ * @param {type} pattern
+ * @returns {Boolean}
+ */
+function contains(value, pattern) {
+    if (value.indexOf(pattern)!== -1) return true;
+    else return false;
 }

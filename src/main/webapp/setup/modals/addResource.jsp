@@ -8,9 +8,6 @@
 <div id="addResourceModal" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content"></div>
-    </div>
-    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button id="closeAddResourceModal" type="button" class="close" data-dismiss="modal"
@@ -30,7 +27,7 @@
                     <div id="resourceTitleForm" class="col-md-6 form-group">
                         <label for="title">Title</label>
                         <input class="form-control tip" data-toggle="tooltip" title="The title (dc:title) property." id="titleResource" type="text" placeholder="Ex: Journal"
-                               onkeyup="changeURI('resourceURI', 'Resource', this.value);" autofocus/> 
+                               maxlength="50" onkeyup="changeURI('resourceURI', 'Resource', this.value);" autofocus/> 
                     </div>
                     <div id="orderForm" class="col-md-6 form-group">
                         <label for="label label-default">Order</label>
@@ -40,12 +37,12 @@
                 </div>
                 <div id="resourceLabelForm" class="form-group">
                     <label for="label label-default">Label</label>
-                    <input id="labelResource" type="text" placeholder="Ex: Journal Resource" class="form-control tip" data-toggle="tooltip" title="The label (rdfs:label) of the Resource." />
+                    <input id="labelResource" maxlength="50" type="text" placeholder="Ex: Journal Resource" class="form-control tip" data-toggle="tooltip" title="The label (rdfs:label) of the Resource." />
                 </div>
                 <div id="resourceCommentForm" class="form-group">
                     <label for="comment">Description</label>
                     <textarea rows="4" style="max-width: 500px; width: 450px;" class="form-control tip" data-toggle="tooltip" title="A description/comment (rdfs:comment) field for the Resource." 
-                              id="commentResource" type="text" placeholder="Ex: Journal Publications Resource"></textarea>
+                              id="commentResource" maxlength="100" type="text" placeholder="Ex: Journal Publications Resource"></textarea>
                 </div>
                 <div class="row">
                     <div id="extendsForm" class="col-md-6 form-group">

@@ -25,7 +25,7 @@
                 <div class="row">
                     <div id="editResourceTitleForm" class="col-md-6 form-group">
                         <label  for="title">Title</label>
-                        <input id="editResourceTitle" type="text" placeholder="Ex: HGNC" class="form-control tip" data-toggle="tooltip" title="The title (dc:title) property." autofocus="autofocus" />
+                        <input maxlength="50" id="editResourceTitle" type="text" placeholder="Ex: HGNC" class="form-control tip" data-toggle="tooltip" title="The title (dc:title) property." autofocus="autofocus" />
                         <input type="hidden" id="oldResourceTitle" value="" />
                     </div>
                     <div id="builtForm" class="col-md-6 ">
@@ -41,7 +41,7 @@
                 <div class="row">
                     <div id="editResourceLabelForm" class="col-md-6 form-group">
                         <label for="label label-default">Label</label>
-                        <input id="editResourceLabel" type="text" placeholder="Ex: HGNC Resource" class="form-control tip" data-toggle="tooltip" title="The label (rdfs:label) property."/>
+                        <input maxlength="50" id="editResourceLabel" type="text" placeholder="Ex: HGNC Resource" class="form-control tip" data-toggle="tooltip" title="The label (rdfs:label) property."/>
                         <input
                             type="hidden" id="oldResourceLabel" value="" />
                     </div>
@@ -54,7 +54,7 @@
                 <div id="editResourceCommentForm" class=" form-group">
                     <label for="comment">Comment</label>
                     <textarea rows="4" id="editResourceComment" type="text" placeholder="Ex: Describes the HGNC Resource..." data-toggle="tooltip"
-                              title="A description/comment (rdfs:comment) field for the Resource." class="tip form-control"></textarea>
+                              maxlength="100" title="A description/comment (rdfs:comment) field for the Resource." class="tip form-control"></textarea>
                     <input
                         type="hidden" id="oldResourceComment" value="" />
                 </div>

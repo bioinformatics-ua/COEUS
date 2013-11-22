@@ -14,17 +14,17 @@ This modal is used to edit Seeds, Entities and Concepts because all of them shar
                 <p class="lead" >Entity URI - <span class="lead text-info" id="editURI" data-toggle="tooltip" title="A URI is formed when you fill the title box." >coeus: </span></p>
                 <div id="editTitleForm" class="form-group">
                     <label class="control-label" for="title">Title</label>
-                    <input id="editTitle" class="form-control tip" data-toggle="tooltip" title="The title (dc:title) property." type="text" placeholder="Ex: Uniprot" autofocus> 
+                    <input maxlength="50" id="editTitle" class="form-control tip" data-toggle="tooltip" title="The title (dc:title) property." type="text" placeholder="Ex: Uniprot" autofocus> 
                     <input type="hidden" id="oldTitle" value=""/>
                 </div>
                 <div id="editLabelForm" class="form-group">
                     <label class="control-label" for="label">Label</label>
-                    <input id="editLabel" class="form-control tip" data-toggle="tooltip" title="The label (rdfs:label) property." type="text" placeholder="Ex: Uniprot Entity"> 
+                    <input maxlength="50" id="editLabel" class="form-control tip" data-toggle="tooltip" title="The label (rdfs:label) property." type="text" placeholder="Ex: Uniprot Entity"> 
                     <input type="hidden" id="oldLabel" value=""/>
                 </div>
                 <div id="editCommentForm" class="form-group">
                     <label class="control-label" for="comment">Comment</label>
-                    <textarea rows="4" class="form-control tip" data-toggle="tooltip" title="A comment (rdfs:comment) property." id="editComment" type="text" placeholder="Ex: Describes the Uniprot..."></textarea> 
+                    <textarea maxlength="100" rows="4" class="form-control tip" data-toggle="tooltip" title="A comment (rdfs:comment) property." id="editComment" type="text" placeholder="Ex: Describes the Uniprot..."></textarea> 
                     <input type="hidden" id="oldComment" value=""/>
                 </div>
 
