@@ -13,7 +13,7 @@
             $(document).ready(function() {
                 changeSidebar('#dashboard');
                 //get seed from url
-
+               
                 callURL("../../config/getconfig/", fillHeader);
                 callURL("../../config/listenv/", fillEnvironments);
 

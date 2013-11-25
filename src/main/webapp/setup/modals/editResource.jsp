@@ -89,6 +89,14 @@
                         <input
                             type="hidden" id="oldPublisher" value="" />
                     </div>
+                    <div id="editConceptForm" class="col-md-6 form-group">
+                        <label for="label label-default">Concept</label>
+                        <select id="editConcept" class="col-md-10 form-control tip" data-toggle="tooltip" title="Change the concept of this Resource."></select> 
+                        <input type="hidden" id="oldConcept" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                   
                     <div id="editEndpointForm" class="col-md-6 form-group">
                         <label for="label label-default">Endpoint</label>
                         <input id="editEndpoint" type="text" placeholder="Ex: http://someurl.com" class="form-control tip" data-toggle="tooltip" title="Data location URI. When the resource extends another concept, use the #replace# keyword to compose the URL with the values from the extended Concept items."/>

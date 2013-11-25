@@ -324,15 +324,18 @@
                 try {
                     var value = e.options[e.selectedIndex].id;
                     removeById(value, "dropdownkeys");
-                    value = value.split("key_")[1];
-                    var q = $('#ApiKey').val();
-                    q = q.replace("|" + value, "");
-                    q = q.replace(value + "|", "");
-                    q = q.replace(value, "");
-                    $('#ApiKey').val(q);
+                    buildInputApi();
                 } catch (e) {
                 }
 
+            }
+            function buildInputApi() {
+                var values = [];
+                var sel = document.getElementById('dropdownkeys');
+                for (var i = 0, n = sel.options.length; i < n; i++) {
+                    if (sel.options[i].value) values.push(sel.options[i].value);
+                }
+                $('#ApiKey').val(values.join("|"));
             }
             function updateApiKeys() {
                 var typeahead = $('#putApiKey').val();

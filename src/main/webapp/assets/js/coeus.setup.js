@@ -6,7 +6,7 @@
  * Return the Application path (instance)
  * @returns {String}
  */
-function getApplicationPath(){
+function getApplicationPath() {
     return window.location.protocol + '//' + window.location.host + '/' + window.location.pathname.split('/')[1] + '/';
 }
 
@@ -580,12 +580,12 @@ function edit() {
 function changeURI(id, type, value) {
     document.getElementById(id).innerHTML = 'coeus:' + type.toLowerCase() + '_' + value.split(' ').join('_');
     //auto-fill label and comment
-    if(type.toLowerCase()==="resource"){
-        document.getElementById('label'+type).value = value+" Label";
-        document.getElementById('comment'+type).value = value+" Description";
-    }else{
-        document.getElementById('label').value = value+" Label";
-        document.getElementById('comment').value = value+" Description";
+    if (type.toLowerCase() === "resource") {
+        document.getElementById('label' + type).value = value + " Label";
+        document.getElementById('comment' + type).value = value + " Description";
+    } else {
+        document.getElementById('label').value = value + " Label";
+        document.getElementById('comment').value = value + " Description";
     }
 }
 /**
@@ -767,19 +767,22 @@ function prepareAddResourceModal(link) {
     $('#resourceLink').val(link);
     publisherChange("Add");
     var q = "SELECT ?concept ?c {?entity coeus:isEntityOf " + link + " . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
-    queryToResult(q, fillConceptsExtension.bind(this,link));
+    queryToResult(q, fillConceptsExtension.bind(this, link));
 }
-function fillConceptsExtension(link,result) {
+function fillConceptsExtension(link, result) {
     $('#extends').html("");
     $('#editExtends').html("");
+    $('#editConcept').html("");
     console.log(result);
     for (var r in result) {
         var concept = splitURIPrefix(result[r].concept.value);
         $('#extends').append('<option>' + concept.value + '</option>');
         $('#editExtends').append('<option>' + concept.value + '</option>');
+        $('#editConcept').append('<option>' + concept.value + '</option>');
     }
     //Only on addResource
-    if(link!==null) $('#extends option:contains(' + link.split(":")[1] + ')').prop({selected: true});
+    if (link !== null)
+        $('#extends option:contains(' + link.split(":")[1] + ')').prop({selected: true});
 }
 /**
  * Add a Resource
@@ -818,9 +821,9 @@ function addResource() {
         empty = true;
     } else
         $('#resourceCommentForm').removeClass('has-error');
-    if ((endpoint === '') | ((!contains(endpoint,"http://")) && (!contains(endpoint,"https://")) && (!contains(endpoint,"file://")))) {
+    if ((endpoint === '') | ((!contains(endpoint, "http://")) && (!contains(endpoint, "https://")) && (!contains(endpoint, "file://")))) {
         $('#endpointForm').addClass('has-error');
-        $('#addResourceResult').html(generateHtmlMessage("Endpoint error:", "It can only start with \"http(s)://\" or \"file://\"." , "alert-danger"));
+        $('#addResourceResult').html(generateHtmlMessage("Endpoint error:", "It can only start with \"http(s)://\" or \"file://\".", "alert-danger"));
         empty = true;
     } else
         $('#endpointForm').removeClass('has-error');
@@ -1059,6 +1062,7 @@ function prepareResourceEdit(individual) {
     $('#editQuery').val("");
     $('#editOrder').val("");
     $('#editExtends').val("");
+    $('#editConcept').val("");
     $('#built').prop('checked', false);
 
     //CLEAN ALSO OLD VALUES IN THE STATIC FIELD
@@ -1071,11 +1075,12 @@ function prepareResourceEdit(individual) {
     $('#oldQuery').val("");
     $('#oldOrder').val("");
     $('#oldExtends').val("");
+    $('#oldConcept').val("");
     $('#oldBuilt').val("false");
 
     var q = "SELECT ?concept ?c {?concep coeus:hasResource " + individual + " . ?entity coeus:isEntityOf ?concep . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
-    queryToResult(q, fillConceptsExtension.bind(this,null));
-    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?built {" + individual + " dc:title ?title . " + individual + " rdfs:label ?label . " + individual + " rdfs:comment ?comment . " + individual + " coeus:method ?method . " + individual + " dc:publisher ?publisher . " + individual + " coeus:endpoint ?endpoint . " + individual + " coeus:query ?query . " + individual + " coeus:order ?order . " + individual + " coeus:extends ?extends . OPTIONAL{" + individual + " coeus:built ?built } }";
+    queryToResult(q, fillConceptsExtension.bind(this, null));
+    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?concept ?built {" + individual + " dc:title ?title . " + individual + " rdfs:label ?label . " + individual + " rdfs:comment ?comment . " + individual + " coeus:method ?method . " + individual + " dc:publisher ?publisher . " + individual + " coeus:endpoint ?endpoint . " + individual + " coeus:query ?query . " + individual + " coeus:order ?order . " + individual + " coeus:extends ?extends . " + individual + " coeus:isResourceOf ?concept . OPTIONAL{" + individual + " coeus:built ?built } }";
     queryToResult(q, fillResourceEdit);
 
 }
@@ -1093,6 +1098,7 @@ function fillResourceEdit(result) {
         $('#editQuery').val(result[0].query.value);
         $('#editOrder').val(result[0].order.value);
         $('#editExtends option:contains(' + splitURIPrefix(result[0].extends.value).value + ')').prop({selected: true});
+        $('#editConcept option:contains(' + splitURIPrefix(result[0].concept.value).value + ')').prop({selected: true});
         if (result[0].built !== undefined && result[0].built.value === "true")
             $('#built').prop('checked', true);
         else
@@ -1250,7 +1256,7 @@ function changeSidebar(id) {
  * @param {type} error
  * @returns {undefined}
  */
-function reloadContext(success,error) {
+function reloadContext(success, error) {
     var url = "/manager/text/reload?path=/coeus";
     $.ajax({url: url, dataType: 'text'}).done(success).fail(error);
 }
@@ -1262,6 +1268,8 @@ function reloadContext(success,error) {
  * @returns {Boolean}
  */
 function contains(value, pattern) {
-    if (value.indexOf(pattern)!== -1) return true;
-    else return false;
+    if (value.indexOf(pattern) !== -1)
+        return true;
+    else
+        return false;
 }
