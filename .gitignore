@@ -1,3 +1,4 @@
 target/*
 *catalog-v001.xml
 *.DS_Store
+nb-configuration.xml

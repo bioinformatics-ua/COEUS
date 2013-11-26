@@ -582,7 +582,7 @@
                                             <select class="form-control tip" id="dropdownprop" multiple="multiple" data-toggle="tooltip" title="Properties define the predicates to where integrated will be loaded to."></select> 
                                             <span class="input-group-btn" ><a class="btn btn-danger tip"
                                                                               onclick="removeSelectorProperty();" data-toggle="tooltip" title="Select one element of list and press this button to remove it."><i class="fa fa-trash-o"></i></a>
-                                            </span></div><input id="propertySelectors" type="" />
+                                            </span></div><input id="propertySelectors" type="hidden" />
                                     </div>
                                 </div>
                             </div>

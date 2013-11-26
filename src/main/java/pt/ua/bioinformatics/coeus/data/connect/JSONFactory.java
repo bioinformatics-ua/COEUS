@@ -100,7 +100,7 @@ public class JSONFactory implements ResourceFactory {
                             }
                         }
                     } catch (Exception ex) {
-                        if (Config.isDebug()) {
+                        if (Config.isDebug()) { saveError(ex);
                             Logger.getLogger(JSONFactory.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -140,7 +140,7 @@ public class JSONFactory implements ResourceFactory {
                                                             System.out.println(k.toString());
                                                             rdfizer.add(inside, k.toString());
                                                         } catch (Exception ex) {
-                                                            if (Config.isDebug()) {
+                                                            if (Config.isDebug()) { saveError(ex);
                                                                 Logger.getLogger(JSONFactory.class.getName()).log(Level.SEVERE, null, ex);
                                                             }
                                                         }
@@ -153,7 +153,7 @@ public class JSONFactory implements ResourceFactory {
                                                 String element = JsonPath.read(i, c.getQuery());
                                                 rdfizer.add(inside, element);
                                             } catch (Exception ex) {
-                                                if (Config.isDebug()) {
+                                                if (Config.isDebug()) { saveError(ex);
                                                     Logger.getLogger(JSONFactory.class.getName()).log(Level.SEVERE, null, ex);
                                                 }
                                             }
@@ -176,7 +176,7 @@ public class JSONFactory implements ResourceFactory {
                                 }
                             }
                         } catch (Exception ex) {
-                            if (Config.isDebug()) {
+                            if (Config.isDebug()) { saveError(ex);
                                 Logger.getLogger(JSONFactory.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
@@ -185,7 +185,7 @@ public class JSONFactory implements ResourceFactory {
 
                 }
             } catch (Exception ex) {
-                if (Config.isDebug()) {
+                if (Config.isDebug()) { saveError(ex);
                     System.out.println("[COEUS][JSONFactory] unable to load data for " + res.getUri());
                     Logger.getLogger(JSONFactory.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -221,7 +221,7 @@ public class JSONFactory implements ResourceFactory {
                                                 try {
                                                     rdfizer.add(inside, k.toString());
                                                 } catch (Exception ex) {
-                                                    if (Config.isDebug()) {
+                                                    if (Config.isDebug()) { saveError(ex);
                                                         Logger.getLogger(JSONFactory.class.getName()).log(Level.SEVERE, null, ex);
                                                     }
                                                 }
@@ -235,7 +235,7 @@ public class JSONFactory implements ResourceFactory {
                                                 rdfizer.add(inside, element);
                                             }
                                         } catch (Exception exc) {
-                                            if (Config.isDebug()) {
+                                            if (Config.isDebug()) { saveError(exc);
                                                 Logger.getLogger(JSONFactory.class.getName()).log(Level.SEVERE, null, exc);
                                             }
                                         }
@@ -246,13 +246,13 @@ public class JSONFactory implements ResourceFactory {
                             rdfizer.complete();
                         }
                     } catch (Exception ex) {
-                        if (Config.isDebug()) {
+                        if (Config.isDebug()) { saveError(ex);
                             Logger.getLogger(JSONFactory.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
             } catch (Exception ex) {
-                if (Config.isDebug()) {
+                if (Config.isDebug()) { saveError(ex);
                     System.out.println("[COEUS][JSONFactory] unable to complete data for " + res.getUri());
                     Logger.getLogger(JSONFactory.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -275,15 +275,33 @@ public class JSONFactory implements ResourceFactory {
             api.removeStatement(statementToRemove);
             api.addStatement(resource, Predicate.get("coeus:built"), true);
             success = true;
-            if (Config.isDebug()) {
+            if (Config.isDebug()) { 
                 System.out.println("[COEUS][API] Saved resource " + res.getUri());
             }
         } catch (Exception ex) {
-            if (Config.isDebug()) {
+            if (Config.isDebug()) { saveError(ex);
                 System.out.println("[COEUS][API] Unable to save resource " + res.getUri());
                 Logger.getLogger(JSONFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return success;
+    }
+    
+    private void saveError(Exception ex) {
+        try {
+            API api = Boot.getAPI();
+            com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
+            Statement statement=api.getModel().createLiteralStatement(resource, Predicate.get("dc:coverage"), "ERROR: "+ex.getMessage());
+            api.addStatement(statement);
+
+            if (Config.isDebug()) { 
+                System.out.println("[COEUS][API] Saved error on resource " + res.getUri());
+            }
+        } catch (Exception e) {
+            if (Config.isDebug()) { 
+                System.out.println("[COEUS][API] Unable to save error on resource " + res.getUri());
+                Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
     }
 }

@@ -5,7 +5,6 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 changeSidebar('#index');
-                
                 tooltip();
                 var qTriples = "SELECT (COUNT(*) AS ?n) {?s ?p ?o }";
                 queryToResult(qTriples, function(result) {
@@ -23,15 +22,23 @@
                 queryToResult(qConcepts, function(result) {
                     $('#concepts').html(result[0].n.value);
                 });
-                var qResources = "SELECT (COUNT(*) AS ?n) {?s a coeus:Resource}";
+                var qResources = "SELECT (COUNT(*) AS ?n) {?resource a coeus:Resource . FILTER NOT EXISTS {?resource dc:coverage ?object}}";
                 queryToResult(qResources, function(result) {
                     $('#resources').html(result[0].n.value);
                 });
-                var qIssues = "SELECT (COUNT(*) AS ?n) {?s a coeus:Resource}";
+                var qIssues = "SELECT (COUNT(*) AS ?n) {?resource dc:coverage ?object . ?resource a coeus:Resource}";
                 queryToResult(qIssues, function(result) {
                     $('#issues').html(result[0].n.value);
                 });
+                callURL("./config/getconfig/", function(result) {
+                    if (result.config.built === false)
+                        $('#info').append(generateHtmlMessage("Alert! ", 'The Knowledge Base is not built. You must complete it by running the <a class="alert-link tip" data-toggle="tooltip" title="Start with COEUS" href="./manager/seed/">COEUS Setup</a>!', "alert-warning"));
+                    else
+                        $('#info').append(generateHtmlMessage("Info: ", 'The Knowledge Base is ready to use. Try out the <a class="alert-link tip" data-toggle="tooltip" title="Go to SPARQL" href="./sparqler/">SPARQL Search Engine</a>. ', "alert-info"));
+                    if (result.config.wizard === false)
+                        $('#info').append(generateHtmlMessage("State: ", 'This Application was successfully downloaded and installed from the <a class="alert-link tip" data-toggle="tooltip" title="Go to COEUS Website" href="http://bioinformatics.ua.pt/coeus/">COEUS Website</a>! Feel free to use according to your needs! ', "alert-success"));
 
+                });
             });
         </script>
     </s:layout-component>
@@ -46,13 +53,10 @@
                         <li id="breadHome"><span class="glyphicon glyphicon-home"></span> </li>
                         <li class="active">Overview</li>
                     </ol>
-                    <div class="alert alert-success alert-dismissable">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        This Application was successfully downloaded and installed from the <a class="alert-link tip" data-toggle="tooltip" title="Go to COEUS Website" href="http://bioinformatics.ua.pt/coeus/">COEUS Website</a>! Feel free to use according to your needs! 
-                    </div>
+                    <div id="info"></div>
                 </div>
             </div><!-- /.row -->
-            
+
             <div class="row">
                 <div class="col-lg-6">
                     <div class="panel panel-info">
@@ -94,11 +98,11 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="./manager/seed/">
+                        <a href="./sparqler/">
                             <div class="panel-footer announcement-bottom">
                                 <div class="row">
                                     <div class="col-xs-6">
-                                        View all
+                                        Explore
                                     </div>
                                     <div class="col-xs-6 text-right">
                                         <i class="fa fa-arrow-circle-right"></i>
@@ -108,7 +112,7 @@
                         </a>
                     </div>
                 </div>        
-                
+
             </div><!-- /.row -->
 
             <div class="row">
@@ -224,5 +228,5 @@
 
         </div>
 
-</s:layout-component>
+    </s:layout-component>
 </s:layout-render>

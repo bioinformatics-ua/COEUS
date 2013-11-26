@@ -2,7 +2,6 @@ package pt.ua.bioinformatics.coeus.data.connect;
 
 import com.hp.hpl.jena.rdf.model.Statement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,13 +84,13 @@ public class SQLFactory implements ResourceFactory {
                             rdfizer.complete();
                         }
                     } catch (Exception ex) {
-                        if (Config.isDebug()) {
+                        if (Config.isDebug()) { saveError(ex);
                             Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
             } catch (Exception ex) {
-                if (Config.isDebug()) {
+                if (Config.isDebug()) { saveError(ex);
                     System.out.println("[COEUS][SQLFactory] unable to " + res.getMethod() + " data for " + res.getUri());
                     Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -112,14 +111,14 @@ public class SQLFactory implements ResourceFactory {
                         }
                         rdfizer.map(key.getProperty());
                     } catch (Exception ex) {
-                        if (Config.isDebug()) {
+                        if (Config.isDebug()) { saveError(ex);
                             Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                     db.close();
                 }
             } catch (Exception ex) {
-                if (Config.isDebug()) {
+                if (Config.isDebug()) { saveError(ex);
                     System.out.println("[COEUS][SQLFactory] unable to load data for " + res.getUri());
                     Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -154,7 +153,7 @@ public class SQLFactory implements ResourceFactory {
                             }
                         }
                     } catch (Exception ex) {
-                        if (Config.isDebug()) {
+                        if (Config.isDebug()) { saveError(ex);
                             Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -186,7 +185,7 @@ public class SQLFactory implements ResourceFactory {
                                 rdfizer.itemize(rs.getString(key.getQuery()));
                             }
                         } catch (Exception ex) {
-                            if (Config.isDebug()) {
+                            if (Config.isDebug()) { saveError(ex);
                                 Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
@@ -194,7 +193,7 @@ public class SQLFactory implements ResourceFactory {
                     }
                 }
             } catch (Exception ex) {
-                if (Config.isDebug()) {
+                if (Config.isDebug()) { saveError(ex);
                     System.out.println("[COEUS][SQLFactory] unable to load data for " + res.getUri());
                     Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -217,15 +216,33 @@ public class SQLFactory implements ResourceFactory {
             api.removeStatement(statementToRemove);
             api.addStatement(resource, Predicate.get("coeus:built"), true);
             success = true;
-            if (Config.isDebug()) {
+            if (Config.isDebug()) { 
                 System.out.println("[COEUS][API] Saved resource " + res.getUri());
             }
         } catch (Exception ex) {
-            if (Config.isDebug()) {
+            if (Config.isDebug()) { saveError(ex);
                 System.out.println("[COEUS][API] Unable to save resource " + res.getUri());
                 Logger.getLogger(SQLFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return success;
+    }
+    
+    private void saveError(Exception ex) {
+        try {
+            API api = Boot.getAPI();
+            com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
+            Statement statement=api.getModel().createLiteralStatement(resource, Predicate.get("dc:coverage"), "ERROR: "+ex.getMessage());
+            api.addStatement(statement);
+
+            if (Config.isDebug()) { 
+                System.out.println("[COEUS][API] Saved error on resource " + res.getUri());
+            }
+        } catch (Exception e) {
+            if (Config.isDebug()) { 
+                System.out.println("[COEUS][API] Unable to save error on resource " + res.getUri());
+                Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
     }
 }

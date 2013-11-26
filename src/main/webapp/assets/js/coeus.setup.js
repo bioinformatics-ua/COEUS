@@ -87,12 +87,12 @@ function splitURIPrefix(uri) {
 //            //$(html).append('Call: ' + url + '<br/> Message: ' + data.message+'<br/><br/>');
 //            $(html).addClass('alert alert-success');
 //        } else {
-//            $(html).addClass('alert alert-error');
+//            $(html).addClass('alert alert-danger');
 //            $(html).append('Call: ' + url + '<br/>Status: ' + data.status + ' Message: ' + data.message + '<br/><br/>');
 //        }
 //
 //    }).fail(function(jqXHR, textStatus) {
-//        $(html).addClass('alert alert-error');
+//        $(html).addClass('alert alert-danger');
 //        $(html).append('Call: ' + url + '<br/> ' + 'ERROR: ' + textStatus + '<br/><br/>');
 //        // Server communication error function handler.
 //    });
@@ -266,6 +266,27 @@ function foreachRemoveSubjects(urlPrefix, subject, showResult, showError, result
     }
 }
 
+/**
+ * Removes all resources errors (dc:coverage property).
+ * @param {type} urlPrefix
+ * @param {type} showResult
+ * @param {type} showError
+ * @returns {undefined}
+ */
+function cleanResourceErrors(urlPrefix,showResult, showError){
+    var qCleanErrors = "SELECT ?resource ?object {?resource dc:coverage ?object . ?resource a coeus:Resource}";
+    queryToResult(qCleanErrors, foreachCleanResourceErrors.bind(this, urlPrefix, showResult, showError));
+}
+function foreachCleanResourceErrors(urlPrefix, showResult, showError, result){
+    for (var r in result) {
+        var object = resultToObject(result[r].object);
+        var resource = resultToObject(result[r].resource);
+
+        var url = "/delete/" + resource.prefix + resource.value + '/dc:coverage/' + object.prefix + object.value;
+        console.log("Deleting: " + url);
+        callURL(urlPrefix + url, showResult, showError);
+    }
+}
 //function removeAllTriplesFromSubjectAndPredicate(urlPrefix, subject, predicate) {
 //    var qSubject = "SELECT ?object {" + subject + " " + predicate + " ?object . }";
 //    console.log(qSubject);
@@ -280,7 +301,7 @@ function foreachRemoveSubjects(urlPrefix, subject, showResult, showError, result
 //        }
 //
 //        //if success refresh page
-//        if (document.getElementById('result').className !== 'alert alert-error') {
+//        if (document.getElementById('result').className !== 'alert alert-danger') {
 //            // window.location="../entity/"+lastPath();
 //            console.log("REDIRECTING...");
 //            //window.location.reload(true);
@@ -419,7 +440,7 @@ function callURL(url, success, error) {
 
 /**
  * Generate a html code message 
- * Ex: var htmlMessage=generateHtmlMessage("Error!", "It already exists!","alert-error");
+ * Ex: var htmlMessage=generateHtmlMessage("Error!", "It already exists!","alert-danger");
  * 
  * @param {type} strong
  * @param {type} message
@@ -535,7 +556,7 @@ function fillEdit(result) {
     }
     catch (err)
     {
-        $('#editResult').append(generateHtmlMessage("Error!", "Some fields do not exist." + err, "alert-error"));
+        $('#editResult').append(generateHtmlMessage("Error!", "Some fields do not exist." + err, "alert-danger"));
     }
     //PUT OLD VALUES IN THE STATIC FIELD
     $('#oldTitle').val($('#editTitle').val());
@@ -736,7 +757,7 @@ function showResult(id, url, result) {
  */
 function showError(id, url, jqXHR, result) {
     clearTimeout(timer);
-    $(id).append(generateHtmlMessage("Server error!", url + "</br>Status Code:" + result.status + " " + result.message, "alert-error"));
+    $(id).append(generateHtmlMessage("Server error!", url + "</br>Status Code:" + result.status + " " + result.message, "alert-danger"));
 }
 
 /**
@@ -821,7 +842,7 @@ function addResource() {
         empty = true;
     } else
         $('#resourceCommentForm').removeClass('has-error');
-    if ((endpoint === '') | ((!contains(endpoint, "http://")) && (!contains(endpoint, "https://")) && (!contains(endpoint, "file://")))) {
+    if ((endpoint === '') | ((!contains(endpoint, "http://")) && (!contains(endpoint, "https://")) && (!contains(endpoint, "file://")) && (!contains(endpoint, "jdbc:")))) {
         $('#endpointForm').addClass('has-error');
         $('#addResourceResult').html(generateHtmlMessage("Endpoint error:", "It can only start with \"http(s)://\" or \"file://\".", "alert-danger"));
         empty = true;
@@ -1106,7 +1127,7 @@ function fillResourceEdit(result) {
     }
     catch (err)
     {
-        $('#editResourceResult').append(generateHtmlMessage("Error!", "Some fields do not exist." + err, "alert-error"));
+        $('#editResourceResult').append(generateHtmlMessage("Error!", "Some fields do not exist." + err, "alert-danger"));
     }
     //PUT OLD VALUES IN THE STATIC FIELD
     $('#oldResourceTitle').val($('#editResourceTitle').val());
@@ -1118,6 +1139,7 @@ function fillResourceEdit(result) {
     $('#oldQuery').val($('#editQuery').val());
     $('#oldOrder').val($('#editOrder').val());
     $('#oldExtends').val(splitURIPrefix(result[0].extends.value).value);
+    $('#oldConcept').val(splitURIPrefix(result[0].concept.value).value);
     $('#oldBuilt').val($('#built').is(':checked'));
     //change publisher according to the result
     publisherChange('edit');
@@ -1170,6 +1192,14 @@ function editResource() {
         url = urlDelete + "coeus:" + $('#oldExtends').val() + "/" + "coeus:isExtendedBy" + "/" + individual;
         array.push(url);
         url = urlWrite + "coeus:" + $('#editExtends').val() + "/" + "coeus:isExtendedBy" + "/" + individual;
+        array.push(url);
+    }
+    if ($('#oldConcept').val() !== $('#editConcept').val()) {
+        url = urlUpdate + individual + "/" + "coeus:isResourceOf" + "/coeus:" + $('#oldConcept').val() + ",coeus:" + $('#editConcept').val();
+        array.push(url);
+        url = urlDelete + "coeus:" + $('#oldConcept').val() + "/" + "coeus:hasResource" + "/" + individual;
+        array.push(url);
+        url = urlWrite + "coeus:" + $('#editConcept').val() + "/" + "coeus:hasResource" + "/" + individual;
         array.push(url);
     }
     if ($('#oldPublisher').val() !== $('#editPublisher').val()) {
