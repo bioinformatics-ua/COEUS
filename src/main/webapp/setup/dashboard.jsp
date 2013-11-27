@@ -87,7 +87,8 @@
 
             function fillResourceOptions(resource, result) {
                 console.log(result);
-                if (result[0] !== undefined) $('#tree_' + resource).before(' <span class="label label-danger" >Error</span>');
+                if (result[0] !== undefined)
+                    $('#tree_' + resource).before(' <span class="label label-danger" >Error</span>');
             }
 
             function fillConcepts(entity, result) {
@@ -148,11 +149,11 @@
                 var built = result.config.built;
                 console.log(built);
                 if (built === true) {
-                    $('#btnUnbuild').removeClass("hide");
-                    $('#btnBuild').addClass("hide");
+//                    $('#btnUnbuild').removeClass("hide");
+//                    $('#btnBuild').addClass("hide");
                 } else {
-                    $('#btnUnbuild').addClass("hide");
-                    $('#btnBuild').removeClass("hide");
+//                    $('#btnUnbuild').addClass("hide");
+//                    $('#btnBuild').removeClass("hide");
 
                     clearInterval(interval);
                     $('#integrationResult').html(generateHtmlMessage("Success!", "Integration is done.", "alert-success"));
@@ -336,7 +337,7 @@
 
                         </div>
                         <div class="col-md-6">
-                            <a onclick="selectEntity();" class="tip btn btn-primary pull-right" data-toggle="tooltip" title="Browse all entities of this seed.">Browser <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                            <a onclick="selectEntity();" class="tip btn btn-info pull-right" data-toggle="tooltip" title="Browse all entities of this seed.">Browser <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
                         </div>
                     </div>
 
@@ -355,9 +356,11 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-6 ">
-                    <a id="btnBuild" onclick="build();" href="#integrationModal" data-toggle="modal" class="btn btn-warning pull-right tip" data-toggle="tooltip" title="Starts data integration process.">Build <i class="glyphicon glyphicon-hdd icon-white"></i></a>
-                    <a id="btnUnbuild" onclick="unbuild();" class="btn btn-danger pull-right tip"  data-toggle="tooltip" title="Change the system property and all resources to an unbuild state.">UnBuild <i class="glyphicon glyphicon-pencil icon-white"></i></a>
+                <div class="col-md-6">
+                    <div class="pull-right">
+                        <a id="btnUnbuild" onclick="unbuild();" class="btn btn-default tip"  data-toggle="tooltip" title="Change the system property and all resources to an unbuild state.">UnBuild <i class="fa fa-eraser"></i></a>
+                        <a id="btnBuild" onclick="build();" href="#integrationModal" data-toggle="modal" class="btn btn-primary tip" data-toggle="tooltip" title="Starts data integration process.">Build <i class="fa fa-cogs"></i></a> 
+                    </div>
                 </div>
             </div>
         </div>

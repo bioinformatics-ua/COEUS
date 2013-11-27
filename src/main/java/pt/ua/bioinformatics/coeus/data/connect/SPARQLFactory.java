@@ -36,6 +36,7 @@ public class SPARQLFactory implements ResourceFactory {
     private String query;
     private QueryExecution e;
     private ResultSet rs;
+    private boolean hasError = false;
 
     public Resource getRes() {
         return res;
@@ -158,11 +159,14 @@ public class SPARQLFactory implements ResourceFactory {
     public boolean save() {
         boolean success = false;
         try {
-            API api = Boot.getAPI();
-            com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
-            Statement statementToRemove=api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
-            api.removeStatement(statementToRemove);
-            api.addStatement(resource, Predicate.get("coeus:built"), true);
+            //only change built property if there are no errors
+            if (hasError == false) {
+                API api = Boot.getAPI();
+                com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
+                Statement statementToRemove = api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
+                api.removeStatement(statementToRemove);
+                api.addStatement(resource, Predicate.get("coeus:built"), true);
+            }
             success = true;
             if (Config.isDebug()) { 
                 System.out.println("[COEUS][API] Saved resource " + res.getUri());
@@ -182,6 +186,7 @@ public class SPARQLFactory implements ResourceFactory {
             com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
             Statement statement=api.getModel().createLiteralStatement(resource, Predicate.get("dc:coverage"), "ERROR: "+ex.getMessage());
             api.addStatement(statement);
+            hasError = true;
 
             if (Config.isDebug()) { 
                 System.out.println("[COEUS][API] Saved error on resource " + res.getUri());

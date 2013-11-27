@@ -39,9 +39,6 @@
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav side-nav">
                             <li id="index" class="sidebaritem"><a href="<c:url value="/" />"><i class="fa fa-eye"></i> Overview</a></li>
-                            <li id="dashboard" class="sidebaritem"><a href="<c:url value="/manager/seed/" />"><i class="fa fa-dashboard"></i> Setup</a></li>
-                            <li><a href="<c:url value="/manager/config/" />"><i class="fa fa-wrench"></i> Wizard</a></li>
-                            <li><a href="<c:url value="/manager/environments/" />"><i class="fa fa-exchange"></i> Environments</a></li>
                             <li id="sparql" class="sidebaritem"><a href="<c:url value="/sparqler/" />"><i class="fa fa-bar-chart-o"></i> SPARQL</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> LinkedData <b class="caret"></b></a>
@@ -55,28 +52,43 @@
                             <li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
                             <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>-->
                             <li><a href="http://bioinformatics.ua.pt/coeus/documentation/" target="_blank"><i class="fa fa-book"></i> Documentation</a></li>
-                            <li><a data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contacts</a></li>
+                            <li><a data-toggle="modal" data-target="#contact"><i class="fa fa-group"></i> Contacts</a></li>
+                            <li style="padding-left: 4px; padding-right: 4px; width: 100%;"><div style="border-top: solid 1px grey;"></div></li>
+                            <li id="dashboard" class="sidebaritem"><a href="<c:url value="/manager/seed/" />"><i class="fa fa-dashboard"></i> Setup</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Manager <b class="caret"></b></a>
+                                <ul class="dropdown-menu" >
+                                    <li id="environments_setup"><a href="<c:url value="/manager/environments/" />"><i class="fa fa-exchange"></i> Environments</a></li>
+                                    <li id="wizard"><a href="<c:url value="/manager/config/" />"><i class="fa fa-wrench"></i> Wizard</a></li>
+                                </ul>
+                            </li>
 
                         </ul>
 
 
+
                         <ul class="nav navbar-nav navbar-right navbar-user">
-                            <li class="dropdown messages-dropdown">
-                                <a href="<c:url value="/manager/seed/" />" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin</a>
-                            </li>
-                            <li class="dropdown alerts-dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+                            <li class="dropdown">
+                                <a href="#" onclick="username('#username');" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Default <span class="label label-default">Default</span></a></li>
-                                    <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
-                                    <li><a href="#">Success <span class="label label-success">Success</span></a></li>
-                                    <li><a href="#">Info <span class="label label-info">Info</span></a></li>
-                                    <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
-                                    <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+                                    <li><a href="#"><i class="fa fa-star-o"></i> Welcome, <span id="username"></span></a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#">View All</a></li>
+                                    <li><a onclick="logout();"><i class="fa fa-power-off"></i> Logout</a></li>
                                 </ul>
                             </li>
+                            <!--                            <li class="dropdown alerts-dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+                                                                <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+                                                                <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+                                                                <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+                                                                <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+                                                                <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#">View All</a></li>
+                                                            </ul>
+                                                        </li>-->
 
                         </ul>
                     </div><!-- /.navbar-collapse -->

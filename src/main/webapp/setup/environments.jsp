@@ -11,6 +11,7 @@
         <script type="text/javascript">
 
             $(document).ready(function() {
+                //changeSidebar('#environments_setup');
                 refresh();
             });
 

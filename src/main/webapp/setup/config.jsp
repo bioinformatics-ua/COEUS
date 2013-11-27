@@ -11,6 +11,7 @@
         <script type="text/javascript">
 
             $(document).ready(function() {
+                //changeSidebar('#wizard');
                 getConfigData();
                 //callURL("../../config/listenv/", envSuccess);
                 $('.next').addClass('hide');
@@ -375,7 +376,7 @@
         <div class="container">
 
             <div id="header" class="page-header">
-                <h1>COEUS Setup Wizard</h1>
+                <h1>Wizard Setup</h1>
             </div>
 
             <ol class="breadcrumb">

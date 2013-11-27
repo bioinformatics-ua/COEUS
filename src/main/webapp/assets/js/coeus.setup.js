@@ -1303,3 +1303,34 @@ function contains(value, pattern) {
     else
         return false;
 }
+/**
+ * logout remote user
+ * @returns {undefined}
+ */
+function logout(){
+    var url = getApplicationPath()+"/config/logout/";
+    callURL(url, logoutResult, logoutResult);
+}
+function logoutResult(result){
+    if(result.status===100){
+        redirect(getApplicationPath());
+    }else{
+        alert(result.message);
+    }
+}
+/**
+ * Put the remote user on the divId
+ * @param {type} divId
+ * @returns {undefined}
+ */
+function username(divId){
+    var url = getApplicationPath()+"config/username/";
+    callURL(url, usernameResult.bind(this,divId), usernameResult.bind(this,divId));
+}
+function usernameResult(divId,result){
+    if(result.status===100){
+        $(divId).html(result.message);
+    }else{
+        redirect(getApplicationPath()+"manager/seed/");
+    }
+}
