@@ -69,9 +69,9 @@
 
                         <ul class="nav navbar-nav navbar-right navbar-user">
                             <li class="dropdown">
-                                <a href="#" onclick="username('#username');" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b class="caret"></b></a>
+                                <a href="#" onclick="username('#remote_user');" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#"><i class="fa fa-star-o"></i> Welcome, <span id="username"></span></a></li>
+                                    <li><a href="#"><i class="fa fa-star-o"></i> Welcome, <span id="remote_user"></span></a></li>
                                     <li class="divider"></li>
                                     <li><a onclick="logout();"><i class="fa fa-power-off"></i> Logout</a></li>
                                 </ul>
