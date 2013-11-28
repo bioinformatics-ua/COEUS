@@ -54,7 +54,7 @@
                     $('#info').html(generateHtmlMessage("The application environment have changed!!", '<p>You must reload the application context to apply new configurations to the server.</p><button class="btn btn-warning reload" onclick="reload();" role="button">Reload</button> <button class="btn btn-default" data-dismiss="alert" role="button">Ignore</button>', "alert-warning"));
                 }
                 else {
-                    $('#info').html(generateHtmlMessage("ERROR!", result.message, "alert-error"));
+                    $('#info').html(generateHtmlMessage("ERROR!", result.message, "alert-danger"));
                 }
             }
 

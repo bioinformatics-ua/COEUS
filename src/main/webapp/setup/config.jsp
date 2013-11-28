@@ -303,7 +303,7 @@
             }
 
             function upEnvFail(jqXHR, textStatus) {
-                $('#resultUpEnv').html(generateHtmlMessage("Error!", textStatus, "alert-error"));
+                $('#resultUpEnv').html(generateHtmlMessage("Error!", textStatus, "alert-danger"));
             }
 
             function reload() {

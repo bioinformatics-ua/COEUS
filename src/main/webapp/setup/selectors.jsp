@@ -139,7 +139,7 @@
             }
 
             function showErrorSelectors(id, url, jqXHR, result) {
-                $(id).append(generateHtmlMessage("Server error!", url + "</br>Status Code:" + result.status + " " + result.message, "alert-error"));
+                $(id).append(generateHtmlMessage("Server error!", url + "</br>Status Code:" + result.status + " " + result.message, "alert-danger"));
             }
 
             function fillConceptsExtension(result) {

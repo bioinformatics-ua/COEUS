@@ -318,7 +318,7 @@ public class CSVFactory implements ResourceFactory {
         try {
             API api = Boot.getAPI();
             com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
-            Statement statement=api.getModel().createLiteralStatement(resource, Predicate.get("dc:coverage"), "ERROR: "+ex.getMessage());
+            Statement statement=api.getModel().createLiteralStatement(resource, Predicate.get("dc:coverage"), "ERROR: "+ex.getMessage()+". For more information, please see the application server log.");
             api.addStatement(statement);
             hasError = true;
 

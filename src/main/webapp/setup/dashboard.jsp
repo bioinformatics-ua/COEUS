@@ -32,6 +32,7 @@
                 queryToResult(qEntities, function(result) {
                     $('#triples').html(result[0].triples.value);
                 });
+                
 
             });
 
@@ -146,23 +147,7 @@
             function fillHeader(result) {
                 $('#header').html('<h1><span class="tip" data-toggle="tooltip" title="Seed URI">' + lastPath() + '</span><small id="env" class="pull-right tip" data-toggle="tooltip" title="Selected environment"> ' + result.config.environment + '</small></h1>');
                 $('#apikey').html(result.config.apikey);
-                var built = result.config.built;
-                console.log(built);
-                if (built === true) {
-//                    $('#btnUnbuild').removeClass("hide");
-//                    $('#btnBuild').addClass("hide");
-                } else {
-//                    $('#btnUnbuild').addClass("hide");
-//                    $('#btnBuild').removeClass("hide");
 
-                    clearInterval(interval);
-                    $('#integrationResult').html(generateHtmlMessage("Success!", "Integration is done.", "alert-success"));
-                    $('#integration').removeClass("hide");
-                    $('#integrationState').html("Integration finished.");
-                    $('#integrationProgress').addClass("hide");
-
-                }
-                tooltip();
                 var urlPrefix = "../../api/" + getApiKey();
                 cleanUnlikedTriples(urlPrefix);
             }
@@ -222,15 +207,28 @@
                     $('#info').html(generateHtmlMessage("Warning!", result.message));
             }
             function showInfoError(result, text) {
-                $('#info').html(generateHtmlMessage("ERROR!", text, "alert-error"));
+                $('#info').html(generateHtmlMessage("ERROR!", text, "alert-danger"));
             }
             function build() {
+                var qIssues = "SELECT (COUNT(*) AS ?n) {?resource dc:coverage ?object . ?resource a coeus:Resource}";
+                queryToResult(qIssues, function(result) {
+                    var n=result[0].n.value;
+                    console.log(n);
+                    if(n>=0){
+                        console.log("changing state to false");
+                        callURL('../../config/changebuilt/false', callBuild.bind(this, 'false'), changeBuiltResult.bind(this, 'false'), showInfoError);
+                    }
+                });
+                
+            }
+            function callBuild(bool,result){
+                console.log("callBuild");
                 runIntegration();
-                callURL("../../config/build/", buildResult);
+                callURL("../../config/build/", function (bresult){
+                    console.log(bresult);
+                });
             }
-            function buildResult(result) {
-                console.log(result);
-            }
+
             function unbuild() {
                 $('#info').html('');
                 var qresource = "SELECT DISTINCT ?resource {" + lastPath() + " coeus:includes ?entity . ?entity coeus:isEntityOf ?concept . ?concept coeus:hasResource ?resource }";
@@ -251,6 +249,7 @@
                     var resource = getPrefix(res.namespace) + ":" + res.value;
                     callURL(urlPrefix + "/update/" + resource + "/coeus:built/xsd:boolean:true,xsd:boolean:false", unbuiltResource.bind(this, resource));
                 }
+                refresh();
 
             }
             function unbuiltResource(resource, result) {
@@ -270,8 +269,6 @@
                     var text = "The overall system built flag has been changed to " + bool + ".";
                     console.log(text);
                     $('#info').append(generateHtmlMessage("Success!", text, "alert-success"));
-                    $('#btnUnbuild').addClass("hide");
-                    $('#btnBuild').removeClass("hide");
                 }
                 else {
                     var text = "The overall system built flag has not been changed to " + bool + ".";
@@ -286,7 +283,23 @@
 
             function checkIntegration() {
                 console.log('checkIntegration');
-                callURL("../../config/getconfig/", fillHeader);
+                callURL("../../config/getconfig/", checkIntegrationResult);
+            }
+
+            function checkIntegrationResult(result) {
+                var built = result.config.built;
+                console.log(built);
+                if (built === true) {
+                    clearInterval(interval);
+                    $('#integrationResult').html(generateHtmlMessage("Success!", "Integration is done.", "alert-success"));
+                    //$('#integration').removeClass("hide");
+                    $('#integrationState').html("Finished.");
+                    $('#integrationProgress').addClass("hide");
+                    refresh();
+                } else {
+                    
+                }
+                tooltip();
             }
 
 
@@ -373,9 +386,12 @@
                         <h3 class="modal-title">Integration Process</h3>
                     </div>
                     <div class="modal-body">
-                        <p id="integrationState">Integration is running...</p>
+                        <p id="integrationState">Integration is running, please wait...</p>
                         <div id="integrationProgress" class="progress progress-striped active">
                             <div class="progress-bar" ole="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"  style="width: 100%;"></div>
+                        </div>
+                        <div id="spinner">
+                            
                         </div>
 
                         <div id="integrationResult"></div>
@@ -383,8 +399,8 @@
                     </div>
 
                     <div class="modal-footer" id="rmbtns">
-                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Hide</button>
-                        <button id="integration" class="btn btn-primary hide loading" onclick="window.location.reload();">Refresh <i class="icon-refresh icon-white"></i></button>
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+<!--                        <button id="integration" class="btn btn-primary hide loading" onclick="window.location.reload();">Refresh <i class="icon-refresh icon-white"></i></button>-->
                     </div>
                 </div>
             </div>
