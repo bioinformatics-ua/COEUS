@@ -717,8 +717,8 @@
                                     <div class="form-group col-md-6">
                                         <label class="control-label col-sm-2 " for="Endpoint">SPARQL</label>
                                         <div class=" col-sm-10 controls">
-                                            <input tabindex="3" id="Endpoint" name="Endpoint" type="text" placeholder="http://bioinformatics.ua.pt/coeus/sparql" class="form-control" disabled/>
-                                            <p class="help-block">The URL of the SPARQL endpoint whose data we want to expose.</p>
+                                            <input tabindex="3" id="Endpoint" name="Endpoint" type="text" placeholder="http://bioinformatics.ua.pt/coeus/sparql" class="form-control" />
+                                            <p class="help-block">The internal URL of the SPARQL endpoint whose data we want to expose.</p>
                                         </div>
                                     </div>
 
