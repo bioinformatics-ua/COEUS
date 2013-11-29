@@ -1,14 +1,13 @@
 <%@include file="/layout/taglib.jsp" %>                  
-<div class="row">
-    <div class="span2 bs-docs-sidebar pull-left">
+<div class="container">
+<!--    <div class="span2 bs-docs-sidebar pull-left">
         <ul class="nav nav-list bs-docs-sidenav affix">
             <li><a href="#science">Science</a></li>
 
             <li><a href="#business">Business</a></li>
         </ul>
-    </div>
+    </div>-->
 
-    <div class="span9 pull-right">
         <section id="cc">
             <div class="page-header">
                 <h1>Science</h1>
@@ -26,5 +25,5 @@
 
             <p>Private/commercial collaborations are also possible through <a href="http://bmd-software.com" target="_blank" title="View BMD Software">BMD Software</a>. Support agreements are made on a per-project perspective. For a tentative budget, feel free to <a class="label label-info" href="mailto:rnd@bmd-software.com">contact us</a>.</p>
         </section>
-    </div>
+
 </div>

@@ -1,6 +1,6 @@
 <%@include file="/layout/taglib.jsp" %>                  
-<div class="row">
-    <div class="span2 bs-docs-sidebar pull-left">
+<div class="container">
+<!--    <div class="span2 bs-docs-sidebar pull-left">
         <ul class="nav nav-list bs-docs-sidenav affix">
             <li><a href="#package">Package</a></li>
 
@@ -12,9 +12,8 @@
 
             <li><a href="#samples">Samples</a></li>
         </ul>
-    </div><!-- Downloads/PACKAGE -->
+    </div> Downloads/PACKAGE -->
 
-    <div class="span9 pull-right">
         <section id="package">
             <div class="page-header">
                 <h1>Package</h1>
@@ -24,7 +23,6 @@
 
             <p>Or you can fork the latest stable version from <a href="https://github.com/bioinformatics-ua/COEUS" target="_blank">GitHub</a>.</p>
         </section>
-        <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
 
         <!-- Downloads/REQUIREMENTS -->
 
@@ -40,8 +38,8 @@
 
                 <li><a href="http://netbeans.org/downloads/" target="_blank">NetBeans IDE 7.0+</a> (or your preferred development environment)</li>
 
-                <li><a href="http://tomcat.apache.org/download-70.cgi" target="_blank">Apache Tomcat 6+</a></li>
-
+                <li><a href="http://tomcat.apache.org/download-70.cgi" target="_blank">Apache Tomcat 6+</a> with manager web application, installed by default on context path "/manager".</li>
+                <li>To enable access to the Manager web application, you must either add a username/password combination to your tomcat-users.xml file on the Tomcat application server: <code>&lt;user name="craigmcc" password="secret" roles="standard,manager" /&gt;</code></li>
                 <li><a href="http://dev.mysql.com/downloads/" target="_blank">MySQL 5+</a></li>
 
                 <li>Semantic Web technologies skills <span class="label label-warning">(not downloadable)</span></li>
@@ -189,5 +187,5 @@
                 Configuration files available on <code>src/main/resources/tester</code>.</p>
 
         </section>
-    </div>
+
 </div>

@@ -11,10 +11,18 @@ function getApplicationPath() {
 }
 
 /**
+ * Return the first pathname (default is 'coeus')
+ * @returns {String}
+ */
+function getFirstPath() {
+    return window.location.pathname.split('/')[1];
+}
+
+/**
  * init service prefix
  * @returns {query} */
 function initSparqlerQuery() {
-    var sparqler = new SPARQL.Service("/coeus/sparql");
+    var sparqler = new SPARQL.Service("/"+getFirstPath()+"/sparql");
 
     var prefixes = getPrefixURI();
     for (var key in prefixes) {
@@ -1262,7 +1270,7 @@ function loadSeedsOnSidebar() {
         $('#sidebarseeds').html('');
         for (var key in result) {
             var splitedURI = splitURIPrefix(result[key].seed.value);
-            var a = '<li><a href="/coeus/resource/' + splitedURI.value + '"><i class="fa fa-circle-o"></i> ' + splitedURI.value + '</a></li>';//TODO: FIX THAT LINK
+            var a = '<li><a href="/'+getFirstPath()+'/resource/' + splitedURI.value + '"><i class="fa fa-circle-o"></i> ' + splitedURI.value + '</a></li>';//TODO: FIX THAT LINK
             $('#sidebarseeds').append(a);
         }
         console.log("INFO: All seeds loaded on sidebar.");
@@ -1287,7 +1295,7 @@ function changeSidebar(id) {
  * @returns {undefined}
  */
 function reloadContext(success, error) {
-    var url = "/manager/text/reload?path=/coeus";
+    var url = "/manager/text/reload?path=/"+getFirstPath();
     $.ajax({url: url, dataType: 'text'}).done(success).fail(error);
 }
 

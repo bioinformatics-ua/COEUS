@@ -29,6 +29,7 @@ public class ManagerActionBean implements ActionBean {
     private static final String ENVIRONMENTS_EDIT_VIEW = "/setup/editenvironment.jsp";
     private static final String GRAPH_VIEW = "/setup/graph.jsp";
     private static final String INDEX_VIEW = "/setup/index.jsp";
+    private static final String WIZARD_VIEW = "/setup/config.jsp";
     private String method;
     private String model;
     private ActionBeanContext context;
@@ -37,14 +38,14 @@ public class ManagerActionBean implements ActionBean {
     public Resolution handle() {
         return new ForwardResolution(INDEX_VIEW);
     }
-
+    
     public Resolution config() {
-        return new ForwardResolution("/setup/config.jsp");
+        return new ForwardResolution(WIZARD_VIEW);
     }
 
-    public Resolution graph() {
-        return new ForwardResolution(GRAPH_VIEW);
-    }
+//    public Resolution graph() {
+//        return new ForwardResolution(GRAPH_VIEW);
+//    }
 
     public Resolution environments() {
         if (method != null && method.startsWith("edit")) {
@@ -61,7 +62,7 @@ public class ManagerActionBean implements ActionBean {
             return new ForwardResolution(DASHBOARD_VIEW);
         }
     }
-
+    
     public Resolution entity() {
         return new ForwardResolution(ENTITIES_VIEW);
     }

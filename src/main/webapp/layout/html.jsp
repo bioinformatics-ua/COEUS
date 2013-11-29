@@ -51,7 +51,7 @@
                             <li><a href="tables.html"><i class="fa fa-table"></i> Tables</a></li>
                             <li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
                             <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>-->
-                            <li><a href="http://bioinformatics.ua.pt/coeus/documentation/" target="_blank"><i class="fa fa-book"></i> Documentation</a></li>
+                            <li><a href="<c:url value="/documentation/" />" ><i class="fa fa-book"></i> Documentation</a></li>
                             <li><a data-toggle="modal" data-target="#contact"><i class="fa fa-group"></i> Contacts</a></li>
                             <li style="padding-left: 4px; padding-right: 4px; width: 100%;"><div style="border-top: solid 1px grey;"></div></li>
                             <li id="dashboard" class="sidebaritem"><a href="<c:url value="/manager/seed/" />"><i class="fa fa-dashboard"></i> Setup</a></li>
@@ -136,7 +136,7 @@
             <div class="wrapper">
                 <div class="page-wrapper">
                     <div class="container">
-                        <p class="pull-right"><a href="#" > <i class="fa fa-arrow-up"></i></a></p>
+                        <p class="pull-right"><a href="#" title="Back to top"> <i class="fa fa-arrow-up"></i></a></p>
                         <p class="text-muted credit">&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2013 - Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a></p>
                     </div>
                 </div>
