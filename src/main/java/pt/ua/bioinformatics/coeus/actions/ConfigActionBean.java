@@ -39,6 +39,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletException;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.DefaultHandler;
@@ -98,6 +99,44 @@ public class ConfigActionBean implements ActionBean {
     public Resolution handle() {
         return new ForwardResolution(NOTFOUND_VIEW);
     }
+
+    /**
+     * logout the user that makes the request
+     *
+     * @return
+     */
+    public Resolution logout() {
+        JSONObject result = new JSONObject();
+        try {
+            String username=getContext().getRequest().getRemoteUser();
+            getContext().getRequest().logout();
+            result.put("status", 100);
+            result.put("message", "[COEUS][API][ConfigActionBean] Logout done by user:"+username);
+        } catch (ServletException e) {
+            result.put("status", 201);
+            result.put("message", "[COEUS][API][ConfigActionBean] Logout fail. Exception: " + e);
+        }
+        return new StreamingResolution("application/json", result.toJSONString());
+    }
+    
+    /**
+     * return the username logged in
+     *
+     * @return
+     */
+    public Resolution username() {
+        JSONObject result = new JSONObject();
+        try {
+            String username=getContext().getRequest().getRemoteUser();
+            result.put("status", 100);
+            result.put("message", username);
+        } catch (Exception e) {
+            result.put("status", 201);
+            result.put("message", "[COEUS][API][ConfigActionBean] Get username fail. Exception: " + e);
+        }
+        return new StreamingResolution("application/json", result.toJSONString());
+    }
+
 
     /**
      * return the config.js file
@@ -316,9 +355,11 @@ public class ConfigActionBean implements ActionBean {
 
     /**
      * Update a Environment:
-     * <p>Copy all values from map.js to do the mapping in the configuration
+     * <p>
+     * Copy all values from map.js to do the mapping in the configuration
      * files.</p>
-     * <p>Copy files to the root dir and change the environment key in
+     * <p>
+     * Copy files to the root dir and change the environment key in
      * config.js</p>
      *
      * @return
@@ -429,7 +470,8 @@ public class ConfigActionBean implements ActionBean {
     }
 
     /**
-     * Receives a map.js file with only db information to update the DB configuration
+     * Receives a map.js file with only db information to update the DB
+     * configuration
      *
      * @return
      */
@@ -484,9 +526,10 @@ public class ConfigActionBean implements ActionBean {
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
-    
-        /**
-     * Receives a map.js file with only db information to update the DB configuration
+
+    /**
+     * Receives a map.js file with only db information to update the DB
+     * configuration
      *
      * @return
      */
@@ -498,7 +541,7 @@ public class ConfigActionBean implements ActionBean {
             JSONParser parser = new JSONParser();
             System.out.println(method);
             JSONObject pubby = (JSONObject) parser.parse(method);
-            
+
             String environment = "env_" + Config.getEnvironment();
             String path = Config.getPath() + environment + "/";
             String map = path + "map.js";
@@ -649,7 +692,6 @@ public class ConfigActionBean implements ActionBean {
         //conn.setRequestProperty("Content-Type", "application/rdf+xml");
         //HttpURLConnection conn=conn.getInputStream();
 
-
         StringBuilder sb = new StringBuilder();
         String line;
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -769,7 +811,7 @@ public class ConfigActionBean implements ActionBean {
             //read local ontology TODO: FIX THAT
             String localOntology = context.getRequest().getScheme() + "://" + context.getRequest().getServerName() + ":" + context.getRequest().getServerPort() + context.getRequest().getContextPath() + "/ontology/";
             set.addAll(getOntologyProperties(localOntology));
-            
+
             //read website ontology 
             String siteOntology = "http://bioinformatics.ua.pt/coeus/ontology/";
             set.addAll(getOntologyProperties(siteOntology));
@@ -780,7 +822,6 @@ public class ConfigActionBean implements ActionBean {
             }
 
             updateFile(sb.toString(), Config.getPath() + "predicates.csv");
-
 
         } catch (ParseException ex) {
             result.put("status", 200);

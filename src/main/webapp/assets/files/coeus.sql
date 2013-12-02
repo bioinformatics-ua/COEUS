@@ -42,10 +42,10 @@ CREATE TABLE `Prefixes` (
 
 
 
-# Dump of table quads
+# Dump of table Quads
 # ------------------------------------------------------------
 
-CREATE TABLE `quads` (
+CREATE TABLE `Quads` (
   `g` bigint(20) NOT NULL,
   `s` bigint(20) NOT NULL,
   `p` bigint(20) NOT NULL,

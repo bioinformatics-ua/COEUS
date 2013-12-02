@@ -64,7 +64,7 @@
                         %>
                         <br/><br/>
                         <div class="alert alert-danger">
-                            <strong>Invalid Login!</strong> Check your <a href="#">credentials</a>.
+                            <strong>Invalid Login!</strong> Check your <a href="../../documentation/#downloads">credentials</a>.
                         </div>
                         <%    }
                         %>

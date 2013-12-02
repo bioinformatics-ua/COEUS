@@ -24,56 +24,62 @@
         </script>
     </s:layout-component>
     <s:layout-component name="body">
-        <div class="container space">
-            <ul id="tabs" class="nav nav-pills">
-                <li class="active"><a data-toggle="pill" href="#basics">Basics</a></li>
-                <li><a href="#downloads" data-toggle="pill">Downloads</a></li>
-                <li><a href="#ontology" data-toggle="pill">Ontology</a></li>
-                <li><a href="#tutorials" data-toggle="pill">Tutorials</a></li>
-                <li><a href="#registry" data-toggle="pill">Registry</a></li>
-                <li><a href="#api" data-toggle="pill">API</a></li>
-                <li><a href="#support" data-toggle="pill">Support</a></li>
-                <li><a href="#licensing" data-toggle="pill">Licensing</a></li>
+        <div class="container">
+            <ul id="tabs" class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#basics">Basics</a></li>
+                <li><a href="#downloads" data-toggle="tab">Downloads</a></li>
+                <li><a href="#ontology" data-toggle="tab">Ontology</a></li>
+                <li><a href="#tutorials" data-toggle="tab">Tutorials</a></li>
+                <li><a href="#registry" data-toggle="tab">Registry</a></li>
+                <li><a href="#api" data-toggle="tab">API</a></li>
+                <li><a href="#science" data-toggle="tab">Science</a></li>
+                <li><a href="#support" data-toggle="tab">Support</a></li>
+                <li><a href="#licensing" data-toggle="tab">Licensing</a></li>
             </ul>
 
             <!-- BASICS -->
             <div class="tab-content">
-                <div class="tab-pane active" id="basics">
+                <div class="tab-pane fade in active" id="basics">
                     <c:import url="/docs/basics.jsp" />
                 </div>
 
                 <!-- REGISTRY -->
-                <div class="tab-pane" id="registry">
+                <div class="tab-pane fade" id="registry">
                     <c:import url="/docs/registry.jsp" />
                 </div>
 
                 <!-- ONTOLOGY -->
-                <div class="tab-pane" id="ontology">
+                <div class="tab-pane fade" id="ontology">
                     <c:import url="/docs/ontology.jsp" />
                 </div>
 
                 <!-- API -->
-                <div class="tab-pane" id="api">                    
+                <div class="tab-pane fade" id="api">                    
                     <c:import url="/docs/api.jsp" />
                 </div>
 
                 <!-- TUTORIALS -->
-                <div class="tab-pane" id="tutorials">                    
+                <div class="tab-pane fade" id="tutorials">                    
                     <c:import url="/docs/tutorials.jsp" />                    
                 </div>
 
                 <!-- DOWNLOADS -->
-                <div class="tab-pane" id="downloads">
+                <div class="tab-pane fade" id="downloads">
                     <c:import url="/docs/downloads.jsp" />
                 </div>
 
                 <!-- SUPPORT -->
-                <div class="tab-pane" id="support">
+                <div class="tab-pane fade" id="support">
                     <c:import url="/docs/support.jsp" />
+                </div>
+                
+                <!-- Science -->
+                <div class="tab-pane fade" id="science">
+                    <c:import url="/docs/science.jsp" />
                 </div>
 
                 <!-- LICENSING -->
-                <div class="tab-pane" id="licensing">
+                <div class="tab-pane fade" id="licensing">
                     <c:import url="/docs/licensing.jsp" />
                 </div>
             </div>

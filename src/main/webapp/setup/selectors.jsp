@@ -139,7 +139,7 @@
             }
 
             function showErrorSelectors(id, url, jqXHR, result) {
-                $(id).append(generateHtmlMessage("Server error!", url + "</br>Status Code:" + result.status + " " + result.message, "alert-error"));
+                $(id).append(generateHtmlMessage("Server error!", url + "</br>Status Code:" + result.status + " " + result.message, "alert-danger"));
             }
 
             function fillConceptsExtension(result) {
@@ -460,14 +460,18 @@
                 try {
                     var value = e.options[e.selectedIndex].id;
                     removeById(value, "dropdownprop");
-                    var q = $('#propertySelectors').val();
-                    q = q.replace("|" + value, "");
-                    q = q.replace(value + "|", "");
-                    q = q.replace(value, "");
-                    $('#propertySelectors').val(q);
+                    buildInputProperties();
                 } catch (e) {
                 }
 
+            }
+            function buildInputProperties() {
+                var values = [];
+                var sel = document.getElementById('dropdownprop');
+                for (var i = 0, n = sel.options.length; i < n; i++) {
+                    if (sel.options[i].value) values.push(sel.options[i].value);
+                }
+                $('#propertySelectors').val(values.join("|"));
             }
         </script>
     </s:layout-component>

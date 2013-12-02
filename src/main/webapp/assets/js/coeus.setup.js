@@ -6,15 +6,23 @@
  * Return the Application path (instance)
  * @returns {String}
  */
-function getApplicationPath(){
+function getApplicationPath() {
     return window.location.protocol + '//' + window.location.host + '/' + window.location.pathname.split('/')[1] + '/';
+}
+
+/**
+ * Return the first pathname (default is 'coeus')
+ * @returns {String}
+ */
+function getFirstPath() {
+    return window.location.pathname.split('/')[1];
 }
 
 /**
  * init service prefix
  * @returns {query} */
 function initSparqlerQuery() {
-    var sparqler = new SPARQL.Service("/coeus/sparql");
+    var sparqler = new SPARQL.Service("/"+getFirstPath()+"/sparql");
 
     var prefixes = getPrefixURI();
     for (var key in prefixes) {
@@ -87,12 +95,12 @@ function splitURIPrefix(uri) {
 //            //$(html).append('Call: ' + url + '<br/> Message: ' + data.message+'<br/><br/>');
 //            $(html).addClass('alert alert-success');
 //        } else {
-//            $(html).addClass('alert alert-error');
+//            $(html).addClass('alert alert-danger');
 //            $(html).append('Call: ' + url + '<br/>Status: ' + data.status + ' Message: ' + data.message + '<br/><br/>');
 //        }
 //
 //    }).fail(function(jqXHR, textStatus) {
-//        $(html).addClass('alert alert-error');
+//        $(html).addClass('alert alert-danger');
 //        $(html).append('Call: ' + url + '<br/> ' + 'ERROR: ' + textStatus + '<br/><br/>');
 //        // Server communication error function handler.
 //    });
@@ -266,6 +274,27 @@ function foreachRemoveSubjects(urlPrefix, subject, showResult, showError, result
     }
 }
 
+/**
+ * Removes all resources errors (dc:coverage property).
+ * @param {type} urlPrefix
+ * @param {type} showResult
+ * @param {type} showError
+ * @returns {undefined}
+ */
+function cleanResourceErrors(urlPrefix,showResult, showError){
+    var qCleanErrors = "SELECT ?resource ?object {?resource dc:coverage ?object . ?resource a coeus:Resource}";
+    queryToResult(qCleanErrors, foreachCleanResourceErrors.bind(this, urlPrefix, showResult, showError));
+}
+function foreachCleanResourceErrors(urlPrefix, showResult, showError, result){
+    for (var r in result) {
+        var object = resultToObject(result[r].object);
+        var resource = resultToObject(result[r].resource);
+
+        var url = "/delete/" + resource.prefix + resource.value + '/dc:coverage/' + object.prefix + object.value;
+        console.log("Deleting: " + url);
+        callURL(urlPrefix + url, showResult, showError);
+    }
+}
 //function removeAllTriplesFromSubjectAndPredicate(urlPrefix, subject, predicate) {
 //    var qSubject = "SELECT ?object {" + subject + " " + predicate + " ?object . }";
 //    console.log(qSubject);
@@ -280,7 +309,7 @@ function foreachRemoveSubjects(urlPrefix, subject, showResult, showError, result
 //        }
 //
 //        //if success refresh page
-//        if (document.getElementById('result').className !== 'alert alert-error') {
+//        if (document.getElementById('result').className !== 'alert alert-danger') {
 //            // window.location="../entity/"+lastPath();
 //            console.log("REDIRECTING...");
 //            //window.location.reload(true);
@@ -419,7 +448,7 @@ function callURL(url, success, error) {
 
 /**
  * Generate a html code message 
- * Ex: var htmlMessage=generateHtmlMessage("Error!", "It already exists!","alert-error");
+ * Ex: var htmlMessage=generateHtmlMessage("Error!", "It already exists!","alert-danger");
  * 
  * @param {type} strong
  * @param {type} message
@@ -535,7 +564,7 @@ function fillEdit(result) {
     }
     catch (err)
     {
-        $('#editResult').append(generateHtmlMessage("Error!", "Some fields do not exist." + err, "alert-error"));
+        $('#editResult').append(generateHtmlMessage("Error!", "Some fields do not exist." + err, "alert-danger"));
     }
     //PUT OLD VALUES IN THE STATIC FIELD
     $('#oldTitle').val($('#editTitle').val());
@@ -580,12 +609,12 @@ function edit() {
 function changeURI(id, type, value) {
     document.getElementById(id).innerHTML = 'coeus:' + type.toLowerCase() + '_' + value.split(' ').join('_');
     //auto-fill label and comment
-    if(type.toLowerCase()==="resource"){
-        document.getElementById('label'+type).value = value+" Label";
-        document.getElementById('comment'+type).value = value+" Description";
-    }else{
-        document.getElementById('label').value = value+" Label";
-        document.getElementById('comment').value = value+" Description";
+    if (type.toLowerCase() === "resource") {
+        document.getElementById('label' + type).value = value + " Label";
+        document.getElementById('comment' + type).value = value + " Description";
+    } else {
+        document.getElementById('label').value = value + " Label";
+        document.getElementById('comment').value = value + " Description";
     }
 }
 /**
@@ -736,7 +765,7 @@ function showResult(id, url, result) {
  */
 function showError(id, url, jqXHR, result) {
     clearTimeout(timer);
-    $(id).append(generateHtmlMessage("Server error!", url + "</br>Status Code:" + result.status + " " + result.message, "alert-error"));
+    $(id).append(generateHtmlMessage("Server error!", url + "</br>Status Code:" + result.status + " " + result.message, "alert-danger"));
 }
 
 /**
@@ -767,19 +796,22 @@ function prepareAddResourceModal(link) {
     $('#resourceLink').val(link);
     publisherChange("Add");
     var q = "SELECT ?concept ?c {?entity coeus:isEntityOf " + link + " . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
-    queryToResult(q, fillConceptsExtension.bind(this,link));
+    queryToResult(q, fillConceptsExtension.bind(this, link));
 }
-function fillConceptsExtension(link,result) {
+function fillConceptsExtension(link, result) {
     $('#extends').html("");
     $('#editExtends').html("");
+    $('#editConcept').html("");
     console.log(result);
     for (var r in result) {
         var concept = splitURIPrefix(result[r].concept.value);
         $('#extends').append('<option>' + concept.value + '</option>');
         $('#editExtends').append('<option>' + concept.value + '</option>');
+        $('#editConcept').append('<option>' + concept.value + '</option>');
     }
     //Only on addResource
-    if(link!==null) $('#extends option:contains(' + link.split(":")[1] + ')').prop({selected: true});
+    if (link !== null)
+        $('#extends option:contains(' + link.split(":")[1] + ')').prop({selected: true});
 }
 /**
  * Add a Resource
@@ -818,9 +850,9 @@ function addResource() {
         empty = true;
     } else
         $('#resourceCommentForm').removeClass('has-error');
-    if ((endpoint === '') | ((!contains(endpoint,"http://")) && (!contains(endpoint,"https://")) && (!contains(endpoint,"file://")))) {
+    if ((endpoint === '') | ((!contains(endpoint, "http://")) && (!contains(endpoint, "https://")) && (!contains(endpoint, "file://")) && (!contains(endpoint, "jdbc:")))) {
         $('#endpointForm').addClass('has-error');
-        $('#addResourceResult').html(generateHtmlMessage("Endpoint error:", "It can only start with \"http(s)://\" or \"file://\"." , "alert-danger"));
+        $('#addResourceResult').html(generateHtmlMessage("Endpoint error:", "It can only start with \"http(s)://\" or \"file://\".", "alert-danger"));
         empty = true;
     } else
         $('#endpointForm').removeClass('has-error');
@@ -1059,6 +1091,7 @@ function prepareResourceEdit(individual) {
     $('#editQuery').val("");
     $('#editOrder').val("");
     $('#editExtends').val("");
+    $('#editConcept').val("");
     $('#built').prop('checked', false);
 
     //CLEAN ALSO OLD VALUES IN THE STATIC FIELD
@@ -1071,11 +1104,12 @@ function prepareResourceEdit(individual) {
     $('#oldQuery').val("");
     $('#oldOrder').val("");
     $('#oldExtends').val("");
+    $('#oldConcept').val("");
     $('#oldBuilt').val("false");
 
     var q = "SELECT ?concept ?c {?concep coeus:hasResource " + individual + " . ?entity coeus:isEntityOf ?concep . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
-    queryToResult(q, fillConceptsExtension.bind(this,null));
-    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?built {" + individual + " dc:title ?title . " + individual + " rdfs:label ?label . " + individual + " rdfs:comment ?comment . " + individual + " coeus:method ?method . " + individual + " dc:publisher ?publisher . " + individual + " coeus:endpoint ?endpoint . " + individual + " coeus:query ?query . " + individual + " coeus:order ?order . " + individual + " coeus:extends ?extends . OPTIONAL{" + individual + " coeus:built ?built } }";
+    queryToResult(q, fillConceptsExtension.bind(this, null));
+    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?concept ?built {" + individual + " dc:title ?title . " + individual + " rdfs:label ?label . " + individual + " rdfs:comment ?comment . " + individual + " coeus:method ?method . " + individual + " dc:publisher ?publisher . " + individual + " coeus:endpoint ?endpoint . " + individual + " coeus:query ?query . " + individual + " coeus:order ?order . " + individual + " coeus:extends ?extends . " + individual + " coeus:isResourceOf ?concept . OPTIONAL{" + individual + " coeus:built ?built } }";
     queryToResult(q, fillResourceEdit);
 
 }
@@ -1093,6 +1127,7 @@ function fillResourceEdit(result) {
         $('#editQuery').val(result[0].query.value);
         $('#editOrder').val(result[0].order.value);
         $('#editExtends option:contains(' + splitURIPrefix(result[0].extends.value).value + ')').prop({selected: true});
+        $('#editConcept option:contains(' + splitURIPrefix(result[0].concept.value).value + ')').prop({selected: true});
         if (result[0].built !== undefined && result[0].built.value === "true")
             $('#built').prop('checked', true);
         else
@@ -1100,7 +1135,7 @@ function fillResourceEdit(result) {
     }
     catch (err)
     {
-        $('#editResourceResult').append(generateHtmlMessage("Error!", "Some fields do not exist." + err, "alert-error"));
+        $('#editResourceResult').append(generateHtmlMessage("Error!", "Some fields do not exist." + err, "alert-danger"));
     }
     //PUT OLD VALUES IN THE STATIC FIELD
     $('#oldResourceTitle').val($('#editResourceTitle').val());
@@ -1112,6 +1147,7 @@ function fillResourceEdit(result) {
     $('#oldQuery').val($('#editQuery').val());
     $('#oldOrder').val($('#editOrder').val());
     $('#oldExtends').val(splitURIPrefix(result[0].extends.value).value);
+    $('#oldConcept').val(splitURIPrefix(result[0].concept.value).value);
     $('#oldBuilt').val($('#built').is(':checked'));
     //change publisher according to the result
     publisherChange('edit');
@@ -1164,6 +1200,14 @@ function editResource() {
         url = urlDelete + "coeus:" + $('#oldExtends').val() + "/" + "coeus:isExtendedBy" + "/" + individual;
         array.push(url);
         url = urlWrite + "coeus:" + $('#editExtends').val() + "/" + "coeus:isExtendedBy" + "/" + individual;
+        array.push(url);
+    }
+    if ($('#oldConcept').val() !== $('#editConcept').val()) {
+        url = urlUpdate + individual + "/" + "coeus:isResourceOf" + "/coeus:" + $('#oldConcept').val() + ",coeus:" + $('#editConcept').val();
+        array.push(url);
+        url = urlDelete + "coeus:" + $('#oldConcept').val() + "/" + "coeus:hasResource" + "/" + individual;
+        array.push(url);
+        url = urlWrite + "coeus:" + $('#editConcept').val() + "/" + "coeus:hasResource" + "/" + individual;
         array.push(url);
     }
     if ($('#oldPublisher').val() !== $('#editPublisher').val()) {
@@ -1226,7 +1270,7 @@ function loadSeedsOnSidebar() {
         $('#sidebarseeds').html('');
         for (var key in result) {
             var splitedURI = splitURIPrefix(result[key].seed.value);
-            var a = '<li><a href="/coeus/resource/' + splitedURI.value + '"><i class="fa fa-circle-o"></i> ' + splitedURI.value + '</a></li>';//TODO: FIX THAT LINK
+            var a = '<li><a href="/'+getFirstPath()+'/resource/' + splitedURI.value + '"><i class="fa fa-circle-o"></i> ' + splitedURI.value + '</a></li>';//TODO: FIX THAT LINK
             $('#sidebarseeds').append(a);
         }
         console.log("INFO: All seeds loaded on sidebar.");
@@ -1250,8 +1294,8 @@ function changeSidebar(id) {
  * @param {type} error
  * @returns {undefined}
  */
-function reloadContext(success,error) {
-    var url = "/manager/text/reload?path=/coeus";
+function reloadContext(success, error) {
+    var url = "/manager/text/reload?path=/"+getFirstPath();
     $.ajax({url: url, dataType: 'text'}).done(success).fail(error);
 }
 
@@ -1262,6 +1306,41 @@ function reloadContext(success,error) {
  * @returns {Boolean}
  */
 function contains(value, pattern) {
-    if (value.indexOf(pattern)!== -1) return true;
-    else return false;
+    if (value.indexOf(pattern) !== -1)
+        return true;
+    else
+        return false;
+}
+/**
+ * logout remote user
+ * @returns {undefined}
+ */
+function logout(){
+    var url = getApplicationPath()+"config/logout/";
+    callURL(url, logoutResult, logoutResult);
+}
+function logoutResult(result){
+    if(result.status===100){
+        redirect(getApplicationPath());
+    }else{
+        console.log(result.message);
+    }
+}
+
+/**
+ * Put the remote user on the divId
+ * @param {type} divId
+ * @returns {undefined}
+ */
+function username(divId){
+    var url = getApplicationPath()+"config/username/";
+    callURL(url, usernameResult.bind(this,divId), usernameResult.bind(this,divId));
+}
+function usernameResult(divId,result){
+    if(result.status===100){
+        $(divId).html(result.message);
+        $("#dropdown_remote_user").removeClass("hide");
+    }else{
+        redirect(getApplicationPath()+"manager/seed/");
+    }
 }

@@ -11,6 +11,7 @@
         <script type="text/javascript">
 
             $(document).ready(function() {
+                //changeSidebar('#wizard');
                 getConfigData();
                 //callURL("../../config/listenv/", envSuccess);
                 $('.next').addClass('hide');
@@ -302,7 +303,7 @@
             }
 
             function upEnvFail(jqXHR, textStatus) {
-                $('#resultUpEnv').html(generateHtmlMessage("Error!", textStatus, "alert-error"));
+                $('#resultUpEnv').html(generateHtmlMessage("Error!", textStatus, "alert-danger"));
             }
 
             function reload() {
@@ -324,15 +325,18 @@
                 try {
                     var value = e.options[e.selectedIndex].id;
                     removeById(value, "dropdownkeys");
-                    value = value.split("key_")[1];
-                    var q = $('#ApiKey').val();
-                    q = q.replace("|" + value, "");
-                    q = q.replace(value + "|", "");
-                    q = q.replace(value, "");
-                    $('#ApiKey').val(q);
+                    buildInputApi();
                 } catch (e) {
                 }
 
+            }
+            function buildInputApi() {
+                var values = [];
+                var sel = document.getElementById('dropdownkeys');
+                for (var i = 0, n = sel.options.length; i < n; i++) {
+                    if (sel.options[i].value) values.push(sel.options[i].value);
+                }
+                $('#ApiKey').val(values.join("|"));
             }
             function updateApiKeys() {
                 var typeahead = $('#putApiKey').val();
@@ -372,7 +376,7 @@
         <div class="container">
 
             <div id="header" class="page-header">
-                <h1>COEUS Setup Wizard</h1>
+                <h1>Wizard Setup</h1>
             </div>
 
             <ol class="breadcrumb">
@@ -713,8 +717,8 @@
                                     <div class="form-group col-md-6">
                                         <label class="control-label col-sm-2 " for="Endpoint">SPARQL</label>
                                         <div class=" col-sm-10 controls">
-                                            <input tabindex="3" id="Endpoint" name="Endpoint" type="text" placeholder="http://bioinformatics.ua.pt/coeus/sparql" class="form-control" disabled/>
-                                            <p class="help-block">The URL of the SPARQL endpoint whose data we want to expose.</p>
+                                            <input tabindex="3" id="Endpoint" name="Endpoint" type="text" placeholder="http://bioinformatics.ua.pt/coeus/sparql" class="form-control" />
+                                            <p class="help-block">The internal URL of the SPARQL endpoint whose data we want to expose.</p>
                                         </div>
                                     </div>
 

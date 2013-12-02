@@ -10,7 +10,7 @@
 #else
 #set ($odd_even = "odd")
 #end
-      <tr class="$odd_even">
+       <tr class="$odd_even">
         <td class="property">
 #if ($property.isInverse())
           <small>is</small>
@@ -24,7 +24,11 @@
           <small>of</small>
 #end
         </td>
-        <td>
+#if ($property.LocalName=="coverage")
+      <td class="text-danger">
+#else
+       <td>
+#end               
           <ul class="list-unstyled">
 #foreach ($value in $property.Values)
             <li>

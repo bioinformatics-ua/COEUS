@@ -151,15 +151,19 @@
         <role-name>manager-gui</role-name>
     </security-role>
     <login-config>
-      <auth-method>FORM</auth-method>
-      <form-login-config>
-        <form-login-page>/login.jsp</form-login-page>
-        <form-error-page>/login.jsp?f=error</form-error-page>
-      </form-login-config>
+        <auth-method>FORM</auth-method>
+        <form-login-config>
+            <form-login-page>/login.jsp</form-login-page>
+            <form-error-page>/login.jsp?f=error</form-error-page>
+        </form-login-config>
     </login-config>
     <!-- End Security -->
     
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/setup/404.jsp</location>
+    </error-page> 
 </web-app>

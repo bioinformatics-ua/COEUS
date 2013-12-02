@@ -6,15 +6,10 @@ package pt.ua.bioinformatics.coeus.data.connect;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.ua.bioinformatics.coeus.api.API;
@@ -23,7 +18,6 @@ import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
 import pt.ua.bioinformatics.coeus.data.Predicate;
 import pt.ua.bioinformatics.coeus.data.Triplify;
-import pt.ua.bioinformatics.coeus.domain.InheritedResource;
 import pt.ua.bioinformatics.coeus.domain.Resource;
 
 /**
@@ -35,6 +29,7 @@ public class RDFFactory implements ResourceFactory {
     private Resource res;
     private API api = Boot.getAPI();
     private Triplify rdfizer;
+    private boolean hasError = false;
 
     public RDFFactory(Resource r) {
         this.res = r;
@@ -87,7 +82,7 @@ public class RDFFactory implements ResourceFactory {
                     }
                 }
             } catch (Exception ex) {
-                if (Config.isDebug()) {
+                if (Config.isDebug()) { saveError(ex);
                     System.out.println("[COEUS][RDFFactory] unable to load data for " + res.getUri());
                     Logger.getLogger(RDFFactory.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -133,7 +128,7 @@ public class RDFFactory implements ResourceFactory {
                         rdfizer.getApi().readModel(endpoint);
 
                     } catch (Exception ex) {
-                        if (Config.isDebug()) {
+                        if (Config.isDebug()) { saveError(ex);
                             System.out.println("[COEUS][RDFFactory] unable to load data for " + item);
                             Logger.getLogger(RDFFactory.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -141,7 +136,7 @@ public class RDFFactory implements ResourceFactory {
                 }
 
             } catch (Exception ex) {
-                if (Config.isDebug()) {
+                if (Config.isDebug()) { saveError(ex);
                     System.out.println("[COEUS][RDFFactory] unable to load data for " + res.getUri());
                     Logger.getLogger(RDFFactory.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -158,20 +153,43 @@ public class RDFFactory implements ResourceFactory {
     public boolean save() {
         boolean success = false;
         try {
-            com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
-            Statement statementToRemove=api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
-            api.removeStatement(statementToRemove);
-            api.addStatement(resource, Predicate.get("coeus:built"), true);
+            //only change built property if there are no errors
+            if (hasError == false) {
+                API api = Boot.getAPI();
+                com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
+                Statement statementToRemove = api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
+                api.removeStatement(statementToRemove);
+                api.addStatement(resource, Predicate.get("coeus:built"), true);
+            }
             success = true;
-            if (Config.isDebug()) {
+            if (Config.isDebug()) { 
                 System.out.println("[COEUS][API] Saved resource " + res.getUri());
             }
         } catch (Exception ex) {
-            if (Config.isDebug()) {
+            if (Config.isDebug()) { saveError(ex);
                 System.out.println("[COEUS][API] Unable to save resource " + res.getUri());
                 Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return success;
+    }
+    
+    private void saveError(Exception ex) {
+        try {
+            API api = Boot.getAPI();
+            com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
+            Statement statement=api.getModel().createLiteralStatement(resource, Predicate.get("dc:coverage"), "ERROR: "+ex.getMessage()+". For more information, please see the application server log.");
+            api.addStatement(statement);
+            hasError = true;
+
+            if (Config.isDebug()) { 
+                System.out.println("[COEUS][API] Saved error on resource " + res.getUri());
+            }
+        } catch (Exception e) {
+            if (Config.isDebug()) { 
+                System.out.println("[COEUS][API] Unable to save error on resource " + res.getUri());
+                Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
     }
 }

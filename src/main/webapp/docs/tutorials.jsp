@@ -1,6 +1,6 @@
 <%@include file="/layout/taglib.jsp" %>
-<div class="row">
-    <div class="span2 bs-docs-sidebar pull-left">
+<div class="container">
+<!--    <div class="span2 bs-docs-sidebar pull-left">
         <ul class="nav nav-list bs-docs-sidenav affix">
             <li><a href="#start">Start</a></li>
             <li><a href="#setup">Setup</a></li>
@@ -10,11 +10,9 @@
             <li><a href="#publish">Publish</a></li>
             <li><a href="#access">Access</a></li>
         </ul>
-    </div>
+    </div>-->
 
-    <div class="span9 pull-right">
         <!-- Tutorials/START -->
-
         <section id="start">
             <div class="page-header">
                 <h1>Start</h1>
@@ -545,5 +543,5 @@ SELECT ?item ?title ?description {
 }</pre>
             </p>
         </section>
-    </div>
+
 </div>

@@ -45,7 +45,7 @@
             }
 
             function refresh() {
-                var qresource = "SELECT DISTINCT ?resource ?c ?order ?built ?label{" + lastPath() + " coeus:hasResource ?resource . ?resource dc:title ?c . ?resource coeus:order ?order . ?resource rdfs:label ?label . OPTIONAL{ ?resource coeus:built ?built }}";
+                var qresource = "SELECT DISTINCT ?resource ?c ?order ?built ?label ?error {" + lastPath() + " coeus:hasResource ?resource . ?resource dc:title ?c . ?resource coeus:order ?order . ?resource rdfs:label ?label . OPTIONAL{ ?resource coeus:built ?built . ?resource dc:coverage ?error }}";
                 queryToResult(qresource, fillListOfResources);
 
             }
@@ -56,9 +56,11 @@
                 for (var key = 0, size = result.length; key < size; key++) {
                     var built = '<span class="label label-success">Built</span>';
                     if (result[key].built === undefined || result[key].built.value === "false")
-                        built = '<span class="label ">not built</span>';
+                        built = '<span class="label label-default">not built</span>';
+                    var error = '';
+                    if (result[key].error !== undefined) error = ' <span class="label label-danger tip" data-toggle="tooltip" title="Click on the resource to view errors">Error</span>';
                     var a = '<tr><td><a class="tip" data-toggle="tooltip" title="View in browser" href="../../resource/' + splitURIPrefix(result[key].resource.value).value + '">'
-                            + splitURIPrefix(result[key].resource.value).value + '</a> ' + built + '</td><td>'
+                            + splitURIPrefix(result[key].resource.value).value + '</a> ' + built + error + '</td><td>'
                             + result[key].c.value + '</td><td>'
                             + result[key].label.value + '</td><td>'
                             + result[key].order.value + '</td><td>'

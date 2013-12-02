@@ -1,14 +1,13 @@
 <%@include file="/layout/taglib.jsp" %>
-<div class="row">
-    <div class="span2 bs-docs-sidebar pull-left">
+<div class="container">
+<!--    <div class="span2 bs-docs-sidebar pull-left">
         <ul class="nav nav-list bs-docs-sidenav affix">
             <li><a href="#formats">Formats</a></li>
 
             <li><a href="#datasources">Data Sources</a></li>
         </ul>
-    </div>
+    </div>-->
 
-    <div class="span9 pull-right">
         <section id="formats">
             <div class="page-header">
                 <h1>Formats</h1>
@@ -356,5 +355,5 @@ coeus:xml_PDB_id coeus:isKeyOf coeus:resource_PDB;
 		owl:NamedIndividual;
 	rdfs:label "xml_pdb_id"^^&lt;&xsd;string&gt;.</pre>
         </section>
-    </div>
+
 </div>

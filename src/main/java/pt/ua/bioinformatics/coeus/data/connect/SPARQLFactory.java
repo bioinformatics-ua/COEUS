@@ -36,6 +36,7 @@ public class SPARQLFactory implements ResourceFactory {
     private String query;
     private QueryExecution e;
     private ResultSet rs;
+    private boolean hasError = false;
 
     public Resource getRes() {
         return res;
@@ -93,7 +94,7 @@ public class SPARQLFactory implements ResourceFactory {
                             }
                         }
                     } catch (Exception ex) {
-                        if (Config.isDebug()) {
+                        if (Config.isDebug()) { saveError(ex);
                             Logger.getLogger(SPARQLFactory.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -132,14 +133,14 @@ public class SPARQLFactory implements ResourceFactory {
                                 }
                             }
                         } catch (Exception ex) {
-                            if (Config.isDebug()) {
+                            if (Config.isDebug()) { saveError(ex);
                                 Logger.getLogger(SPARQLFactory.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                     }
                 }
             } catch (Exception ex) {
-                if (Config.isDebug()) {
+                if (Config.isDebug()) { saveError(ex);
                     System.out.println("[COEUS][SPARQLFactory] unable to load data for " + res.getUri());
                     Logger.getLogger(SPARQLFactory.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -158,21 +159,43 @@ public class SPARQLFactory implements ResourceFactory {
     public boolean save() {
         boolean success = false;
         try {
-            API api = Boot.getAPI();
-            com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
-            Statement statementToRemove=api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
-            api.removeStatement(statementToRemove);
-            api.addStatement(resource, Predicate.get("coeus:built"), true);
+            //only change built property if there are no errors
+            if (hasError == false) {
+                API api = Boot.getAPI();
+                com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
+                Statement statementToRemove = api.getModel().createLiteralStatement(resource, Predicate.get("coeus:built"), false);
+                api.removeStatement(statementToRemove);
+                api.addStatement(resource, Predicate.get("coeus:built"), true);
+            }
             success = true;
-            if (Config.isDebug()) {
+            if (Config.isDebug()) { 
                 System.out.println("[COEUS][API] Saved resource " + res.getUri());
             }
         } catch (Exception ex) {
-            if (Config.isDebug()) {
+            if (Config.isDebug()) { saveError(ex);
                 System.out.println("[COEUS][API] Unable to save resource " + res.getUri());
                 Logger.getLogger(SPARQLFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return success;
+    }
+    
+    private void saveError(Exception ex) {
+        try {
+            API api = Boot.getAPI();
+            com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(this.res.getUri());
+            Statement statement=api.getModel().createLiteralStatement(resource, Predicate.get("dc:coverage"), "ERROR: "+ex.getMessage()+". For more information, please see the application server log.");
+            api.addStatement(statement);
+            hasError = true;
+
+            if (Config.isDebug()) { 
+                System.out.println("[COEUS][API] Saved error on resource " + res.getUri());
+            }
+        } catch (Exception e) {
+            if (Config.isDebug()) { 
+                System.out.println("[COEUS][API] Unable to save error on resource " + res.getUri());
+                Logger.getLogger(XMLFactory.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
     }
 }
