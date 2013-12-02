@@ -43,8 +43,7 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> LinkedData <b class="caret"></b></a>
                                 <ul class="dropdown-menu" id="sidebarseeds">
-                                    <li><a href="#">Seed Item</a></li>
-                                    <li><a href="#">Seed Item</a></li>
+                                    <li><a href="#">(empty)</a></li>
                                 </ul>
                             </li>
                             <!--<li><a href="charts.html"><i class="fa fa-bar-chart-o"></i> Charts</a></li>
@@ -70,8 +69,8 @@
                         <ul class="nav navbar-nav navbar-right navbar-user">
                             <li class="dropdown">
                                 <a href="#" onclick="username('#remote_user');" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#"><i class="fa fa-star-o"></i> Welcome, <span id="remote_user"></span></a></li>
+                                <ul class="dropdown-menu hide" id="dropdown_remote_user">
+                                    <li><a href="#"><i class="fa fa-star-o"></i> Welcome <span id="remote_user"></span></a></li>
                                     <li class="divider"></li>
                                     <li><a onclick="logout();"><i class="fa fa-power-off"></i> Logout</a></li>
                                 </ul>

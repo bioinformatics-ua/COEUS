@@ -1316,16 +1316,17 @@ function contains(value, pattern) {
  * @returns {undefined}
  */
 function logout(){
-    var url = getApplicationPath()+"/config/logout/";
+    var url = getApplicationPath()+"config/logout/";
     callURL(url, logoutResult, logoutResult);
 }
 function logoutResult(result){
     if(result.status===100){
         redirect(getApplicationPath());
     }else{
-        alert(result.message);
+        console.log(result.message);
     }
 }
+
 /**
  * Put the remote user on the divId
  * @param {type} divId
@@ -1338,6 +1339,7 @@ function username(divId){
 function usernameResult(divId,result){
     if(result.status===100){
         $(divId).html(result.message);
+        $("#dropdown_remote_user").removeClass("hide");
     }else{
         redirect(getApplicationPath()+"manager/seed/");
     }

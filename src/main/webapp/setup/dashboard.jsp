@@ -32,7 +32,7 @@
                 queryToResult(qEntities, function(result) {
                     $('#triples').html(result[0].triples.value);
                 });
-                
+
 
             });
 
@@ -73,7 +73,7 @@
                             + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + prefix + ':' + resource + '\')"><sub><i class="black fa fa-trash-o fa-2x tip" data-toggle="tooltip" title="Delete"></i></sub></a>'
                             + '</span></p>';
 
-                    var qResourcesOptions = "SELECT ?error {" + prefix + ":" + resource + " a coeus:Resource . " + prefix + ":" + resource + " dc:coverage ?error }";
+                    var qResourcesOptions = "SELECT ?error ?built {" + prefix + ":" + resource + " a coeus:Resource . OPTIONAL{ " + prefix + ":" + resource + " dc:coverage ?error} . OPTIONAL{ " + prefix + ":" + resource + " coeus:built ?built}}";
                     console.log(qResourcesOptions);
                     queryToResult(qResourcesOptions, fillResourceOptions.bind(this, resource));
 
@@ -88,8 +88,14 @@
 
             function fillResourceOptions(resource, result) {
                 console.log(result);
-                if (result[0] !== undefined)
-                    $('#tree_' + resource).before(' <span class="label label-danger" >Error</span>');
+
+                if (result[0].error !== undefined)
+                    $('#tree_' + resource).before(' <span class="label label-danger" >error</span>');
+                if (result[0].built !== undefined && result[0].built.value==="true")
+                    $('#tree_' + resource).before(' <span class="label label-success" >built</span>');
+                else $('#tree_' + resource).before(' <span class="label label-default" >not built</span>');
+
+
             }
 
             function fillConcepts(entity, result) {
@@ -212,19 +218,19 @@
             function build() {
                 var qIssues = "SELECT (COUNT(*) AS ?n) {?resource dc:coverage ?object . ?resource a coeus:Resource}";
                 queryToResult(qIssues, function(result) {
-                    var n=result[0].n.value;
+                    var n = result[0].n.value;
                     console.log(n);
-                    if(n>=0){
+                    if (n >= 0) {
                         console.log("changing state to false");
                         callURL('../../config/changebuilt/false', callBuild.bind(this, 'false'), changeBuiltResult.bind(this, 'false'), showInfoError);
                     }
                 });
-                
+
             }
-            function callBuild(bool,result){
+            function callBuild(bool, result) {
                 console.log("callBuild");
                 runIntegration();
-                callURL("../../config/build/", function (bresult){
+                callURL("../../config/build/", function(bresult) {
                     console.log(bresult);
                 });
             }
@@ -297,7 +303,7 @@
                     $('#integrationProgress').addClass("hide");
                     refresh();
                 } else {
-                    
+
                 }
                 tooltip();
             }
@@ -391,7 +397,7 @@
                             <div class="progress-bar" ole="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"  style="width: 100%;"></div>
                         </div>
                         <div id="spinner">
-                            
+
                         </div>
 
                         <div id="integrationResult"></div>
@@ -400,7 +406,7 @@
 
                     <div class="modal-footer" id="rmbtns">
                         <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-<!--                        <button id="integration" class="btn btn-primary hide loading" onclick="window.location.reload();">Refresh <i class="icon-refresh icon-white"></i></button>-->
+                        <!--                        <button id="integration" class="btn btn-primary hide loading" onclick="window.location.reload();">Refresh <i class="icon-refresh icon-white"></i></button>-->
                     </div>
                 </div>
             </div>

@@ -971,6 +971,234 @@
 
     
 
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/seed_News_Aggregator">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Seed"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">News Aggregator</dc:title>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Seed News</rdfs:comment>
+        <includes rdf:resource="http://bioinformatics.ua.pt/coeus/resource/entity_News"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">News Aggregator</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/entity_News">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Entity"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">News</dc:title>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Entity News</rdfs:comment>
+        <isIncludedIn rdf:resource="http://bioinformatics.ua.pt/coeus/resource/seed_News_Aggregator"/>
+        <isEntityOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_Abola"/>
+        <isEntityOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_Marca"/>
+        <isEntityOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_BBC"/>
+        <isEntityOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_Reuters"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">News</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/concept_Reuters">
+        <hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Reuters"/>
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Concept"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reuters</dc:title>
+        <isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Reuters"/>
+        <hasEntity rdf:resource="http://bioinformatics.ua.pt/coeus/resource/entity_News"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reuters</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/concept_Marca">
+        <hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Marca"/>
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Concept"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Marca</dc:title>
+        <isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Marca"/>
+        <hasEntity rdf:resource="http://bioinformatics.ua.pt/coeus/resource/entity_News"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Marca</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/concept_Abola">
+        <hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Abola"/>
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Concept"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Abola</dc:title>
+        <isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Abola"/>
+        <hasEntity rdf:resource="http://bioinformatics.ua.pt/coeus/resource/entity_News"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Abola</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/concept_BBC">
+        <hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_BBC"/>
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Concept"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">BBC</dc:title>
+        <isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_BBC"/>
+        <hasEntity rdf:resource="http://bioinformatics.ua.pt/coeus/resource/entity_News"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">BBC</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/resource_Abola">
+        <hasKey rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_id"/>
+        <hasKey rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_Abola_id"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_description"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_Abola_id"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_title"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_date"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_link"/>
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Abola</dc:title>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Resource loader for A Bola XML feeds.</rdfs:comment>
+        <isResourceOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_Abola"/>
+        <order rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</order>
+        <method rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cache</method>
+        <endpoint rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://www.abola.pt/rss/index.aspx</endpoint>
+        <extends rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_Abola"/>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">//item</query>
+        <dc:publisher rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml</dc:publisher>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Abola</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/resource_Reuters">
+        <hasKey rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_Reuters_id"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_description"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_Reuters_id"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_title"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_date"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_link"/>
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reuters</dc:title>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Resource loader for Reuters XML feeds.</rdfs:comment>
+        <isResourceOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_Reuters"/>
+        <order rdf:datatype="http://www.w3.org/2001/XMLSchema#string">4</order>
+        <method rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cache</method>
+        <endpoint rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://feeds.reuters.com/reuters/sportsNews</endpoint>
+        <extends rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_Reuters"/>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">//item</query>
+        <dc:publisher rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml</dc:publisher>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reuters</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/resource_Marca">
+        <hasKey rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_Marca_id"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_description"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_Marca_id"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_title"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_date"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_link"/>
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Marca</dc:title>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Resource loader for Marca XML feeds.</rdfs:comment>
+        <isResourceOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_Marca"/>
+        <order rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</order>
+        <method rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cache</method>
+        <endpoint rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://estaticos.marca.com/rss/portada.xml</endpoint>
+        <extends rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_Marca"/>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">//item</query>
+        <dc:publisher rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml</dc:publisher>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Marca</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/resource_BBC">
+        <hasKey rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_BBC_id"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_BBC_id"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_description"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_title"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_date"/>
+        <loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_xml_link"/>
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">BBC</dc:title>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Resource loader for BBC XML feeds.</rdfs:comment>
+        <isResourceOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_BBC"/>
+        <order rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3</order>
+        <method rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cache</method>
+        <endpoint rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://feeds.bbci.co.uk/sport/0/rss.xml</endpoint>
+        <extends rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_BBC"/>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">//item</query>
+        <dc:publisher rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml</dc:publisher>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">BBC</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_xml_link">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_link</dc:title>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Reuters"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Marca"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_BBC"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Abola"/>
+        <property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:publisher</property>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">link</query>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_link</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_xml_Reuters_id">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_Reuters_id</dc:title>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Reuters"/>
+        <property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:identifier</property>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">guid</query>
+        <isKeyOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Reuters"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_Reuters_id</rdfs:label>
+        <regex rdf:datatype="http://www.w3.org/2001/XMLSchema#string">[0-9]{5,}</regex>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_xml_BBC_id">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_BBC_id</dc:title>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_BBC"/>
+        <property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:identifier</property>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">guid</query>
+        <isKeyOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_BBC"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_BBC_id</rdfs:label>
+        <regex rdf:datatype="http://www.w3.org/2001/XMLSchema#string">[0-9]{5,}</regex>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_xml_description">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_description</dc:title>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Reuters"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Marca"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_BBC"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Abola"/>
+        <property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:description</property>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">description</query>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_description</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_xml_date">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_date</dc:title>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Reuters"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Marca"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_BBC"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Abola"/>
+        <property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:date</property>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubDate</query>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_date</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_xml_Marca_id">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_Marca_id</dc:title>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Marca"/>
+        <property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:identifier</property>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">guid</query>
+        <isKeyOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Marca"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_Marca_id</rdfs:label>
+        <regex rdf:datatype="http://www.w3.org/2001/XMLSchema#string">[0-9]{5,}</regex>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_xml_title">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_title</dc:title>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Reuters"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Marca"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_BBC"/>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Abola"/>
+        <property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:title</property>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">title</query>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_title</rdfs:label>
+    </owl:NamedIndividual>
+    
+    <owl:NamedIndividual rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_xml_Abola_id">
+        <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
+        <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_Abola_id</dc:title>
+        <loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Abola"/>
+        <property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:identifier</property>
+        <query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">guid</query>
+        <isKeyOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_Abola"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml_Abola_id</rdfs:label>
+        <regex rdf:datatype="http://www.w3.org/2001/XMLSchema#string">[0-9]{5,}</regex>
+    </owl:NamedIndividual>
 
 </rdf:RDF>
 

@@ -4,22 +4,22 @@
     <s:layout-component name="custom_scripts">
         <script type="text/javascript">
             $(document).ready(function() {
-//                // set bootstrap tab handlers
-//                $('#tabs a').click(function(e) {
-//                    e.preventDefault();
-//                    window.location.hash = e.target.hash;
-//                    $(this).tab('show');
-//                });
-//
-//                // customize tab behaviour for inner sections (hashed)
-//                if (window.location.hash === '#basics' || window.location.hash === '#downloads' || window.location.hash === '#ontology' || window.location.hash.toString() === '#tutorials' || window.location.hash === '#registry' || window.location.hash === '#api' || window.location.hash === '#support' || window.location.hash === '#licensing') {
-//                    $('a[href=' + window.location.hash + ']').tab('show');
-//                } else {
-//                    var id = $(window.location.hash).parents('.tab-pane').attr('id');
-//                    $('a[href=#' + id + ']').tab('show');
-//                }
-//
-//                window.prettyPrint && prettyPrint();
+                // set bootstrap tab handlers
+                $('#tabs a').click(function(e) {
+                    e.preventDefault();
+                    window.location.hash = e.target.hash;
+                    $(this).tab('show');
+                });
+
+                // customize tab behaviour for inner sections (hashed)
+                if (window.location.hash === '#basics' || window.location.hash === '#downloads' || window.location.hash === '#ontology' || window.location.hash.toString() === '#tutorials' || window.location.hash === '#registry' || window.location.hash === '#api' || window.location.hash === '#support' || window.location.hash === '#licensing') {
+                    $('a[href=' + window.location.hash + ']').tab('show');
+                } else {
+                    var id = $(window.location.hash).parents('.tab-pane').attr('id');
+                    $('a[href=#' + id + ']').tab('show');
+                }
+
+                window.prettyPrint && prettyPrint();
             });
         </script>
     </s:layout-component>
