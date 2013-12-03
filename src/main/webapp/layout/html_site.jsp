@@ -30,24 +30,22 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="<c:url value="/home/" />">COEUS</a>
+                        <a class="navbar-brand" href="<c:url value="/home/" />">COEUS Framework</a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav">
-                            <li class="active"><a href="<c:url value="/home/" />">Home</a></li>
-
-                                <li><a href="<c:url value="/documentation/" />">Documentation</a></li>
-                                 <li><a href="<c:url value="/" />">Live Demo</a></li>
-
-                                <li><a data-toggle="modal" data-target="#contact" href="#contact">Contact</a></li>
+                            <li class="active"><a href="<c:url value="/home/" />"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+                            <li><a target="_blank" href="<c:url value="/" />"><i class="glyphicon glyphicon-send"></i> Live Demo</a></li>
+                            <li><a target="_blank" href="<c:url value="/documentation/" />"><i class="glyphicon glyphicon-book"></i> Documentation</a></li>
+                            <li><a data-toggle="modal" data-target="#contact" href="#contact"><i class="glyphicon glyphicon-envelope"></i> Contact</a></li>
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container -->
             </nav>
 
-           <!-- contact modal box -->
+            <!-- contact modal box -->
             <div id="contact" class="modal fade" role="dialog" aria-labelledby="contact" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -73,12 +71,12 @@
                 </div>
             </div>
 
-        <s:layout-component name="body">
-        </s:layout-component>
+            <s:layout-component name="body">
+            </s:layout-component>
 
         </body>
-        
-         <footer id="footer">
+
+        <footer id="footer">
             <div class="">
                 <div class="page-wrapper">
                     <div class="container">
@@ -89,7 +87,7 @@
             </div>
         </footer> 
 
-        
+
         <s:layout-component name="scripts">
             <jsp:include page="script.jsp" />
         </s:layout-component>

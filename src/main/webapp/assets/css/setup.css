@@ -180,7 +180,19 @@ table.tablesorter thead tr th:hover {
 
 /* COEUS homepage css */
 
+.marketing p{
+    font-size: 16px;
+    line-height: 1.5;
+}
 
+.marketing h2{
+    font-weight: 200;
+margin-bottom: 5px;
+font-size: 31.5px;
+line-height: 40px;
+margin: 10px 0;
+font-family: inherit;
+}
 
 .featurette-heading {
     font-size: 60px;
@@ -188,17 +200,14 @@ table.tablesorter thead tr th:hover {
     letter-spacing: -1px
 }
 
-.headline {
-
-}
 .headline > .container > h1 {
     font-size: 130px;
-
 }
 
 .headline > .container > h2 {
     font-size: 50px;
-
+font-weight:200;
+line-height:1.25;
 }
 
 .hero-unit {

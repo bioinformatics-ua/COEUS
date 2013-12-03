@@ -16,42 +16,33 @@
                 <h1 class="">COEUS</h1>
                 <h2>Streamlined back-end framework for rapid semantic web application development.
                     <h2></h2>
-                <p> 
-                    <a href="https://github.com/bioinformatics-ua/COEUS/archive/master.zip" class="btn btn-info btn-lg">Get COEUS</a>
-                </p>
-               <span class="masthead-links">
-                    <a href="https://github.com/bioinformatics-ua/COEUS" target="_blank">GitHub project</a>
-                    
-                </span>
+                    <p> 
+                        <a href="https://github.com/bioinformatics-ua/COEUS/archive/master.zip" class="btn btn-info btn-lg">Get COEUS <i class="glyphicon glyphicon-download-alt"></i></a>
+                    </p>
+                    <span class="masthead-links">
+                        <a href="https://github.com/bioinformatics-ua/COEUS" target="_blank">GitHub project</a>
+                    </span>
             </div>
         </div>
 
-
-        <!-- <div class="jumbotron masthead">
-            <div class="container">
-                <h1>COEUS</h1>
-                <p>Streamlined back-end framework for rapid semantic web application development.</p>
-
-            </div>
-        </div>-->
         <div class="text-center hero-unit">
             <p><h1>SWAT4LS Workshop <sup><span class="label label-warning">New!! <i class="icon-star icon-white"></i></span></sup></h1></p>
-        <p class="lead">A COEUS Workshop/Tutorial will be presented in the next edition of <a href="http://www.swat4ls.org/workshops/edinburgh2013/">SWAT4LS</a>.</p>
+        <p class="lead">A COEUS Workshop/Tutorial will be presented in the next edition of <a target="_blank" href="http://www.swat4ls.org/workshops/edinburgh2013/">SWAT4LS</a>.</p>
         <p class="lead">This workshop will be helded in Edinburgh, UK, December 9-12, 2013. </p>
-        <p><a href="../documentation/#science" class="btn btn-primary btn-lg">View more »</a></p> 
+        <p><a target="_blank" href="../documentation/#science" class="btn btn-primary btn-lg">View more <i class="glyphicon glyphicon-forward"></i></a></p> 
     </div>
     <div class="container">
 
 
-        <div class="text-center ">
-
+        <div class="text-center marketing">
+            <hr class="soften" />
             <h1 class="featurette-heading text-muted">Hello, Semantic Web!</h1>
             <p class="lead">
                 <em>Ipsa scientia potestas est.</em> Knowledge itself is power.
             </p>
             <p></p>
             <hr class="soften" />
-            <div class="row">
+            <div class="row mar">
                 <div class="col-lg-4">
                     <img src="../assets/img/integrate.png" width="150" height="150" alt="Integration"  />
                     <h2>Integration</h2>
@@ -103,7 +94,7 @@
                         <br />Reach more users and create new semantic cloud-based software platforms.</p>
                 </div>
             </div>
-
+            <hr class="soften" />
             <h1 class="featurette-heading text-muted">Build the future with COEUS</h1>
             <p class="lead">Semantic Web + Rapid Application Development = Next-Generation Applications.</p>
             <hr class="soften" />
@@ -131,14 +122,11 @@
                 </div>
                 <div class="col-md-4">
                     <h2>Featured</h2><a title="Go to Diseasecard" target="_blank" href="http://bioinformatics.ua.pt/diseasecard/"><img src="<c:url value="/assets/img/dc4.png"/>" width="200" height="29" alt="Diseasecard"></a>
-                    <br
-                        />
-                    <br />A new semantic rare diseases research portal. COEUS is the foundation
-                    of the internal application engine, enabling the delivery of advanced UI
-                    features and the exploration of collected knowledge programmatically.
-                    <br
-                        />
-                    <br />
+                    <br/><br/>
+                    <p>A new semantic rare diseases research portal. COEUS is the foundation
+                        of the internal application engine, enabling the delivery of advanced UI
+                        features and the exploration of collected knowledge programmatically.
+                    </p>
                     <p><a title="Go to Diseasecard" target="_blank" class="btn btn-primary btn-info"
                           href="http://bioinformatics.ua.pt/diseasecard/">Go to Diseasecard</a>
                     </p>
