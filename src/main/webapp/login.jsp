@@ -55,7 +55,7 @@
             </div>
             <form class="form-signin" method="POST" action="j_security_check">
                 <h2 class="form-signin-heading">Please sign in</h2>
-                <input type="text" name="j_username" class="input-block-level form-control" placeholder="Email address">
+                <input type="text" name="j_username" class="input-block-level form-control" placeholder="Tomcat User">
                     <input type="password" name="j_password" class="input-block-level form-control" placeholder="Password">
 
                         <button class="btn btn-primary btn-lg" type="submit">Sign in</button>

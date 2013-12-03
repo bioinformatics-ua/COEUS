@@ -66,7 +66,7 @@
                         recent = ' <span class="label label-warning tip" data-toggle="tooltip" title="Recently added" >New <i class="fa fa-star" ></i></span> ';
 
 
-                    c += '<p class="text-info treeitem" ><a href="../../resource/' + resource + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
+                    c += '<p class="text-info treeitem" ><a target="_blank" href="../../resource/' + resource + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
                             + resource + recent + '<span id="tree_' + resource + '" class="showonhover">'
                             + ' <a href="#editResourceModal" data-toggle="modal" onclick="prepareResourceEdit(\'' + prefix + ':' + resource + '\');"><sub><i class="black fa fa-edit fa-2x tip" data-toggle="tooltip" title="Edit"></i></sub></a>'
                             + ' <a href="../selector/' + prefix + ':' + resource + '"><sub><i class="black fa fa-wrench fa-2x tip" data-toggle="tooltip" title="Configuration" ></i></sub></a>'
@@ -115,7 +115,7 @@
 
 
                     c += '<p class="text-warning treeitem">'
-                            + '<a href="../../resource/' + concept + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
+                            + '<a target="_blank" href="../../resource/' + concept + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
                             + concept + recent + '<span class="showonhover">'
                             //+ ' <a href="../concept/edit/' + prefix + ':' + concept + '"><i class="icon-edit"></i></a>'
                             + ' <a href="#editModal" data-toggle="modal" onclick="prepareEdit(\'' + all + '\');"><sub><i class="black fa fa-edit fa-2x tip" data-toggle="tooltip" title="Edit"></i></sub></a>'
@@ -176,7 +176,7 @@
                         recent = ' <span class="label label-warning tip" data-toggle="tooltip" title="Recently added" >New <i class="fa fa-star" ></i></span> ';
 
                     e += '<p class="text-success treeitem">'
-                            + '<a href="../../resource/' + entity + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
+                            + '<a target="_blank" href="../../resource/' + entity + '"><sub><i class="black fa fa-search-plus fa-2x tip" data-toggle="tooltip" title="View in browser" ></i></sub></a> '
                             + entity + recent + '<span class="showonhover">'
                             + ' <a href="#editModal" data-toggle="modal" onclick="prepareEdit(\'' + prefix + ":" + entity + '\');"><sub><i class="black fa fa-edit fa-2x tip" data-toggle="tooltip" title="Edit" ></i></sub></a>'
                             // + ' <a href="../entity/edit/' + prefix + ":" + entity + '"><i class="icon-edit"></i></a> '

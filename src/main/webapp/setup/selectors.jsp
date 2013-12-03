@@ -94,7 +94,7 @@
                         if (result[r].regex !== undefined)
                             regex = result[r].regex.value;
                         var sel = splitURIPrefix(result[r].selector.value).value;
-                        var a = '<tr><td><a href="../../resource/' + sel + '" class="tip" data-toggle="tooltip" title="View in browser.">'
+                        var a = '<tr><td><a target="_blank" href="../../resource/' + sel + '" class="tip" data-toggle="tooltip" title="View in browser.">'
                                 + sel + ' ' + key
                                 + '</a></td><td>'
                                 + result[r].title.value
@@ -159,7 +159,7 @@
                     if (result[r].regex !== undefined)
                         regex = result[r].regex.value;
                     var uri = splitURIPrefix(result[r].selector.value).value;
-                    var a = '<tr><td><a href="../../resource/' + uri + '" class="tip" data-toggle="tooltip" title="View in browser">'
+                    var a = '<tr><td><a target="_blank" href="../../resource/' + uri + '" class="tip" data-toggle="tooltip" title="View in browser">'
                             + uri + '</a> ' + key + '</td><td>'
                             + result[r].title.value
                             + '</td><td>'
