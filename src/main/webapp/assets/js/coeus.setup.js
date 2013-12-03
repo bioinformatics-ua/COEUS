@@ -1270,7 +1270,7 @@ function loadSeedsOnSidebar() {
         $('#sidebarseeds').html('');
         for (var key in result) {
             var splitedURI = splitURIPrefix(result[key].seed.value);
-            var a = '<li><a href="/'+getFirstPath()+'/resource/' + splitedURI.value + '"><i class="fa fa-circle-o"></i> ' + splitedURI.value + '</a></li>';//TODO: FIX THAT LINK
+            var a = '<li><a target="_blank" href="/'+getFirstPath()+'/resource/' + splitedURI.value + '"><i class="fa fa-circle-o"></i> ' + splitedURI.value + '</a></li>';//TODO: FIX THAT LINK
             $('#sidebarseeds').append(a);
         }
         console.log("INFO: All seeds loaded on sidebar.");

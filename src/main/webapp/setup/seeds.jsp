@@ -54,7 +54,7 @@
                     var a = '<div class="col-sm-6 col-md-5"><div class="thumbnail"><div class="caption clearfix">'
                             + '<a href="./' + seed + '" class="btn btn-primary icon pull-right ">Choose <span class="fa fa-forward"></span></a>'
                             + '<h4>' + result[key].s.value + '</h4>'
-                            + '<small><b>URI: </b><a class="tip" data-toggle="tooltip" title="View in browser" href="../../resource/' + splitedURI.value + '">' + seed + '</a></small>'
+                            + '<small><b>URI: </b><a class="tip" data-toggle="tooltip" title="View in browser" target="_blank" href="../../resource/' + splitedURI.value + '">' + seed + '</a></small>'
                             + '<a href="#removeModal" class="pull-right" data-toggle="modal" onclick="selectToRemove(\'' + seed + '\');"><i class="fa fa-trash-o fa-1x tip black" data-toggle="tooltip" title="Delete"></i></a> '
                             + '<a href="#editModal" data-toggle="modal" onclick="prepareEdit(\'' + seed + '\');" class="pull-right"> <i class="fa fa-edit fa-1x tip black" data-toggle="tooltip" title="Edit"></i></a> '
                             + '</div></div><div class="row">&nbsp;</div></div>';

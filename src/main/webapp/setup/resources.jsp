@@ -59,7 +59,7 @@
                         built = '<span class="label label-default">not built</span>';
                     var error = '';
                     if (result[key].error !== undefined) error = ' <span class="label label-danger tip" data-toggle="tooltip" title="Click on the resource to view errors">Error</span>';
-                    var a = '<tr><td><a class="tip" data-toggle="tooltip" title="View in browser" href="../../resource/' + splitURIPrefix(result[key].resource.value).value + '">'
+                    var a = '<tr><td><a class="tip" data-toggle="tooltip" title="View in browser" target="_blank" href="../../resource/' + splitURIPrefix(result[key].resource.value).value + '">'
                             + splitURIPrefix(result[key].resource.value).value + '</a> ' + built + error + '</td><td>'
                             + result[key].c.value + '</td><td>'
                             + result[key].label.value + '</td><td>'

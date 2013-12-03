@@ -44,7 +44,7 @@
                 // fill Entities
                 $('#entities').html("");
                 for (var key in result) {
-                    var a = '<tr><td><a class="tip" data-toggle="tooltip" title="View in browser"  href="../../resource/' + splitURIPrefix(result[key].entity.value).value + '">'
+                    var a = '<tr><td><a class="tip" data-toggle="tooltip" title="View in browser" target="_blank" href="../../resource/' + splitURIPrefix(result[key].entity.value).value + '">'
                             + splitURIPrefix(result[key].entity.value).value + '</a></td><td>'
                             + result[key].e.value + '</td><td>'
                             + result[key].label.value + '</td><td>'

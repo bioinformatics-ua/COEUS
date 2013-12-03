@@ -72,7 +72,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <form action="../sparql" method="get">
+                        <form action="../sparql" method="get" target="_blank">
                             <div class="clearfix">
                                 <label label-default="label-default" for="query"><strong>Query</strong>
                                 </label>

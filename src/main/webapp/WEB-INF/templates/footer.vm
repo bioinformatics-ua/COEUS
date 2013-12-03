@@ -8,7 +8,7 @@
   </body>
 #set ($has_text = false)
          <footer id="footer">
-            <div class="wrapper">
+            <div><!-- <div class="wrapper"> -->
                 <div class="page-wrapper">
                     <div class="container">
 #if ($rdf_link)

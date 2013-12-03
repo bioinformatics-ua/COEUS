@@ -177,3 +177,30 @@ table.tablesorter thead tr th:hover {
 .input-large{
     width: 200px;
 }
+
+/* COEUS homepage css */
+
+.header-image {
+
+        background-position: top;
+	height: auto;
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+
+.headline {
+	padding: 120px 0;
+}
+
+.headline > .container > h1 {
+	font-size: 130px;
+	background: #ffffff;
+	background: rgba(255, 255, 255, 0.9);
+}
+
+.headline > .container > h2 {
+	font-size: 77px;
+	background: #ffffff;
+	background: rgba(255, 255, 255, 0.9);
+}

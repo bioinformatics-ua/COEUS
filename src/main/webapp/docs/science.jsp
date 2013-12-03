@@ -33,7 +33,7 @@
                 <h1>COEUS White Paper</h1>
             </div>
 
-            <p><a class="btn btn-sm btn-primary" href="<c:url value="/assets/files/coeus_whitepaper.pdf" />">Get Whitepaper <i class="icon-file icon-white"></i></a><br></p>
+            <p><a class="btn btn-sm btn-primary" href="<c:url value="/assets/files/coeus_whitepaper.pdf" />">Get Whitepaper <i class="glyphicon glyphicon-file"></i></a><br></p>
         </section>
 
         <section id="tutorial2013">

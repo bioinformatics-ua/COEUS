@@ -60,7 +60,7 @@
                 $('#concepts').html("");
                 for (var key in result) {
                     var concept = 'coeus:' + splitURIPrefix(result[key].concept.value).value;
-                    var a = '<tr><td><a class="tip" data-toggle="tooltip" title="View in browser" href="../../resource/' + splitURIPrefix(result[key].concept.value).value + '">'
+                    var a = '<tr><td><a class="tip" data-toggle="tooltip" title="View in browser" target="_blank" href="../../resource/' + splitURIPrefix(result[key].concept.value).value + '">'
                             + splitURIPrefix(result[key].concept.value).value + '</a></td><td>'
                             + result[key].c.value + '</td><td>'
                      + result[key].label.value + '</td><td>'
