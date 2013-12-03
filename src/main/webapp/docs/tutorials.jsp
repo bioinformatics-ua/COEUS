@@ -502,7 +502,7 @@ t.start();</pre>
     <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
     <section id="publish">
         <div class="page-header">
-            <h1>Publish</h1>
+            <h2>Publish</h2>
         </div>
         <p>
             Once data are completely loaded in the seed, we just need to update the application settings and deploy the seed in Tomcat server.<br />
@@ -522,7 +522,7 @@ t.start();</pre>
     <span class="pull-right"><a href="#" title="Back to top"><i class="icon-arrow-up"></i></a></span>
     <section id="access">
         <div class="page-header">
-            <h1>Access</h1>
+            <h2>Access</h2>
         </div>
         <p>
             With our COEUS seed online we can use any of the <a href="#api" id="show_api" title="Jump to API documentation">API</a> methods to access integrated data. 
