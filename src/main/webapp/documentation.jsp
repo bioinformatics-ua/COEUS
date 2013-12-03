@@ -12,7 +12,7 @@
                 });
 
                 // customize tab behaviour for inner sections (hashed)
-                if (window.location.hash === '#basics' || window.location.hash === '#downloads' || window.location.hash === '#ontology' || window.location.hash.toString() === '#tutorials' || window.location.hash === '#registry' || window.location.hash === '#api' || window.location.hash === '#support' || window.location.hash === '#licensing') {
+                if (window.location.hash === '#basics' || window.location.hash === '#downloads' || window.location.hash === '#ontology' || window.location.hash.toString() === '#tutorials' || window.location.hash === '#registry' || window.location.hash === '#api' || window.location.hash === '#science' || window.location.hash === '#support' || window.location.hash === '#licensing') {
                     $('a[href=' + window.location.hash + ']').tab('show');
                 } else {
                     var id = $(window.location.hash).parents('.tab-pane').attr('id');
