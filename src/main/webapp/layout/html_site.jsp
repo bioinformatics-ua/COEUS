@@ -47,25 +47,29 @@
                 </div><!-- /.container -->
             </nav>
 
-            <!-- contact modal box -->
-            <div id="contact" class="modal hide fade" role="dialog" aria-labelledby="contact" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+           <!-- contact modal box -->
+            <div id="contact" class="modal fade" role="dialog" aria-labelledby="contact" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 
-                    <h3>Contact Information</h3>
-                </div>
+                            <h3 class="modal-title" >Contact Information</h3>
+                        </div>
 
-                <div class="modal-body">
-                    <address>
-                        <strong>COEUS, A/C Pedro Lopes & Pedro Sernadela</strong><br>
-                        DETI/IEETA, University of Aveiro<br>
-                        Campus Universitario de Santiago<br>
-                        3810 - 193 Aveiro<br>
-                        Portugal
-                    </address>
-                </div>
-                <div class="modal-footer">
-                    <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback" class="btn btn-info">Send Mail <i class="icon-envelope icon-white"></i></a>
+                        <div class="modal-body">
+                            <address>
+                                <strong>COEUS, A/C Pedro Lopes & Pedro Sernadela</strong><br>
+                                DETI/IEETA, University of Aveiro<br>
+                                Campus Universitario de Santiago<br>
+                                3810 - 193 Aveiro<br>
+                                Portugal
+                            </address>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback" class="btn btn-info">Send Mail <i class="icon-envelope icon-white"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
