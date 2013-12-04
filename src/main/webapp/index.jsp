@@ -71,7 +71,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="./manager/seed/">
+                        <a href="<c:url value="/manager/seed/"/>">
                             <div class="panel-footer announcement-bottom">
                                 <div class="row">
                                     <div class="col-xs-6">
@@ -98,7 +98,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="./sparqler/">
+                        <a href="<c:url value="/sparqler/"/>">
                             <div class="panel-footer announcement-bottom">
                                 <div class="row">
                                     <div class="col-xs-6">
@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="./manager/seed/">
+                        <a href="<c:url value="/manager/seed/"/>">
                             <div class="panel-footer announcement-bottom">
                                 <div class="row">
                                     <div class="col-xs-6">
@@ -156,7 +156,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="./manager/seed/">
+                        <a href="<c:url value="/manager/seed/"/>">
                             <div class="panel-footer announcement-bottom">
                                 <div class="row">
                                     <div class="col-xs-6">
@@ -183,7 +183,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="./manager/seed/">
+                        <a href="<c:url value="/manager/seed/"/>">
                             <div class="panel-footer announcement-bottom">
                                 <div class="row">
                                     <div class="col-xs-6">
@@ -210,7 +210,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="./manager/seed/">
+                        <a href="<c:url value="/manager/seed/"/>">
                             <div class="panel-footer announcement-bottom">
                                 <div class="row">
                                     <div class="col-xs-6">

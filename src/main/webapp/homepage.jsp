@@ -29,7 +29,7 @@
             <p><h1>SWAT4LS Workshop <sup><span class="label label-warning">New!! <i class="icon-star icon-white"></i></span></sup></h1></p>
         <p class="lead">A COEUS Workshop/Tutorial will be presented in the next edition of <a target="_blank" href="http://www.swat4ls.org/workshops/edinburgh2013/">SWAT4LS</a>.</p>
         <p class="lead">This workshop will be helded in Edinburgh, UK, December 9-12, 2013. </p>
-        <p><a target="_blank" href="../documentation/#science" class="btn btn-primary btn-lg">View more <i class="glyphicon glyphicon-forward"></i></a></p> 
+        <p><a target="_blank" href="/documentation/#science" class="btn btn-primary btn-lg">View more <i class="glyphicon glyphicon-forward"></i></a></p> 
     </div>
     <div class="container">
 
@@ -44,7 +44,7 @@
             <hr class="soften" />
             <div class="row mar">
                 <div class="col-lg-4">
-                    <img src="../assets/img/integrate.png" width="150" height="150" alt="Integration"  />
+                    <img src="./assets/img/integrate.png" width="150" height="150" alt="Integration"  />
                     <h2>Integration</h2>
                     <p><strong>Create custom warehouses</strong>, collecting distributed and
                         heterogeneous data.
@@ -52,7 +52,7 @@
                         warehousing features.</p>
                 </div>
                 <div class="col-lg-4">
-                    <img src="../assets/img/cloud.png" width="150" height="150" alt="Cloud-based" />
+                    <img src="./assets/img/cloud.png" width="150" height="150" alt="Cloud-based" />
                     <h2>Cloud-based</h2>
                     <p><strong>Deploy your knowledgebase in the cloud</strong>, using any available
                         host.
@@ -60,7 +60,7 @@
                         update, and delete support.</p>
                 </div>
                 <div class="col-lg-4">
-                    <img src="../assets/img/semantic.png" width="150" height="150" alt="Semantic Web" />
+                    <img src="./assets/img/semantic.png" width="150" height="150" alt="Semantic Web" />
                     <h2>Semantics</h2>
                     <p><strong>Use Semantic Web &amp; LinkedData technologies in all application layers.</strong>
                         <br
@@ -70,7 +70,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-4">
-                    <img src="../assets/img/rapid.png" width="150" height="150" alt="RAD" />
+                    <img src="./assets/img/rapid.png" width="150" height="150" alt="RAD" />
                     <h2>Rapid Dev Time</h2>
                     <p><strong>Reduce development time.</strong> Get new applications up and running
                         much faster using the latest rapid application development strategies.
@@ -79,7 +79,7 @@
                         PHP, Ruby, JavaScript, C#... COEUS' APIs work everywhere.</p>
                 </div>
                 <div class="col-md-4">
-                    <img src="../assets/img/network.png" width="150" height="150" alt="Interoperability"/>
+                    <img src="./assets/img/network.png" width="150" height="150" alt="Interoperability"/>
                     <h2>Interoperability</h2>
                     <p><strong>Use COEUS advanced API to connect multiple nodes together and with any other software.</strong>
                         <br
@@ -87,7 +87,7 @@
                         amongst a scalable number of peers</p>
                 </div>
                 <div class="col-md-4">
-                    <img src="../assets/img/distribute.png" width="150" height="150" alt="Ecosystem" />
+                    <img src="./assets/img/distribute.png" width="150" height="150" alt="Ecosystem" />
                     <h2>Ecosystem</h2>
                     <p><strong>Launch your custom application ecosystem.</strong> Distribute your
                         data to any platform or device.
