@@ -11,7 +11,7 @@ import net.sourceforge.stripes.action.UrlBinding;
  *
  * @author sernadela
  */
-@UrlBinding("/home/")
+@UrlBinding("/overview/")
 public class RedirectHomepageActionBean implements ActionBean {
 
     private ActionBeanContext context;
@@ -26,6 +26,6 @@ public class RedirectHomepageActionBean implements ActionBean {
 
     @DefaultHandler
     public Resolution handle() {
-        return new ForwardResolution("/homepage.jsp");
+        return new ForwardResolution("/index.jsp");
     }
 }

@@ -55,8 +55,8 @@ sdb:Model rdfs:subClassOf  ja:Model .
        #sdb:sdbHost        "localhost:3306" ;
        #sdb:sdbName        "coeus" ;
        sdb:jdbcURL        "jdbc:mysql://localhost:3306/coeus?autoReconnect=true" ;
-     sdb:sdbUser       "root" ;
-    sdb:sdbPassword   "" ;
+     sdb:sdbUser       "demo" ;
+    sdb:sdbPassword   "demo" ;
     ]
     .
 

@@ -30,14 +30,14 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="<c:url value="/home/" />">COEUS Framework</a>
+                        <a class="navbar-brand" href="<c:url value="/" />">COEUS Framework</a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav">
-                            <li class="active"><a href="<c:url value="/home/" />"><i class="glyphicon glyphicon-home"></i> Home</a></li>
-                            <li><a target="_blank" href="<c:url value="/" />"><i class="glyphicon glyphicon-send"></i> Live Demo</a></li>
+                            <li class="active"><a href="<c:url value="/" />"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+                            <li><a target="_blank" href="<c:url value="/overview/" />"><i class="glyphicon glyphicon-send"></i> Live Demo</a></li>
                             <li><a target="_blank" href="<c:url value="/documentation/" />"><i class="glyphicon glyphicon-book"></i> Documentation</a></li>
                             <li><a data-toggle="modal" data-target="#contact" href="#contact"><i class="glyphicon glyphicon-envelope"></i> Contact</a></li>
                         </ul>

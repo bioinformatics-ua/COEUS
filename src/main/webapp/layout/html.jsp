@@ -32,13 +32,13 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="http://bioinformatics.ua.pt/coeus/">COEUS <sub>v2.0</sub></a>
+                        <a class="navbar-brand" href="http://bioinformatics.ua.pt/coeus/">COEUS <sub>v2.1</sub></a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav side-nav">
-                            <li id="index" class="sidebaritem"><a href="<c:url value="/" />"><i class="fa fa-eye"></i> Overview</a></li>
+                            <li id="index" class="sidebaritem"><a href="<c:url value="/overview/" />"><i class="fa fa-eye"></i> Overview</a></li>
                             <li id="sparql" class="sidebaritem"><a href="<c:url value="/sparqler/" />"><i class="fa fa-bar-chart-o"></i> SPARQL</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> LinkedData <b class="caret"></b></a>

@@ -123,7 +123,7 @@
                                 </div>
                             </div>
                             <input hidden="" style="display: none; visibility: hidden;" name="stylesheet"
-                                   size="25" value="<c:url value="/translate"></c:url>" />
+                                   size="25" value="<c:url value="/translate"/>" />
                             </form>
                             <h2>Endpoint</h2>
                             <p>You can integrate COEUS data directly by using the SPARQL endpoint.
