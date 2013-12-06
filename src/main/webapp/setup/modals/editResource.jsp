@@ -105,6 +105,7 @@
                 </div>
 
                 <div id="editSqlEndpointForm" class="hide form-group">
+                    <label>Endpoint (DB Connection)</label>
                     <div class="form-inline ">
                         <div class="form-group">jdbc:</div>
                         <div class="form-group">
@@ -119,7 +120,7 @@
                         </div>
                         <div class="form-group">:</div>
                         <div class="form-group">
-                            <input id="editPortEndpoint" type="number" placeholder="3306" class="input-mini form-control tip" onchange="refreshEnpoint('edit');" data-toggle="tooltip" title="Port" />
+                            <input id="editPortEndpoint" type="number" placeholder="3306" class="input-port form-control tip" onchange="refreshEnpoint('edit');" data-toggle="tooltip" title="Port" />
                         </div>
                         <div class="form-group">/</div>
                         <div class="form-group">

@@ -286,7 +286,7 @@
                     $(id).html(generateHtmlMessage("Success!", "Please, press next.", "alert-success"));
                     $(btnNext).removeClass('hide');
                 } else {
-                    $(id).html(generateHtmlMessage("Warning!", result.message));
+                    $(id).html(generateHtmlMessage("Warning!", result.message, "alert-warning"));
                 }
 
             }

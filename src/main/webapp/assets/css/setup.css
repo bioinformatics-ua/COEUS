@@ -85,7 +85,7 @@ table.tablesorter thead tr th:hover {
 
 /* Edit Below to Customize Widths > 768px */
 @media (min-width:768px) {
-
+ 
     /* Wrappers */
 
     .wrapper {
@@ -178,6 +178,10 @@ table.tablesorter thead tr th:hover {
     width: 200px;
 }
 
+.input-port{
+    width: 80px;
+}
+
 /* COEUS homepage css */
 
 .marketing p{
@@ -208,6 +212,16 @@ font-family: inherit;
     font-size: 50px;
 font-weight:200;
 line-height:1.25;
+}
+
+/* Descrease homepage title if < 768px */
+@media (max-width:768px) {
+    .headline > .container > h1 {
+        font-size: 70px;
+    }
+    .headline > .container > h2 {
+        font-size: 40px;
+    }
 }
 
 .hero-unit {

@@ -13,9 +13,8 @@
 
         <div class="headline jumbotron masthead">
             <div class="container text-center ">
-                <h1 class="">COEUS</h1>
-                <h2>Streamlined back-end framework for rapid semantic web application development.
-                    <h2></h2>
+                <h1>COEUS</h1>
+                <h2>Streamlined back-end framework for rapid semantic web application development.</h2>
                     <p> 
                         <a href="https://github.com/bioinformatics-ua/COEUS/archive/master.zip" class="btn btn-info btn-lg">Get COEUS <i class="glyphicon glyphicon-download-alt"></i></a>
                     </p>

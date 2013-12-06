@@ -87,11 +87,11 @@
                         </div>
                         <div class="form-group">://</div>
                         <div class="form-group">
-                            <input id="hostEndpoint" type="text" placeholder="Ex: someurl.com" class="form-control tip" onkeyup="refreshEnpoint();" data-toggle="tooltip" title="URL"/>
+                            <input id="hostEndpoint" type="text" placeholder="Ex: someurl.com" class="form-control input-medium tip" onkeyup="refreshEnpoint();" data-toggle="tooltip" title="URL"/>
                         </div>
                         <div class="form-group">:</div>
                         <div class="form-group">
-                            <input id="portEndpoint" type="number" placeholder="3306" class="form-control input-mini tip" onchange="refreshEnpoint();" data-toggle="tooltip" title="Port"/>
+                            <input id="portEndpoint" type="number" placeholder="3306" class="form-control input-port tip" onchange="refreshEnpoint();" data-toggle="tooltip" title="Port"/>
                         </div>
                         <div class="form-group">/</div>
                         <div class="form-group">
