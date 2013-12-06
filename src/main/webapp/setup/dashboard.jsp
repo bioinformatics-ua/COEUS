@@ -27,19 +27,23 @@
                     $('#seeds option:contains(' + lastPath().split('coeus:')[1] + ')').prop({selected: true});
                 }
                 );
-                var seed = lastPath();
+
+            });
+            
+            function refreshTotalItems(){
+                 var seed = lastPath();
                 var qEntities = "SELECT (COUNT(*) AS ?triples) {?s a coeus:Item . ?s coeus:hasConcept ?concept . ?concept coeus:hasEntity ?entity . ?entity coeus:isIncludedIn " + seed + "}";
                 queryToResult(qEntities, function(result) {
                     $('#triples').html(result[0].triples.value);
                 });
-
-
-            });
+            }
 
             function refresh() {
                 var seed = lastPath();
                 var qEntities = "SELECT DISTINCT ?entity {" + seed + " coeus:includes ?entity }";
                 queryToResult(qEntities, fillEntities);
+                
+                refreshTotalItems();
             }
 
             function queryConcepts(entity) {
