@@ -1,13 +1,6 @@
 <%@include file="/layout/taglib.jsp" %>
 <s:layout-render name="/layout/html_site.jsp">
     <s:layout-component name="title">COEUS</s:layout-component>
-    <s:layout-component name="custom_scripts">
-        <script type="text/javascript">
-            $(document).ready(function() {
-
-            });
-        </script>
-    </s:layout-component>
     <s:layout-component name="body">
 
 
@@ -28,7 +21,7 @@
             <p><h1>SWAT4LS Workshop <sup><span class="label label-warning">New!! <i class="icon-star icon-white"></i></span></sup></h1></p>
         <p class="lead">A COEUS Workshop/Tutorial will be presented in the next edition of <a target="_blank" href="http://www.swat4ls.org/workshops/edinburgh2013/">SWAT4LS</a>.</p>
         <p class="lead">This workshop will be helded in Edinburgh, UK, December 9-12, 2013. </p>
-        <p><a target="_blank" href="/documentation/#science" class="btn btn-primary btn-lg">View more <i class="glyphicon glyphicon-forward"></i></a></p> 
+        <p><a target="_blank" href="./documentation/#science" class="btn btn-primary btn-lg">View more <i class="glyphicon glyphicon-forward"></i></a></p> 
     </div>
     <div class="container">
 
