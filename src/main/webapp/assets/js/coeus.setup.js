@@ -408,6 +408,8 @@ function encodeBars(value) {
     value = value.split('/').join('%2F');
     value = value.split('#').join('%23');
     value = value.split('?').join('%3F');
+    value = value.split('<').join('%3C');
+    value = value.split('>').join('%3E');
     return value;
 }
 /**
