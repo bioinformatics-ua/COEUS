@@ -85,6 +85,7 @@
                             <option>sql</option>
                             <option>sparql</option>
                             <option>rdf</option>
+                            <option>linkeddata</option>
                         </select> 
                         <input
                             type="hidden" id="oldPublisher" value="" />

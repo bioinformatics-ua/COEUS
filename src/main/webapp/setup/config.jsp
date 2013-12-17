@@ -151,24 +151,34 @@
                 var env = $('#createEnvironment').val();
                 if (env !== "") {
                     var url = "../../config/newenv/" + env;
-                    $('#envForm').removeClass('error');
+                    $('#envForm').removeClass('has-error');
                     $('#createBtnEnv').addClass('disabled');
                     $('#createBtnEnv').html("Waiting...");
                     callURL(url, createResult.bind(this, "#resultCreateEnv", '#createBtnEnv', '#nextBtnEnv'), showError.bind(this, "#resultCreateEnv", url));
                 } else {
-                    $('#envForm').addClass('controls control-group error');
+                    $('#envForm').addClass('has-error');
                 }
             }
             function createDB() {
 
                 // verify all fields:
                 var empty = false;
-                if ($('#url') === '') {
-                    $('#urlForm').addClass('controls control-group error');
+                if ($('#host').val() === '') {
+                    $('#urlForm').addClass('has-error');
                     empty = true;
                 } else
-                    $('#urlForm').removeClass('error');
-
+                    $('#urlForm').removeClass('has-error');
+                if ($('#port').val() === '') {
+                    $('#urlForm').addClass('has-error');
+                    empty = true;
+                } else
+                    $('#urlForm').removeClass('has-error');
+                if ($('#path').val() === '') {
+                    $('#urlForm').addClass('has-error');
+                    empty = true;
+                } else
+                    $('#urlForm').removeClass('has-error');
+                
                 if (!empty) {
                     var url = "../../config/db/" + encodeBars(generateMap());
                     $('#createBtnDb').addClass('disabled');
@@ -184,10 +194,10 @@
                 // verify all fields:
                 var empty = false;
                 if ($('#url') === '') {
-                    $('#pubbyForm').addClass('controls control-group error');
+                    $('#pubbyForm').addClass('has-error');
                     empty = true;
                 } else
-                    $('#pubbyForm').removeClass('error');
+                    $('#pubbyForm').removeClass('has-error');
 
                 if (!empty) {
                     var url = "../../config/pubby/" + encodeBars(generateMap());
@@ -203,10 +213,10 @@
                 // verify all fields:
                 var empty = false;
                 if ($('#ApiKey') === '') {
-                    $('#modelForm').addClass('controls control-group error');
+                    $('#modelForm').addClass('has-error');
                     empty = true;
                 } else
-                    $('#modelForm').removeClass('error');
+                    $('#modelForm').removeClass('has-error');
 
                 if (!empty) {
 
@@ -242,10 +252,10 @@
                 // verify all fields:
                 var empty = false;
                 if ($('#ApiKey') === '') {
-                    $('#modelForm').addClass('controls control-group error');
+                    $('#modelForm').addClass('has-error');
                     empty = true;
                 } else
-                    $('#modelForm').removeClass('error');
+                    $('#modelForm').removeClass('has-error');
 
                 if (!empty) {
 
@@ -433,7 +443,7 @@
                             <form class="form-horizontal" role="form">
                                 <div class="form-group">
                                     <label for="Environment" class="col-sm-2 control-label">Create Environment</label>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-10" id="envForm">
                                         <input tabindex="1" id="createEnvironment" name="Environment" type="text" placeholder="Production" class="form-control input-large" autofocus/>
                                         <input id="environment" class="hide" />
                                         <p class="help-block">Name of the Environment used to store application settings.</p>
@@ -614,7 +624,7 @@
                                     <div class="form-inline col-sm-10" id="urlForm">jdbc:mysql://
                                         <input tabindex="1" id="host" name="host" type="text" placeholder="localhost"
                                                class="input-large form-control" /> :
-                                        <input tabindex="2" id="port" name="jdbcURL" type="text" placeholder="3306"
+                                        <input tabindex="2" id="port" name="port" type="number" placeholder="3306" 
                                                class="input-mini form-control" /> /
                                         <input tabindex="3" id="path" name="path" type="text" placeholder="coeus"
                                                class="input-mini form-control" />

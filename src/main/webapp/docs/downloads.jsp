@@ -41,9 +41,12 @@
                 <li><a href="http://tomcat.apache.org/download-70.cgi" target="_blank">Apache Tomcat 6+</a> with manager web application, installed by default on context path "/manager".</li>
                 <ul>
                     <li>To <span class="text-info">enable access</span> you must either add a username/password combination to your  <a href="http://tomcat.apache.org/tomcat-7.0-doc/realm-howto.html#UserDatabaseRealm" target="_blank">tomcat-users.xml</a> file on the Tomcat application server: <code>&lt;user name="your_name" password="your_password" roles="manager-gui,manager-script" /&gt;</code></li>
+                    <li>It is also recommended that you <span class="text-info">check the write permissions</span> of the tomcat <span class="text-info">webapps</span> folder.</li>
                 </ul>
                 <li><a href="http://dev.mysql.com/downloads/" target="_blank">MySQL 5+</a> with <span class="text-info">root access</span> or other user with similar permissions (CREATE DATABASE, TABLES,..). </li>
-
+                <ul>
+                    <li>If you need other database please visit the <a href="http://jena.apache.org/documentation/sdb/databases_supported.html" target="_blank"> list of databases supported</a> (not implemented yet).</li>
+                </ul>
                 <li>Semantic Web technologies skills <span class="label label-warning">(not downloadable)</span></li>
             </ul>
 
