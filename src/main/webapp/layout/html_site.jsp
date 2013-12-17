@@ -92,6 +92,7 @@
             <jsp:include page="script.jsp" />
         </s:layout-component>
         <s:layout-component name="custom_scripts">
+           
         </s:layout-component>
     </html>
 </s:layout-definition>

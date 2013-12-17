@@ -1,13 +1,6 @@
 <%@include file="/layout/taglib.jsp" %>
 <s:layout-render name="/layout/html_site.jsp">
     <s:layout-component name="title">COEUS</s:layout-component>
-    <s:layout-component name="custom_scripts">
-        <script type="text/javascript">
-            $(document).ready(function() {
-
-            });
-        </script>
-    </s:layout-component>
     <s:layout-component name="body">
 
 
@@ -25,10 +18,10 @@
         </div>
 
         <div class="text-center hero-unit">
-            <p><h1>SWAT4LS Workshop <sup><span class="label label-warning">New!! <i class="icon-star icon-white"></i></span></sup></h1></p>
-        <p class="lead">A COEUS Workshop/Tutorial will be presented in the next edition of <a target="_blank" href="http://www.swat4ls.org/workshops/edinburgh2013/">SWAT4LS</a>.</p>
-        <p class="lead">This workshop will be helded in Edinburgh, UK, December 9-12, 2013. </p>
-        <p><a target="_blank" href="/documentation/#science" class="btn btn-primary btn-lg">View more <i class="glyphicon glyphicon-forward"></i></a></p> 
+            <p><h1>SWAT4LS Workshop <sup><span class="label label-warning">Last news!! <i class="icon-star icon-white"></i></span></sup></h1></p>
+        <p class="lead">A COEUS Workshop/Tutorial was presented in the 2013 edition of <a target="_blank" href="http://www.swat4ls.org/workshops/edinburgh2013/">SWAT4LS</a>.</p>
+        <p class="lead">This workshop was helded in Edinburgh, UK, December 9-12, 2013. </p>
+        <p><a target="_blank" href="./documentation/#science" class="btn btn-primary btn-lg">View more <i class="glyphicon glyphicon-forward"></i></a></p> 
     </div>
     <div class="container">
 
@@ -77,7 +70,7 @@
                             />COEUS is the back-end framework, the client-side is language-agnostic:
                         PHP, Ruby, JavaScript, C#... COEUS' APIs work everywhere.</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-lg-4">
                     <img src="./assets/img/network.png" width="150" height="150" alt="Interoperability"/>
                     <h2>Interoperability</h2>
                     <p><strong>Use COEUS advanced API to connect multiple nodes together and with any other software.</strong>
@@ -85,7 +78,7 @@
                             />Create your own knowledge network using SPARQL Federation enabling data-sharing
                         amongst a scalable number of peers</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-lg-4">
                     <img src="./assets/img/distribute.png" width="150" height="150" alt="Ecosystem" />
                     <h2>Ecosystem</h2>
                     <p><strong>Launch your custom application ecosystem.</strong> Distribute your
