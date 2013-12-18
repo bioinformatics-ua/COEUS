@@ -68,6 +68,7 @@
                             <option>sql</option>
                             <option>sparql</option>
                             <option>rdf</option>
+                            <option>linkeddata</option>
                         </select> 
                     </div>
                     <div id="endpointForm" class="col-md-6 form-group">
