@@ -1,6 +1,7 @@
 package pt.ua.bioinformatics.coeus.data;
 
 import au.com.bytecode.opencsv.CSVReader;
+import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -21,6 +22,7 @@ import org.json.simple.parser.JSONParser;
 import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
+import pt.ua.bioinformatics.coeus.common.Indexer;
 
 /**
  * COEUS Data Storage key class. Handles all SDB-related stuff.

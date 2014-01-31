@@ -87,6 +87,7 @@ public class Boot {
                 long f = System.currentTimeMillis();
                 System.out.println("\n\t[COEUS] " + Config.getName() + " Integration done in " + ((f - i) / 1000) + " seconds.\n");
                 Config.setBuiltOnFile(true);
+                Indexer.index();
             } else {
                 System.out.println("\n\t[COEUS] " + Config.getName() + " Integration Already done.\n");
             }
@@ -118,6 +119,7 @@ public class Boot {
                 Storage.load();
                 api = new API();
                 Storage.loadPredicates();
+                Indexer.index();
                 System.out.println("\n\t[COEUS] " + Config.getName() + " Online\n");
                 started = true;
             } catch (Exception ex) {

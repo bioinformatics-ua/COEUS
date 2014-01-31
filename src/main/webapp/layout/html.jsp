@@ -50,6 +50,7 @@
                             <li><a href="tables.html"><i class="fa fa-table"></i> Tables</a></li>
                             <li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
                             <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>-->
+                            <li id="textsearch"><a href="<c:url value="/search/" />" ><i class="fa fa-search"></i> Text Search</a></li>
                             <li><a href="<c:url value="/documentation/" />" ><i class="fa fa-book"></i> Documentation</a></li>
                             <li><a data-toggle="modal" data-target="#contact"><i class="fa fa-group"></i> Contacts</a></li>
                             <li style="padding-left: 4px; padding-right: 4px; width: 100%;"><div style="border-top: solid 1px grey;"></div></li>

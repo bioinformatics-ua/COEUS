@@ -834,7 +834,7 @@ public class ConfigActionBean implements ActionBean {
         }
         return new StreamingResolution("application/json", result.toString());
     }
-
+    
     /**
      * Change the key-value in the top key of the config.js file
      *
