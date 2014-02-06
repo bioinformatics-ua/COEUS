@@ -40,7 +40,7 @@ public class TextSearchActionBean implements ActionBean {
         String queryString = ""
                 + "PREFIX pf: <http://jena.hpl.hp.com/ARQ/property#>"
                 + "SELECT ?Text_Match ?Subject_Associated ?Predicate_Associated ?Score {"
-                + "    (?Text_Match ?Score ) pf:textMatch '" + query + "*' ."
+                + "    (?Text_Match ?Score ) pf:textMatch ('" + query + "*' 50 ) ."
                 + "    ?Subject_Associated ?Predicate_Associated ?Text_Match"
                 + "}";
         result=Boot.getAPI().select(queryString, "json", false);

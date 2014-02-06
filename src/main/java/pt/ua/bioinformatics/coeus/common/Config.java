@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import pt.ua.bioinformatics.coeus.actions.ConfigActionBean;
 import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 
 /**
@@ -181,6 +181,7 @@ public class Config {
         if (!loaded) {
             try {
                 path = Config.class.getResource("/").getPath();
+                loadLoggingProperties();
                 JSONParser parser = new JSONParser();
                 file = (JSONObject) parser.parse(readFile());
                 JSONObject config = (JSONObject) file.get("config");
@@ -282,5 +283,22 @@ public class Config {
             }
             Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+     /**
+     * Loads logging configuration
+     *
+     */
+    public static void loadLoggingProperties() {
+        try {
+            LogManager manager = LogManager.getLogManager();
+            File loggingFile = new File(path+"logging.properties");
+            manager.readConfiguration(new FileInputStream(loggingFile));
+            System.out.println("[COEUS][Config] logging.properties loaded.");
+            
+            Logger.getLogger(Config.class.getName()).log(Level.WARNING, "COEUS HAS STARTED");
+        } catch (Exception ex) {
+            // DO NOT WARN
+        } 
     }
 }

@@ -25,6 +25,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>net.kencochrane.raven</groupId>
+            <artifactId>raven</artifactId>
+            <version>4.0</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>

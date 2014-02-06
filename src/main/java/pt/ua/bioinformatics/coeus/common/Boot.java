@@ -1,6 +1,8 @@
 package pt.ua.bioinformatics.coeus.common;
 
+import java.io.ByteArrayInputStream;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import pt.ua.bioinformatics.coeus.api.API;
 import pt.ua.bioinformatics.coeus.data.Storage;
@@ -50,7 +52,8 @@ public class Boot {
     /**
      * Reset and load COEUS Storage information (connect, ontology, setup,
      * predicates).
-     * <p><ol>
+     * <p>
+     * <ol>
      * <li>Reset and load </li>
      * <li>Reset and load config.js</li>
      * </ol></p>
@@ -71,7 +74,8 @@ public class Boot {
 
     /**
      * Build COEUS instance.
-     * <p><ol>
+     * <p>
+     * <ol>
      * <li>Load Storage information (connect, ontology, setup, predicates)</li>
      * <li>Build instance</li>
      * <li>Save and restart</li>
@@ -102,11 +106,13 @@ public class Boot {
 
     /**
      * Starts the configured COEUS instance.
-     * <p><b>Built workflow</b><ol>
+     * <p>
+     * <b>Built workflow</b><ol>
      * <li>Connect to COEUS Data SDB</li>
      * <li>Load Predicate information for further usage</li>
      * </ol></p>
-     * <p><b>Unbuilt workflow</b><ol>
+     * <p>
+     * <b>Unbuilt workflow</b><ol>
      * <li>Load Storage information (connect, ontology, setup, predicates)</li>
      * <li>Build instance</li>
      * <li>Save and restart</li>
