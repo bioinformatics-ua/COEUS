@@ -4,11 +4,20 @@
  */
 package pt.ua.bioinformatics.coeus.actions;
 
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntProperty;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.ResIterator;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Selector;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import com.hp.hpl.jena.vocabulary.RDF;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,6 +61,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pt.ua.bioinformatics.coeus.api.DB;
+import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
 import pt.ua.bioinformatics.coeus.common.Worker;
@@ -108,17 +118,17 @@ public class ConfigActionBean implements ActionBean {
     public Resolution logout() {
         JSONObject result = new JSONObject();
         try {
-            String username=getContext().getRequest().getRemoteUser();
+            String username = getContext().getRequest().getRemoteUser();
             getContext().getRequest().logout();
             result.put("status", 100);
-            result.put("message", "[COEUS][API][ConfigActionBean] Logout done by user:"+username);
+            result.put("message", "[COEUS][API][ConfigActionBean] Logout done by user:" + username);
         } catch (ServletException e) {
             result.put("status", 201);
             result.put("message", "[COEUS][API][ConfigActionBean] Logout fail. Exception: " + e);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
-    
+
     /**
      * return the username logged in
      *
@@ -127,7 +137,7 @@ public class ConfigActionBean implements ActionBean {
     public Resolution username() {
         JSONObject result = new JSONObject();
         try {
-            String username=getContext().getRequest().getRemoteUser();
+            String username = getContext().getRequest().getRemoteUser();
             result.put("status", 100);
             result.put("message", username);
         } catch (Exception e) {
@@ -136,7 +146,6 @@ public class ConfigActionBean implements ActionBean {
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
-
 
     /**
      * return the config.js file
@@ -175,7 +184,7 @@ public class ConfigActionBean implements ActionBean {
     }
 
     /**
-     * Export the database content
+     * Export the database model
      *
      * @return
      * @throws FileNotFoundException
@@ -183,11 +192,67 @@ public class ConfigActionBean implements ActionBean {
     public Resolution export() throws FileNotFoundException {
         StringWriter outs = new StringWriter();
         Boot.start();
-        if (method.endsWith(".ttl")) {
-            Boot.getAPI().getModel().write(outs, "TURTLE");
-        } else {
-            Boot.getAPI().getModel().write(outs, "RDF/XML");
+
+        Model m = Boot.getAPI().getModel();
+        Model exportModel = ModelFactory.createOntologyModel();
+        exportModel.setNsPrefix(Config.getKeyPrefix(), PrefixFactory.getURIForPrefix(Config.getKeyPrefix()));
+        String type = PrefixFactory.getURIForPrefix("rdf") + "type";
+
+        //Load Resources
+        String resource = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "Resource";
+        ResIterator resIte = m.listResourcesWithProperty(m.createProperty(type), m.createResource(resource));
+        List<Resource> resourceList = resIte.toList();
+        for (Resource r : resourceList) {
+            StmtIterator stat = m.listStatements(r, null, (RDFNode) null);
+            exportModel.add(stat.toList());
         }
+        //Load Concepts
+        String concept = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "Concept";
+        resIte = m.listResourcesWithProperty(m.createProperty(type), m.createResource(concept));
+        resourceList = resIte.toList();
+        for (Resource r : resourceList) {
+            StmtIterator stat = m.listStatements(r, null, (RDFNode) null);
+            exportModel.add(stat.toList());
+        }
+        String isConceptOf = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "isConceptOf";
+        StmtIterator statIte = m.listStatements(null, m.createProperty(isConceptOf), (RDFNode) null);
+        List<Statement> listStats = statIte.toList();
+        if (!listStats.isEmpty()) {
+            exportModel.remove(listStats);//remove data associated
+        }            
+        //Load Entities
+        String entity = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "Entity";
+        resIte = m.listResourcesWithProperty(m.createProperty(type), m.createResource(entity));
+        resourceList = resIte.toList();
+        for (Resource r : resourceList) {
+            StmtIterator stat = m.listStatements(r, null, (RDFNode) null);
+            exportModel.add(stat.toList());
+        }
+        //Load Seeds
+        String seed = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "Seed";
+        resIte = m.listResourcesWithProperty(m.createProperty(type), m.createResource(seed));
+        resourceList = resIte.toList();
+        for (Resource r : resourceList) {
+            StmtIterator stat = m.listStatements(r, null, (RDFNode) null);
+            exportModel.add(stat.toList());
+        }
+        //Load Selectors
+        String selector = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "loadsFor";
+        resIte = m.listResourcesWithProperty(m.createProperty(selector));
+        resourceList = resIte.toList();
+        for (Resource r : resourceList) {
+            StmtIterator stat = m.listStatements(r, null, (RDFNode) null);
+            exportModel.add(stat.toList());
+        }
+
+        if (method.endsWith(".ttl")) {
+            exportModel.write(outs, "TURTLE");
+            //Boot.getAPI().getModel().write(outs, "TURTLE");
+        } else {
+            exportModel.write(outs, "RDF/XML");
+            //Boot.getAPI().getModel().write(outs, "RDF/XML");
+        }
+        exportModel.close();
         return new StreamingResolution("application/rdf+xml", outs.toString());
     }
 
@@ -834,7 +899,7 @@ public class ConfigActionBean implements ActionBean {
         }
         return new StreamingResolution("application/json", result.toString());
     }
-    
+
     /**
      * Change the key-value in the top key of the config.js file
      *

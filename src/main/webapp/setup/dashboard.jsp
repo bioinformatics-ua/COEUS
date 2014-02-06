@@ -370,7 +370,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="btn-group btn-default" > <a class="btn btn-default dropdown-toggle tip" title="Exports all data from the triple store." data-toggle="dropdown" href="#">Data Export <span class="caret"></span></a>
+                    <div class="btn-group btn-default" > <a class="btn btn-default dropdown-toggle tip" title="Exports all data from the triple store." data-toggle="dropdown" href="#">Data Model Export <span class="caret"></span></a>
                         <ul class="dropdown-menu ">
                             <li><a href="../../config/export/coeus.rdf">RDF</a>
                             </li>
