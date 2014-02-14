@@ -185,7 +185,7 @@ public class CSVFactory implements ResourceFactory {
                         char queryLinesSkip = csvKeys[0].charAt(0);
                         char querySeparator = guessDelimiter(u, queryQuotes, queryLinesSkip);
 
-                        //System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
+                        System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
                         reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
                     }
                     list = reader.readAll();
@@ -357,11 +357,12 @@ public class CSVFactory implements ResourceFactory {
                 BufferedReader br = new BufferedReader(new InputStreamReader(urlLocation.openStream()));
                 CSVReader testReader = new CSVReader(br, delimiters[a], quotes, headerSkip);
                 columsSizeDetected.clear();
+                System.err.println("    TEST: " +delimiters[a]);
 
                 for (int i = 0; i < linesToCheck; i++) {
                     String[] rows = testReader.readNext();
                     columsSizeDetected.add(rows.length);
-                    //System.out.println(delimiters[a] + " - " + rows.length);
+                    System.err.println(delimiters[a] + " -rows: " + rows.length);
                 }
 
                 // test the colums size in each line
@@ -379,7 +380,7 @@ public class CSVFactory implements ResourceFactory {
             }
 
             if (b) {
-                //System.out.println("Find:" + delimiters[a]);
+                System.err.println("Finded:" + delimiters[a]);
                 return delimiters[a];
             }
         }

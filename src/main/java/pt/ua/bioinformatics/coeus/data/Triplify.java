@@ -1,5 +1,6 @@
 package pt.ua.bioinformatics.coeus.data;
 
+import com.hp.hpl.jena.rdf.model.Property;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -111,6 +112,34 @@ public class Triplify {
             com.hp.hpl.jena.rdf.model.Resource item = api.createResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + itemTmp[1] + "_" + i);
             com.hp.hpl.jena.rdf.model.Resource obj = api.createResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "Item");
             api.addStatement(item, Predicate.get("rdf:type"), obj);
+            
+            if(resource.getIsResourceOf().getUri().endsWith("concept_nanopublication")){
+                
+                com.hp.hpl.jena.rdf.model.Resource nanopub = api.createResource("http://www.nanopub.org/nschema#Nanopublication");
+                api.addStatement(item, Predicate.get("rdf:type"), nanopub);
+                
+                com.hp.hpl.jena.rdf.model.Resource a = api.createResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix())+"assertion_"+i);
+                Property p=api.getModel().createProperty(PrefixFactory.getURIForPrefix("np")+"hasAssertion");
+                api.addStatement(item, p, a);
+                p=api.getModel().createProperty(PrefixFactory.getURIForPrefix("np")+"hasPublicationInfo");
+                com.hp.hpl.jena.rdf.model.Resource info = api.createResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix())+"publicationInfo_"+i);
+                api.addStatement(item, p, info);
+                p=api.getModel().createProperty(PrefixFactory.getURIForPrefix("np")+"hasProvenance");
+                com.hp.hpl.jena.rdf.model.Resource prov = api.createResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix())+"provenance_"+i);
+                api.addStatement(item, p, prov);
+                
+            }else if(resource.getIsResourceOf().getUri().endsWith("concept_assertion")){
+                com.hp.hpl.jena.rdf.model.Resource assertion = api.createResource("http://www.nanopub.org/nschema#Assertion");
+                api.addStatement(item, Predicate.get("rdf:type"), assertion);
+            }else if(resource.getIsResourceOf().getUri().endsWith("concept_publicationInfo")){
+                com.hp.hpl.jena.rdf.model.Resource pubinfo = api.createResource("http://www.nanopub.org/nschema#PublicationInfo");
+                api.addStatement(item, Predicate.get("rdf:type"), pubinfo);
+            }else if(resource.getIsResourceOf().getUri().endsWith("concept_provenance")){
+                com.hp.hpl.jena.rdf.model.Resource prov = api.createResource("http://www.nanopub.org/nschema#Provenance");
+                api.addStatement(item, Predicate.get("rdf:type"), prov);
+            }else{
+                // ignore
+            }
 
             // set Item label and creator
             api.addStatement(item, Predicate.get("rdfs:label"), ConceptFactory.getTokenFromConcept(this.resource.getIsResourceOf().getLabel()) + i);

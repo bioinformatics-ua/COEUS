@@ -39,6 +39,7 @@ function getPrefixURI() {
         rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         rdfs: "http://www.w3.org/2000/01/rdf-schema#",
         coeus: "http://bioinformatics.ua.pt/coeus/resource/",
+        np: "http://www.nanopub.org/nschema#",
         owl: "http://www.w3.org/2002/07/owl#"
     };
     return prefixes;
@@ -265,10 +266,18 @@ function removeAllTriplesFromSubject(urlPrefix, subject, showResult, showError) 
 function foreachRemoveSubjects(urlPrefix, subject, showResult, showError, result) {
     console.log(result);
     for (var r in result) {
-        var object = resultToObject(result[r].object);
+        var obj;
+        try {
+            var object= resultToObject(result[r].object);
+            obj=object.prefix + object.value;
+        }catch (ex){
+            //is a literal object
+            obj= result[r].object.value;
+        }
+        
         var predicate = resultToPredicate(result[r].predicate);
-
-        var url = "/delete/" + subject + '/' + predicate.prefix + predicate.value + '/' + object.prefix + object.value;
+        
+        var url = "/delete/" + subject + '/' + predicate.prefix + predicate.value + '/' + obj;
         console.log("Deleting: " + url);
         callURL(urlPrefix + url, showResult, showError);
     }
