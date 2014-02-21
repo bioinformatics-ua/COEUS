@@ -1,7 +1,6 @@
 package pt.ua.bioinformatics.coeus.data;
 
 import au.com.bytecode.opencsv.CSVReader;
-import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -10,6 +9,7 @@ import com.hp.hpl.jena.reasoner.Reasoner;
 import com.hp.hpl.jena.reasoner.ReasonerRegistry;
 import com.hp.hpl.jena.sdb.SDBFactory;
 import com.hp.hpl.jena.sdb.Store;
+import com.hp.hpl.jena.sparql.core.DatasetGraph;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.FileReader;
@@ -22,7 +22,6 @@ import org.json.simple.parser.JSONParser;
 import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
-import pt.ua.bioinformatics.coeus.common.Indexer;
 
 /**
  * COEUS Data Storage key class. Handles all SDB-related stuff.
@@ -37,6 +36,7 @@ public class Storage {
     private static boolean loaded = false;
     private static boolean connected = false;
     private static Model model = null;
+    private static DatasetGraph datasetGraph = null;
     private static Store store = null;
     private static Reasoner reasoner = ReasonerRegistry.getRDFSSimpleReasoner(); //what's the best reasoner?
     private static InfModel infmodel = null;
@@ -47,6 +47,14 @@ public class Storage {
 
     public static void setConnected(boolean connected) {
         Storage.connected = connected;
+    }
+    
+    public static DatasetGraph getDatasetGraph() {
+        return datasetGraph;
+    }
+
+    public static void setDatasetGraph(DatasetGraph datasetGraph) {
+        Storage.datasetGraph = datasetGraph;
     }
 
     public static InfModel getInfmodel() {
@@ -103,6 +111,7 @@ public class Storage {
             Storage.close();
             store = (Store) SDBFactory.connectStore(Config.getPath() + Config.getSdb());
             model = SDBFactory.connectDefaultModel(store);
+            datasetGraph = SDBFactory.connectDataset(store).asDatasetGraph();
             infmodel = ModelFactory.createInfModel(reasoner, model);
             connected = true;
             if (Config.isDebug()) {

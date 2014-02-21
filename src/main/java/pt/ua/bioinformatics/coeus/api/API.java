@@ -1,5 +1,6 @@
 package pt.ua.bioinformatics.coeus.api;
 
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.ResultSet;
@@ -9,6 +10,8 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.sparql.core.DatasetGraph;
+import com.hp.hpl.jena.sparql.core.Quad;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -19,7 +22,8 @@ import pt.ua.bioinformatics.coeus.data.Storage;
 
 /**
  * COEUS API handler class.
- * <p>Main API class for internal Java usage, use this or internal when building
+ * <p>
+ * Main API class for internal Java usage, use this or internal when building
  * new data access methods!</p>
  * <p>
  * <ul>
@@ -35,6 +39,7 @@ public class API {
 
     private Model model = Storage.getModel();                   // Jena Model access
     private InfModel inferredModel = Storage.getInfmodel();     // Jena InferredModel access (when active!)
+    private DatasetGraph datasetGraph = Storage.getDatasetGraph(); // Jena Dataset access
     private Internal internal = new Internal();                 // Cross-usage with Internal
     private JSONParser jsonparser = new JSONParser();           // JSONParser for JSON outputs
 
@@ -44,6 +49,14 @@ public class API {
 
     public void setJsonparser(JSONParser jsonparser) {
         this.jsonparser = jsonparser;
+    }
+
+    public DatasetGraph getDatasetGraph() {
+        return datasetGraph;
+    }
+
+    public void setDatasetGraph(DatasetGraph datasetGraph) {
+        this.datasetGraph = datasetGraph;
     }
 
     public Internal getInternal() {
@@ -427,16 +440,16 @@ public class API {
         }
 
     }
-    
+
     /**
-     * Read into the model any rdf data 
-     * 
+     * Read into the model any rdf data
+     *
      * @param is
-     * @param base 
+     * @param base
      */
-    public void readModel(InputStream is,String base) {
+    public void readModel(InputStream is, String base) {
         try {
-            this.model.read(is,base);
+            this.model.read(is, base);
         } catch (Exception ex) {
             if (Config.isDebug()) {
                 System.out.println("[COEUS][API] Unable to read into the model");
@@ -444,7 +457,7 @@ public class API {
             Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Remove a statement from the model.
      *
@@ -461,14 +474,15 @@ public class API {
         }
 
     }
-        /**
+
+    /**
      * Verify if the statement exists in the model
-     * 
+     *
      * @param statement
-     * @return 
+     * @return
      */
     public boolean containsStatement(Statement statement) {
-         try {
+        try {
             return this.model.contains(statement);
         } catch (Exception ex) {
             if (Config.isDebug()) {
@@ -477,37 +491,39 @@ public class API {
             Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
-        
+
     }
+
     /**
      * Add statement to the model
-     * 
+     *
      * @param statement
-     * @return 
+     * @return
      */
     public void addStatement(Statement statement) {
-         try {
+        try {
             this.model.add(statement);
         } catch (Exception ex) {
             if (Config.isDebug()) {
-                String stat=statement.getSubject()+" "+statement.getPredicate()+" "+statement.getObject();
-                System.out.println("[COEUS][API] Unable add statement in the model: "+stat);
+                String stat = statement.getSubject() + " " + statement.getPredicate() + " " + statement.getObject();
+                System.out.println("[COEUS][API] Unable add statement in the model: " + stat);
                 Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
         }
-        
+
     }
+
     /**
      * Create a statement from the model.
-     * 
+     *
      * @param sub
      * @param pred
      * @param obj (String)
      */
     public Statement createStatement(Resource sub, Property pred, String obj) {
-        Statement statement=null;
+        Statement statement = null;
         try {
-            statement=this.model.createStatement(sub, pred, obj);
+            statement = this.model.createStatement(sub, pred, obj);
         } catch (Exception ex) {
             if (Config.isDebug()) {
                 System.out.println("[COEUS][API] Unable to create statement from the model");
@@ -516,18 +532,18 @@ public class API {
         }
         return statement;
     }
-    
+
     /**
      * Create a statement from the model.
-     * 
+     *
      * @param sub
      * @param pred
      * @param obj (Resource)
      */
     public Statement createStatement(Resource sub, Property pred, Resource obj) {
-        Statement statement=null;
+        Statement statement = null;
         try {
-            statement=this.model.createStatement(sub, pred, obj);
+            statement = this.model.createStatement(sub, pred, obj);
         } catch (Exception ex) {
             if (Config.isDebug()) {
                 System.out.println("[COEUS][API] Unable to create statement from the model");
@@ -535,5 +551,38 @@ public class API {
             Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
         }
         return statement;
+    }
+
+    /**
+     * Add a Quad from URIs
+     * 
+     * @param g
+     * @param s
+     * @param p
+     * @param o 
+     */
+    public void addQuadURI(String g, String s, String p, String o) {
+        Quad q = new Quad(Node.createURI(g), Node.createURI(s), Node.createURI(p), Node.createURI(o));
+        datasetGraph.add(q);
+    }
+    /**
+     * Add a Quad with a literal object
+     * 
+     * @param g
+     * @param s
+     * @param p
+     * @param o 
+     */
+    public void addQuadLiteral(String g, String s, String p, String o) {
+        Quad q = new Quad(Node.createURI(g), Node.createURI(s), Node.createURI(p), Node.createLiteral(o));
+        datasetGraph.add(q);
+    }
+    /**
+     * Add a Quad
+     * 
+     * @param q 
+     */
+    public void addQuad(Quad q) {
+        datasetGraph.add(q);
     }
 }
