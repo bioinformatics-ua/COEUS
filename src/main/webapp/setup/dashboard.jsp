@@ -389,9 +389,9 @@
                 <div class="col-md-6">
                     <div class="btn-group btn-default" > <a class="btn btn-default dropdown-toggle tip" title="Exports the KB data model from the triple store." data-toggle="dropdown" href="#">Data Model Export <span class="caret"></span></a>
                         <ul class="dropdown-menu ">
-                            <li><a href="../../config/export/coeus.rdf">RDF</a>
+                            <li><a href="../../config/export/setup.rdf">RDF</a>
                             </li>
-                            <li><a href="../../config/export/coeus.ttl">TTL</a>
+                            <li><a href="../../config/export/setup.ttl">TTL</a>
                             </li>
                         </ul>
                     </div>

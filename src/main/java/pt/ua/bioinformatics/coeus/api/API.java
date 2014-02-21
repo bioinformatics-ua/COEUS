@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import org.json.simple.parser.JSONParser;
 import pt.ua.bioinformatics.coeus.common.Config;
 import pt.ua.bioinformatics.coeus.data.Storage;
+import pt.ua.bioinformatics.coeus.nanopub.Nanopublication;
 
 /**
  * COEUS API handler class.
@@ -555,34 +556,62 @@ public class API {
 
     /**
      * Add a Quad from URIs
-     * 
+     *
      * @param g
      * @param s
      * @param p
-     * @param o 
+     * @param o
      */
     public void addQuadURI(String g, String s, String p, String o) {
         Quad q = new Quad(Node.createURI(g), Node.createURI(s), Node.createURI(p), Node.createURI(o));
         datasetGraph.add(q);
     }
+
     /**
      * Add a Quad with a literal object
-     * 
+     *
      * @param g
      * @param s
      * @param p
-     * @param o 
+     * @param o
      */
     public void addQuadLiteral(String g, String s, String p, String o) {
         Quad q = new Quad(Node.createURI(g), Node.createURI(s), Node.createURI(p), Node.createLiteral(o));
         datasetGraph.add(q);
     }
+
     /**
      * Add a Quad
-     * 
-     * @param q 
+     *
+     * @param q
      */
     public void addQuad(Quad q) {
         datasetGraph.add(q);
+    }
+
+    /**
+     * Store the nanopublication into the SDB
+     * 
+     * @param np 
+     */
+    public void storeNanopub(Nanopublication np) {
+
+        //Store all Quads related with nanopub itself
+        for (Quad q : np.getContent()) {
+            addQuad(q);
+        }
+        //Store all Quads related with nanopub Assertion graph
+        for (Quad q : np.getAssertion().getContent()) {
+            addQuad(q);
+        }
+        //Store all Quads related with nanopub Provenance graph
+        for (Quad q : np.getProvenace().getContent()) {
+            addQuad(q);
+        }
+        //Store all Quads related with nanopub PublicationInfo graph
+        for (Quad q : np.getPubInfo().getContent()) {
+            addQuad(q);
+        }
+
     }
 }
