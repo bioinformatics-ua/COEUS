@@ -85,13 +85,30 @@
     <xsl:template match="res:uri">
         <xsl:variable name="uri" select="text()"/>
         <xsl:text>&lt;</xsl:text>
-        <xsl:value-of select="$uri"/>
+        <a>
+            <xsl:attribute name="href">
+                <xsl:value-of select="$uri"/>
+            </xsl:attribute>
+            <xsl:value-of select="$uri"/>
+        </a>
         <xsl:text>&gt;</xsl:text>
     </xsl:template>
 
     <xsl:template match="res:literal">
-        <xsl:text>"</xsl:text>
-        <xsl:value-of select="text()"/>
+        <xsl:text>"</xsl:text> 
+        <xsl:choose>
+            <xsl:when test="starts-with(text(), 'http')">
+                <a>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="text()"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="text()"/>
+                </a>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="text()"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:text>"</xsl:text>
 
         <xsl:choose>

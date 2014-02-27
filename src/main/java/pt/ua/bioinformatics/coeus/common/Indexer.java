@@ -6,8 +6,8 @@ package pt.ua.bioinformatics.coeus.common;
 
 import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
+import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 /**
  *
@@ -15,34 +15,28 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  */
 public class Indexer {
 
-    static void index() {
+    public static void index() {
         try {
-            Boot.start();
+
             Model m = Boot.getAPI().getModel();
-            // ---- Read and index all literal strings.
-            IndexBuilderString larqBuilder = new IndexBuilderString();
-
-            // Index statements as they are added to the model.
-
-
-            // To just build the index, create a model that does not store statements 
-            // Model model2 = ModelFactory.createModelForGraph(new GraphSink()) ;
-
-
-
+            // -- Read and index all literal strings.
+            
+            IndexBuilderString larqBuilder = new IndexBuilderString() ;
+            long i = System.currentTimeMillis();
             // ---- Alternatively build the index after the model has been created. 
-            StmtIterator iter = m.listStatements();
-            larqBuilder.indexStatements(iter);
+            larqBuilder.indexStatements(m.listStatements());
+            // -- Finish indexing
+            larqBuilder.closeWriter() ;
+            // -- Create the access index  
+            IndexLARQ index = larqBuilder.getIndex() ;
+            // -- Make globally available
+            LARQ.setDefaultIndex(index);
+            long f = System.currentTimeMillis();
+            System.out.println("\n\t[COEUS] " + Config.getName() + " Indexer done in " + ((f - i) / 1000) + " seconds.\n");
             //larqBuilder.indexStatements(Boot.getAPI().getModel().listStatements()) ;
 
-            // ---- Finish indexing
-            larqBuilder.closeWriter();
-
-            // ---- Create the access index  
-            IndexLARQ index = larqBuilder.getIndex();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-
         }
 
     }
