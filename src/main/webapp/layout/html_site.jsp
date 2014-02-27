@@ -81,7 +81,7 @@
                 <div class="page-wrapper">
                     <div class="container">
                         <p class="pull-right"><a href="#" title="Back to top"> <i class="fa fa-arrow-up"></i></a></p>
-                        <p class="text-muted credit">&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2013 - Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a> <a href="http://getbootstrap.com/" title="Go to Bootstrap" target="_blank"><small>(Layout with Bootstrap)</small></a></p> 
+                        <p class="text-muted credit">&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> <script> document.write(new Date().getFullYear()); </script> - Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a> <a href="http://getbootstrap.com/" title="Go to Bootstrap" target="_blank"><small>(Layout with Bootstrap)</small></a></p> 
                     </div>
                 </div>
             </div>

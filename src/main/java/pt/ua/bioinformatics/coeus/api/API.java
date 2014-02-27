@@ -597,19 +597,19 @@ public class API {
     public void storeNanopub(Nanopublication np) {
 
         //Store all Quads related with nanopub itself
-        for (Quad q : np.getContent()) {
+        for (Quad q : np.getNanopubQuads()) {
             addQuad(q);
         }
         //Store all Quads related with nanopub Assertion graph
-        for (Quad q : np.getAssertion().getContent()) {
+        for (Quad q : np.getAssertion().getAssertionQuads()) {
             addQuad(q);
         }
         //Store all Quads related with nanopub Provenance graph
-        for (Quad q : np.getProvenace().getContent()) {
+        for (Quad q : np.getProvenace().getProvenanceQuads()) {
             addQuad(q);
         }
         //Store all Quads related with nanopub PublicationInfo graph
-        for (Quad q : np.getPubInfo().getContent()) {
+        for (Quad q : np.getPubInfo().getPublicationInfoQuads()) {
             addQuad(q);
         }
 

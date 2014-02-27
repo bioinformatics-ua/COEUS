@@ -25,26 +25,26 @@ import pt.ua.bioinformatics.coeus.data.Predicate;
  */
 public class Nanopublication {
 
-    String id;
+    String uri; // np uri graph
     Assertion assertion; //each np has only one Assertion graph (in this implementation)
     Provenance provenace; //each np has only one Provenance graph (in this implementation)
     PublicationInfo pubInfo; //each np has only one PublicationInfo graph (in this implementation)
-    List<Quad> content = new ArrayList<Quad>(); //quads only relative to the np itself
+    List<Triple> content = new ArrayList<Triple>(); //triples only relative to the np itself
 
-    public Nanopublication(String id, Assertion assertion, Provenance provenace, PublicationInfo pubInfo) {
-        this.id = id;
+    public Nanopublication(String uri, Assertion assertion, Provenance provenace, PublicationInfo pubInfo) {
+        this.uri = uri;
         this.assertion = assertion;
         this.provenace = provenace;
         this.pubInfo = pubInfo;
         init();
     }
 
-    public String getId() {
-        return id;
+    public String getUri() {
+        return uri;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public Assertion getAssertion() {
@@ -71,11 +71,11 @@ public class Nanopublication {
         this.pubInfo = pubInfo;
     }
 
-    public List<Quad> getContent() {
+    public List<Triple> getContent() {
         return content;
     }
 
-    public void setContent(List<Quad> content) {
+    public void setContent(List<Triple> content) {
         this.content = content;
     }
 
@@ -84,8 +84,7 @@ public class Nanopublication {
      * @param t 
      */
     public void add(Triple t) {
-        Quad q = new Quad(Node.createURI(id), t);
-        content.add(q);
+        content.add(t);
     }
 
     /**
@@ -93,15 +92,28 @@ public class Nanopublication {
      *
      */
     private void init() {
-        Triple type = new Triple( Node.createURI(id), Node.createURI(Predicate.get("rdf:type").getURI()), Node.createURI(PrefixFactory.getURIForPrefix("np") + "Nanopublication"));
+        Triple type = new Triple( Node.createURI(uri), Node.createURI(Predicate.get("rdf:type").getURI()), Node.createURI(PrefixFactory.getURIForPrefix("np") + "Nanopublication"));
         add(type);
-        Triple hasAssertion = new Triple(Node.createURI(id), Node.createURI(PrefixFactory.getURIForPrefix("np")+"hasAssertion"), Node.createURI(assertion.getId()));
+        Triple hasAssertion = new Triple(Node.createURI(uri), Node.createURI(PrefixFactory.getURIForPrefix("np")+"hasAssertion"), Node.createURI(assertion.getUri()));
         add(hasAssertion);
-        Triple hasProv = new Triple( Node.createURI(id), Node.createURI(PrefixFactory.getURIForPrefix("np")+"hasProvenance"), Node.createURI(provenace.getId()));
+        Triple hasProv = new Triple( Node.createURI(uri), Node.createURI(PrefixFactory.getURIForPrefix("np")+"hasProvenance"), Node.createURI(provenace.getUri()));
         add(hasProv);
-        Triple hasInfo = new Triple( Node.createURI(id), Node.createURI(PrefixFactory.getURIForPrefix("np")+"hasPublicationInfo"), Node.createURI(pubInfo.getId()));
+        Triple hasInfo = new Triple( Node.createURI(uri), Node.createURI(PrefixFactory.getURIForPrefix("np")+"hasPublicationInfo"), Node.createURI(pubInfo.getUri()));
         add(hasInfo);
     }
+    
+    /**
+     * Retrieve only the quads associated with the np itself
+     * @return 
+     */
+    public List<Quad> getNanopubQuads(){
+        List<Quad> q=new ArrayList<Quad>();
+        for (Triple triple : content) {
+            Quad quad=new Quad(Node.createURI(uri), triple);
+            q.add(quad);
+        }
+        return q;
+    } 
 
     /**
      * Write all quads associated with the np
@@ -112,19 +124,19 @@ public class Nanopublication {
         
         DatasetGraph dg = DatasetGraphFactory.createMem();
         //load all Quads related with nanopub itself
-        for (Quad q : getContent()) {
+        for (Quad q : getNanopubQuads()) {
             dg.add(q);
         }
         //load all Quads related with nanopub Assertion graph
-        for (Quad q : getAssertion().getContent()) {
+        for (Quad q : getAssertion().getAssertionQuads()) {
             dg.add(q);
         }
         //load all Quads related with nanopub Provenance graph
-        for (Quad q : getProvenace().getContent()) {
+        for (Quad q : getProvenace().getProvenanceQuads()) {
             dg.add(q);
         }
         //load all Quads related with nanopub PublicationInfo graph
-        for (Quad q : getPubInfo().getContent()) {
+        for (Quad q : getPubInfo().getPublicationInfoQuads()) {
             dg.add(q);
         }
 

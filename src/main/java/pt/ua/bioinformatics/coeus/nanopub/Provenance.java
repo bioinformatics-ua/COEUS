@@ -19,32 +19,32 @@ import pt.ua.bioinformatics.coeus.data.Predicate;
  */
 public class Provenance {
 
-    String id;
-    List<Quad> content = new ArrayList<Quad>();
+    String uri; // np provenance graph
+    List<Triple> content = new ArrayList<Triple>();
 
-    public Provenance(String id) {
-        this.id = id;
+    public Provenance(String uri) {
+        this.uri = uri;
         init();
     }
 
-    public String getId() {
-        return id;
+    public String getUri() {
+        return uri;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
-    public List<Quad> getContent() {
+    public List<Triple> getContent() {
         return content;
     }
 
-    public void setContent(List<Quad> content) {
+    public void setContent(List<Triple> content) {
         this.content = content;
     }
 
     private void init() {
-        Triple type = new Triple(Node.createURI(id), Node.createURI(Predicate.get("rdf:type").getURI()), Node.createURI(PrefixFactory.getURIForPrefix("np") + "Provenance"));
+        Triple type = new Triple(Node.createURI(uri), Node.createURI(Predicate.get("rdf:type").getURI()), Node.createURI(PrefixFactory.getURIForPrefix("np") + "Provenance"));
         add(type);
     }
 
@@ -54,8 +54,21 @@ public class Provenance {
      * @param t
      */
     public void add(Triple t) {
-        Quad q = new Quad(Node.createURI(id), t);
-        content.add(q);
+        content.add(t);
+    }
+
+    /**
+     * Retrieve only the quads associated with the np provenance field
+     *
+     * @return
+     */
+    public List<Quad> getProvenanceQuads() {
+        List<Quad> q = new ArrayList<Quad>();
+        for (Triple triple : content) {
+            Quad quad = new Quad(Node.createURI(uri), triple);
+            q.add(quad);
+        }
+        return q;
     }
 
 }
