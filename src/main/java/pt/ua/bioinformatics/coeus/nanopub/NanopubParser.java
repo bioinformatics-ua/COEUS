@@ -27,6 +27,7 @@ public class NanopubParser {
 
         //INPUTS
         String concept = "coeus:concept_HGNC";
+        boolean loadAll = true;
 
         String queryConcepts = "SELECT * {?item coeus:hasConcept " + concept + "}";
         ResultSet rs = Boot.getAPI().selectRS(queryConcepts, false);
@@ -52,6 +53,9 @@ public class NanopubParser {
                 } else {
                     a.add(new Triple(Node.createURI(item), Node.createURI(p), Node.createLiteral(o)));
                 }
+                if (p.endsWith("isAssociatedTo") && loadAll) {
+                    a = addAssociations(a, o);
+                }
             }
 
             Provenance p = new Provenance(np_item + "_Provenance");
@@ -67,5 +71,35 @@ public class NanopubParser {
             Boot.getAPI().storeNanopub(np);
         }
 
+    }
+
+    /**
+     * Add all objects (recursive function) with the property (coeus:isAssociatedTo) to the Assertion
+     *
+     * @param property
+     * @return
+     */
+    public static Assertion addAssociations(Assertion a, String object) {
+        String queryItems = "SELECT * { <" + object + "> ?p ?o}";
+        ResultSet rs_item = Boot.getAPI().selectRS(queryItems, false);
+
+        while (rs_item.hasNext()) {
+            QuerySolution row_item = rs_item.next();
+            String p = row_item.get("p").toString();
+            String o = row_item.get("o").toString();
+            
+            UrlValidator urlValidator = new UrlValidator();
+            if (urlValidator.isValid(o)) {
+                a.add(new Triple(Node.createURI(object), Node.createURI(p), Node.createURI(o)));
+            } else {
+                a.add(new Triple(Node.createURI(object), Node.createURI(p), Node.createLiteral(o)));
+            }
+
+            if (p.endsWith("isAssociatedTo")) {
+                Triple t = new Triple(Node.createURI(o), Node.createURI(p), Node.createURI(object));
+                if(!a.getContent().contains(t)) a = addAssociations(a, o);
+            }
+        }
+        return a;
     }
 }

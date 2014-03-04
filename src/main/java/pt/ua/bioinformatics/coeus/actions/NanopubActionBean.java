@@ -1,7 +1,6 @@
 package pt.ua.bioinformatics.coeus.actions;
 
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.sparql.core.DatasetGraph;
 import com.hp.hpl.jena.sparql.core.DatasetGraphFactory;
 import com.hp.hpl.jena.sparql.core.Quad;
@@ -18,10 +17,6 @@ import org.openjena.riot.RiotWriter;
 import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
-import pt.ua.bioinformatics.coeus.nanopub.Assertion;
-import pt.ua.bioinformatics.coeus.nanopub.Nanopublication;
-import pt.ua.bioinformatics.coeus.nanopub.Provenance;
-import pt.ua.bioinformatics.coeus.nanopub.PublicationInfo;
 
 /**
  *
@@ -52,37 +47,37 @@ public class NanopubActionBean implements ActionBean {
 
     @DefaultHandler
     public Resolution handle() {
-/*
+
         Boot.start();
         DatasetGraph dg = Boot.getAPI().getDatasetGraph();
         DatasetGraph outGraph = DatasetGraphFactory.createMem();
-        String npURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "nanopublication_" + id;
-        String assURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "assertion_" + id;
-        String provURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "provenance_" + id;
-        String infoURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "publicationInfo_" + id;
+        String npURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + id + "_Nanopub";
+        String assURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + id +"_Nanopub_Assertion" ;
+        String provURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) +id+ "_Nanopub_Provenance" ;
+        String infoURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) +id+ "_Nanopub_PublicationInfo" ;
         //Nanopub
-        Iterator<Quad> itNp = dg.find(Node.ANY, Node.createURI(npURI), Node.ANY, Node.ANY);
+        Iterator<Quad> itNp = dg.find(Node.createURI(npURI), Node.ANY, Node.ANY, Node.ANY);
         while (itNp.hasNext()) {
             Quad q = itNp.next();
             Quad quadToAdd = new Quad(Node.createURI(npURI), q.getSubject(), q.getPredicate(), q.getObject());
             outGraph.add(quadToAdd);
         }
         //Assertion 
-        Iterator<Quad> itAss = dg.find(Node.ANY, Node.createURI(assURI), Node.ANY, Node.ANY);
+        Iterator<Quad> itAss = dg.find( Node.createURI(assURI),Node.ANY, Node.ANY, Node.ANY);
         while (itAss.hasNext()) {
             Quad q = itAss.next();
             Quad quadToAdd = new Quad(Node.createURI(assURI), q.getSubject(), q.getPredicate(), q.getObject());
             outGraph.add(quadToAdd);
         }
         //Provenance
-        Iterator<Quad> itProv = dg.find(Node.ANY, Node.createURI(provURI), Node.ANY, Node.ANY);
+        Iterator<Quad> itProv = dg.find(Node.createURI(provURI),Node.ANY,  Node.ANY, Node.ANY);
         while (itProv.hasNext()) {
             Quad q = itProv.next();
             Quad quadToAdd = new Quad(Node.createURI(provURI), q.getSubject(), q.getPredicate(), q.getObject());
             outGraph.add(quadToAdd);
         }
         //PublicationInfo
-        Iterator<Quad> itInfo = dg.find(Node.ANY, Node.createURI(infoURI), Node.ANY, Node.ANY);
+        Iterator<Quad> itInfo = dg.find( Node.createURI(infoURI),Node.ANY, Node.ANY, Node.ANY);
         while (itInfo.hasNext()) {
             Quad q = itInfo.next();
             Quad quadToAdd = new Quad(Node.createURI(infoURI), q.getSubject(), q.getPredicate(), q.getObject());
@@ -94,27 +89,14 @@ public class NanopubActionBean implements ActionBean {
         RiotWriter.writeNQuads(ps, outGraph);
         String content = baos.toString();
         outGraph.close();
-*/
-        
-        Boot.start();
-        String coeus=PrefixFactory.getURIForPrefix("coeus");
-        Assertion a=new Assertion(coeus+"ass1");
-        Provenance p=new Provenance(coeus+"prov1");
-        PublicationInfo i=new PublicationInfo(coeus+"info1");
-        
-        a.add(new Triple(Node.createURI("malaria"), Node.createURI("isTransmited"), Node.createURI("mosquitos")));
-        a.add(new Triple(Node.createURI("malaria"), Node.createURI("isTransmited"), Node.createURI("mosquitos")));
-        
-        p.add(new Triple(Node.createURI("p1"), Node.createURI("p2"), Node.createURI("p3")));
-        i.add(new Triple(Node.createURI("i1"), Node.createURI("i2"), Node.createURI("i3")));
-        
-        Nanopublication np=new Nanopublication(coeus+id, a, p, i);
+
+       
         
         //Boot.getAPI().storeNanopub(np);
         
         //Model mo = ModelFactory.createModelForGraph(ds.getGraph(Node.createURI("a1"))) ;
         //RDFDataMgr.write(System.out, Boot.getAPI().getDatasetGraph(), RDFFormat.TRIG);
-        return new StreamingResolution("text/n-quads", np.writeNQuads());
+        return new StreamingResolution("text/n-quads", content);
     }
 
     /*
