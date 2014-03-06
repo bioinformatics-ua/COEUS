@@ -63,6 +63,7 @@ import pt.ua.bioinformatics.coeus.common.Boot;
 import pt.ua.bioinformatics.coeus.common.Config;
 import pt.ua.bioinformatics.coeus.common.Worker;
 import pt.ua.bioinformatics.coeus.data.Predicate;
+import pt.ua.bioinformatics.coeus.nanopub.NanopubParser;
 
 /**
  *
@@ -272,6 +273,36 @@ public class ConfigActionBean implements ActionBean {
         } catch (Exception e) {
             result.put("status", 201);
             result.put("message", "[COEUS][API][ConfigActionBean] Build fail. Exception: " + e);
+        }
+        return new StreamingResolution("application/json", result.toJSONString());
+    }
+    
+     /**
+     * Integrate a concept into Nanopub (Boot.build() call in a different thread)
+     *
+     * @return
+     */
+    public Resolution nanopub() {
+        JSONObject result = new JSONObject();
+        String value = method;
+        try {
+
+            ExecutorService executor = (ExecutorService) context.getServletContext().getAttribute("INTEGRATION_EXECUTOR");
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    NanopubParser parser=new NanopubParser();
+                    //parser.parse(value);
+                }
+            };
+            executor.execute(runnable);
+
+            result.put("status", 100);
+            result.put("message", "[COEUS][API][ConfigActionBean] Nanopubs builded.");
+        } catch (Exception e) {
+            result.put("status", 201);
+            result.put("message", "[COEUS][API][ConfigActionBean] Build Nanopubs fail. Exception: " + e);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }

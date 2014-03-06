@@ -51,10 +51,10 @@ public class NanopubActionBean implements ActionBean {
         Boot.start();
         DatasetGraph dg = Boot.getAPI().getDatasetGraph();
         DatasetGraph outGraph = DatasetGraphFactory.createMem();
-        String npURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + id + "_Nanopub";
-        String assURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + id +"_Nanopub_Assertion" ;
-        String provURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) +id+ "_Nanopub_Provenance" ;
-        String infoURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) +id+ "_Nanopub_PublicationInfo" ;
+        String npURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + id ;
+        String assURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + id +"_Assertion" ;
+        String provURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) +id+ "_Provenance" ;
+        String infoURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) +id+ "_PublicationInfo" ;
         //Nanopub
         Iterator<Quad> itNp = dg.find(Node.createURI(npURI), Node.ANY, Node.ANY, Node.ANY);
         while (itNp.hasNext()) {

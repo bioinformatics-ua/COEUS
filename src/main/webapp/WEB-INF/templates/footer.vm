@@ -13,7 +13,8 @@
                     <div class="container">
 #if ($rdf_link)
       <p class="pull-right">View: <a href="$rdf_link?output=ttl">As Turtle</a> |
-      <a href="$rdf_link?output=xml">As RDF/XML</a></p>
+      <a href="$rdf_link?output=xml">As RDF/XML</a> #if ($nanopub == true) | <a href="../nanopub/$title" >As Nanopublication</a> #end</p>
+
 #set ($has_text = true)
 #end 
 #if ($sparql_endpoint)

@@ -22,11 +22,11 @@ import pt.ua.bioinformatics.coeus.common.Config;
  */
 public class NanopubParser {
 
-    public static void main(String[] args) throws ParseException {
+    public void parse(String concept) throws ParseException {
         Boot.start();
 
         //INPUTS
-        String concept = "coeus:concept_HGNC";
+        //String concept = "coeus:concept_HGNC";
         boolean loadAll = true;
 
         String queryConcepts = "SELECT * {?item coeus:hasConcept " + concept + "}";
@@ -76,10 +76,11 @@ public class NanopubParser {
     /**
      * Add all objects (recursive function) with the property (coeus:isAssociatedTo) to the Assertion
      *
-     * @param property
+     * @param a
+     * @param object
      * @return
      */
-    public static Assertion addAssociations(Assertion a, String object) {
+    public Assertion addAssociations(Assertion a, String object) {
         String queryItems = "SELECT * { <" + object + "> ?p ?o}";
         ResultSet rs_item = Boot.getAPI().selectRS(queryItems, false);
 
