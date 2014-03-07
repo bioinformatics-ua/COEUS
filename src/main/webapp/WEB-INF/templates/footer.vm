@@ -23,7 +23,7 @@
 
                         <p>&nbsp;</p>
                         <p class="pull-right"><a href="#" > <i class="fa fa-arrow-up"></i></a></p>
-                        <p class="text-muted credit">&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2013 - Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a></p>
+                        <p class="text-muted credit">&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> <script> document.write(new Date().getFullYear()); </script> - Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a></p>
                     </div>
                 </div>
             </div>

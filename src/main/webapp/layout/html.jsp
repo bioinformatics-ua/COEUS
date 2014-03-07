@@ -32,7 +32,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="http://bioinformatics.ua.pt/coeus/">COEUS <sub>v2.1</sub></a>
+                        <a class="navbar-brand" href="http://bioinformatics.ua.pt/coeus/">COEUS <sub>v2.2</sub></a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -124,7 +124,7 @@
                             </address>
                         </div>
                         <div class="modal-footer">
-                            <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback" class="btn btn-info">Send Mail <i class="icon-envelope icon-white"></i></a>
+                            <a href="mailto:pedrolopes@ua.pt,sernadela@ua.pt?subject=[COEUS] feedback" class="btn btn-info">Send Mail <i class="icon-envelope icon-white"></i></a>
                         </div>
                     </div>
                 </div>

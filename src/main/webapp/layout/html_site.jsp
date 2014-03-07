@@ -65,7 +65,7 @@
                             </address>
                         </div>
                         <div class="modal-footer">
-                            <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback" class="btn btn-info">Send Mail <i class="icon-envelope icon-white"></i></a>
+                            <a href="mailto:pedrolopes@ua.pt,sernadela@ua.pt?subject=[COEUS] feedback" class="btn btn-info">Send Mail <i class="icon-envelope icon-white"></i></a>
                         </div>
                     </div>
                 </div>

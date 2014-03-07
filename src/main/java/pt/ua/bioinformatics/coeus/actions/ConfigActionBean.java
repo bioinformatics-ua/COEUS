@@ -217,7 +217,7 @@ public class ConfigActionBean implements ActionBean {
         List<Statement> listStats = statIte.toList();
         if (!listStats.isEmpty()) {
             exportModel.remove(listStats);//remove data associated
-        }            
+        }
         //Load Entities
         String entity = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "Entity";
         resIte = m.listResourcesWithProperty(m.createProperty(type), m.createResource(entity));
@@ -276,33 +276,36 @@ public class ConfigActionBean implements ActionBean {
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
-    
-     /**
-     * Integrate a concept into Nanopub (Boot.build() call in a different thread)
+
+    /**
+     * Integrate a concept into Nanopub (Boot.build() call in a different
+     * thread)
      *
      * @return
      */
     public Resolution nanopub() {
         JSONObject result = new JSONObject();
-        String value = method;
+        final String concept = method;
         try {
-
             ExecutorService executor = (ExecutorService) context.getServletContext().getAttribute("INTEGRATION_EXECUTOR");
             Runnable runnable = new Runnable() {
 
                 @Override
                 public void run() {
-                    NanopubParser parser=new NanopubParser();
-                    //parser.parse(value);
+                    NanopubParser parser = new NanopubParser(concept);
+                    long i = System.currentTimeMillis();
+                    parser.parse();
+                    long f = System.currentTimeMillis();
+                    System.out.println("\n\t[COEUS] " + Config.getName() + " [Nanopublication] parsing of " + concept + " done in " + ((f - i) / 1000) + " seconds.\n");
                 }
             };
             executor.execute(runnable);
 
             result.put("status", 100);
-            result.put("message", "[COEUS][API][ConfigActionBean] Nanopubs builded.");
+            result.put("message", "[COEUS][API][ConfigActionBean] NanopubParser started: " + concept);
         } catch (Exception e) {
             result.put("status", 201);
-            result.put("message", "[COEUS][API][ConfigActionBean] Build Nanopubs fail. Exception: " + e);
+            result.put("message", "[COEUS][API][ConfigActionBean] NanopubParser start fail: " + concept + ". Exception: " + e);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }

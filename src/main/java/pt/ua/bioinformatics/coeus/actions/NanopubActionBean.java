@@ -54,7 +54,7 @@ public class NanopubActionBean implements ActionBean {
         String npURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + id ;
         String assURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + id +"_Assertion" ;
         String provURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) +id+ "_Provenance" ;
-        String infoURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) +id+ "_PublicationInfo" ;
+        String infoURI = PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) +id+ "_PubInfo" ;
         //Nanopub
         Iterator<Quad> itNp = dg.find(Node.createURI(npURI), Node.ANY, Node.ANY, Node.ANY);
         while (itNp.hasNext()) {

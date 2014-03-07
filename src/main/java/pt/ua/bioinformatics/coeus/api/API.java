@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.parser.JSONParser;
 import pt.ua.bioinformatics.coeus.common.Config;
+import pt.ua.bioinformatics.coeus.data.Predicate;
 import pt.ua.bioinformatics.coeus.data.Storage;
 import pt.ua.bioinformatics.coeus.nanopub.Nanopublication;
 
@@ -590,11 +591,13 @@ public class API {
     }
 
     /**
-     * Store the nanopublication into the SDB
-     * 
-     * @param np 
+     * Store the nanopublication into the Dataset SDB and associate with the related
+     * concept in the model
+     *
+     * @param np
+     * @param concept
      */
-    public void storeNanopub(Nanopublication np) {
+    public void storeNanopub(Nanopublication np, String concept) {
 
         //Store all Quads related with nanopub itself
         for (Quad q : np.getNanopubQuads()) {
@@ -611,6 +614,17 @@ public class API {
         //Store all Quads related with nanopub PublicationInfo graph
         for (Quad q : np.getPubInfo().getPublicationInfoQuads()) {
             addQuad(q);
+        }
+
+        try {
+            com.hp.hpl.jena.rdf.model.Resource resource = getResource(PrefixFactory.decode(concept));
+            addStatement(resource, model.createProperty("http://www.w3.org/ns/prov#generated"), createResource(np.getUri()));
+        } catch (Exception ex) {
+            if (Config.isDebug()) {
+                System.out.println("[COEUS][API] Unable to associate " + concept + " with " + np.getUri());
+                Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
 
     }
