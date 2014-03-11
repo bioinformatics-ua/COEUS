@@ -127,6 +127,7 @@
                             //+ ' <a href="../resource/add/' + all + '"><i class="icon-plus-sign"></i></a>'
                             + ' <a href="#addResourceModal" data-toggle="modal" onclick="prepareAddResourceModal(\'' + all + '\');"><sub><i class="black fa fa-plus-circle fa-2x tip" data-toggle="tooltip" title="Add Resource" ></i></sub></a>'
                             + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + all + '\')"><sub><i class="black fa fa-trash-o fa-2x tip" data-toggle="tooltip" title="Delete"></i></sub></a>'
+                            // + ' <a href="#nanopubModal" data-toggle="modal" onclick="nanopubModal(\'' + all + '\');"><sub><i class="black fa fa-book fa-2x tip" data-toggle="tooltip" title="Create Nanopublications" ></i></sub></a>'
                             + '</span></p><ul id="' + concept + '"></ul>';
                 }
                 //console.log(entity);
@@ -320,13 +321,13 @@
                     for (var r in result) {
                         var item = splitURIPrefix(result[r].item.value);
                         var concept = splitURIPrefix(result[r].concept.value);
-                        var prefix = getPrefix(item.namespace) + ":";  
-                        
+                        var prefix = getPrefix(item.namespace) + ":";
+
                         var urlPrefix = "../../api/" + getApiKey();
                         var url = "/delete/coeus:" + concept.value + '/coeus:isConceptOf/' + prefix + item.value;
                         console.log("Deleting: " + url);
                         callURL(urlPrefix + url);
-                        removeAllTriplesFromSubject(urlPrefix, prefix + item.value,refreshTotalItems);
+                        removeAllTriplesFromSubject(urlPrefix, prefix + item.value, refreshTotalItems);
                     }
                 });
             }
@@ -377,7 +378,10 @@
 
                         </div>
                         <div class="col-md-6">
-                            <a onclick="selectEntity();" class="tip btn btn-info pull-right" data-toggle="tooltip" title="Browse all entities of this seed.">Browser <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                            <div class="pull-right">
+                                <a onclick="window.location = '../nanopub/' + lastPath();" class="tip btn btn-primary" data-toggle="tooltip" title="Nanopublications Manager.">Nanopublications <i class="glyphicon glyphicon-book icon-white"></i></a> 
+                                <a onclick="selectEntity();" class="tip btn btn-info" data-toggle="tooltip" title="Browse all entities of this seed.">Browser <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                            </div>
                         </div>
                     </div>
 
@@ -433,7 +437,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="cleanItemsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
