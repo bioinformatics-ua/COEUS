@@ -185,9 +185,8 @@ public class ConfigActionBean implements ActionBean {
      * Export the database model
      *
      * @return
-     * @throws FileNotFoundException
      */
-    public Resolution export() throws FileNotFoundException {
+    public Resolution export() {
         StringWriter outs = new StringWriter();
         Boot.start();
 
@@ -285,29 +284,44 @@ public class ConfigActionBean implements ActionBean {
      */
     public Resolution nanopub() {
         JSONObject result = new JSONObject();
-        final String concept = method;
+        System.out.println(method);
         try {
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(method);
+            final String concept_root = json.get("root").toString();
+            JSONArray concept_childs = (JSONArray)json.get("childs");
+            Object[] c=concept_childs.toArray();
+            final List<String> childs=new ArrayList<String>();
+            for (Object object : c) {
+                childs.add(object.toString());
+            }
+            
             ExecutorService executor = (ExecutorService) context.getServletContext().getAttribute("INTEGRATION_EXECUTOR");
             Runnable runnable = new Runnable() {
 
                 @Override
                 public void run() {
-                    NanopubParser parser = new NanopubParser(concept);
+                    NanopubParser parser = new NanopubParser(Config.getKeyPrefix()+":"+concept_root,childs);
                     long i = System.currentTimeMillis();
                     parser.parse();
                     long f = System.currentTimeMillis();
-                    System.out.println("\n\t[COEUS] " + Config.getName() + " [Nanopublication] parsing of " + concept + " done in " + ((f - i) / 1000) + " seconds.\n");
+                    System.out.println("\n\t[COEUS] " + Config.getName() + " [Nanopublication] parsing of " + concept_root + " done in " + ((f - i) / 1000) + " seconds.\n");
                 }
             };
             executor.execute(runnable);
 
             result.put("status", 100);
-            result.put("message", "[COEUS][API][ConfigActionBean] NanopubParser started: " + concept);
+            result.put("message", "[COEUS][API][ConfigActionBean] NanopubParser started: " + concept_root);
+        } catch (ParseException p) {
+            result.put("status", 201);
+            result.put("message", "[COEUS][API][ConfigActionBean] NanopubParser invalid json. ParseException: " + p.getLocalizedMessage());
         } catch (Exception e) {
             result.put("status", 201);
-            result.put("message", "[COEUS][API][ConfigActionBean] NanopubParser start fail: " + concept + ". Exception: " + e);
+            result.put("message", "[COEUS][API][ConfigActionBean] NanopubParser start fail. Exception: " + e.getLocalizedMessage());
         }
-        return new StreamingResolution("application/json", result.toJSONString());
+
+        return new StreamingResolution(
+                "application/json", result.toJSONString());
     }
 
     /**
@@ -383,11 +397,15 @@ public class ConfigActionBean implements ActionBean {
         } catch (IOException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Clean DB, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Clean DB, check parse exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
@@ -399,7 +417,8 @@ public class ConfigActionBean implements ActionBean {
      */
     public Resolution listenv() {
         JSONObject result = new JSONObject();
-        File src = new File(ConfigActionBean.class.getResource("/").getPath());
+        File src = new File(ConfigActionBean.class
+                .getResource("/").getPath());
         String env[] = src.list(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -412,11 +431,14 @@ public class ConfigActionBean implements ActionBean {
         });
         Map<String, List<String>> m = new HashMap<String, List<String>>();
         List<String> l = new ArrayList<String>();
+
         l.addAll(Arrays.asList(env));
-        m.put("environments", l);
+        m.put(
+                "environments", l);
         result.putAll(m);
 
-        return new StreamingResolution("application/json", result.toJSONString());
+        return new StreamingResolution(
+                "application/json", result.toJSONString());
     }
 
     /**
@@ -480,7 +502,9 @@ public class ConfigActionBean implements ActionBean {
         } catch (Exception ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Evironment " + method + " not updated, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
 
         //Boot.start();
@@ -537,7 +561,9 @@ public class ConfigActionBean implements ActionBean {
         } catch (IOException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: " + method + " not created, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
 
         //Boot.start();
@@ -559,8 +585,10 @@ public class ConfigActionBean implements ActionBean {
             JSONParser parser = new JSONParser();
             String json = readToString(map);
             result = (JSONObject) parser.parse(json);
+
         } catch (Exception ex) {
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConfigActionBean.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
@@ -610,15 +638,21 @@ public class ConfigActionBean implements ActionBean {
         } catch (ParseException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On parse map.js, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On creating database, check exception: " + ex);
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Please, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
@@ -665,11 +699,15 @@ public class ConfigActionBean implements ActionBean {
         } catch (ParseException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On parse map.js, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Please, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
@@ -698,15 +736,21 @@ public class ConfigActionBean implements ActionBean {
         } catch (ParseException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On parse map.js, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On creating database, check exception: " + ex);
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Please, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
@@ -741,11 +785,15 @@ public class ConfigActionBean implements ActionBean {
         } catch (ParseException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On parse map.js, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: On update map.js, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
@@ -769,7 +817,9 @@ public class ConfigActionBean implements ActionBean {
         } catch (IOException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: " + method + " not deleted, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
 
         return new StreamingResolution("application/json", result.toJSONString());
@@ -862,11 +912,15 @@ public class ConfigActionBean implements ActionBean {
         } catch (ParseException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: check the ParseException.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Please, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
         return new StreamingResolution("application/json", result.toJSONString());
     }
@@ -922,11 +976,15 @@ public class ConfigActionBean implements ActionBean {
         } catch (ParseException ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Please, check the ParseException.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: Please, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
         return new StreamingResolution("application/json", result.toString());
     }
@@ -979,7 +1037,9 @@ public class ConfigActionBean implements ActionBean {
         } catch (Exception ex) {
             result.put("status", 200);
             result.put("message", "[COEUS][API][ConfigActionBean] ERROR: " + filename + " not updated, check exception.");
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger
+                    .getLogger(ConfigActionBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
         }
 
         return result;

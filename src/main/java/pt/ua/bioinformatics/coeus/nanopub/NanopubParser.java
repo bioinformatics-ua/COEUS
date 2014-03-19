@@ -12,6 +12,7 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Statement;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.validator.routines.UrlValidator;
@@ -27,16 +28,19 @@ import pt.ua.bioinformatics.coeus.data.Predicate;
  */
 public class NanopubParser {
 
-    String concept;
+    String concept_root;
+    List<String> concept_childs;
     boolean loadAll = true;
 
     /**
-     * Create a parser for the given concept. Ex: "coeus:concept_HGNC"
+     * Create a parser for the given concept root.
      *
-     * @param concept
+     * @param concept_root
+     * @param concept_childs
      */
-    public NanopubParser(String concept) {
-        this.concept = concept;
+    public NanopubParser(String concept_root, List<String> concept_childs) {
+        this.concept_root = concept_root;
+        this.concept_childs = concept_childs;
     }
 
     /**
@@ -45,14 +49,17 @@ public class NanopubParser {
      */
     public void parse() {
 
-        Logger.getLogger(NanopubParser.class.getName()).log(Level.INFO, "[COEUS][NanopubParser] Start parsing: {0}", concept);
+        for (String string : concept_childs) {
+            System.err.println("\t[COEUS][NanopubParser] "+ string);
+        }
+        Logger.getLogger(NanopubParser.class.getName()).log(Level.INFO, "[COEUS][NanopubParser] Start parsing: {0}", concept_root);
 
         Boot.start();
 
-        String queryConcepts = "SELECT * {?item coeus:hasConcept " + concept + " FILTER NOT EXISTS {" + concept + " coeus:builtNp true }}";
+        String queryConcepts = "SELECT * {?item coeus:hasConcept " + concept_root + " FILTER NOT EXISTS {" + concept_root + " coeus:builtNp true }}";
         ResultSet rs = Boot.getAPI().selectRS(queryConcepts, false);
         if (!rs.hasNext() && Config.isDebug()) {
-            System.out.println("[COEUS][NanopubParser] Already parsed the concept " + concept);
+            Logger.getLogger(NanopubParser.class.getName()).log(Level.INFO,"[COEUS][NanopubParser] Already parsed the concept {0}" , concept_root);
         }
         while (rs.hasNext()) {
             QuerySolution row = rs.next();
@@ -76,7 +83,7 @@ public class NanopubParser {
                 } else {
                     a.add(new Triple(Node.createURI(item), Node.createURI(p), Node.createLiteral(o)));
                 }
-                if (p.endsWith("isAssociatedTo") && loadAll) {
+                if (p.endsWith("isAssociatedTo")) {
                     a = addAssociations(a, o);
                 }
             }
@@ -87,12 +94,12 @@ public class NanopubParser {
             PublicationInfo i = new PublicationInfo(np_item + "_PubInfo");
             i.add(new Triple(Node.createURI(np_item), Node.createURI("http://www.w3.org/ns/prov#generatedAtTime"), Node.createLiteral(new Date().toString(), null, XSDDatatype.XSDdateTime)));
             i.add(new Triple(Node.createURI(np_item), Node.createURI("http://www.w3.org/ns/prov#wasAttributedTo"), Node.createLiteral(Config.getName())));
-            i.add(new Triple(Node.createURI(np_item), Node.createURI("http://www.w3.org/ns/prov#wasGeneratedBy"), Node.createURI(PrefixFactory.decode(concept))));
+            i.add(new Triple(Node.createURI(np_item), Node.createURI("http://www.w3.org/ns/prov#wasGeneratedBy"), Node.createURI(PrefixFactory.decode(concept_root))));
 
             /**/
             Nanopublication np = new Nanopublication(np_item, a, p, i);
             //System.out.println(np.writeNQuads());
-            Boot.getAPI().storeNanopub(np, concept);
+            Boot.getAPI().storeNanopub(np, concept_root);
 
         }
         save();
@@ -105,13 +112,13 @@ public class NanopubParser {
     public void save() {
         try {
             API api = Boot.getAPI();
-            com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(PrefixFactory.decode(concept));
+            com.hp.hpl.jena.rdf.model.Resource resource = api.getResource(PrefixFactory.decode(concept_root));
             Statement statementToRemove = api.getModel().createLiteralStatement(resource, Predicate.get("coeus:builtNp"), false);
             api.removeStatement(statementToRemove);
             api.addStatement(resource, Predicate.get("coeus:builtNp"), true);
         } catch (Exception ex) {
             if (Config.isDebug()) {
-                System.out.println("[COEUS][NanopubParser] Unable to save property in concept " + concept);
+                System.out.println("[COEUS][NanopubParser] Unable to save property in concept " + concept_root);
                 Logger.getLogger(NanopubParser.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -129,19 +136,33 @@ public class NanopubParser {
     public Assertion addAssociations(Assertion a, String object) {
         String queryItems = "SELECT * { <" + object + "> ?p ?o}";
         ResultSet rs_item = Boot.getAPI().selectRS(queryItems, false);
+        ResultSet rs_item_test = Boot.getAPI().selectRS(queryItems, false);
+        Boolean load = false;
+
+        //Test if the data concept is to load into the assertion
+        while (rs_item_test.hasNext()) {
+            QuerySolution row_item = rs_item_test.next();
+            String p = row_item.get("p").toString();
+            String o = row_item.get("o").toString();
+
+            if ((p.endsWith("hasConcept")) && (concept_childs.contains(PrefixFactory.encode(o).split(":")[1]))) {
+                load = true;Logger.getLogger(NanopubParser.class.getName()).log(Level.INFO,PrefixFactory.encode(o).split(":")[1]);
+            }
+        }
 
         while (rs_item.hasNext()) {
             QuerySolution row_item = rs_item.next();
             String p = row_item.get("p").toString();
             String o = row_item.get("o").toString();
-
-            UrlValidator urlValidator = new UrlValidator();
-            if (urlValidator.isValid(o)) {
-                a.add(new Triple(Node.createURI(object), Node.createURI(p), Node.createURI(o)));
-            } else {
-                a.add(new Triple(Node.createURI(object), Node.createURI(p), Node.createLiteral(o)));
+            //Add all or add only the association
+            if (load || p.endsWith("isAssociatedTo")) {
+                UrlValidator urlValidator = new UrlValidator();
+                if (urlValidator.isValid(o)) {
+                    a.add(new Triple(Node.createURI(object), Node.createURI(p), Node.createURI(o)));
+                } else {
+                    a.add(new Triple(Node.createURI(object), Node.createURI(p), Node.createLiteral(o)));
+                }
             }
-
             if (p.endsWith("isAssociatedTo")) {
                 Triple t = new Triple(Node.createURI(o), Node.createURI(p), Node.createURI(object));
                 if (!a.getContent().contains(t)) {

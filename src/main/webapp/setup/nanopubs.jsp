@@ -24,7 +24,6 @@
                 concepts_relations();
 
 
-
             });
 
 
@@ -73,24 +72,48 @@
                 console.log(roots);
                 //Put the roots in the tree
                 for (var r in roots) {
-                    html_tree.append('<li><input type="radio" name="radios" id="radio_' + roots[r].concept + '" value="' + roots[r].concept + '" > <label class="btn btn-primary tree-toggle"><i class="fa fa-minus-circle"></i> ' + roots[r].concept + ' </label> <ul class="fa-ul list" id="' + roots[r].concept + '"></ul></li>');
+                    html_tree.append('<p></p><li><i class="fa fa-minus-circle tree-toggle"></i> <a class="btn btn-default btn-tree">' + roots[r].concept + '</a> <ul class="fa-ul list" id="' + roots[r].concept + '"></ul></li>');
                     fillAllChilds(concept_relations, roots[r].concept);
                 }
 
                 $('.tree-toggle').click(function() {
-                    var isExpanded = $(this).find('i.fa-minus-circle').length ? true : false;
+                    //console.log();
+                    var isExpanded = contains(this.className, "fa-minus-circle");
                     if (isExpanded)
-                        $(this).find('i.fa-minus-circle').removeClass("fa-minus-circle").addClass("fa-plus-circle");
+                        $(this).removeClass("fa-minus-circle").addClass("fa-plus-circle");
                     else
-                        $(this).find('i.fa-plus-circle').removeClass("fa-plus-circle").addClass("fa-minus-circle");
+                        $(this).removeClass("fa-plus-circle").addClass("fa-minus-circle");
                     $(this).parent().children('ul.list').toggle(200);
                 });
+                $('.btn-tree').click(function() {
+                    $('.btn-tree').removeClass("btn-info").addClass("btn-default");
+                    $(this).addClass("btn-info");
+                    var root = $(this).html();
+                    console.log(root);
+
+                    $("input:checkbox[name=child_box]").each(function()
+                    {
+                        this.checked = false;
+                        $(this).removeClass("hide");
+                    });
+                    $("input:checkbox[value=" + root + "]").each(function()
+                    {
+                        $(this).addClass("hide");
+                        console.log($(this));
+
+                    });
+
+                });
+                tooltip();
+
+
             }
 
             function fillAllChilds(concept_relations, root) {
                 for (var rel in concept_relations) {
                     if (concept_relations[rel].root === root) {
-                        $('#' + root).append('<p><li><input type="checkbox" name="child_box" value="' + concept_relations[rel].child + '"> <label class="btn btn-default tree-toggle"><i class="fa fa-minus-circle"></i> ' + concept_relations[rel].child + ' </label> <ul class="fa-ul list" id="' + concept_relations[rel].child + '"></ul></li></p>');
+                        //$('#' + root).append('<p><li><input type="checkbox" name="child_box" value="' + concept_relations[rel].child + '"> <label class="btn btn-default tree-toggle"><i class="fa fa-minus-circle"></i> ' + concept_relations[rel].child + ' </label> <ul class="fa-ul list" id="' + concept_relations[rel].child + '"></ul></li></p>');
+                        $('#' + root).append('<p><li><i class="fa fa-minus-circle tree-toggle"></i> <a class="btn btn-default btn-tree">' + concept_relations[rel].child + '</a> <input title="Include Data Items?" class="tip" type="checkbox" name="child_box" value="' + concept_relations[rel].child + '" ><ul class="fa-ul list" id="' + concept_relations[rel].child + '"></ul></li></p>');
                         fillAllChilds(concept_relations, concept_relations[rel].child);
                     }
                 }
@@ -137,10 +160,12 @@
             }
 
             function generate() {
-                var selected_root = document.querySelector('input[name="radios"]:checked');
+                var selected_root = document.querySelector('a.btn-tree.btn-info');
+                $("#nanopubResult").html("");
                 if (selected_root !== null) {
+                    selected_root = $(selected_root).html();
                     //console.log(selected_root.value);
-                    var order = {root: selected_root.value, childs: []};
+                    var order = {root: selected_root, childs: []};
                     var i = 0;
                     $("input:checkbox[name=child_box]:checked").each(function()
                     {
@@ -159,9 +184,13 @@
                         //order.push(path);
 
                     });
-                    console.log(JSON.stringify(order));
+                    var send = JSON.stringify(order);
+                    console.log(send);
+                    //callURL("../../config/nanopub/" + send, nanopubResult, nanopubResult);
                     //$('#' + selected_root.value);
 
+                } else {
+                    $("#nanopubResult").append(generateHtmlMessage("EMPTY:", "No concepts selected to process.", "alert-warning"));
                 }
 //                var toGenerate = new Array();
 //                var table = document.getElementById("concepts");
@@ -212,14 +241,22 @@
             </ul>
             <div class="row">
                 <div class="col-md-6">
-                    <h3>Choose the root Concept:</h3>
+                    <h3>Nanopub Creator:</h3>
                 </div>
                 <div class="col-md-6 text-right">
-                    <div class="btn-group"> <a href="#nanopubModal" data-toggle="modal" class="btn btn-success" onclick="generate();">Create Nanopublications <i class="fa fa-cogs icon-white"></i></a>
+                    <div class="btn-group"> <a href="#nanopubModal" data-toggle="modal" data-toggle="tooltip" class="btn btn-success tip" title="Create Nanopublications from the Concept data Items" onclick="generate();">Create Nanopublications <i class="fa fa-cogs icon-white"></i></a>
                     </div>
                 </div>
             </div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Concept Relations Tree</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="fa-ul list" id="tree"></ul>
+                </div>
 
+            </div>
             <!--<table class="table table-hover">
 
                 <thead>
@@ -237,7 +274,7 @@
             </table>-->
 
             <!--<select class="form-control" id="concepts"></select>-->
-            <ul class="fa-ul list" id="tree"></ul>
+
 
 
         </div>
