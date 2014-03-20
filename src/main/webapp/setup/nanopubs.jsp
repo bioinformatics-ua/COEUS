@@ -9,6 +9,29 @@
     <s:layout-component name="title">COEUS</s:layout-component>
     <s:layout-component name="custom_scripts">
         <script type="text/javascript">
+            $(document).on('click', '.btn-add', function(event) {
+                event.preventDefault();
+
+                var field = $(this).closest('.form-group');
+                var field_new = field.clone();
+
+                $(this)
+                        .toggleClass('btn-default')
+                        .toggleClass('btn-add')
+                        .toggleClass('btn-danger')
+                        .toggleClass('btn-remove')
+                        .html('<i class="fa fa-minus-circle"></i>');
+
+                field_new.find('input').val('');
+                field_new.insertAfter(field);
+            });
+
+            $(document).on('click', '.btn-remove', function(event) {
+                event.preventDefault();
+                $(this).closest('.form-group').remove();
+            });
+
+
             $(document).ready(function() {
                 changeSidebar('#dashboard');
                 callURL("../../config/getconfig/", fillHeader);
@@ -28,7 +51,9 @@
 
 
             function concepts_relations() {
-                var qconcept = "SELECT ?concept_root ?concept_child { ?resource coeus:isResourceOf ?concept_child . ?resource coeus:extends ?concept_root . ?concept_root coeus:hasEntity ?entity . ?entity coeus:isIncludedIn " + lastPath() + " . ?concept_child coeus:hasEntity ?entity2 . ?entity2 coeus:isIncludedIn " + lastPath() + " . FILTER (?concept_root != ?concept_child)}";
+                var qconcept = "SELECT ?concept_root ?concept_child { ?resource coeus:isResourceOf ?concept_child . ?resource coeus:extends ?concept_root . "
+                        + "?concept_root coeus:hasEntity ?entity . ?entity coeus:isIncludedIn " + lastPath() + " . ?concept_child coeus:hasEntity ?entity2 . ?entity2 coeus:isIncludedIn " + lastPath() + " . "
+                        + "FILTER (?concept_root != ?concept_child)}";
                 queryToResult(qconcept, concepts_all);
             }
 
@@ -43,7 +68,7 @@
                 var html_tree = $('#tree');
                 html_tree.html("");
 
-                //Simplify the result 
+                //Simplify the relations 
                 var concept_relations = {};
                 for (var key in relations) {
                     var concept_root = splitURIPrefix(relations[key].concept_root.value).value;
@@ -51,7 +76,7 @@
                     concept_relations[key] = {root: concept_root, child: concept_child};
                 }
                 console.log(concept_relations);
-                //Simplify the relations
+                //Simplify the result
                 var concept_all = {};
                 for (var key in result) {
                     var concept = splitURIPrefix(result[key].concept.value).value;
@@ -72,12 +97,17 @@
                 console.log(roots);
                 //Put the roots in the tree
                 for (var r in roots) {
-                    html_tree.append('<p></p><li><i class="fa fa-minus-circle tree-toggle"></i> <a class="btn btn-default btn-tree">' + roots[r].concept + '</a> <ul class="fa-ul list" id="' + roots[r].concept + '"></ul></li>');
+                    html_tree.append('<p></p><li>'
+                            + '<i class="fa fa-minus-circle tree-toggle"></i> '
+                            + '<a class="btn btn-default btn-tree">' + roots[r].concept + '</a> '
+                            + '<span id="items_' + roots[r].concept + '" class="badge tip" title="Data Items"></span> '
+                            + '<input title="Include Data Items?" class="tip hide" type="checkbox" name="child_box" value="' + roots[r].concept + '" > '
+                            + '<ul class="fa-ul list" id="' + roots[r].concept + '"></ul>'
+                            + '</li>');
                     fillAllChilds(concept_relations, roots[r].concept);
                 }
 
                 $('.tree-toggle').click(function() {
-                    //console.log();
                     var isExpanded = contains(this.className, "fa-minus-circle");
                     if (isExpanded)
                         $(this).removeClass("fa-minus-circle").addClass("fa-plus-circle");
@@ -89,65 +119,78 @@
                     $('.btn-tree').removeClass("btn-info").addClass("btn-default");
                     $(this).addClass("btn-info");
                     var root = $(this).html();
-                    console.log(root);
 
                     $("input:checkbox[name=child_box]").each(function()
                     {
                         this.checked = false;
-                        $(this).removeClass("hide");
+                        $(this).addClass("hide");
                     });
                     $("input:checkbox[value=" + root + "]").each(function()
                     {
-                        $(this).addClass("hide");
-                        console.log($(this));
+                        $(this).parent("li");
+                        $(this).parent("li").children("ul").find("input:checkbox").each(function() {
+                            $(this).removeClass("hide");
+                        });
 
                     });
 
                 });
                 tooltip();
+                for (var r in concept_all) {
+                    var qcount = "SELECT (COUNT( * ) AS ?total) { coeus:" + concept_all[r].concept + " coeus:isConceptOf ?item}";
+                    queryToResult(qcount, fillItems.bind(this, concept_all[r].concept));
+                }
+            }
 
-
+            function fillItems(concept, result) {
+                $("#items_" + concept).html(result[0].total.value);
             }
 
             function fillAllChilds(concept_relations, root) {
                 for (var rel in concept_relations) {
                     if (concept_relations[rel].root === root) {
-                        //$('#' + root).append('<p><li><input type="checkbox" name="child_box" value="' + concept_relations[rel].child + '"> <label class="btn btn-default tree-toggle"><i class="fa fa-minus-circle"></i> ' + concept_relations[rel].child + ' </label> <ul class="fa-ul list" id="' + concept_relations[rel].child + '"></ul></li></p>');
-                        $('#' + root).append('<p><li><i class="fa fa-minus-circle tree-toggle"></i> <a class="btn btn-default btn-tree">' + concept_relations[rel].child + '</a> <input title="Include Data Items?" class="tip" type="checkbox" name="child_box" value="' + concept_relations[rel].child + '" ><ul class="fa-ul list" id="' + concept_relations[rel].child + '"></ul></li></p>');
+                        $('#' + root).append('<p><li>'
+                                + '<i class="fa fa-minus-circle tree-toggle"></i> '
+                                + '<a class="btn btn-default btn-tree">' + concept_relations[rel].child + '</a> '
+                                + '<span id="items_' + concept_relations[rel].child + '" class="tip badge" title="Data Items"></span> <span> </span>'
+                                + '<input title="Include Data Items?" class="tip hide" type="checkbox" name="child_box" value="' + concept_relations[rel].child + '" > '
+                                + '<ul class="fa-ul list" id="' + concept_relations[rel].child + '"></ul>'
+                                + '</li></p>');
                         fillAllChilds(concept_relations, concept_relations[rel].child);
                     }
                 }
             }
 
-            function refresh() {
-                var qconcept = "SELECT DISTINCT ?concept ?c ?label ?entity ?builtNp{" + lastPath() + " coeus:includes ?entity . ?entity coeus:isEntityOf ?concept . ?concept dc:title ?c . ?concept rdfs:label ?label . OPTIONAL{ ?concept coeus:builtNp ?builtNp}}";
-                queryToResult(qconcept, fillListOfConcepts);
-            }
-
-            function fillListOfConcepts(result) {
-                $('#concepts').html("");
-                for (var key in result) {
-                    var concept = 'coeus:' + splitURIPrefix(result[key].concept.value).value;
-                    var a = '<option>' + concept + '</option>';
-                    $('#concepts').append(a);
-                }
-                //fill Extensions:
-//                for (var r in result) {
-//                    var id = splitURIPrefix(result[r].concept.value).value;
-//                    var ext = 'coeus:' + id;
-//                    //FILL THE EXTENSIONS
-//                    var extensions = "SELECT ?resource {" + ext + " coeus:isExtendedBy ?resource }";
-//                    queryToResult(extensions, fillExtensions.bind(this, id));
+//            function refresh() {
+//                var qconcept = "SELECT DISTINCT ?concept ?c ?label ?entity ?builtNp{" + lastPath() + " coeus:includes ?entity . ?entity coeus:isEntityOf ?concept 
+//                . ?concept dc:title ?c . ?concept rdfs:label ?label . OPTIONAL{ ?concept coeus:builtNp ?builtNp}}";
+//                queryToResult(qconcept, fillListOfConcepts);
+//            }
+//
+//            function fillListOfConcepts(result) {
+//                $('#concepts').html("");
+//                for (var key in result) {
+//                    var concept = 'coeus:' + splitURIPrefix(result[key].concept.value).value;
+//                    var a = '<option>' + concept + '</option>';
+//                    $('#concepts').append(a);
 //                }
-                tooltip();
-            }
-            function fillExtensions(id, result) {
-                for (var rs in result) {
-                    var r = splitURIPrefix(result[rs].resource.value).value;
-                    $('#' + id).append('<li><a tabindex="-1" href="../selector/coeus:' + r + '">coeus:' + r + '</a></li>');
-                }
-                //console.log('fillExtensions:'+ext);console.log(result)
-            }
+//                //fill Extensions:
+////                for (var r in result) {
+////                    var id = splitURIPrefix(result[r].concept.value).value;
+////                    var ext = 'coeus:' + id;
+////                    //FILL THE EXTENSIONS
+////                    var extensions = "SELECT ?resource {" + ext + " coeus:isExtendedBy ?resource }";
+////                    queryToResult(extensions, fillExtensions.bind(this, id));
+////                }
+//                tooltip();
+//            }
+//            function fillExtensions(id, result) {
+//                for (var rs in result) {
+//                    var r = splitURIPrefix(result[rs].resource.value).value;
+//                    $('#' + id).append('<li><a tabindex="-1" href="../selector/coeus:' + r + '">coeus:' + r + '</a></li>');
+//                }
+//                //console.log('fillExtensions:'+ext);console.log(result)
+//            }
 
 
 
@@ -171,45 +214,14 @@
                     {
                         order["childs"][i] = $(this).val();
                         i++;
-//                        var path=new Array();
-//                        path.push(selected_root.value); 
-//                        var p = $(this).parent('li').parent('ul');
-//                        while (p.length !== 0 && p[0].id!==selected_root.value) {
-//                            path.push(p[0].id);
-//                            var p = p.parent('li').parent('ul');
-//                        }
-//                        path.push($(this).val()); 
-
-                        //order["childs"]=$(this).val();
-                        //order.push(path);
-
                     });
                     var send = JSON.stringify(order);
                     console.log(send);
-                    //callURL("../../config/nanopub/" + send, nanopubResult, nanopubResult);
-                    //$('#' + selected_root.value);
+                    callURL("../../config/nanopub/" + send, nanopubResult, nanopubResult);
 
                 } else {
                     $("#nanopubResult").append(generateHtmlMessage("EMPTY:", "No concepts selected to process.", "alert-warning"));
                 }
-//                var toGenerate = new Array();
-//                var table = document.getElementById("concepts");
-//                for (var z = 0; z < table.rows.length; z++) {
-//                    var checkbox = document.getElementById("check" + table.rows.item(z).id);
-//                    var splitedConcept = checkbox.id.split("_");
-//                    var c = splitedConcept[splitedConcept.length - 2] + "_" + splitedConcept[splitedConcept.length - 1];
-//                    if (checkbox.checked)
-//                        toGenerate.push(c);
-//                }
-//                var conceptsToNanopub = $("#conceptsToNanopub");
-//                conceptsToNanopub.html("");
-//                if (toGenerate.length === 0)
-//                    $("#nanopubResult").append(generateHtmlMessage("EMPTY:", "No concepts selected to process.", "alert-warning"));
-//                for (var i in toGenerate) {
-//                    console.log(toGenerate[i]);
-//                    conceptsToNanopub.append("<li>" + toGenerate[i] + "</li>");
-//                    callURL("../../config/nanopub/coeus:" + toGenerate[i], nanopubResult, nanopubResult);
-//                }
             }
 
             function nanopubResult(result) {
@@ -241,10 +253,14 @@
             </ul>
             <div class="row">
                 <div class="col-md-6">
-                    <h3>Nanopub Creator:</h3>
+                    <h3>Nanopub Creator</h3>
                 </div>
                 <div class="col-md-6 text-right">
-                    <div class="btn-group"> <a href="#nanopubModal" data-toggle="modal" data-toggle="tooltip" class="btn btn-success tip" title="Create Nanopublications from the Concept data Items" onclick="generate();">Create Nanopublications <i class="fa fa-cogs icon-white"></i></a>
+                    <div class="btn-group"> 
+                        <a href="#nanopubModal" data-toggle="modal" data-toggle="tooltip" class="btn btn-success tip" 
+                           title="Create Nanopublications from the Concept data Items" onclick="generate();">
+                            Create Nanopublications <i class="fa fa-cogs icon-white"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -253,29 +269,27 @@
                     <h3 class="panel-title">Concept Relations Tree</h3>
                 </div>
                 <div class="panel-body">
+                    <h4><i class="fa fa-chevron-right"></i> Click on the concept root:</h4>
                     <ul class="fa-ul list" id="tree"></ul>
                 </div>
-
             </div>
-            <!--<table class="table table-hover">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Nanopub Related</h3>
+                </div>
+                <div class="panel-body">
+                    <h4><i class="fa fa-chevron-right"></i> Add more info:</h4>
 
-                <thead>
-                    <tr>
-                        <th>Concept</th>
-                        <th>Title</th>
-                        <th>Label</th>
-                        <th>Entity</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="concepts">
-
-                </tbody>
-            </table>-->
-
-            <!--<select class="form-control" id="concepts"></select>-->
-
-
+                    <div class="form-group ">
+                        <div class="row">
+                            <div class="col-md-4"><input type="text" name="multiple[]" class="form-control"></div>
+                            <div class="col-md-4"><input type="text" name="multiple[]" class="form-control"></div>
+                            <div class="col-md-4"><button type="button" class="btn btn-default btn-add"><i class="fa fa-plus"></i></button></div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
 
         </div>
 
