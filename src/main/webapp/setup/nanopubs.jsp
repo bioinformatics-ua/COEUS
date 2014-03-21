@@ -8,6 +8,7 @@
 <s:layout-render name="/layout/html.jsp">
     <s:layout-component name="title">COEUS</s:layout-component>
     <s:layout-component name="custom_scripts">
+        <script src="<c:url value="/assets/js/typeahead.js" />"></script>
         <script type="text/javascript">
             $(document).on('click', '.btn-add', function(event) {
                 event.preventDefault();
@@ -24,6 +25,9 @@
 
                 field_new.find('input').val('');
                 field_new.insertAfter(field);
+
+
+
             });
 
             $(document).on('click', '.btn-remove', function(event) {
@@ -45,6 +49,13 @@
 
                 });
                 concepts_relations();
+
+                $('.twitter-typeahead').typeahead({
+                    name: 'properties',
+                    prefetch: '../../config/properties/',
+                    remote: '../../config/properties/%QUERY',
+                    limit: 15
+                });
 
 
             });
@@ -208,13 +219,25 @@
                 if (selected_root !== null) {
                     selected_root = $(selected_root).html();
                     //console.log(selected_root.value);
-                    var order = {root: selected_root, childs: []};
+                    var order = {root: selected_root, childs: [], info:[]};
                     var i = 0;
                     $("input:checkbox[name=child_box]:checked").each(function()
                     {
                         order["childs"][i] = $(this).val();
                         i++;
                     });
+                    var c=0;
+                    var information=[];
+                    $("#information").children().each(function() {
+                        var p=$(this).find("input[name=predicate]").val();
+                        var o=$(this).find("input[name=object]").val();
+                        var aux={predicate:p,object:o};
+                        if(p!=="" && o!=="") information[c]=aux;
+                        c++;
+                    });
+                    information.pop();
+                    order["info"]=information;
+
                     var send = JSON.stringify(order);
                     console.log(send);
                     callURL("../../config/nanopub/" + send, nanopubResult, nanopubResult);
@@ -275,19 +298,27 @@
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Nanopub Related</h3>
+                    <h3 class="panel-title">Nanopub Related Options</h3>
                 </div>
                 <div class="panel-body">
-                    <h4><i class="fa fa-chevron-right"></i> Add more info:</h4>
-
-                    <div class="form-group ">
-                        <div class="row">
-                            <div class="col-md-4"><input type="text" name="multiple[]" class="form-control"></div>
-                            <div class="col-md-4"><input type="text" name="multiple[]" class="form-control"></div>
-                            <div class="col-md-4"><button type="button" class="btn btn-default btn-add"><i class="fa fa-plus"></i></button></div>
+                    <h4><i class="fa fa-chevron-right"></i> Add more info about the nanopub:</h4>
+                    <div id="information">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4  input-group"><input type="text" name="predicate" class="twitter-typeahead form-control tip" title="Predicate" data-toggle="tooltip"></div>
+                                <div class="col-md-4"><input type="text" name="object" class="form-control tip" title="Object"></div>
+                                <div class="col-md-4"><button type="button" class="btn btn-default btn-add"><i class="fa fa-plus"></i></button></div>
+                            </div>
                         </div>
-                        
                     </div>
+
+                    <!-- <div class="form-group">
+                         <label >Search Property</label>
+                         <div class="input-group">
+                             <input class="twitter-typeahead form-control tip" id="typeahead" type="text" data-toggle="tooltip" title="Search and press the plus button to add it to the list"/>
+                             <span class="input-group-btn" ><button id="btnPlus" class="btn btn-success tip" data-toggle="tooltip" title="Add a property to the list" type="button" onclick="updateSelectorProperties();"><i class="fa fa-plus-circle"></i></button></span>
+                         </div>
+                     </div>-->
                 </div>
             </div>
 
