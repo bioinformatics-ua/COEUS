@@ -28,13 +28,17 @@
                 $('#news_count_items').on('click', function() {
                     $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\n\nSELECT COUNT(DISTINCT ?tag) {?tag coeus:hasConcept coeus:concept_BBC}');
                 });
+
+                $('#list_nanopubs').on('click', function() {
+                    $('#query').val('PREFIX coeus: <http://bioinformatics.ua.pt/coeus/resource/>\nPREFIX np: <http://www.nanopub.org/nschema#>\n\nSELECT ?np { GRAPH ?g { ?np a np:Nanopublication } }');
+                });
             });
         </script>
     </s:layout-component>
     <s:layout-component name="body">
         <div class="container space">
             <div class="row">
-                
+
                 <div class="col-md-9">
                     <section id="sparql">
                         <div class="page-header">
@@ -68,6 +72,14 @@
                                     <li><a id="news_all_concept" href="#">Get all Concept individuals</a>
                                     </li>
                                     <li><a id="news_count_items" href="#">Get Item count for Concept</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>Nanopublications</strong>
+                                </p>
+                                <ul>
+                                    <li><a id="list_nanopubs" href="#">List all nanopubs</a>
                                     </li>
                                 </ul>
                             </div>
@@ -124,47 +136,47 @@
                             </div>
                             <input hidden="" style="display: none; visibility: hidden;" name="stylesheet"
                                    size="25" value="<c:url value="/translate"/>" />
-                            </form>
-                            <h2>Endpoint</h2>
-                            <p>You can integrate COEUS data directly by using the SPARQL endpoint.
-                                <br
-                                    />This endpoint replies to any SPARQL queries, including output format specifications
-                                and distributed service connections.</p>
-                            <p><a class="btn btn-default right disabled" target="_top" href="#">Endpoint at <em>/sparql</em></a>
-                            </p>
-                        </section>
-                        <!--<section id="linkeddata">
-                            <div class="page-header">
-                                <h1>Linked Data</h1>
+                        </form>
+                        <h2>Endpoint</h2>
+                        <p>You can integrate COEUS data directly by using the SPARQL endpoint.
+                            <br
+                                />This endpoint replies to any SPARQL queries, including output format specifications
+                            and distributed service connections.</p>
+                        <p><a class="btn btn-default right disabled" target="_top" href="#">Endpoint at <em>/sparql</em></a>
+                        </p>
+                    </section>
+                    <!--<section id="linkeddata">
+                        <div class="page-header">
+                            <h1>Linked Data</h1>
+                        </div>
+                        <p>You can also browse COEUS content through LinkedData methods.</p>
+                        <div
+                            class="row">
+                            <div class="col-md-4">
+                                <p><strong>Proteinator</strong>
+                                </p>
+                                <ul>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/uniprot_O15350" target="_top">Browse <em>UniProt P78312</em> data </a>
+                                    </li>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/resource_UniProt"
+                                           target="_top">Browse <em>UniProt Resource</em> </a>
+                                    </li>
+                                </ul>
                             </div>
-                            <p>You can also browse COEUS content through LinkedData methods.</p>
-                            <div
-                                class="row">
-                                <div class="col-md-4">
-                                    <p><strong>Proteinator</strong>
-                                    </p>
-                                    <ul>
-                                        <li><a href="http://bioinformatics.ua.pt/coeus/resource/uniprot_O15350" target="_top">Browse <em>UniProt P78312</em> data </a>
-                                        </li>
-                                        <li><a href="http://bioinformatics.ua.pt/coeus/resource/resource_UniProt"
-                                               target="_top">Browse <em>UniProt Resource</em> </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-4">
-                                    <p><strong>NewsAggregator</strong>
-                                    </p>
-                                    <ul>
-                                        <li><a href="http://bioinformatics.ua.pt/coeus/resource/concept_BBC" target="_top">Browse <em>BBC Concept</em> </a>
-                                        </li>
-                                        <li><a href="http://bioinformatics.ua.pt/coeus/resource/resource_BBC" target="_top">Browse <em>BBC Resource</em> </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                            <div class="col-md-4">
+                                <p><strong>NewsAggregator</strong>
+                                </p>
+                                <ul>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/concept_BBC" target="_top">Browse <em>BBC Concept</em> </a>
+                                    </li>
+                                    <li><a href="http://bioinformatics.ua.pt/coeus/resource/resource_BBC" target="_top">Browse <em>BBC Resource</em> </a>
+                                    </li>
+                                </ul>
                             </div>
-                        </section>-->
-                    </div>
+                        </div>
+                    </section>-->
                 </div>
             </div>
+        </div>
     </s:layout-component>
 </s:layout-render>

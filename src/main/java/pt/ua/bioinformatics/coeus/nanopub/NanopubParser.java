@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.validator.routines.UrlValidator;
+import org.json.simple.JSONObject;
 import pt.ua.bioinformatics.coeus.api.API;
 import pt.ua.bioinformatics.coeus.api.PrefixFactory;
 import pt.ua.bioinformatics.coeus.common.Boot;
@@ -28,8 +29,9 @@ import pt.ua.bioinformatics.coeus.data.Predicate;
  */
 public class NanopubParser {
 
-    String concept_root;
-    List<String> concept_childs;
+    String concept_root; // concept root
+    List<String> concept_childs; // childs of the root concept (means load also items data)
+    List<JSONObject> info; // additional info to include in the np
     boolean loadAll = true;
 
     /**
@@ -37,10 +39,12 @@ public class NanopubParser {
      *
      * @param concept_root
      * @param concept_childs
+     * @param info
      */
-    public NanopubParser(String concept_root, List<String> concept_childs) {
+    public NanopubParser(String concept_root, List<String> concept_childs, List<JSONObject> info) {
         this.concept_root = concept_root;
         this.concept_childs = concept_childs;
+        this.info = info;
     }
 
     /**
@@ -50,7 +54,7 @@ public class NanopubParser {
     public void parse() {
 
         for (String string : concept_childs) {
-            System.err.println("\t[COEUS][NanopubParser] "+ string);
+            System.err.println("\t[COEUS][NanopubParser] " + string);
         }
         Logger.getLogger(NanopubParser.class.getName()).log(Level.INFO, "[COEUS][NanopubParser] Start parsing: {0}", concept_root);
 
@@ -59,8 +63,9 @@ public class NanopubParser {
         String queryConcepts = "SELECT * {?item coeus:hasConcept " + concept_root + " FILTER NOT EXISTS {" + concept_root + " coeus:builtNp true }}";
         ResultSet rs = Boot.getAPI().selectRS(queryConcepts, false);
         if (!rs.hasNext() && Config.isDebug()) {
-            Logger.getLogger(NanopubParser.class.getName()).log(Level.INFO,"[COEUS][NanopubParser] Already parsed the concept {0}" , concept_root);
+            Logger.getLogger(NanopubParser.class.getName()).log(Level.INFO, "[COEUS][NanopubParser] Already parsed the concept {0}", concept_root);
         }
+        UrlValidator urlValidator = new UrlValidator();
         while (rs.hasNext()) {
             QuerySolution row = rs.next();
 
@@ -69,6 +74,7 @@ public class NanopubParser {
             String queryItems = "SELECT * { <" + item + "> ?p ?o}";
             ResultSet rs_item = Boot.getAPI().selectRS(queryItems, false);
 
+            //Build Assertion
             String np_item = item + "_Nanopub";
             Assertion a = new Assertion(np_item + "_Assertion");
             //Add Items to Assertion field
@@ -77,7 +83,7 @@ public class NanopubParser {
                 String p = row_item.get("p").toString();
                 String o = row_item.get("o").toString();
                 //System.out.println(item + " " + p + " " + o);
-                UrlValidator urlValidator = new UrlValidator();
+
                 if (urlValidator.isValid(o)) {
                     a.add(new Triple(Node.createURI(item), Node.createURI(p), Node.createURI(o)));
                 } else {
@@ -88,13 +94,24 @@ public class NanopubParser {
                 }
             }
 
+            //Build Provenance
             Provenance p = new Provenance(np_item + "_Provenance");
             p.add(new Triple(Node.createURI(a.getUri()), Node.createURI("http://www.w3.org/ns/prov#wasDerivedFrom"), Node.createLiteral("COEUS")));
 
+            //Build PublicationInfo
             PublicationInfo i = new PublicationInfo(np_item + "_PubInfo");
             i.add(new Triple(Node.createURI(np_item), Node.createURI("http://www.w3.org/ns/prov#generatedAtTime"), Node.createLiteral(new Date().toString(), null, XSDDatatype.XSDdateTime)));
             i.add(new Triple(Node.createURI(np_item), Node.createURI("http://www.w3.org/ns/prov#wasAttributedTo"), Node.createLiteral(Config.getName())));
             i.add(new Triple(Node.createURI(np_item), Node.createURI("http://www.w3.org/ns/prov#wasGeneratedBy"), Node.createURI(PrefixFactory.decode(concept_root))));
+            for (JSONObject json : info) {
+                String predicate = (String) json.get("predicate");
+                String object = (String) json.get("object");
+                if (urlValidator.isValid(object)) {
+                    i.add(new Triple(Node.createURI(np_item), Node.createURI(PrefixFactory.decode(predicate)), Node.createURI(object)));
+                } else {
+                    i.add(new Triple(Node.createURI(np_item), Node.createURI(PrefixFactory.decode(predicate)), Node.createLiteral(object)));
+                }
+            }
 
             /**/
             Nanopublication np = new Nanopublication(np_item, a, p, i);
@@ -146,7 +163,8 @@ public class NanopubParser {
             String o = row_item.get("o").toString();
 
             if ((p.endsWith("hasConcept")) && (concept_childs.contains(PrefixFactory.encode(o).split(":")[1]))) {
-                load = true;Logger.getLogger(NanopubParser.class.getName()).log(Level.INFO,PrefixFactory.encode(o).split(":")[1]);
+                load = true;
+                Logger.getLogger(NanopubParser.class.getName()).log(Level.INFO, PrefixFactory.encode(o).split(":")[1]);
             }
         }
 

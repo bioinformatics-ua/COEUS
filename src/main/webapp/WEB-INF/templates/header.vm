@@ -16,6 +16,7 @@
         <link href="${server_base}assets/css/docs.css" rel="stylesheet">
         <link rel="shortcut icon" href="${server_base}favicon.ico">
     <script type="text/javascript" src="${server_base}assets/js/pubby.js"></script>
+    <script type="text/javascript" src="${server_base}assets/js/jquery.js"></script>
   </head>
   <body onLoad="init();">
 <!--<div class=wrapper>-->

@@ -12,8 +12,14 @@
                 <div class="page-wrapper">
                     <div class="container">
 #if ($rdf_link)
-      <p class="pull-right">View: <a href="$rdf_link?output=ttl">As Turtle</a> |
-      <a href="$rdf_link?output=xml">As RDF/XML</a> #if ($nanopub == true) | <a href="../nanopub/$title" >As Nanopublication</a> #end</p>
+        <p class="pull-right">
+        #if ($nanopub == true) Full View: <a href="../nanopub/$title" >As NQuads</a> |
+        <a id="convert" href="#" onclick="convert('${server_base}','$title');">As TriG</a>
+        <a id="download" class="btn btn-primary hide">Download</a>
+        #else
+        View: <a href="$rdf_link?output=ttl">As Turtle</a> |
+        <a href="$rdf_link?output=xml">As RDF/XML</a> 
+        #end</p>
 
 #set ($has_text = true)
 #end 
@@ -28,4 +34,6 @@
                 </div>
             </div>
         </footer> 
+
+<script type="text/javascript" src="${server_base}assets/js/np.js"></script>
 </html>

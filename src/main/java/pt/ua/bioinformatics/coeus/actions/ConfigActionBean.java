@@ -276,7 +276,7 @@ public class ConfigActionBean implements ActionBean {
     }
 
     /**
-     * Integrate a concept into Nanopub (Boot.build() call in a different
+     * Integrate a concept into Nanopub ( call in a different
      * thread)
      *
      * @return
@@ -287,20 +287,30 @@ public class ConfigActionBean implements ActionBean {
         try {
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(method);
+            //parse root
             final String concept_root = json.get("root").toString();
-            JSONArray concept_childs = (JSONArray)json.get("childs");
-            Object[] c=concept_childs.toArray();
-            final List<String> childs=new ArrayList<String>();
+            //parse childs
+            JSONArray concept_childs = (JSONArray) json.get("childs");
+            Object[] c = concept_childs.toArray();
+            final List<String> childs = new ArrayList<String>();
             for (Object object : c) {
                 childs.add(object.toString());
             }
-            
+            //parse info
+            JSONArray additional_info = (JSONArray) json.get("info");
+            final List<JSONObject> info = new ArrayList<JSONObject>();
+            Iterator<JSONObject> iterator = additional_info.iterator();
+            while (iterator.hasNext()) {
+                JSONObject j=(JSONObject)iterator.next();
+                info.add(j);
+            }
+
             ExecutorService executor = (ExecutorService) context.getServletContext().getAttribute("INTEGRATION_EXECUTOR");
             Runnable runnable = new Runnable() {
 
                 @Override
                 public void run() {
-                    NanopubParser parser = new NanopubParser(Config.getKeyPrefix()+":"+concept_root,childs);
+                    NanopubParser parser = new NanopubParser(Config.getKeyPrefix() + ":" + concept_root, childs, info);
                     long i = System.currentTimeMillis();
                     parser.parse();
                     long f = System.currentTimeMillis();

@@ -26,7 +26,8 @@
                 field_new.find('input').val('');
                 field_new.insertAfter(field);
 
-
+                init_typeahead();
+                tooltip();
 
             });
 
@@ -49,16 +50,19 @@
 
                 });
                 concepts_relations();
+                
+                init_typeahead();
 
-                $('.twitter-typeahead').typeahead({
+            });
+
+            function init_typeahead() {
+                $('.twitter_typeahead').typeahead({
                     name: 'properties',
                     prefetch: '../../config/properties/',
                     remote: '../../config/properties/%QUERY',
                     limit: 15
                 });
-
-
-            });
+            }
 
 
             function concepts_relations() {
@@ -172,39 +176,6 @@
                 }
             }
 
-//            function refresh() {
-//                var qconcept = "SELECT DISTINCT ?concept ?c ?label ?entity ?builtNp{" + lastPath() + " coeus:includes ?entity . ?entity coeus:isEntityOf ?concept 
-//                . ?concept dc:title ?c . ?concept rdfs:label ?label . OPTIONAL{ ?concept coeus:builtNp ?builtNp}}";
-//                queryToResult(qconcept, fillListOfConcepts);
-//            }
-//
-//            function fillListOfConcepts(result) {
-//                $('#concepts').html("");
-//                for (var key in result) {
-//                    var concept = 'coeus:' + splitURIPrefix(result[key].concept.value).value;
-//                    var a = '<option>' + concept + '</option>';
-//                    $('#concepts').append(a);
-//                }
-//                //fill Extensions:
-////                for (var r in result) {
-////                    var id = splitURIPrefix(result[r].concept.value).value;
-////                    var ext = 'coeus:' + id;
-////                    //FILL THE EXTENSIONS
-////                    var extensions = "SELECT ?resource {" + ext + " coeus:isExtendedBy ?resource }";
-////                    queryToResult(extensions, fillExtensions.bind(this, id));
-////                }
-//                tooltip();
-//            }
-//            function fillExtensions(id, result) {
-//                for (var rs in result) {
-//                    var r = splitURIPrefix(result[rs].resource.value).value;
-//                    $('#' + id).append('<li><a tabindex="-1" href="../selector/coeus:' + r + '">coeus:' + r + '</a></li>');
-//                }
-//                //console.log('fillExtensions:'+ext);console.log(result)
-//            }
-
-
-
             // Callback to generate the pages header
             function fillHeader(result) {
                 $('#header').html('<h1><span class="tip" data-toggle="tooltip" title="Seed URI">' + lastPath() + '</span><small id="env" class="pull-right tip" data-toggle="tooltip" title="Selected environment"> ' + result.config.environment + '</small></h1>');
@@ -219,24 +190,25 @@
                 if (selected_root !== null) {
                     selected_root = $(selected_root).html();
                     //console.log(selected_root.value);
-                    var order = {root: selected_root, childs: [], info:[]};
+                    var order = {root: selected_root, childs: [], info: []};
                     var i = 0;
                     $("input:checkbox[name=child_box]:checked").each(function()
                     {
                         order["childs"][i] = $(this).val();
                         i++;
                     });
-                    var c=0;
-                    var information=[];
+                    var c = 0;
+                    var information = [];
                     $("#information").children().each(function() {
-                        var p=$(this).find("input[name=predicate]").val();
-                        var o=$(this).find("input[name=object]").val();
-                        var aux={predicate:p,object:o};
-                        if(p!=="" && o!=="") information[c]=aux;
+                        var p = $(this).find("input[name=predicate]").val();
+                        var o = $(this).find("input[name=object]").val();
+                        var aux = {predicate: p, object: o};
+                        if (p !== "" && o !== "")
+                            information[c] = aux;
                         c++;
                     });
-                    information.pop();
-                    order["info"]=information;
+                    //information.pop();
+                    order["info"] = information;
 
                     var send = JSON.stringify(order);
                     console.log(send);
@@ -298,14 +270,14 @@
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Nanopub Related Options</h3>
+                    <h3 class="panel-title">Nanopub Additional Info (Optional)</h3>
                 </div>
                 <div class="panel-body">
                     <h4><i class="fa fa-chevron-right"></i> Add more info about the nanopub:</h4>
                     <div id="information">
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-md-4  input-group"><input type="text" name="predicate" class="twitter-typeahead form-control tip" title="Predicate" data-toggle="tooltip"></div>
+                                <div class="col-md-4 input-group"><input type="text" name="predicate" class="twitter_typeahead form-control tip" title="Predicate" data-toggle="tooltip"></div>
                                 <div class="col-md-4"><input type="text" name="object" class="form-control tip" title="Object"></div>
                                 <div class="col-md-4"><button type="button" class="btn btn-default btn-add"><i class="fa fa-plus"></i></button></div>
                             </div>
