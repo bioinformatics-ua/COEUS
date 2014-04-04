@@ -50,7 +50,7 @@
 
                 });
                 concepts_relations();
-                
+
                 init_typeahead();
 
             });
@@ -190,13 +190,14 @@
                 if (selected_root !== null) {
                     selected_root = $(selected_root).html();
                     //console.log(selected_root.value);
-                    var order = {root: selected_root, childs: [], info: []};
+                    var order = {root: selected_root, childs: [], info: [], prov: []};
                     var i = 0;
                     $("input:checkbox[name=child_box]:checked").each(function()
                     {
                         order["childs"][i] = $(this).val();
                         i++;
                     });
+                    //Publication Info
                     var c = 0;
                     var information = [];
                     $("#information").children().each(function() {
@@ -209,21 +210,35 @@
                     });
                     //information.pop();
                     order["info"] = information;
+                    ///Provenace
+                    var c = 0;
+                    var provenance = [];
+                    $("#provenance").children().each(function() {
+                        var p = $(this).find("input[name=predicate]").val();
+                        var o = $(this).find("input[name=object]").val();
+                        var aux = {predicate: p, object: o};
+                        if (p !== "" && o !== "")
+                            provenance[c] = aux;
+                        c++;
+                    });
+                    //information.pop();
+                    order["prov"] = provenance;
 
                     var send = JSON.stringify(order);
                     console.log(send);
-                    callURL("../../config/nanopub/" + send, nanopubResult, nanopubResult);
+                    callURL("../../config/nanopub/" + send, nanopubResult.bind(this, selected_root), nanopubResult.bind(this, selected_root));
 
                 } else {
                     $("#nanopubResult").append(generateHtmlMessage("EMPTY:", "No concepts selected to process.", "alert-warning"));
                 }
             }
 
-            function nanopubResult(result) {
+            function nanopubResult(root, result) {
                 var htmlMessage;
                 if (result.status === 100) {
                     htmlMessage = generateHtmlMessage("STARTED:", result.message, "alert-success");
                     console.log(result.message);
+                    runParser(root);
                 } else {
                     htmlMessage = generateHtmlMessage("FAIL:", result.message, "alert-danger");
                     console.log(result.message);
@@ -231,6 +246,33 @@
                 $("#nanopubResult").append(htmlMessage);
             }
 
+            var interval;
+            function runParser(root) {
+                interval = setInterval(checkParser.bind(this, root), 2000);
+            }
+
+            function checkParser(root) {
+                console.log('checkParser of '+root);
+                var q = "SELECT ?built { coeus:" + root + " coeus:builtNp ?built }";
+                queryToResult(q, checkParserResult.bind(this, root));
+            }
+
+            function checkParserResult(root, result) {
+                var built = false;
+                try {
+                    built = result[0].built.value;
+                    if (built === true || built === 'true') {
+                        //console.log("clear timer");
+                        clearInterval(interval);
+                        $('#nanopubResult').append(generateHtmlMessage("FINISH!", "Parsed: " + root+' - <a target="_blank" href="../../resource/' + root+'" >View Nanopubs</a>', "alert-success"));
+                        
+                    }
+                } catch (e) {
+                    //ignore
+                }
+                //console.log(built);
+                //tooltip();
+            }
 
 
         </script>
@@ -254,7 +296,7 @@
                     <div class="btn-group"> 
                         <a href="#nanopubModal" data-toggle="modal" data-toggle="tooltip" class="btn btn-success tip" 
                            title="Create Nanopublications from the Concept data Items" onclick="generate();">
-                            Create Nanopublications <i class="fa fa-cogs icon-white"></i>
+                            Build Nanopublications <i class="fa fa-cogs icon-white"></i>
                         </a>
                     </div>
                 </div>
@@ -270,7 +312,7 @@
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Nanopub Additional Info (Optional)</h3>
+                    <h3 class="panel-title">Publication Info (Optional)</h3>
                 </div>
                 <div class="panel-body">
                     <h4><i class="fa fa-chevron-right"></i> Add more info about the nanopub:</h4>
@@ -283,14 +325,23 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="form-group">
-                         <label >Search Property</label>
-                         <div class="input-group">
-                             <input class="twitter-typeahead form-control tip" id="typeahead" type="text" data-toggle="tooltip" title="Search and press the plus button to add it to the list"/>
-                             <span class="input-group-btn" ><button id="btnPlus" class="btn btn-success tip" data-toggle="tooltip" title="Add a property to the list" type="button" onclick="updateSelectorProperties();"><i class="fa fa-plus-circle"></i></button></span>
-                         </div>
-                     </div>-->
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Provenance (Optional)</h3>
+                </div>
+                <div class="panel-body">
+                    <h4><i class="fa fa-chevron-right"></i> Add more provenance info about the nanopub:</h4>
+                    <div id="provenance">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4 input-group"><input type="text" name="predicate" class="twitter_typeahead form-control tip" title="Predicate" data-toggle="tooltip"></div>
+                                <div class="col-md-4"><input type="text" name="object" class="form-control tip" title="Object"></div>
+                                <div class="col-md-4"><button type="button" class="btn btn-default btn-add"><i class="fa fa-plus"></i></button></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

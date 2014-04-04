@@ -32,6 +32,7 @@ public class NanopubParser {
     String concept_root; // concept root
     List<String> concept_childs; // childs of the root concept (means load also items data)
     List<JSONObject> info; // additional info to include in the np
+    List<JSONObject> prov; // additional prov to include in the np
     boolean loadAll = true;
 
     /**
@@ -40,11 +41,13 @@ public class NanopubParser {
      * @param concept_root
      * @param concept_childs
      * @param info
+     * @param prov
      */
-    public NanopubParser(String concept_root, List<String> concept_childs, List<JSONObject> info) {
+    public NanopubParser(String concept_root, List<String> concept_childs, List<JSONObject> info, List<JSONObject> prov) {
         this.concept_root = concept_root;
         this.concept_childs = concept_childs;
         this.info = info;
+        this.prov=prov;
     }
 
     /**
@@ -96,7 +99,16 @@ public class NanopubParser {
 
             //Build Provenance
             Provenance p = new Provenance(np_item + "_Provenance");
-            p.add(new Triple(Node.createURI(a.getUri()), Node.createURI("http://www.w3.org/ns/prov#wasDerivedFrom"), Node.createLiteral("COEUS")));
+            p.add(new Triple(Node.createURI(a.getUri()), Node.createURI("http://www.w3.org/ns/prov#wasDerivedFrom"), Node.createURI("http://bioinformatics.ua.pt/coeus/")));
+            for (JSONObject json : prov) {
+                String predicate = (String) json.get("predicate");
+                String object = (String) json.get("object");
+                if (urlValidator.isValid(object)) {
+                    p.add(new Triple(Node.createURI(a.getUri()), Node.createURI(PrefixFactory.decode(predicate)), Node.createURI(object)));
+                } else {
+                    p.add(new Triple(Node.createURI(a.getUri()), Node.createURI(PrefixFactory.decode(predicate)), Node.createLiteral(object)));
+                }
+            }
 
             //Build PublicationInfo
             PublicationInfo i = new PublicationInfo(np_item + "_PubInfo");

@@ -304,13 +304,21 @@ public class ConfigActionBean implements ActionBean {
                 JSONObject j=(JSONObject)iterator.next();
                 info.add(j);
             }
+            //parse prov
+            JSONArray additional_prov = (JSONArray) json.get("prov");
+            final List<JSONObject> prov = new ArrayList<JSONObject>();
+            Iterator<JSONObject> iterator_prov = additional_prov.iterator();
+            while (iterator_prov.hasNext()) {
+                JSONObject j=(JSONObject)iterator_prov.next();
+                prov.add(j);
+            }
 
             ExecutorService executor = (ExecutorService) context.getServletContext().getAttribute("INTEGRATION_EXECUTOR");
             Runnable runnable = new Runnable() {
 
                 @Override
                 public void run() {
-                    NanopubParser parser = new NanopubParser(Config.getKeyPrefix() + ":" + concept_root, childs, info);
+                    NanopubParser parser = new NanopubParser(Config.getKeyPrefix() + ":" + concept_root, childs, info, prov);
                     long i = System.currentTimeMillis();
                     parser.parse();
                     long f = System.currentTimeMillis();
