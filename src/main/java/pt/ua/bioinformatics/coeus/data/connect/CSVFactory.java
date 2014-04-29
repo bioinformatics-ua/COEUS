@@ -95,14 +95,20 @@ public class CSVFactory implements ResourceFactory {
                         String[] csvKeys = res.getQuery().split("\\|");
                         char queryQuotes = csvKeys[1].charAt(0);
                         char queryLinesSkip = csvKeys[0].charAt(0);
-                        char querySeparator = guessDelimiter(u, queryQuotes, queryLinesSkip);
+                        char querySeparator = guessDelimiter(u, queryQuotes, Integer.parseInt(queryLinesSkip+""));
 
-                        //System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
-                        reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
+                        System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
+                        reader = new CSVReader(in, querySeparator, queryQuotes, Integer.parseInt(queryLinesSkip+""));
                     }
                     list = reader.readAll();
                     try {
+                        //System.out.println("size: "+list.size());
                         for (String[] s : list) {
+                            //Displays the content
+                        //    System.out.println("");
+                        //    for (String string : s) {
+                        //        System.out.print(string+" - ");
+                        //    }
                             rdfizer = new Triplify(res, PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + ConceptFactory.getTokenFromConcept(res.getExtendsConcept()) + ItemFactory.getTokenFromItem(extensions.get(l)));
                             for (Object o : res.getLoadsFrom()) {
                                 InheritedResource c = (InheritedResource) o;
@@ -143,10 +149,10 @@ public class CSVFactory implements ResourceFactory {
                         String[] csvKeys = res.getQuery().split("\\|");
                         char queryQuotes = csvKeys[1].charAt(0);
                         char queryLinesSkip = csvKeys[0].charAt(0);
-                        char querySeparator = guessDelimiter(u, queryQuotes, queryLinesSkip);
+                        char querySeparator = guessDelimiter(u, queryQuotes, Integer.parseInt(queryLinesSkip+""));
 
                         //System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
-                        reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
+                        reader = new CSVReader(in, querySeparator, queryQuotes, Integer.parseInt(queryLinesSkip+""));
                     }
                     list = reader.readAll();
                     try {
@@ -183,14 +189,21 @@ public class CSVFactory implements ResourceFactory {
                         String[] csvKeys = res.getQuery().split("\\|");
                         char queryQuotes = csvKeys[1].charAt(0);
                         char queryLinesSkip = csvKeys[0].charAt(0);
-                        char querySeparator = guessDelimiter(u, queryQuotes, queryLinesSkip);
+                        char querySeparator = guessDelimiter(u, queryQuotes, Integer.parseInt(queryLinesSkip+""));
 
                         System.out.println(res.getQuery() + " - " +querySeparator+ queryQuotes + queryLinesSkip);
-                        reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
+                        reader = new CSVReader(in, querySeparator, queryQuotes, Integer.parseInt(queryLinesSkip+""));
                     }
                     list = reader.readAll();
                     try {
+                        System.out.println("size: "+list.size());
                         for (String[] s : list) {
+                            //Displays the content
+                            //System.out.println("");
+                            //for (String string : s) {
+                            //    System.out.print(string+" - ");
+                            //}
+                            
                             InheritedResource key = (InheritedResource) res.getHasKey();
                             rdfizer = new Triplify(res);
                             for (Object o : res.getLoadsFrom()) {
@@ -238,15 +251,21 @@ public class CSVFactory implements ResourceFactory {
                             String[] csvKeys = res.getQuery().split("\\|");
                             char queryQuotes = csvKeys[1].charAt(0);
                             char queryLinesSkip = csvKeys[0].charAt(0);
-                            char querySeparator = guessDelimiter(u, queryQuotes, queryLinesSkip);
+                            char querySeparator = guessDelimiter(u, queryQuotes, Integer.parseInt(queryLinesSkip+""));
 
                             //System.out.println(res.getQuery() + " - " + querySeparator + queryQuotes + queryLinesSkip);
-                            reader = new CSVReader(in, querySeparator, queryQuotes, queryLinesSkip);
+                            reader = new CSVReader(in, querySeparator, queryQuotes, Integer.parseInt(queryLinesSkip+""));
                         }
 
                         list = reader.readAll();
                         try {
+                            //System.out.println("size: "+list.size());
                             for (String[] s : list) {
+                            //Displays the content
+                            //System.out.println("");
+                            //for (String string : s) {
+                            //    System.out.print(string+" ");
+                            //}
                                 InheritedResource key = (InheritedResource) res.getHasKey();
                                 rdfizer = new Triplify(res, extensions.get(item));
                                 for (Object o : res.getLoadsFrom()) {
@@ -337,7 +356,7 @@ public class CSVFactory implements ResourceFactory {
      * Try to guess the csv delimiter. If fail returns the default ',' otherwise
      * return the delimiter.
      *
-     * @param location
+     * @param urlLocation
      * @param quotes
      * @param headerSkip
      * @return
@@ -357,12 +376,12 @@ public class CSVFactory implements ResourceFactory {
                 BufferedReader br = new BufferedReader(new InputStreamReader(urlLocation.openStream()));
                 CSVReader testReader = new CSVReader(br, delimiters[a], quotes, headerSkip);
                 columsSizeDetected.clear();
-                System.err.println("    TEST: " +delimiters[a]);
+                //System.err.println("    TEST: " +delimiters[a]);
 
                 for (int i = 0; i < linesToCheck; i++) {
                     String[] rows = testReader.readNext();
                     columsSizeDetected.add(rows.length);
-                    System.err.println(delimiters[a] + " -rows: " + rows.length);
+                    //System.err.println(delimiters[a] + " -rows: " + rows.length);
                 }
 
                 // test the colums size in each line
@@ -380,7 +399,7 @@ public class CSVFactory implements ResourceFactory {
             }
 
             if (b) {
-                System.err.println("Finded:" + delimiters[a]);
+                //System.err.println("Finded:" + delimiters[a]);
                 return delimiters[a];
             }
         }

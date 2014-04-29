@@ -5,7 +5,7 @@
  */
 
 //service location
-var SERVICE="http://localhost:8080/rdf-converter/service/url/";
+var SERVICE="http://bioinformatics.ua.pt/rdf-converter/service/url/";
 
 function convert(server, title){
     //console.log(server);

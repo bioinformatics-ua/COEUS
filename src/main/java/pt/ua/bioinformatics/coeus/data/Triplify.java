@@ -165,6 +165,7 @@ public class Triplify {
             for (String key : properties.keySet()) {
                 for (String object : properties.get(key)) {
                     api.addStatement(item, Predicate.get(key), object);
+                    //System.err.println(item+" "+Predicate.get(key)+" "+object);
                 }
             }
             success = true;

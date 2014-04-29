@@ -292,14 +292,7 @@
                 <div class="col-md-6">
                     <h3>Nanopub Creator</h3>
                 </div>
-                <div class="col-md-6 text-right">
-                    <div class="btn-group"> 
-                        <a href="#nanopubModal" data-toggle="modal" data-toggle="tooltip" class="btn btn-success tip" 
-                           title="Create Nanopublications from the Concept data Items" onclick="generate();">
-                            Build Nanopublications <i class="fa fa-cogs icon-white"></i>
-                        </a>
-                    </div>
-                </div>
+               
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -344,6 +337,14 @@
                     </div>
                 </div>
             </div>
+             <div class="text-right">
+                    <div class="btn-group"> 
+                        <a href="#nanopubModal" data-toggle="modal" data-toggle="tooltip" class="btn btn-success tip" 
+                           title="Create Nanopublications from the Concept data Items" onclick="generate();">
+                            Build Nanopublications <i class="fa fa-cogs icon-white"></i>
+                        </a>
+                    </div>
+                </div>
 
         </div>
 

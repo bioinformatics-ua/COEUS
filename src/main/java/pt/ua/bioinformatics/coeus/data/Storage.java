@@ -13,7 +13,12 @@ import com.hp.hpl.jena.sparql.core.DatasetGraph;
 import com.hp.hpl.jena.update.UpdateAction;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
@@ -165,14 +170,18 @@ public class Storage {
     private static boolean loadOntology() {
         boolean success = false;
         try {
-            InputStream in = FileManager.get().open(Config.getOntology());
+            //InputStream in = FileManager.get().open(Config.getOntology());
+            URLConnection conn=new URL(Config.getOntology()).openConnection();
+            conn.setConnectTimeout(3000);
+            conn.setReadTimeout(4000);
+            InputStream in=conn.getInputStream();
             model.read(in, null);
             success = true;
             if (Config.isDebug()) {
                 System.out.println("[COEUS][Storage] COEUS Ontology loaded");
             }
         } catch (Exception ex) {
-            if (Config.isDebug()) {
+                if (Config.isDebug()) {
                 System.out.println("[COEUS][Storage] Unable to load COEUS Ontology");
                 Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
             }

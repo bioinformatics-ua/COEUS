@@ -14,21 +14,37 @@
     <!-- Tutorials/SWAT4LS -->
     <section id="start">
         <div class="page-header">
+            <h1>Nanopublications <small>(Generation Process)</small></h1>
+        </div>
+
+        <p>COEUS has now the capability to share your data in the <a href="http://nanopub.org/nschema" target="_blank">Nanopublication format</a>. With this new plugin you can transform your integrated data in this prominent format by following the next steps:</p>
+        <ol>
+            <li>Go to the Nanopublication Section on the Dashboard.</li>
+            <li>Select the concept root and related data that will generate the nanopublications.</li>
+            <li>Fill out the provenance and additional information about the nanopublications.</li>
+            <li>Start to Build nanopublications.</li>
+            <li>When finished you can view the concept data items according to the nanopublication format.</li>
+        </ol>
+        <p><a href="<c:url value="/assets/files/nanopub_tutorial.pdf" />" target="_blank" class="btn btn-sm btn-primary">Download tutorial <i class="glyphicon glyphicon-file"></i></a></p>
+    </section>
+    <!-- Tutorials/SWAT4LS -->
+    <section id="start">
+        <div class="page-header">
             <h1>SWAT4LS <small>(with web interface)</small></h1>
         </div>
         <p><a href="http://www.swat4ls.org/workshops/edinburgh2013/" target="_blank">Visit website</a><br>
-                <strong>December 9-12, 2013</strong> Edinburgh, United Kingdom</p>
+            <strong>December 9-12, 2013</strong> Edinburgh, United Kingdom</p>
         <p>In this tutorial/hands-on session, we will guide you through the process of creating your own custom COEUS knowledge base. You will learn how to:</p>
-            <ol>
-                <li>Create a new COEUS instance</li>
-                <li>From GitHub download to web deployment</li>
-                <li>Integrate data from heterogeneous *omics sources into your COEUS knowledge base</li>
-                <li>Create your mashup merging multiple datasets</li>
-                <li>Explore COEUS API to access aggregated data</li>
-                <li>Build new rich web information systems using the API</li>
-                <li>Access knowledge federation through the SPARQL and LinkedData interfaces
-                </li>
-            </ol>
+        <ol>
+            <li>Create a new COEUS instance</li>
+            <li>From GitHub download to web deployment</li>
+            <li>Integrate data from heterogeneous *omics sources into your COEUS knowledge base</li>
+            <li>Create your mashup merging multiple datasets</li>
+            <li>Explore COEUS API to access aggregated data</li>
+            <li>Build new rich web information systems using the API</li>
+            <li>Access knowledge federation through the SPARQL and LinkedData interfaces
+            </li>
+        </ol>
         <p><a href="<c:url value="/assets/files/swat4ls_tutorial.pdf" />" target="_blank" class="btn btn-sm btn-primary">Download tutorial <i class="glyphicon glyphicon-file"></i></a></p>
     </section>
     <!-- Tutorials/START -->
