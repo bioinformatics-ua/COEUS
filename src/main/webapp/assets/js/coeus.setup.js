@@ -842,6 +842,7 @@ function addResource() {
     var order = $('#order').val();
     var concept_ext = $('#extends').val();
     var link = $('#resourceLink').val();
+    var extension = $('#extension').val();
     var urlWrite = "../../api/" + getApiKey() + "/write/";
 
     // verify all fields:
@@ -894,7 +895,8 @@ function addResource() {
         var urlExtends = urlWrite + individual + "/" + "coeus:extends" + "/coeus:" + concept_ext;
         var urlIsExtendedBy = urlWrite + "coeus:" + concept_ext + "/" + "coeus:isExtendedBy" + "/" + individual;
         var urlBuilt = urlWrite + individual + "/" + "coeus:built" + "/xsd:boolean:false";
-
+        var urlExtension = urlWrite + individual + "/" + "coeus:extension" + "/xsd:string:"+extension;
+        if(extension!=="") array.push(urlExtension);
         array.push(urlIndividual, urlType, urlTitle, urlLabel, urlComment, urlIsResourceOf, urlHasResource, urlMethod, urlPublisher, urlEndpoint, urlQuery, urlOrder, urlExtends, urlIsExtendedBy, urlBuilt);
         submitIfNotExists(array, individual);
     }
@@ -1102,6 +1104,7 @@ function prepareResourceEdit(individual) {
     $('#editQuery').val("");
     $('#editOrder').val("");
     $('#editExtends').val("");
+    $('#editExtension').val("");
     $('#editConcept').val("");
     $('#built').prop('checked', false);
 
@@ -1115,12 +1118,13 @@ function prepareResourceEdit(individual) {
     $('#oldQuery').val("");
     $('#oldOrder').val("");
     $('#oldExtends').val("");
+    $('#oldExtension').val("");
     $('#oldConcept').val("");
     $('#oldBuilt').val("false");
 
     var q = "SELECT ?concept ?c {?concep coeus:hasResource " + individual + " . ?entity coeus:isEntityOf ?concep . ?seed coeus:includes ?entity . ?concept coeus:hasEntity ?ent . ?ent coeus:isIncludedIn ?seed . ?concept dc:title ?c}";
     queryToResult(q, fillConceptsExtension.bind(this, null));
-    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?concept ?built {" + individual + " dc:title ?title . " + individual + " rdfs:label ?label . " + individual + " rdfs:comment ?comment . " + individual + " coeus:method ?method . " + individual + " dc:publisher ?publisher . " + individual + " coeus:endpoint ?endpoint . " + individual + " coeus:query ?query . " + individual + " coeus:order ?order . " + individual + " coeus:extends ?extends . " + individual + " coeus:isResourceOf ?concept . OPTIONAL{" + individual + " coeus:built ?built } }";
+    var q = "SELECT ?title ?label ?comment ?method ?publisher ?endpoint ?query ?order ?extends ?concept ?built ?extension {" + individual + " dc:title ?title . " + individual + " rdfs:label ?label . " + individual + " rdfs:comment ?comment . " + individual + " coeus:method ?method . " + individual + " dc:publisher ?publisher . " + individual + " coeus:endpoint ?endpoint . " + individual + " coeus:query ?query . " + individual + " coeus:order ?order . " + individual + " coeus:extends ?extends . " + individual + " coeus:isResourceOf ?concept . OPTIONAL{" + individual + " coeus:built ?built . " + individual + " coeus:extension ?extension } }";
     queryToResult(q, fillResourceEdit);
 
 }
@@ -1143,6 +1147,7 @@ function fillResourceEdit(result) {
             $('#built').prop('checked', true);
         else
             $('#built').prop('checked', false);
+        if (result[0].extension !== undefined && result[0].extension.value !== "") $('#editExtension').val(result[0].extension.value);
     }
     catch (err)
     {
@@ -1157,6 +1162,7 @@ function fillResourceEdit(result) {
     $('#oldEndpoint').val($('#editEndpoint').val());
     $('#oldQuery').val($('#editQuery').val());
     $('#oldOrder').val($('#editOrder').val());
+    $('#oldExtension').val($('#editExtension').val());
     $('#oldExtends').val(splitURIPrefix(result[0].extends.value).value);
     $('#oldConcept').val(splitURIPrefix(result[0].concept.value).value);
     $('#oldBuilt').val($('#built').is(':checked'));
@@ -1211,6 +1217,10 @@ function editResource() {
         url = urlDelete + "coeus:" + $('#oldExtends').val() + "/" + "coeus:isExtendedBy" + "/" + individual;
         array.push(url);
         url = urlWrite + "coeus:" + $('#editExtends').val() + "/" + "coeus:isExtendedBy" + "/" + individual;
+        array.push(url);
+    }
+    if ($('#oldExtension').val() !== $('#editExtension').val()) {
+        url = urlUpdate + individual + "/" + "coeus:extension" + "/xsd:string:" + encodeBars($('#oldExtension').val()) + ",xsd:string:" + encodeBars($('#editExtension').val());
         array.push(url);
     }
     if ($('#oldConcept').val() !== $('#editConcept').val()) {
@@ -1354,4 +1364,4 @@ function usernameResult(divId,result){
     }else{
         redirect(getApplicationPath()+"manager/seed/");
     }
-}
+}          
