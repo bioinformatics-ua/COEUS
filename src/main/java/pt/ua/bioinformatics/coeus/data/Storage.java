@@ -422,6 +422,7 @@ public class Storage {
         boolean success = true;
         try {
             if(store!=null && !store.isClosed()) store.close();
+            //store.getConnection().getSqlConnection().isValid(timeout)
             success = true;
         } catch (Exception ex) {
             if (Config.isDebug()) {

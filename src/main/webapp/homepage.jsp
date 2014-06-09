@@ -50,13 +50,19 @@
                         <br />Integrate CSV, SQL, XML or SPARQL resources with advanced Extract-Transform-Load
                         warehousing features.</p>
                 </div>
-                <div class="col-lg-4">
+                <!--<div class="col-lg-4">
                     <img src="./assets/img/cloud.png" width="150" height="150" alt="Cloud-based" />
                     <h2>Cloud-based</h2>
                     <p><strong>Deploy your knowledgebase in the cloud</strong>, using any available
                         host.
                         <br />Your content - available any time, any where. And with full create, read,
                         update, and delete support.</p>
+                </div>-->
+                 <div class="col-lg-4">
+                    <img src="./assets/img/nanopub_book.png" width="150" height="150" alt="Cloud-based" />
+                    <h2>Nanopublication</h2>
+                    <p><strong>Transform your data into Nanopublications</strong>, automatically through the web interface.
+                        <br />With the Nanopublications extension the data can be converted into a single publishable and citable entity.</p>
                 </div>
                 <div class="col-lg-4">
                     <img src="./assets/img/semantic.png" width="150" height="150" alt="Semantic Web" />
