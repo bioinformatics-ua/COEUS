@@ -24,13 +24,13 @@ public class ExecutorContextListener implements ServletContextListener{
         executor = Executors.newFixedThreadPool(4);
         context.setAttribute("INTEGRATION_EXECUTOR", executor);
         Boot.start();
-	System.out.println("ServletContextListener started");	
+	//System.out.println("ServletContextListener started");	
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
-        System.out.println("ServletContextListener destroyed");  
+        //System.out.println("ServletContextListener destroyed");  
         List<Runnable> list=executor.shutdownNow();
         //System.err.println("\n\n\nList of runnables:\n\n");
         //for(Runnable r : list){

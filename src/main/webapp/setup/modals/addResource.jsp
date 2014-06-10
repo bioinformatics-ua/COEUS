@@ -59,6 +59,13 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div id="extensionForm" class="col-md-6 form-group">
+                        <label>Property Extension (Optional)</label>
+                        <input type="text" id="extension" class="form-control tip" title="The property (e.g. dc:identifier, dc:source, etc.) that will be choosed for the extension query." data-toggle="tooltip">
+                    </div>
+                    
+                </div>
+                <div class="row">
                     <div id="publisherForm" class="col-md-6 form-group">
                         <label for="label label-default">Publisher</label>
                         <select id="publisher" class="form-control tip" data-toggle="tooltip" title="Connector type: the selectors configuration will be loaded according to this value." onchange="publisherChange();">

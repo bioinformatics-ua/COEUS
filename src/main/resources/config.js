@@ -1,6 +1,6 @@
 {
 "config": {
-        "name": "Model Test",
+        "name": "http://bioinformatics.ua.pt",
         "description": "COEUS Model Test",
         "keyprefix":"coeus",
         "version": "1.0a",
@@ -22,5 +22,8 @@
         "owl": "http://www.w3.org/2002/07/owl#",
         "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         "dc": "http://purl.org/dc/elements/1.1/",
+        "np": "http://www.nanopub.org/nschema#",
+        "prov": "http://www.w3.org/ns/prov", 
+        "dcterms": "http://purl.org/dc/terms/",
 }
 }

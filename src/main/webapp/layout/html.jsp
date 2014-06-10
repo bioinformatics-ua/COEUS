@@ -32,7 +32,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="http://bioinformatics.ua.pt/coeus/">COEUS <sub>v2.1</sub></a>
+                        <a class="navbar-brand" href="http://bioinformatics.ua.pt/coeus/">COEUS <sub>v2.2</sub></a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -124,7 +124,7 @@
                             </address>
                         </div>
                         <div class="modal-footer">
-                            <a href="mailto:pedrolopes@ua.pt?subject=[COEUS] feedback" class="btn btn-info">Send Mail <i class="icon-envelope icon-white"></i></a>
+                            <a href="mailto:pedrolopes@ua.pt,sernadela@ua.pt?subject=[COEUS] feedback" class="btn btn-info">Send Mail <i class="icon-envelope icon-white"></i></a>
                         </div>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
                 <div class="page-wrapper">
                     <div class="container">
                         <p class="pull-right"><a href="#" title="Back to top"> <i class="fa fa-arrow-up"></i></a></p>
-                        <p class="text-muted credit">&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2013 - Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a></p>
+                        <p class="text-muted credit">&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> <script> document.write(new Date().getFullYear()); </script> - Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a></p>
                     </div>
                 </div>
             </div>

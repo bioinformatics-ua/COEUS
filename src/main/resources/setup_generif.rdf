@@ -6,33 +6,33 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:coeus="http://bioinformatics.ua.pt/coeus/resource/" > 
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/concept_pubmed">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubmed Description</rdfs:comment>
-    <coeus:hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article"/>
-    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Concept"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubmed Label</rdfs:label>
-    <coeus:isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_link"/>
-    <coeus:hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_link"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubmed</dc:title>
     <coeus:hasEntity rdf:resource="http://bioinformatics.ua.pt/coeus/resource/entity_pubmed"/>
+    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Concept"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubmed Label</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubmed Description</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <coeus:isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_link"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubmed</dc:title>
+    <coeus:hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article"/>
+    <coeus:hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_link"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_title">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">title</rdfs:label>
-    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0</coeus:query>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">//ArticleTitle</coeus:query>
     <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:title</coeus:property>
     <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article"/>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">title</dc:title>
+    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/CSV"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_url">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">url</rdfs:label>
-    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</coeus:query>
-    <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:source</coeus:property>
+  <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_journal">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">journal</rdfs:label>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">//Title</coeus:query>
+    <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:subject</coeus:property>
     <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">url</dc:title>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">journal</dc:title>
+    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/CSV"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_link">
     <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
@@ -53,10 +53,38 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_generif_tax_id">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tax id</rdfs:label>
-    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0</coeus:query>
-    <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:subject</coeus:property>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</coeus:query>
+    <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">rdf:value</coeus:property>
     <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tax id</dc:title>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/CSV"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_abstract">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">abstract</rdfs:label>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">//AbstractText</coeus:query>
+    <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dcterms:abstract</coeus:property>
+    <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">abstract</dc:title>
+    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_issn">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">issn</rdfs:label>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">//ISSN</coeus:query>
+    <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:source</coeus:property>
+    <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">issn</dc:title>
+    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_generif_id">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">id</rdfs:label>
+    <coeus:isKeyOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0</coeus:query>
+    <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:identifier</coeus:property>
+    <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">id</dc:title>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/CSV"/>
   </rdf:Description>
@@ -71,7 +99,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_generif_date">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">date</rdfs:label>
-    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3</coeus:query>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">4</coeus:query>
     <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:date</coeus:property>
     <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">date</dc:title>
@@ -90,7 +118,7 @@
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_generif_gene_link">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">gene link</rdfs:label>
     <coeus:isKeyOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_gene_link"/>
-    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">link</coeus:query>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">gene link</coeus:query>
     <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:relation</coeus:property>
     <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_gene_link"/>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">gene link</dc:title>
@@ -98,17 +126,17 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/concept_generif">
-    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Concept"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">generif Label</rdfs:label>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">generif Description</rdfs:comment>
-    <coeus:isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article"/>
     <coeus:hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_gene_link"/>
-    <coeus:hasEntity rdf:resource="http://bioinformatics.ua.pt/coeus/resource/entity_generif"/>
-    <coeus:hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
-    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">generif</dc:title>
-    <coeus:isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_gene_link"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">generif Description</rdfs:comment>
     <coeus:isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
+    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Concept"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <coeus:isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_gene_link"/>
+    <coeus:hasEntity rdf:resource="http://bioinformatics.ua.pt/coeus/resource/entity_generif"/>
+    <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">generif</dc:title>
+    <coeus:isExtendedBy rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article"/>
+    <coeus:hasResource rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/resource_generif">
     <coeus:built rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</coeus:built>
@@ -118,35 +146,34 @@
     <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">generif Description</rdfs:comment>
     <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1|"</coeus:query>
+    <coeus:hasKey rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_generif_id"/>
     <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_generif_gene_id"/>
     <coeus:isResourceOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_generif"/>
     <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_generif_pub_id"/>
-    <coeus:built rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</coeus:built>
     <dc:publisher rdf:datatype="http://www.w3.org/2001/XMLSchema#string">csv</dc:publisher>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <coeus:endpoint rdf:datatype="http://www.w3.org/2001/XMLSchema#string">file:///D:/Downloads/generifs_basic/generifs_basic</coeus:endpoint>
     <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_generif_tax_id"/>
+    <coeus:endpoint rdf:datatype="http://www.w3.org/2001/XMLSchema#string">file:///D:/Downloads/generifs_basic/generifs_basic_10000</coeus:endpoint>
+    <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_generif_id"/>
     <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_generif_text"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">generif Label</rdfs:label>
     <coeus:order rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</coeus:order>
-    <coeus:hasKey rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_generif_pub_id"/>
     <coeus:method rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cache</coeus:method>
   </rdf:Description>
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_id">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">id</rdfs:label>
     <coeus:isKeyOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article"/>
-    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">9</coeus:query>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">//PMID</coeus:query>
     <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:identifier</coeus:property>
     <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article"/>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">id</dc:title>
+    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/XML"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-    <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/CSV"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_generif_pub_id">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubid</rdfs:label>
-    <coeus:isKeyOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
-    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</coeus:query>
-    <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:identifier</coeus:property>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3</coeus:query>
+    <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:source</coeus:property>
     <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pub id</dc:title>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
@@ -165,20 +192,22 @@
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/resource_pubmed_article">
     <coeus:isResourceOf rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_pubmed"/>
     <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_id"/>
+    <dc:publisher rdf:datatype="http://www.w3.org/2001/XMLSchema#string">xml</dc:publisher>
     <rdf:type rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Resource"/>
-    <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_url"/>
     <coeus:method rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cache</coeus:method>
-    <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_title"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubmed article Description</rdfs:comment>
-    <coeus:endpoint rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&amp;id=#replace#&amp;rettype=csv&amp;retmode=text</coeus:endpoint>
+    <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_title"/>
     <coeus:extends rdf:resource="http://bioinformatics.ua.pt/coeus/resource/concept_generif"/>
+    <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_issn"/>
     <coeus:order rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</coeus:order>
     <coeus:hasKey rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_id"/>
-    <dc:publisher rdf:datatype="http://www.w3.org/2001/XMLSchema#string">csv</dc:publisher>
+    <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_journal"/>
+    <coeus:loadsFrom rdf:resource="http://bioinformatics.ua.pt/coeus/resource/selector_pubmed_abstract"/>
+    <coeus:extension rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:source</coeus:extension>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubmed article Label</rdfs:label>
     <coeus:built rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</coeus:built>
-    <coeus:built rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</coeus:built>
-    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1|"</coeus:query>
+    <coeus:endpoint rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&amp;id=#replace#&amp;rettype=xml&amp;retmode=text</coeus:endpoint>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">//PubmedArticle</coeus:query>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pubmed article</dc:title>
   </rdf:Description>
@@ -193,7 +222,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_generif_text">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">text</rdfs:label>
-    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">4</coeus:query>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">5</coeus:query>
     <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:description</coeus:property>
     <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">text</dc:title>
@@ -206,6 +235,7 @@
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">gene link Label</rdfs:label>
     <dc:publisher rdf:datatype="http://www.w3.org/2001/XMLSchema#string">linkeddata</dc:publisher>
     <coeus:endpoint rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://www.ncbi.nlm.nih.gov/gene/#replace#</coeus:endpoint>
+    <coeus:extension rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:relation</coeus:extension>
     <coeus:method rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cache</coeus:method>
     <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">linkeddata</coeus:query>
     <coeus:order rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</coeus:order>
@@ -219,7 +249,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://bioinformatics.ua.pt/coeus/resource/selector_generif_gene_id">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">geneid</rdfs:label>
-    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</coeus:query>
+    <coeus:query rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</coeus:query>
     <coeus:property rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dc:relation</coeus:property>
     <coeus:loadsFor rdf:resource="http://bioinformatics.ua.pt/coeus/resource/resource_generif"/>
     <dc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">gene id</dc:title>

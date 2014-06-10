@@ -111,7 +111,7 @@ public class Triplify {
             com.hp.hpl.jena.rdf.model.Resource item = api.createResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + itemTmp[1] + "_" + i);
             com.hp.hpl.jena.rdf.model.Resource obj = api.createResource(PrefixFactory.getURIForPrefix(Config.getKeyPrefix()) + "Item");
             api.addStatement(item, Predicate.get("rdf:type"), obj);
-
+            
             // set Item label and creator
             api.addStatement(item, Predicate.get("rdfs:label"), ConceptFactory.getTokenFromConcept(this.resource.getIsResourceOf().getLabel()) + i);
             api.addStatement(item, Predicate.get("dc:creator"), Config.getName());
@@ -165,6 +165,7 @@ public class Triplify {
             for (String key : properties.keySet()) {
                 for (String object : properties.get(key)) {
                     api.addStatement(item, Predicate.get(key), object);
+                    //System.err.println(item+" "+Predicate.get(key)+" "+object);
                 }
             }
             success = true;

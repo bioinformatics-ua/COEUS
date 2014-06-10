@@ -34,7 +34,7 @@ public class Indexer {
             long f = System.currentTimeMillis();
             System.out.println("\n\t[COEUS] " + Config.getName() + " Indexer done in " + ((f - i) / 1000) + " seconds.\n");
             //larqBuilder.indexStatements(Boot.getAPI().getModel().listStatements()) ;
-
+        
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

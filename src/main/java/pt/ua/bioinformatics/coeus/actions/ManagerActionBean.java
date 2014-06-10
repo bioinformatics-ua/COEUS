@@ -13,7 +13,7 @@ import net.sourceforge.stripes.action.UrlBinding;
 
 /**
  * Pages forward manager
- * 
+ *
  * @author sernadela
  */
 @UrlBinding("/manager/{$model}/{method}")
@@ -30,6 +30,7 @@ public class ManagerActionBean implements ActionBean {
     private static final String GRAPH_VIEW = "/setup/graph.jsp";
     private static final String INDEX_VIEW = "/setup/index.jsp";
     private static final String WIZARD_VIEW = "/setup/config.jsp";
+    private static final String NANOPUB_VIEW = "/setup/nanopubs.jsp";
     private String method;
     private String model;
     private ActionBeanContext context;
@@ -38,7 +39,7 @@ public class ManagerActionBean implements ActionBean {
     public Resolution handle() {
         return new ForwardResolution(INDEX_VIEW);
     }
-    
+
     public Resolution config() {
         return new ForwardResolution(WIZARD_VIEW);
     }
@@ -46,7 +47,6 @@ public class ManagerActionBean implements ActionBean {
 //    public Resolution graph() {
 //        return new ForwardResolution(GRAPH_VIEW);
 //    }
-
     public Resolution environments() {
         if (method != null && method.startsWith("edit")) {
             return new ForwardResolution(ENVIRONMENTS_EDIT_VIEW);
@@ -62,7 +62,11 @@ public class ManagerActionBean implements ActionBean {
             return new ForwardResolution(DASHBOARD_VIEW);
         }
     }
-    
+
+    public Resolution nanopub() {
+        return new ForwardResolution(NANOPUB_VIEW);
+    }
+
     public Resolution entity() {
         return new ForwardResolution(ENTITIES_VIEW);
     }
@@ -74,6 +78,7 @@ public class ManagerActionBean implements ActionBean {
     public Resolution resource() {
         return new ForwardResolution(RESOURCES_VIEW);
     }
+
     public Resolution selector() {
         return new ForwardResolution(SELECTORS_VIEW);
     }

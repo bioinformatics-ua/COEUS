@@ -8,20 +8,27 @@
             <div class="container text-center ">
                 <h1>COEUS</h1>
                 <h2>Streamlined back-end framework for rapid semantic web application development.</h2>
-                    <p> 
-                        <a href="https://github.com/bioinformatics-ua/COEUS/archive/master.zip" class="btn btn-info btn-lg">Get COEUS <i class="glyphicon glyphicon-download-alt"></i></a>
-                    </p>
-                    <span class="masthead-links">
-                        <a href="https://github.com/bioinformatics-ua/COEUS" target="_blank">GitHub project</a>
-                    </span>
+                <p> 
+                    <a href="https://github.com/bioinformatics-ua/COEUS/archive/master.zip" class="btn btn-info btn-lg">Get COEUS <i class="glyphicon glyphicon-download-alt"></i></a>
+                </p>
+                <span class="masthead-links">
+                    <a href="https://github.com/bioinformatics-ua/COEUS" target="_blank">GitHub project</a>
+                </span>
+                <p>
+                    <iframe src="http://ghbtns.com/github-btn.html?user=bioinformatics-ua&repo=coeus&type=watch&count=true"
+                            allowtransparency="true" frameborder="0" scrolling="0" width="75" height="20"></iframe>
+                    <iframe src="http://ghbtns.com/github-btn.html?user=bioinformatics-ua&repo=coeus&type=fork&count=true"
+                            allowtransparency="true" frameborder="0" scrolling="0" width="75" height="20"></iframe>
+                   
+                </p>
             </div>
         </div>
 
         <div class="text-center hero-unit">
-            <p><h1>SWAT4LS Workshop <sup><span class="label label-warning">Last news!! <i class="icon-star icon-white"></i></span></sup></h1></p>
-        <p class="lead">A COEUS Workshop/Tutorial was presented in the 2013 edition of <a target="_blank" href="http://www.swat4ls.org/workshops/edinburgh2013/">SWAT4LS</a>.</p>
-        <p class="lead">This workshop was helded in Edinburgh, UK, December 9-12, 2013. </p>
-        <p><a target="_blank" href="./documentation/#science" class="btn btn-primary btn-lg">View more <i class="glyphicon glyphicon-forward"></i></a></p> 
+             <p><h1>SWAT4LS Workshop <sup><span class="label label-warning">Last news!! <i class="icon-star icon-white"></i></span></sup></h1></p>
+            <p class="lead">A COEUS Workshop/Tutorial was presented in the 2013 edition of <a target="_blank" href="http://www.swat4ls.org/workshops/edinburgh2013/">SWAT4LS</a>.</p>
+            <p class="lead">This workshop was helded in Edinburgh, UK, December 9-12, 2013. </p>
+            <p><a target="_blank" href="./documentation/#science" class="btn btn-primary btn-lg">View more <i class="glyphicon glyphicon-forward"></i></a></p> 
     </div>
     <div class="container">
 
@@ -43,13 +50,19 @@
                         <br />Integrate CSV, SQL, XML or SPARQL resources with advanced Extract-Transform-Load
                         warehousing features.</p>
                 </div>
-                <div class="col-lg-4">
+                <!--<div class="col-lg-4">
                     <img src="./assets/img/cloud.png" width="150" height="150" alt="Cloud-based" />
                     <h2>Cloud-based</h2>
                     <p><strong>Deploy your knowledgebase in the cloud</strong>, using any available
                         host.
                         <br />Your content - available any time, any where. And with full create, read,
                         update, and delete support.</p>
+                </div>-->
+                 <div class="col-lg-4">
+                    <img src="./assets/img/nanopub_book.png" width="150" height="150" alt="Cloud-based" />
+                    <h2>Nanopublication</h2>
+                    <p><strong>Transform your data into Nanopublications</strong>, automatically through the web interface.
+                        <br />With the Nanopublications extension the data can be converted into a single publishable and citable entity.</p>
                 </div>
                 <div class="col-lg-4">
                     <img src="./assets/img/semantic.png" width="150" height="150" alt="Semantic Web" />

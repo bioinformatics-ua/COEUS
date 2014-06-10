@@ -29,9 +29,9 @@
                 );
 
             });
-            
-            function refreshTotalItems(){
-                 var seed = lastPath();
+
+            function refreshTotalItems() {
+                var seed = lastPath();
                 var qEntities = "SELECT (COUNT(*) AS ?triples) {?s a coeus:Item . ?s coeus:hasConcept ?concept . ?concept coeus:hasEntity ?entity . ?entity coeus:isIncludedIn " + seed + "}";
                 queryToResult(qEntities, function(result) {
                     $('#triples').html(result[0].triples.value);
@@ -42,7 +42,7 @@
                 var seed = lastPath();
                 var qEntities = "SELECT DISTINCT ?entity {" + seed + " coeus:includes ?entity }";
                 queryToResult(qEntities, fillEntities);
-                
+
                 refreshTotalItems();
             }
 
@@ -95,9 +95,10 @@
 
                 if (result[0].error !== undefined)
                     $('#tree_' + resource).before(' <span class="label label-danger" >error</span>');
-                if (result[0].built !== undefined && result[0].built.value==="true")
+                if (result[0].built !== undefined && result[0].built.value === "true")
                     $('#tree_' + resource).before(' <span class="label label-success" >built</span>');
-                else $('#tree_' + resource).before(' <span class="label label-default" >not built</span>');
+                else
+                    $('#tree_' + resource).before(' <span class="label label-default" >not built</span>');
 
 
             }
@@ -126,6 +127,7 @@
                             //+ ' <a href="../resource/add/' + all + '"><i class="icon-plus-sign"></i></a>'
                             + ' <a href="#addResourceModal" data-toggle="modal" onclick="prepareAddResourceModal(\'' + all + '\');"><sub><i class="black fa fa-plus-circle fa-2x tip" data-toggle="tooltip" title="Add Resource" ></i></sub></a>'
                             + ' <a href="#removeModal" role="button" data-toggle="modal" onclick="selectToRemove(\'' + all + '\')"><sub><i class="black fa fa-trash-o fa-2x tip" data-toggle="tooltip" title="Delete"></i></sub></a>'
+                            // + ' <a href="#nanopubModal" data-toggle="modal" onclick="nanopubModal(\'' + all + '\');"><sub><i class="black fa fa-book fa-2x tip" data-toggle="tooltip" title="Create Nanopublications" ></i></sub></a>'
                             + '</span></p><ul id="' + concept + '"></ul>';
                 }
                 //console.log(entity);
@@ -312,7 +314,23 @@
                 tooltip();
             }
 
+            function cleanItems() {
 
+                var qItem = "SELECT ?item ?concept{ ?item a coeus:Item . ?concept coeus:isConceptOf ?item}";
+                queryToResult(qItem, function(result) {
+                    for (var r in result) {
+                        var item = splitURIPrefix(result[r].item.value);
+                        var concept = splitURIPrefix(result[r].concept.value);
+                        var prefix = getPrefix(item.namespace) + ":";
+
+                        var urlPrefix = "../../api/" + getApiKey();
+                        var url = "/delete/coeus:" + concept.value + '/coeus:isConceptOf/' + prefix + item.value;
+                        console.log("Deleting: " + url);
+                        callURL(urlPrefix + url);
+                        removeAllTriplesFromSubject(urlPrefix, prefix + item.value, refreshTotalItems);
+                    }
+                });
+            }
 
         </script>
     </s:layout-component>
@@ -360,7 +378,10 @@
 
                         </div>
                         <div class="col-md-6">
-                            <a onclick="selectEntity();" class="tip btn btn-info pull-right" data-toggle="tooltip" title="Browse all entities of this seed.">Browser <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                            <div class="pull-right">
+                                <a onclick="window.location = '../nanopub/' + lastPath();" class="tip btn btn-primary" data-toggle="tooltip" title="Nanopublications Manager.">Nanopublications <i class="glyphicon glyphicon-book icon-white"></i></a> 
+                                <a onclick="selectEntity();" class="tip btn btn-info" data-toggle="tooltip" title="Browse all entities of this seed.">Browser <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                            </div>
                         </div>
                     </div>
 
@@ -370,17 +391,18 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="btn-group btn-default" > <a class="btn btn-default dropdown-toggle tip" title="Exports all data from the triple store." data-toggle="dropdown" href="#">Data Model Export <span class="caret"></span></a>
+                    <div class="btn-group btn-default" > <a class="btn btn-default dropdown-toggle tip" title="Exports the KB data model from the triple store." data-toggle="dropdown" href="#">Data Model Export <span class="caret"></span></a>
                         <ul class="dropdown-menu ">
-                            <li><a href="../../config/export/coeus.rdf">RDF</a>
+                            <li><a href="../../config/export/setup.rdf">RDF</a>
                             </li>
-                            <li><a href="../../config/export/coeus.ttl">TTL</a>
+                            <li><a href="../../config/export/setup.ttl">TTL</a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="pull-right">
+                        <a id="btnCleanItems" onclick="" href="#cleanItemsModal" data-toggle="modal" class="btn btn-danger tip" data-toggle="tooltip" title="Cleans all Items data.">Items <i class="fa fa-trash-o"></i></a> 
                         <a id="btnUnbuild" onclick="unbuild();" class="btn btn-default tip"  data-toggle="tooltip" title="Change the system property and all resources to an unbuild state.">UnBuild <i class="fa fa-eraser"></i></a>
                         <a id="btnBuild" onclick="build();" href="#integrationModal" data-toggle="modal" class="btn btn-primary tip" data-toggle="tooltip" title="Starts data integration process.">Build <i class="fa fa-cogs"></i></a> 
                     </div>
@@ -411,6 +433,25 @@
                     <div class="modal-footer" id="rmbtns">
                         <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
                         <!--                        <button id="integration" class="btn btn-primary hide loading" onclick="window.location.reload();">Refresh <i class="icon-refresh icon-white"></i></button>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cleanItemsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="closeIntegrationModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 class="modal-title">Clean Items data</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure that you want to remove all coeus:Items data?</p>
+                    </div>
+
+                    <div class="modal-footer" id="rmbtns">
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn btn-danger loading" data-dismiss="modal" aria-hidden="true" onclick="cleanItems();">Clean<i class="icon-trash icon-white"></i></button>
                     </div>
                 </div>
             </div>

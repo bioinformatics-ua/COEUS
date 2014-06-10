@@ -36,6 +36,8 @@
 @prefix void:     <http://rdfs.org/ns/void#> .
 @prefix ir:       <http://www.ontologydesignpatterns.org/cp/owl/informationrealization.owl#> .
 @prefix coeus:     <http://bioinformatics.ua.pt/coeus/resource/> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix np:    <http://www.nanopub.org/nschema#> .
 
 # Server configuration section
 <> a conf:Configuration;

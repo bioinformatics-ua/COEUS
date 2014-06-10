@@ -469,19 +469,32 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
+    <!-- http://bioinformatics.ua.pt/coeus/resource/builtNp -->
+
+    <owl:DatatypeProperty rdf:about="http://bioinformatics.ua.pt/coeus/resource/builtNp">
+        <rdfs:label rdf:datatype="&xsd;string">dataproperty_builtNp</rdfs:label>
+        <owl:versionInfo rdf:datatype="&xsd;string">1.0b</owl:versionInfo>
+        <dc:date rdf:datatype="&xsd;date">2014-03-07</dc:date>
+        <dc:description rdf:datatype="&xsd;string">Defines if Concept has generated or built nanopublications.</dc:description>
+        <rdfs:comment rdf:datatype="&xsd;string">Defines if Concept has generated or built nanopublications.</rdfs:comment>
+        <dc:creator rdf:datatype="&xsd;string">Pedro Sernadela sernadela@ua.pt</dc:creator>
+        <dc:title rdf:datatype="&xsd;string">builtNp</dc:title>
+        <rdfs:domain rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Concept"/>
+        <rdfs:range rdf:resource="&xsd;boolean"/>
+    </owl:DatatypeProperty>
 
 
     <!-- http://bioinformatics.ua.pt/coeus/resource/built -->
 
     <owl:DatatypeProperty rdf:about="http://bioinformatics.ua.pt/coeus/resource/built">
-        <rdfs:label rdf:datatype="&xsd;string">dataproperty_loaded</rdfs:label>
+        <rdfs:label rdf:datatype="&xsd;string">dataproperty_built</rdfs:label>
         <owl:versionInfo rdf:datatype="&xsd;string">1.0b</owl:versionInfo>
         <dc:date rdf:datatype="&xsd;date">2011-03-31</dc:date>
         <dc:description rdf:datatype="&xsd;string">Defines that a Seed, Entity, Concept is or is not built.</dc:description>
         <rdfs:comment rdf:datatype="&xsd;string">Defines that a Seed, Entity, Concept is or is not built.</rdfs:comment>
         <dc:creator rdf:datatype="&xsd;string">Pedro Lopes pedrolopes@ua.pt</dc:creator>
-        <dc:title rdf:datatype="&xsd;string">loaded</dc:title>
+        <dc:title rdf:datatype="&xsd;string">built</dc:title>
         <rdfs:domain rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Bridge"/>
         <rdfs:domain rdf:resource="http://bioinformatics.ua.pt/coeus/resource/CSV"/>
         <rdfs:domain rdf:resource="http://bioinformatics.ua.pt/coeus/resource/Concept"/>

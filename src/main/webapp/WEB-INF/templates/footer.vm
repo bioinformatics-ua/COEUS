@@ -12,8 +12,15 @@
                 <div class="page-wrapper">
                     <div class="container">
 #if ($rdf_link)
-      <p class="pull-right">View: <a href="$rdf_link?output=ttl">As Turtle</a> |
-      <a href="$rdf_link?output=xml">As RDF/XML</a></p>
+        <p class="pull-right">
+        #if ($nanopub == true) Full View: <a href="../nanopub/$title" >As NQuads</a> |
+        <a id="convert" href="#" onclick="convert('${server_base}','$title');">As TriG</a>
+        <a id="download" class="btn btn-primary hide">Download</a>
+        #else
+        View: <a href="$rdf_link?output=ttl">As Turtle</a> |
+        <a href="$rdf_link?output=xml">As RDF/XML</a> 
+        #end</p>
+
 #set ($has_text = true)
 #end 
 #if ($sparql_endpoint)
@@ -22,9 +29,11 @@
 
                         <p>&nbsp;</p>
                         <p class="pull-right"><a href="#" > <i class="fa fa-arrow-up"></i></a></p>
-                        <p class="text-muted credit">&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> 2013 - Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a></p>
+                        <p class="text-muted credit">&copy; <a target="_blank" title="UA.PT Bioinformatics" href="http://bioinformatics.ua.pt/">University of Aveiro</a> <script> document.write(new Date().getFullYear()); </script> - Support provided by <a href="http://bmd-software.com" target="_blank">BMD Software, LDA</a></p>
                     </div>
                 </div>
             </div>
         </footer> 
+
+<script type="text/javascript" src="${server_base}assets/js/np.js"></script>
 </html>

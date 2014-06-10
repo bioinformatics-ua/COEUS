@@ -224,6 +224,7 @@ public class XMLFactory implements ResourceFactory {
                 for (String item : extensions.keySet()) {
                     domFactory = DocumentBuilderFactory.newInstance();
                     u = new URL(res.getEndpoint().replace("#replace#", URLEncoder.encode(ItemFactory.getTokenFromItem(item), "UTF-8")));
+                    //System.err.println(u.toString());
                     domFactory.setNamespaceAware(false);
                     builder = domFactory.newDocumentBuilder();
                     try {

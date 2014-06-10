@@ -163,7 +163,7 @@
         <!-- To show app overview page -->
          <welcome-file>index.jsp</welcome-file> 
         <!-- To show website homepage -->
-        <!--<welcome-file>homepage.jsp</welcome-file>-->
+        <!-- <welcome-file>homepage.jsp</welcome-file> -->
     </welcome-file-list>
     
     <error-page>
