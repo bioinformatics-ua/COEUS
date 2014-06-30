@@ -899,38 +899,6 @@ public class ConfigActionBean implements ActionBean {
     }
 
     /**
-     * Read RDF content to the KB.
-     *
-     * @return
-     */
-    public Resolution read() {
-        JSONObject result = new JSONObject();
-        try {
-            Boot.start();
-            HttpServletRequest request = context.getRequest();
-            if ("POST".equalsIgnoreCase(request.getMethod())) {
-                //InputStream is=request.getInputStream();
-                String data = request.getParameter("data");
-                String base = request.getParameter("base");
-                String lang = request.getParameter("lang");
-                //System.err.println("content: " + data);
-                InputStream is = new ByteArrayInputStream(data.getBytes());
-                Boot.getAPI().readModel(is, null,lang);
-                result.put("status", 100);
-                result.put("message", "[COEUS][API][ConfigActionBean] Read OK ");
-            }else{
-                result.put("status", 200);
-                result.put("message", "[COEUS][API][ConfigActionBean] Use POST instead.");
-            }
-        } catch (Exception ex) {
-            result.put("status", 200);
-            result.put("message", "[COEUS][API][ConfigActionBean] Read ERROR: " + ex.getLocalizedMessage());
-            Logger.getLogger(ConfigActionBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return new StreamingResolution("application/json", result.toJSONString());
-    }
-
-    /**
      * Update the config section of the config.js file.
      *
      * @return

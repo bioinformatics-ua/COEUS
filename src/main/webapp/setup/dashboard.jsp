@@ -337,9 +337,9 @@
                 var content = $('#rdf_content').val();
                 //var base_uri = "http://bioinformatics.ua.pt/coeus/resource/";
                 var content_lang=$("#content_lang option:selected" ).text();
-                var json = {data: content, lang:content_lang};
+                var json = {'data': content, 'lang':content_lang};
                 console.log(json);
-                var service = "../../config/read/";
+                var service = "../../api/" + getApiKey()+"/read/";
                 $.post(service, json, function(data, status) {
                     var result=jQuery.parseJSON(JSON.stringify(data));
                     console.log( result );
