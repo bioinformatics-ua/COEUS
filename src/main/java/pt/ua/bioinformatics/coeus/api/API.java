@@ -459,6 +459,17 @@ public class API {
             Logger.getLogger(API.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    /**
+     * Read into the model any rdf data from lang ("RDF/XML", "N-TRIPLE", "TURTLE" (or "TTL") and "N3")
+     *
+     * @param is
+     * @param base
+     * @param lang
+     */
+    public void readModel(InputStream is, String base, String lang) {
+            this.model.read(is, base,lang);
+    }
 
     /**
      * Remove a statement from the model.

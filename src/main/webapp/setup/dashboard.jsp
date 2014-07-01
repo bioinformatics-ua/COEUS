@@ -332,6 +332,26 @@
                 });
             }
 
+            function import_rdf() {
+
+                var content = $('#rdf_content').val();
+                //var base_uri = "http://bioinformatics.ua.pt/coeus/resource/";
+                var content_lang=$("#content_lang option:selected" ).text();
+                var json = {'data': content, 'lang':content_lang};
+                console.log(json);
+                var service = "../../api/" + getApiKey()+"/read/";
+                $.post(service, json, function(data, status) {
+                    var result=jQuery.parseJSON(JSON.stringify(data));
+                    console.log( result );
+                    if(result.status===100){
+                        $('#resultImport').html(generateHtmlMessage("Success!", result.message, "alert-success"));
+                    }else{
+                        $('#resultImport').html(generateHtmlMessage("Error!", result.message, "alert-danger"));
+                    }
+                    
+                });
+            }
+
         </script>
     </s:layout-component>
     <s:layout-component name="body">
@@ -391,11 +411,14 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="btn-group btn-default" > <a class="btn btn-default dropdown-toggle tip" title="Exports the KB data model from the triple store." data-toggle="dropdown" href="#">Data Model Export <span class="caret"></span></a>
+                    <div class="btn-group btn-default" > <a class="btn btn-default dropdown-toggle tip" title="Exports the KB data model from the triple store." data-toggle="dropdown" href="#">Data Model I/O <span class="caret"></span></a>
                         <ul class="dropdown-menu ">
-                            <li><a href="../../config/export/setup.rdf">RDF</a>
+                            <li><a href="#importModal" data-toggle="modal"><i class="fa fa-upload"></i> Import</a>
                             </li>
-                            <li><a href="../../config/export/setup.ttl">TTL</a>
+                            <li class="divider"></li>
+                            <li><a href="../../config/export/setup.rdf"><i class="fa fa-download"></i> Export RDF</a>
+                            </li>
+                            <li><a href="../../config/export/setup.ttl"><i class="fa fa-download"></i> Export TTL</a>
                             </li>
                         </ul>
                     </div>
@@ -452,6 +475,30 @@
                     <div class="modal-footer" id="rmbtns">
                         <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
                         <button class="btn btn-danger loading" data-dismiss="modal" aria-hidden="true" onclick="cleanItems();">Clean<i class="icon-trash icon-white"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="importModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="closeIntegrationModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 class="modal-title">Import to KB</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p><select class="form-control " id="content_lang">
+                                <option>RDF/XML</option>
+                                <option>TTL</option>
+                            </select></p>
+                        <p><textarea id="rdf_content" class="form-control" rows="10" placeholder="Paste the content here..." ></textarea></p>
+                        <p id="resultImport"></p>
+                    </div>
+
+                    <div class="modal-footer" id="rmbtns">
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button class="btn btn-primary loading" onclick="import_rdf();">Import <i class="fa fa-upload"></i></button>
                     </div>
                 </div>
             </div>

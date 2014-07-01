@@ -16,6 +16,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -45,6 +46,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.DefaultHandler;
@@ -276,8 +278,7 @@ public class ConfigActionBean implements ActionBean {
     }
 
     /**
-     * Integrate a concept into Nanopub ( call in a different
-     * thread)
+     * Integrate a concept into Nanopub ( call in a different thread)
      *
      * @return
      */
@@ -301,7 +302,7 @@ public class ConfigActionBean implements ActionBean {
             final List<JSONObject> info = new ArrayList<JSONObject>();
             Iterator<JSONObject> iterator = additional_info.iterator();
             while (iterator.hasNext()) {
-                JSONObject j=(JSONObject)iterator.next();
+                JSONObject j = (JSONObject) iterator.next();
                 info.add(j);
             }
             //parse prov
@@ -309,7 +310,7 @@ public class ConfigActionBean implements ActionBean {
             final List<JSONObject> prov = new ArrayList<JSONObject>();
             Iterator<JSONObject> iterator_prov = additional_prov.iterator();
             while (iterator_prov.hasNext()) {
-                JSONObject j=(JSONObject)iterator_prov.next();
+                JSONObject j = (JSONObject) iterator_prov.next();
                 prov.add(j);
             }
 
